@@ -1,4 +1,0 @@
-#Wed Feb 15 16:34:52 IST 2023
-base.0=/home/vishal/Projects/Flutter Applications/i_densfa/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
-renamed.0=classes.dex
-path.0=classes.dex
