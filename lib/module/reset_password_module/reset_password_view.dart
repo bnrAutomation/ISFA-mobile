@@ -22,7 +22,7 @@ class ResetPasswordView extends StatelessWidget {
           builder: (context, state) {
             return Stack(
               children: [
-                Background(true),
+                const Background(true),
                 Align(
                   alignment: Alignment.center,
                   child: Container(

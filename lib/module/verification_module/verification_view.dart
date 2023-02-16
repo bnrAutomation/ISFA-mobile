@@ -8,8 +8,7 @@ import 'package:i_densfa/module/verification_module/verification/verification_bl
 import '../reset_password_module/reset_password_view.dart';
 
 class VerificationView extends StatelessWidget {
-  VerificationView({super.key});
-  String verificationCode = "";
+  const VerificationView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class VerificationView extends StatelessWidget {
           builder: (context, state) {
             return Stack(
               children: [
-                Background(true),
+                const Background(true),
                 Align(
                   alignment: Alignment.center,
                   child: Container(
@@ -95,14 +94,13 @@ class VerificationView extends StatelessWidget {
                             // borderWidth: 3.0,
                             //runs when a code is typed in
                             onCodeChanged: (String code) {
-                              verificationCode = code;
                               BlocProvider.of<VerificationBloc>(context)
                                   .add(VerificationTextChangeEvent(code));
                             },
                             //runs when every textfield is filled
                             onSubmit: (String verificationCode) {
-                              BlocProvider.of<VerificationBloc>(context).add(
-                                  VerificationSubmitEvent(verificationCode));
+                              BlocProvider.of<VerificationBloc>(context)
+                                  .add(VerificationSubmitEvent());
                             },
                           ),
                           const SizedBox(
@@ -158,9 +156,9 @@ class VerificationView extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(30),
                           child: MaterialButton(
-                            onPressed: () => {
-                              BlocProvider.of<VerificationBloc>(context).add(
-                                  VerificationSubmitEvent(verificationCode))
+                            onPressed: () {
+                              BlocProvider.of<VerificationBloc>(context)
+                                  .add(VerificationSubmitEvent());
                             },
                             elevation: 2,
                             color: Theme.of(context).colorScheme.onPrimary,

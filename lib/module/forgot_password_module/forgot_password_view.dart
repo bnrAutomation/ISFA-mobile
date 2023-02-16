@@ -8,6 +8,7 @@ import 'package:i_densfa/utility/image_constants.dart';
 
 class ForgotPasswordView extends StatelessWidget {
   ForgotPasswordView({super.key});
+
   final TextEditingController usernameController = TextEditingController();
 
   @override
@@ -20,7 +21,7 @@ class ForgotPasswordView extends StatelessWidget {
           builder: (context, state) {
             return Stack(
               children: [
-                Background(true),
+                const Background(true),
                 Align(
                   alignment: Alignment.center,
                   child: Container(
@@ -103,7 +104,7 @@ class ForgotPasswordView extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: ((context) =>
-                                          VerificationView())));
+                                          const VerificationView())));
                             }
                           },
                           builder: (context, state) {

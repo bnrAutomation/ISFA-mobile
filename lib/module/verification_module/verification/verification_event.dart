@@ -8,9 +8,6 @@ class VerificationTextChangeEvent extends VerificationEvent {
   VerificationTextChangeEvent(this.otpValue);
 }
 
-class VerificationSubmitEvent extends VerificationEvent {
-  final String otp;
-  VerificationSubmitEvent(this.otp);
-}
+class VerificationSubmitEvent extends VerificationEvent {}
 
 class ReSendPasswordEvent extends VerificationEvent {}

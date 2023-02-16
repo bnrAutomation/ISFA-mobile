@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:i_densfa/module/home_module/home_view.dart';
 import 'package:i_densfa/module/login_module/login/login_bloc.dart';
 import 'package:i_densfa/module/tabber_module/tabber_view.dart';
 import 'package:i_densfa/utility/image_constants.dart';
@@ -12,8 +11,8 @@ import '../ui/background.dart';
 class LoginView extends StatelessWidget {
   LoginView({super.key});
 
-  final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class LoginView extends StatelessWidget {
           builder: (context, state) {
             return Stack(
               children: [
-                Background(false),
+                const Background(false),
                 Align(
                   alignment: Alignment.center,
                   child: Container(
@@ -157,7 +156,8 @@ class LoginView extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: ((context) => TabberView())));
+                                      builder: ((context) =>
+                                          const TabberView())));
                             }
                           },
                           builder: (context, state) {

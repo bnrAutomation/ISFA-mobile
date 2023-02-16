@@ -1,7 +1,5 @@
-import 'dart:math';
-
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'forgot_password_event.dart';
 part 'forgot_password_state.dart';

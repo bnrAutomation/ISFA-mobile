@@ -1,20 +1,22 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'verification_event.dart';
 part 'verification_state.dart';
 
 class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
+  var varificationCode = "";
   VerificationBloc() : super(VerificationInitial()) {
     on<VerificationEvent>((event, emit) {
       if (event is VerificationTextChangeEvent) {
-        if (event.otpValue.isEmpty || event.otpValue.length != 6) {
-          emit(VerificationErrorState("Please Enter Valid OTP"));
+        if (event.otpValue.length == 6) {
+          // emit(VerificationErrorState("Please Enter Valid OTP"));
         } else {
+          varificationCode = event.otpValue;
           emit(VerificationValidState());
         }
       } else if (event is VerificationSubmitEvent) {
-        if (event.otp.isEmpty || event.otp.length != 6) {
+        if (varificationCode.isEmpty || varificationCode.length != 6) {
           emit(VerificationErrorState("Please Enter Valid OTP"));
         } else {
           emit(VerificationSuccesfullState());

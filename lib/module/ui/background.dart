@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:i_densfa/utility/image_constants.dart';
 
 class Background extends StatelessWidget {
-  bool showBackButton = true;
-  Background(this.showBackButton, {super.key});
+  final bool showBackButton;
+  const Background(this.showBackButton, {super.key});
   @override
   Widget build(BuildContext context) {
     return Stack(

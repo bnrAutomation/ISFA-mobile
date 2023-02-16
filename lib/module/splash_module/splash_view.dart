@@ -19,7 +19,7 @@ class SplashView extends StatelessWidget {
         builder: (context, state) {
           return Stack(
             children: [
-              Background(false),
+              const Background(false),
               Positioned(
                   bottom: 20,
                   right: 20,

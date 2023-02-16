@@ -6,8 +6,9 @@ abstract class ForgotPasswordState {}
 class ForgotPasswordInitial extends ForgotPasswordState {}
 
 class ForgotPasswordErrorState extends ForgotPasswordState {
-  final String errorMessage;
   ForgotPasswordErrorState(this.errorMessage);
+
+  final String errorMessage;
 }
 
 class ForgotPasswordValidState extends ForgotPasswordState {}
