@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:i_densfa/module/tabber_module/tabber/tabber_bloc.dart';
 
+import '../leaderboard/leaderboard_view.dart';
+
 class TabberView extends StatelessWidget {
   const TabberView({super.key});
   static const TextStyle optionStyle =
@@ -17,10 +19,7 @@ class TabberView extends StatelessWidget {
       'Learner',
       style: optionStyle,
     ),
-    Text(
-      'Leaderboard',
-      style: optionStyle,
-    ),
+    LeaderboardView(),
     Text(
       'Campaign',
       style: optionStyle,
