@@ -11,53 +11,6 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  TextTheme buildTextTheme(TextTheme base) {
-    var newBase = GoogleFonts.macondoTextTheme(base);
-    return newBase
-        .copyWith(
-          displaySmall: newBase.displaySmall?.copyWith(
-            fontWeight: FontWeight.w700,
-            fontFamily: 'SF Pro Display',
-          ),
-          headlineMedium: newBase.headlineMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-            fontFamily: 'SF Pro Display',
-          ),
-          headlineSmall: newBase.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w500,
-          ),
-          titleLarge: newBase.titleLarge?.copyWith(fontSize: 18.0),
-          bodySmall: newBase.bodySmall?.copyWith(
-            fontWeight: FontWeight.w400,
-            fontSize: 14.0,
-          ),
-          titleMedium: newBase.titleMedium?.copyWith(
-            fontWeight: FontWeight.w400,
-            fontSize: 16.0,
-          ),
-          labelLarge: newBase.labelLarge?.copyWith(
-            fontWeight: FontWeight.w400,
-            fontSize: 14.0,
-          ),
-        )
-        .apply(
-          displayColor: const Color(0xFF263238),
-          bodyColor: const Color(0xFF263238),
-        )
-        .copyWith(
-          displayLarge:
-              GoogleFonts.montserratTextTheme(newBase).displayLarge?.copyWith(),
-          displayMedium: GoogleFonts.montserratTextTheme(newBase)
-              .displayMedium
-              ?.copyWith(),
-          headlineSmall: GoogleFonts.montserratTextTheme(newBase)
-              .headlineSmall
-              ?.copyWith(),
-          titleLarge:
-              GoogleFonts.montserratTextTheme(newBase).titleLarge?.copyWith(),
-        );
-  }
-
   final ThemeData _darkTheme = ThemeData(
       secondaryHeaderColor: Colors.white70,
       colorScheme: const ColorScheme(
