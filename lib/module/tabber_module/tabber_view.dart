@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:i_densfa/module/tabber_module/tabber/tabber_bloc.dart';
 
-import '../leaderboard/leaderboard_view.dart';
+import '../beat_plan_module/beat_plan_view.dart';
 
 class TabberView extends StatelessWidget {
   const TabberView({super.key});
@@ -19,7 +20,7 @@ class TabberView extends StatelessWidget {
       'Learner',
       style: optionStyle,
     ),
-    LeaderboardView(),
+    BeatPlanView(),
     Text(
       'Campaign',
       style: optionStyle,
@@ -37,6 +38,17 @@ class TabberView extends StatelessWidget {
       child: BlocBuilder<TabberBloc, TabberState>(
         builder: (context, state) {
           return Scaffold(
+            drawer: const AppSideMenu(),
+            appBar: AppBar(
+              backgroundColor: const Color(0XFF003D5B),
+              leading: Builder(
+                  builder: (context) => IconButton(
+                      onPressed: () => Scaffold.of(context).openDrawer(),
+                      icon: const Icon(
+                        Icons.menu,
+                        color: Colors.white,
+                      ))),
+            ),
             body: Center(
               child: widgetOptions[
                   BlocProvider.of<TabberBloc>(context).selectIndex],
@@ -100,6 +112,102 @@ class TabberView extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class AppSideMenu extends StatelessWidget {
+  const AppSideMenu({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          UserAccountsDrawerHeader(
+              decoration: const BoxDecoration(color: Color(0XFF003D5B)),
+              currentAccountPicture: const CircleAvatar(),
+              otherAccountsPictures: [
+                BlocBuilder<TabberBloc, TabberState>(
+                  buildWhen: (previous, current) =>
+                      (current is OnlineStatusUpdateState),
+                  builder: (context, state) {
+                    return FittedBox(
+                      child: Column(
+                        children: [
+                          CupertinoSwitch(
+                              value: context.read<TabberBloc>().isOnline,
+                              onChanged: (newVal) {
+                                context
+                                    .read<TabberBloc>()
+                                    .add(UpdateOnlineStatusEvent(newVal));
+                              }),
+                          Text(
+                            context.read<TabberBloc>().isOnline
+                                ? "Online"
+                                : "Offline",
+                            style: const TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                )
+              ],
+              accountName: const Text("Gopal Krishan"),
+              accountEmail: const Text("ce.gopal@denave.com")),
+          ListTile(
+            leading: const Icon(Icons.group),
+            title: const Text('Team'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(CupertinoIcons.tag),
+            title: const Text('Schemes'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(CupertinoIcons.calendar_today),
+            title: const Text('Attendance'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.timer_outlined),
+            title: const Text('My Activities'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.help_outline),
+            title: const Text('Help and Support'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings_outlined),
+            title: const Text('Settings'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
     );
   }

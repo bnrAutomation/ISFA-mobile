@@ -9,3 +9,5 @@ class UpdateIndexState extends TabberState {
   final int index;
   UpdateIndexState(this.index);
 }
+
+class OnlineStatusUpdateState extends TabberState {}

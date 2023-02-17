@@ -7,3 +7,9 @@ class ChangeTabEvent extends TabberEvent {
   final int selectIndex;
   ChangeTabEvent(this.selectIndex);
 }
+
+class UpdateOnlineStatusEvent extends TabberEvent {
+  final bool updatedStatus;
+
+  UpdateOnlineStatusEvent(this.updatedStatus);
+}

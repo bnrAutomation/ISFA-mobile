@@ -1,16 +1,17 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LeaderboardView extends StatelessWidget {
-  const LeaderboardView({super.key});
+class BeatPlanView extends StatelessWidget {
+  const BeatPlanView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          const LeaderboardSearchBar(),
+          const BeatPlanSearchBar(),
           Expanded(
             child: AppTabbarController(
               titles: const ['MI', 'DAP'],
@@ -20,7 +21,7 @@ class LeaderboardView extends StatelessWidget {
                     padding: const EdgeInsets.all(15),
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 20),
-                    itemBuilder: (context, index) => const LeaderboardMI()),
+                    itemBuilder: (context, index) => const BeatPlanMI()),
                 const Center(child: Text("DAP"))
               ],
             ),
@@ -31,8 +32,8 @@ class LeaderboardView extends StatelessWidget {
   }
 }
 
-class LeaderboardMI extends StatelessWidget {
-  const LeaderboardMI({super.key});
+class BeatPlanMI extends StatelessWidget {
+  const BeatPlanMI({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -152,8 +153,8 @@ class AppTabbarController extends StatelessWidget {
   }
 }
 
-class LeaderboardSearchBar extends StatelessWidget {
-  const LeaderboardSearchBar({super.key});
+class BeatPlanSearchBar extends StatelessWidget {
+  const BeatPlanSearchBar({super.key});
 
   @override
   Widget build(BuildContext context) {
