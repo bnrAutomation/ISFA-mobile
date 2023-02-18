@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:i_densfa/module/campaign_module/campaign_view.dart';
 import 'package:i_densfa/module/tabber_module/tabber/tabber_bloc.dart';
 
 import '../beat_plan_module/beat_plan_view.dart';
@@ -21,10 +22,7 @@ class TabberView extends StatelessWidget {
       style: optionStyle,
     ),
     BeatPlanView(),
-    Text(
-      'Campaign',
-      style: optionStyle,
-    ),
+    CampaignView(),
     Text(
       'Analytics',
       style: optionStyle,
