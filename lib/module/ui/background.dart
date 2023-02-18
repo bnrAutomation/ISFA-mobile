@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../utility/image_constants.dart';
 
 class Background extends StatelessWidget {
   final bool showBackButton;
@@ -36,6 +39,13 @@ class Background extends StatelessWidget {
               ),
             )),
         Positioned(
+          bottom: 0,
+          left: 0,
+          child: SvgPicture.asset(
+            imageConstants.triangle,
+          ),
+        ),
+        Positioned(
             bottom: 0,
             right: 0,
             child: Container(
@@ -48,13 +58,6 @@ class Background extends StatelessWidget {
                     bottomLeft: Radius.circular(1.sw >= 1.sh ? 1.sh : 1.sw)),
               ),
             )),
-        // Positioned(
-        //   bottom: 0,
-        //   left: 0,
-        //   child: Image.asset(
-        //     imageConstants.bootom,
-        //   ),
-        // ),
         showBackButton
             ? Positioned(
                 top: 20,
