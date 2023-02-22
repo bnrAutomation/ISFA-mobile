@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view.dart';
+import 'package:i_densfa/module/login_module/login_view.dart';
+import 'package:i_densfa/module/my_activity_module/my_activity_view.dart';
 import 'package:i_densfa/module/tabber_module/tabber/tabber_bloc.dart';
 
 import '../beat_plan_module/beat_plan_view.dart';
@@ -142,8 +144,8 @@ class AppSideMenu extends StatelessWidget {
                               }),
                           Text(
                             context.read<TabberBloc>().isOnline
-                                ? "Online"
-                                : "Offline",
+                                ? "On-Duty"
+                                : "Off-Duty",
                             style: const TextStyle(color: Colors.white),
                           )
                         ],
@@ -180,6 +182,8 @@ class AppSideMenu extends StatelessWidget {
             title: const Text('My Activities'),
             onTap: () {
               Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => MyActivityView())));
             },
           ),
           ListTile(
@@ -201,6 +205,8 @@ class AppSideMenu extends StatelessWidget {
             title: const Text('Logout'),
             onTap: () {
               Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => LoginView())));
             },
           ),
         ],

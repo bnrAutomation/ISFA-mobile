@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/login_module/login_view.dart';
 import 'package:i_densfa/module/reset_password_module/reset_password/reset_password_bloc.dart';
 import 'package:i_densfa/module/ui/background.dart';
+import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/utility/image_constants.dart';
 
 class ResetPasswordView extends StatelessWidget {
@@ -173,30 +174,18 @@ class ResetPasswordView extends StatelessWidget {
                             return SizedBox(
                               width: 1.sw,
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: MaterialButton(
-                                  onPressed: () => {
-                                    BlocProvider.of<ResetPasswordBloc>(context)
-                                        .add(SubmitChangePasswordEvent(
-                                            newPasswordController.text,
-                                            confirmPasssordController.text))
-                                  },
-                                  elevation: 2,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  splashColor: Colors.red.withOpacity(0.5),
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 15, horizontal: 25),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(32.0),
-                                  ),
-                                  child: const Text(
-                                    "Change Passsord",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
+                                      horizontal: 20),
+                                  child: CustomMaterialButton(
+                                    onPressed: () => {
+                                      BlocProvider.of<ResetPasswordBloc>(
+                                              context)
+                                          .add(SubmitChangePasswordEvent(
+                                              newPasswordController.text,
+                                              confirmPasssordController.text))
+                                    },
+                                    buttonText: "Change Passsord",
+                                  )),
                             );
                           },
                         ),

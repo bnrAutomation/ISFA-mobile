@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/splash_module/splash/splash_bloc.dart';
+import 'package:i_densfa/module/ui/custom_material_button.dart';
 
 import '../../utility/image_constants.dart';
 import '../login_module/login_view.dart';
@@ -27,34 +28,31 @@ class SplashView extends StatelessWidget {
                   child: SizedBox(
                     width: 1.sw,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: MaterialButton(
-                        onPressed: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => LoginView())))
-                        },
-                        elevation: 2,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        splashColor: Colors.red.withOpacity(0.5),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 25),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32.0),
-                        ),
-                        child: const Text(
-                          "Get Start",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: CustomMaterialButton(
+                          onPressed: () => {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => LoginView())))
+                          },
+                          buttonText: "Get Start",
+                        )),
                   )),
               Center(
-                child: Image.asset(
-                  imageConstants.logo,
-                  width: 0.5.sw,
-                  height: 0.5.sh,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      imageConstants.logo,
+                      // width: 0.5.sw,
+                      // height: 0.5.sh,
+                    ),
+                    const Text(
+                      "Sales Force Automation",
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ],
                 ),
               )
             ],

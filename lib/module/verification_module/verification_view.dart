@@ -99,8 +99,9 @@ class VerificationView extends StatelessWidget {
                             },
                             //runs when every textfield is filled
                             onSubmit: (String verificationCode) {
-                              BlocProvider.of<VerificationBloc>(context)
-                                  .add(VerificationSubmitEvent());
+                              BlocProvider.of<VerificationBloc>(context).add(
+                                  VerificationTextChangeEvent(
+                                      verificationCode));
                             },
                           ),
                           const SizedBox(
@@ -157,8 +158,10 @@ class VerificationView extends StatelessWidget {
                           padding: const EdgeInsets.all(30),
                           child: MaterialButton(
                             onPressed: () {
-                              BlocProvider.of<VerificationBloc>(context)
-                                  .add(VerificationSubmitEvent());
+                              BlocProvider.of<VerificationBloc>(context).add(
+                                  VerificationSubmitEvent(
+                                      BlocProvider.of<VerificationBloc>(context)
+                                          .varificationCode));
                             },
                             elevation: 2,
                             color: Theme.of(context).colorScheme.onPrimary,
