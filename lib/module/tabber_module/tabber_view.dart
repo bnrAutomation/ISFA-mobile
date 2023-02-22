@@ -44,7 +44,7 @@ class TabberView extends StatelessWidget {
                       onPressed: () => Scaffold.of(context).openDrawer(),
                       icon: const Icon(
                         Icons.menu,
-                        color: Colors.white,
+                        color: Colors.black,
                       ))),
             ),
             body: Center(
