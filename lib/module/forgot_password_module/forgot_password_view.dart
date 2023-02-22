@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/forgot_password_module/forgotpassword/forgot_password_bloc.dart';
 import 'package:i_densfa/module/ui/background.dart';
+import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/module/verification_module/verification_view.dart';
 import 'package:i_densfa/utility/image_constants.dart';
 
@@ -111,29 +112,17 @@ class ForgotPasswordView extends StatelessWidget {
                             return SizedBox(
                               width: 1.sw,
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: MaterialButton(
-                                  onPressed: () => {
-                                    BlocProvider.of<ForgotPasswordBloc>(context)
-                                        .add(ForgotPasswordSubmitEvent(
-                                            usernameController.text))
-                                  },
-                                  elevation: 2,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  splashColor: Colors.red.withOpacity(0.5),
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 15, horizontal: 25),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(32.0),
-                                  ),
-                                  child: const Text(
-                                    "Get OTP",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
+                                      horizontal: 20),
+                                  child: CustomMaterialButton(
+                                    onPressed: () => {
+                                      BlocProvider.of<ForgotPasswordBloc>(
+                                              context)
+                                          .add(ForgotPasswordSubmitEvent(
+                                              usernameController.text))
+                                    },
+                                    buttonText: "Get OTP",
+                                  )),
                             );
                           },
                         ),

@@ -9,8 +9,9 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
   VerificationBloc() : super(VerificationInitial()) {
     on<VerificationEvent>((event, emit) {
       if (event is VerificationTextChangeEvent) {
-        if (event.otpValue.length == 6) {
-          // emit(VerificationErrorState("Please Enter Valid OTP"));
+        if (event.otpValue.length != 6) {
+          varificationCode = event.otpValue;
+          emit(VerificationErrorState("Please Enter Valid OTP"));
         } else {
           varificationCode = event.otpValue;
           emit(VerificationValidState());
