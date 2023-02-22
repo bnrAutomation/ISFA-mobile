@@ -18,4 +18,9 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
       }
     });
   }
+
+  String tabTitle() {
+    final titles = ['My Schedule', 'ISFA', 'ISFA', 'ISFA', 'ISFA'];
+    return titles[selectIndex];
+  }
 }

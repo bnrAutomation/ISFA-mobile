@@ -12,6 +12,10 @@ class MyApp extends StatelessWidget {
 
   final ThemeData _darkTheme = ThemeData(
       secondaryHeaderColor: Colors.white70,
+      appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0XFF003D5B),
+          foregroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.white)),
       colorScheme: const ColorScheme(
           secondary: Color(0xFF5F39E8),
           onBackground: Colors.black,
@@ -36,28 +40,33 @@ class MyApp extends StatelessWidget {
       ));
 
   final ThemeData _lightTheme = ThemeData(
-      secondaryHeaderColor: Colors.black87,
-      colorScheme: const ColorScheme(
-          secondary: Color(0xFFF900A7),
-          onBackground: Colors.white,
-          onError: Color(0xFFe74c3c),
-          brightness: Brightness.light,
-          onSecondary: Color(0xFFF900A7),
-          onSurface: Color(0xFFFFFBFA),
-          background: Colors.white,
-          onPrimary: Color(0xFFDC6434),
-          primary: Color(0xFFDC6434),
-          surface: Color(0xFFFFFBFA),
-          error: Color(0xFFe74c3c)),
-      dividerColor: Colors.transparent,
-      brightness: Brightness.light,
-      cardColor: const Color(0xFFF8F8F8),
-      primaryColor: const Color(0xFFDC6434),
-      shadowColor: Colors.grey[400],
-      buttonTheme: const ButtonThemeData(
-        buttonColor: Color(0xFFDC6434),
-        disabledColor: Colors.white,
-      ));
+    appBarTheme: const AppBarTheme(
+        backgroundColor: Color(0XFF003D5B),
+        foregroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.white)),
+    // secondaryHeaderColor: Colors.black87,
+    // colorScheme: const ColorScheme(
+    //     secondary: Color(0xFFF900A7),
+    //     onBackground: Colors.white,
+    //     onError: Color(0xFFe74c3c),
+    //     brightness: Brightness.light,
+    //     onSecondary: Color(0xFFF900A7),
+    //     onSurface: Color(0xFFFFFBFA),
+    //     background: Colors.white,
+    //     onPrimary: Color(0xFFDC6434),
+    //     primary: Color(0xFFDC6434),
+    //     surface: Color(0xFFFFFBFA),
+    //     error: Color(0xFFe74c3c)),
+    // dividerColor: Colors.transparent,
+    // brightness: Brightness.light,
+    // cardColor: const Color(0xFFF8F8F8),
+    // primaryColor: const Color(0xFFDC6434),
+    // shadowColor: Colors.grey[400],
+    // buttonTheme: const ButtonThemeData(
+    //   buttonColor: Color(0xFFDC6434),
+    //   disabledColor: Colors.white,
+    // ),
+  );
 
   @override
   Widget build(BuildContext context) {

@@ -6,6 +6,7 @@ import 'package:i_densfa/module/campaign_module/campaign_view.dart';
 import 'package:i_densfa/module/tabber_module/tabber/tabber_bloc.dart';
 
 import '../beat_plan_module/beat_plan_view.dart';
+import '../store_list_module/store_list_view.dart';
 
 class TabberView extends StatelessWidget {
   const TabberView({super.key});
@@ -13,10 +14,7 @@ class TabberView extends StatelessWidget {
       TextStyle(color: Colors.black, fontWeight: FontWeight.w600);
 
   static const List<Widget> widgetOptions = <Widget>[
-    Text(
-      'My Schedule',
-      style: optionStyle,
-    ),
+    StoreListView(),
     Text(
       'Learner',
       style: optionStyle,
@@ -38,7 +36,7 @@ class TabberView extends StatelessWidget {
           return Scaffold(
             drawer: const AppSideMenu(),
             appBar: AppBar(
-              backgroundColor: const Color(0XFF003D5B),
+              title: Text(context.read<TabberBloc>().tabTitle()),
               leading: Builder(
                   builder: (context) => IconButton(
                       onPressed: () => Scaffold.of(context).openDrawer(),
