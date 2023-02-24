@@ -32,7 +32,6 @@ class MyActivityView extends StatelessWidget {
                 Container(
                     decoration: const BoxDecoration(
                       color: Colors.white,
-                      // borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.white,
@@ -172,7 +171,7 @@ class MyActivityView extends StatelessWidget {
 class SingleActivity extends StatelessWidget {
   final int index;
 
-  const SingleActivity(this.index);
+  const SingleActivity(this.index, {super.key});
 
   @override
   Widget build(BuildContext context) {

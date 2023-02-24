@@ -5,7 +5,7 @@ import 'package:i_densfa/module/login_module/login_view.dart';
 import 'package:i_densfa/module/reset_password_module/reset_password/reset_password_bloc.dart';
 import 'package:i_densfa/module/ui/background.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
-import 'package:i_densfa/utility/image_constants.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 
 class ResetPasswordView extends StatelessWidget {
   final TextEditingController newPasswordController = TextEditingController();

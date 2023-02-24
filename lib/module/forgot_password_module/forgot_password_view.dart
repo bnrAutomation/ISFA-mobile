@@ -5,7 +5,7 @@ import 'package:i_densfa/module/forgot_password_module/forgotpassword/forgot_pas
 import 'package:i_densfa/module/ui/background.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/module/verification_module/verification_view.dart';
-import 'package:i_densfa/utility/image_constants.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 
 class ForgotPasswordView extends StatelessWidget {
   ForgotPasswordView({super.key});

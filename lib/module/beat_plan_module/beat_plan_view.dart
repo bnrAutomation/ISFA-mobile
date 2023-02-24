@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -50,7 +49,8 @@ class BeatPlanMI extends StatelessWidget {
                 Container(
                     color: Colors.grey.shade100,
                     alignment: Alignment.center,
-                    child: Image.network('https://picsum.photos/290/160',
+                    child: Image.network(
+                        'https://media.istockphoto.com/id/912819604/vector/storefront-flat-design-e-commerce-icon.jpg?s=612x612&w=0&k=20&c=_x_QQJKHw_B9Z2HcbA2d1FH1U1JVaErOAp2ywgmmoTI=',
                         fit: BoxFit.fitWidth)),
                 Container(
                   color: const Color(0xffBFD1DF),

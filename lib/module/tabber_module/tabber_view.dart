@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view.dart';
+import 'package:i_densfa/module/leaves_module/leave_view.dart';
 import 'package:i_densfa/module/login_module/login_view.dart';
 import 'package:i_densfa/module/my_activity_module/my_activity_view.dart';
+import 'package:i_densfa/module/promoter_module/promoter_view.dart';
 import 'package:i_densfa/module/tabber_module/tabber/tabber_bloc.dart';
 
 import '../beat_plan_module/beat_plan_view.dart';
@@ -43,7 +45,7 @@ class TabberView extends StatelessWidget {
                   builder: (context) => IconButton(
                       onPressed: () => Scaffold.of(context).openDrawer(),
                       icon: const Icon(
-                        Icons.menu,
+                        Icons.blur_on_sharp,
                         color: Colors.black,
                       ))),
             ),
@@ -182,8 +184,30 @@ class AppSideMenu extends StatelessWidget {
             title: const Text('My Activities'),
             onTap: () {
               Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => const MyActivityView())));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.timer_outlined),
+            title: const Text('Leave'),
+            onTap: () {
+              Navigator.pop(context);
               Navigator.push(context,
-                  MaterialPageRoute(builder: ((context) => MyActivityView())));
+                  MaterialPageRoute(builder: ((context) => LeaveView())));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.handshake_outlined),
+            title: const Text('Promoter'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => const PromoterView())));
             },
           ),
           ListTile(

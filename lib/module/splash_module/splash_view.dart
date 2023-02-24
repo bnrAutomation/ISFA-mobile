@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/splash_module/splash/splash_bloc.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
-
-import '../../utility/image_constants.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import '../login_module/login_view.dart';
 import '../ui/background.dart';
 

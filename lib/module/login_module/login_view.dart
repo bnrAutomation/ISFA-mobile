@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/login_module/login/login_bloc.dart';
 import 'package:i_densfa/module/tabber_module/tabber_view.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
-import 'package:i_densfa/utility/image_constants.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import '../forgot_password_module/forgot_password_view.dart';
 import '../ui/background.dart';
 
