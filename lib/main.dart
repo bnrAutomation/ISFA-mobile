@@ -17,6 +17,12 @@ class MyApp extends StatelessWidget {
             background: const Color(0xFFF8F8F8),
           ),
       primaryColor: const Color(0XFF003D5B),
+      textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+              elevation: MaterialStateProperty.all(1),
+              backgroundColor:
+                  MaterialStateProperty.all(const Color(0XFF003D5B)),
+              foregroundColor: MaterialStateProperty.all(Colors.white))),
       buttonTheme: const ButtonThemeData(
         buttonColor: Color(0XFFFFBF00),
         disabledColor: Colors.white,
