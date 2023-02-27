@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/store_list_module/bloc/schedule_visit_call_bloc.dart';
+import 'package:i_densfa/module/ui/custom_material_button.dart';
 
 import 'store_list_view.dart';
 
@@ -125,10 +126,12 @@ class ScheduleVisitView extends StatelessWidget {
                   hintText: 'Type here (max 256 characters allowed)'),
             ),
             const SizedBox(height: 20),
-            TextButton(
-                onPressed: () {},
-                child: const SizedBox(
-                    height: 40, child: Center(child: Text("SAVE"))))
+
+            CustomMaterialButton(buttonText: "Save", onPressed: () => {}),
+            // TextButton(
+            //     onPressed: () {},
+            //     child: const SizedBox(
+            //         height: 40, child: Center(child: Text("SAVE"))))
           ],
         ),
       ),
@@ -154,7 +157,7 @@ class ScheduleVisitView extends StatelessWidget {
                     child: Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.symmetric(vertical: 10),
+                          margin: const EdgeInsets.symmetric(vertical: 10),
                           width: 50,
                           height: 3,
                           color: Colors.grey,

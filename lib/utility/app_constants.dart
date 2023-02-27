@@ -9,6 +9,12 @@ class ImageConstants {
   final String sick = "assets/icons/sick.svg";
   final String walkman = "assets/icons/walkman.svg";
   final String sunumbrella = "assets/icons/sunumbrella.svg";
+  final String line = "assets/icons/line.svg";
+  final String navigator = "assets/icons/navigator.svg";
+  final String box = "assets/icons/box.svg";
+  final String campaign = "assets/icons/campaign.svg";
+  final String feedback = "assets/icons/feedback.svg";
+  final String scan = "assets/icons/scan.svg";
 
   final String progressImage = "assets/images/dummy_progress.png";
   final String casualLeaveBg = "assets/images/casual_leave_bg.png";

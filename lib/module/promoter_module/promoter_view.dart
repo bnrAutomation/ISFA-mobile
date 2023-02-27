@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:i_densfa/module/ui/custom_image_button.dart';
+import 'package:i_densfa/module/ui/custom_material_button.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 
 class PromoterView extends StatelessWidget {
   const PromoterView({super.key});
@@ -8,7 +13,7 @@ class PromoterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      // backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: const Color(0XFF003D5B),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -21,20 +26,45 @@ class PromoterView extends StatelessWidget {
         ),
       ),
       body: Column(children: [
-        ClipRRect(
+        const SizedBox(
+          height: 5,
+        ),
+        Card(
+          color: const Color(0xffBFD1DF),
+          margin: const EdgeInsets.symmetric(horizontal: 5),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          elevation: 5,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                  color: Colors.grey.shade100,
+                  height: 0.2.sh,
+                  decoration: const BoxDecoration(
+                    color: Color(0xffBFD1DF),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+
+                      //Radius.circular(20)
+                    ),
+                  ),
                   alignment: Alignment.center,
                   child: Image.network(
                     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpo1BfypXH0JcsdyjZI_w3rK-T4utQ_RAVjBx5ELNHpuN9fUdPBNuwjLjSxaVfCpXhsRQ&usqp=CAU",
                     fit: BoxFit.fitWidth,
                   )),
               Container(
-                color: const Color(0xffBFD1DF),
                 padding: const EdgeInsets.all(15),
+                decoration: const BoxDecoration(
+                  color: Color(0xffBFD1DF),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+
+                    //Radius.circular(20)
+                  ),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -67,6 +97,24 @@ class PromoterView extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
+
+// Visible only one  either Check_in or Check-Out button.
+
+                    CustomMaterialButton(
+                        buttonText: "Check-In Store",
+                        gradient: const LinearGradient(colors: <Color>[
+                          Color(0XFF003D5B),
+                          Color(0XFF278BBC),
+                        ]),
+                        onPressed: () => {}),
+
+                    const SizedBox(height: 8),
+                    CustomMaterialButton(
+                        gradient: const LinearGradient(
+                          colors: <Color>[Color(0XFFC92434), Color(0XFF003D5B)],
+                        ),
+                        buttonText: "Check-Out Store",
+                        onPressed: () => {})
                   ],
                 ),
               )
@@ -76,123 +124,212 @@ class PromoterView extends StatelessWidget {
         const SizedBox(
           height: 8,
         ),
-        Expanded(
-          child: Column(
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
             children: [
+              Expanded(
+                child: CustomImageButton(
+                  buttonText: "Navigate to\nstore",
+                  onPressed: () => {},
+                  image: SvgPicture.asset(
+                    imageConstants.navigator,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Expanded(
+                child: CustomImageButton(
+                  buttonText: "Inventory",
+                  onPressed: () => {},
+                  image: SvgPicture.asset(
+                    imageConstants.box,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Expanded(
+                child: CustomImageButton(
+                  buttonText: "Start Campaign",
+                  onPressed: () => {},
+                  image: SvgPicture.asset(
+                    imageConstants.campaign,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Expanded(
+                child: CustomImageButton(
+                  buttonText: "Feedback",
+                  onPressed: () => {
+                    showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (context) {
+                          return _openFeedbackSheet(context);
+                        })
+                  },
+                  image: SvgPicture.asset(
+                    imageConstants.feedback,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ]),
+    );
+  }
+
+  Widget _openFeedbackSheet(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(
+          height: 20,
+          width: 1.sw,
+        ),
+        SvgPicture.asset(
+          imageConstants.line,
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 5,
+                width: 1.sw,
+              ),
+              Text(
+                "Take Feedback",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text("Neeraj Pan Bhandar,New Delhi.",
+                  style: Theme.of(context).textTheme.labelLarge),
+              const SizedBox(
+                height: 5,
+              ),
+              Text("Select Purpose",
+                  style: Theme.of(context).textTheme.labelLarge),
+              const SizedBox(
+                height: 5,
+              ),
+              Container(
+                width: 1.sw,
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                  // value:
+                  //     context.read<LeaveBloc>().selectLeaveType.isNotEmpty
+                  //         ? context.read<LeaveBloc>().selectLeaveType
+                  //         : null,
+                  items: <String>[
+                    'This is Dummy Purpose',
+                    'This is Dummy Purpose',
+                    'This is Dummy Purpose',
+                    'Other'
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    // BlocProvider.of<LeaveBloc>(context)
+                    //     .add(ChangeLeaveTypeEvent(value ?? ""));
+                  },
+                  hint: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Choose an option",
+                      style: TextStyle(color: Colors.grey),
+                      //textAlign: TextAlign.end,
+                    ),
+                  ),
+                )),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text("Reason", style: Theme.of(context).textTheme.labelLarge),
+              const SizedBox(
+                height: 5,
+              ),
+              Container(
+                width: 1.sw,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      contentPadding:
+                          EdgeInsets.only(left: 8, bottom: 8, top: 8, right: 8),
+                      hintText: "Type your reason here..."),
+                  // onTap: () => {},
+                  minLines: 2,
+                  maxLines: 5,
+                  keyboardType: TextInputType.multiline,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InkWell(
-                    onTap: () => {},
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        boxShadow: [
-                          BoxShadow(
-                              offset: Offset(0.5, 0.2),
-                              blurRadius: 2.0,
-                              blurStyle: BlurStyle.normal),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(
-                              Icons.navigation_rounded,
-                              color: Colors.amber,
-                              size: 44,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Navigate to store",
-                              style: TextStyle(color: Colors.black),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  CircleAvatar(
+                      // backgroundImage: AssetImage(imageConstants.scan),
+                      backgroundColor: Colors.grey,
+                      radius: 50,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: SvgPicture.asset(imageConstants.scan),
+                      )),
                   const SizedBox(
-                    width: 10,
                     height: 10,
                   ),
-                  InkWell(
-                    onTap: () => {},
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        boxShadow: [
-                          BoxShadow(
-                              offset: Offset(0.5, 0.2),
-                              blurRadius: 2.0,
-                              blurStyle: BlurStyle.normal),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(
-                              Icons.check_circle_outline,
-                              color: Colors.amber,
-                              size: 44,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Check-In to site",
-                              style: TextStyle(color: Colors.black),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                  Expanded(
+                    child: CustomMaterialButton(
+                        buttonText: "Click Image",
+                        onPressed: () => {Navigator.pop(context)}),
                   ),
                   const SizedBox(
-                    width: 10,
-                    height: 10,
+                    height: 5,
                   ),
-                  InkWell(
-                    onTap: () => {},
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        boxShadow: [
-                          BoxShadow(
-                              offset: Offset(0.5, 0.2),
-                              blurRadius: 2.0,
-                              blurStyle: BlurStyle.normal),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(
-                              Icons.check_circle_outline,
-                              color: Colors.amber,
-                              size: 44,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Start Campaign",
-                              style: TextStyle(color: Colors.black),
-                            )
-                          ],
-                        ),
-                      ),
+                  MaterialButton(
+                    onPressed: () {},
+                    color: Colors.black,
+                    textColor: Colors.white,
+                    padding: const EdgeInsets.all(16),
+                    shape: const CircleBorder(),
+                    child: const Icon(
+                      Icons.delete_outline,
+                      size: 18,
                     ),
                   )
                 ],
@@ -200,89 +337,16 @@ class PromoterView extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () => {},
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 2.0,
-                              blurStyle: BlurStyle.normal,
-                              offset: Offset(0.5, 0.2)),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(
-                              Icons.inventory_2_outlined,
-                              color: Colors.amber,
-                              size: 44,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Inventory",
-                              style: TextStyle(color: Colors.black),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                    height: 10,
-                  ),
-                  InkWell(
-                    onTap: () => {},
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        boxShadow: [
-                          BoxShadow(
-                              offset: Offset(0.5, 0.2),
-                              blurRadius: 2.0,
-                              blurStyle: BlurStyle.normal),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(
-                              Icons.feedback_outlined,
-                              color: Colors.amber,
-                              size: 44,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Feedback",
-                              style: TextStyle(color: Colors.black),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )
+              CustomMaterialButton(
+                  buttonText: "Save Feedback",
+                  onPressed: () => {Navigator.pop(context)}),
+              const SizedBox(
+                height: 10,
+              ),
             ],
           ),
-        ),
-      ]),
+        )
+      ],
     );
   }
 }
