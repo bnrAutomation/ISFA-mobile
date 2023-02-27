@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:i_densfa/module/campaign_module/campaign_view/campain_list.dart';
+import 'package:i_densfa/module/inventory_module/inventory_view.dart';
 import 'package:i_densfa/module/ui/custom_image_button.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/utility/app_constants.dart';
@@ -143,7 +145,12 @@ class PromoterView extends StatelessWidget {
               Expanded(
                 child: CustomImageButton(
                   buttonText: "Inventory",
-                  onPressed: () => {},
+                  onPressed: () => {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => const InventoryView())))
+                  },
                   image: SvgPicture.asset(
                     imageConstants.box,
                   ),
@@ -155,7 +162,14 @@ class PromoterView extends StatelessWidget {
               Expanded(
                 child: CustomImageButton(
                   buttonText: "Start Campaign",
-                  onPressed: () => {},
+                  onPressed: () => {
+                    showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (context) {
+                          return _openCampaignSheet(context);
+                        })
+                  },
                   image: SvgPicture.asset(
                     imageConstants.campaign,
                   ),
@@ -184,6 +198,53 @@ class PromoterView extends StatelessWidget {
           ),
         ),
       ]),
+    );
+  }
+
+  Widget _openCampaignSheet(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(
+          height: 20,
+          width: 1.sw,
+        ),
+        SvgPicture.asset(
+          imageConstants.line,
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 5,
+                width: 1.sw,
+              ),
+              Text(
+                "Campaign",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 5,
+                  shrinkWrap: true,
+                  //padding: const EdgeInsets.all(5),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 5),
+                  itemBuilder: (context, index) => const CampaignList()),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
