@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_densfa/module/store_detail_module/store_detail_view.dart';
 
 import 'bloc/schedule_visit_call_bloc.dart';
 import 'schedule_visit_view.dart';
@@ -61,7 +62,12 @@ class StoreListView extends StatelessWidget {
             itemCount: 10,
             separatorBuilder: (context, index) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
-              return const StoreCardView();
+              return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (c) => const StoreDetailView()));
+                  },
+                  child: const StoreCardView());
             },
           ))
         ],
