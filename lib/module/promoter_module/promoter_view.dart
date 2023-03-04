@@ -4,10 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view/campain_list.dart';
+import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions_view.dart';
 import 'package:i_densfa/module/inventory_module/inventory_view.dart';
 import 'package:i_densfa/module/ui/custom_image_button.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/app_pop_view.dart';
 
 class PromoterView extends StatelessWidget {
   const PromoterView({super.key});
@@ -174,13 +176,9 @@ class PromoterView extends StatelessWidget {
               Expanded(
                 child: CustomImageButton(
                   buttonText: "Start Campaign",
-                  onPressed: () => {
-                    showModalBottomSheet(
-                        isScrollControlled: true,
-                        context: context,
-                        builder: (context) {
-                          return _openCampaignSheet(context);
-                        })
+                  onPressed: () {
+                    AppPopup.showAppBottomSheet(
+                        context: context, child: _openCampaignSheet(context));
                   },
                   image: SvgPicture.asset(
                     imageConstants.campaign,
@@ -193,13 +191,9 @@ class PromoterView extends StatelessWidget {
               Expanded(
                 child: CustomImageButton(
                   buttonText: "Feedback",
-                  onPressed: () => {
-                    showModalBottomSheet(
-                        isScrollControlled: true,
-                        context: context,
-                        builder: (context) {
-                          return _openFeedbackSheet(context);
-                        })
+                  onPressed: () {
+                    AppPopup.showAppBottomSheet(
+                        context: context, child: _openFeedbackSheet(context));
                   },
                   image: SvgPicture.asset(
                     imageConstants.feedback,
@@ -214,95 +208,61 @@ class PromoterView extends StatelessWidget {
   }
 
   Widget _openCampaignSheet(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        SizedBox(
-          height: 20,
-          width: 1.sw,
-        ),
-        SvgPicture.asset(
-          imageConstants.line,
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 5,
-                width: 1.sw,
-              ),
-              Text(
-                "Campaign",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 5,
-                  shrinkWrap: true,
-                  //padding: const EdgeInsets.all(5),
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 5),
-                  itemBuilder: (context, index) => const CampaignList()),
-            ],
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(
+            "Campaign",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
-        ),
-      ],
+          const SizedBox(height: 10),
+          Expanded(
+            child: ListView.separated(
+                itemCount: 10,
+                separatorBuilder: (context, index) => const SizedBox(height: 5),
+                itemBuilder: (context, index) => InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      AppPopup.showAppBottomSheet(
+                        context: context,
+                        child: const DynamicQuestionsView(),
+                      );
+                    },
+                    child: const CampaignList())),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _openFeedbackSheet(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        SizedBox(
-          height: 20,
-          width: 1.sw,
-        ),
-        SvgPicture.asset(
-          imageConstants.line,
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(
+            "Take Feedback",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 5,
-                width: 1.sw,
-              ),
-              Text(
-                "Take Feedback",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
               Text("Neeraj Pan Bhandar,New Delhi.",
                   style: Theme.of(context).textTheme.labelLarge),
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               Text("Select Purpose",
                   style: Theme.of(context).textTheme.labelLarge),
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               Container(
                 width: 1.sw,
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -341,9 +301,7 @@ class PromoterView extends StatelessWidget {
                   ),
                 )),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Text("Reason", style: Theme.of(context).textTheme.labelLarge),
               const SizedBox(
                 height: 5,
@@ -370,9 +328,7 @@ class PromoterView extends StatelessWidget {
                   keyboardType: TextInputType.multiline,
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   CircleAvatar(
@@ -417,9 +373,9 @@ class PromoterView extends StatelessWidget {
                 height: 10,
               ),
             ],
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/store_list_module/bloc/schedule_visit_call_bloc.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
+import 'package:i_densfa/utility/app_pop_view.dart';
 
 import 'store_list_view.dart';
 
@@ -146,40 +147,21 @@ class ScheduleVisitView extends StatelessWidget {
         TextField(
           readOnly: true,
           onTap: () async {
-            final selectedItem = await showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height - 20),
-                builder: (context) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          width: 50,
-                          height: 3,
-                          color: Colors.grey,
-                        ),
-                        Expanded(
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.all(10),
-                            itemCount: 10,
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 10),
-                            itemBuilder: (context, index) => InkWell(
-                                onTap: () {
-                                  Navigator.of(context).pop("name");
-                                },
-                                child: const StoreCardView()),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                });
+            final selectedItem = await AppPopup.showAppBottomSheet(
+              context: context,
+              child: ListView.separated(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(10),
+                itemCount: 10,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 10),
+                itemBuilder: (context, index) => InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop("name");
+                    },
+                    child: const StoreCardView()),
+              ),
+            );
 
             print(selectedItem);
           },

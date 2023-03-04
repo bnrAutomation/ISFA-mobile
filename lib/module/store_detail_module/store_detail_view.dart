@@ -195,56 +195,62 @@ class StoreDetailView extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Spacer(),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.location_off_outlined,
-                          color: Colors.white,
-                        )),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.call,
-                          color: Colors.white,
-                        )),
-                  ],
-                ),
-                const Spacer(),
-                Text("Shree Sai Mangala Enterprise",
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: const Icon(Icons.keyboard_backspace,
+                              color: Colors.white)),
+                      const Spacer(),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.location_off_outlined,
+                            color: Colors.white,
+                          )),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.call,
+                            color: Colors.white,
+                          )),
+                    ],
+                  ),
+                  const Spacer(),
+                  Text("Shree Sai Mangala Enterprise",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: Colors.white)),
+                  Text(
+                      "PLOT NO.77, BLOCK NO 179/1, SYNO-159/11, GABBARMATA MANDIR GALI, KADODARA, SURAT, Surat, Gujarat, Surat, Surat, India 123456",
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelMedium
+                          ?.copyWith(color: Colors.white)),
+                  Container(
+                    margin: const EdgeInsets.only(top: 6),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20)),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                    child: Text("Metro",
+                        style: Theme.of(context).textTheme.bodySmall),
+                  ),
+                  Text(
+                    "7 km Away",
                     style: Theme.of(context)
                         .textTheme
-                        .titleMedium
-                        ?.copyWith(color: Colors.white)),
-                Text(
-                    "PLOT NO.77, BLOCK NO 179/1, SYNO-159/11, GABBARMATA MANDIR GALI, KADODARA, SURAT, Surat, Gujarat, Surat, Surat, India 123456",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelMedium
-                        ?.copyWith(color: Colors.white)),
-                Container(
-                  margin: const EdgeInsets.only(top: 6),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-                  child: Text("Metro",
-                      style: Theme.of(context).textTheme.bodySmall),
-                ),
-                Text(
-                  "7 km Away",
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelSmall
-                      ?.copyWith(color: Colors.white),
-                ),
-              ],
+                        .labelSmall
+                        ?.copyWith(color: Colors.white),
+                  ),
+                ],
+              ),
             ),
           )
         ],
