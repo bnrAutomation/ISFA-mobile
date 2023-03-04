@@ -70,10 +70,22 @@ class PromoterView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Chroma Store",
-                      style: GoogleFonts.inter(
-                          fontSize: 16, fontWeight: FontWeight.w600),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "Chroma Store",
+                            style: GoogleFonts.inter(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () => {},
+                            icon: const Icon(
+                              Icons.location_on,
+                              color: Colors.red,
+                            ))
+                      ],
                     ),
                     const SizedBox(height: 5),
                     Row(
@@ -132,7 +144,7 @@ class PromoterView extends StatelessWidget {
             children: [
               Expanded(
                 child: CustomImageButton(
-                  buttonText: "Navigate to\nstore",
+                  buttonText: "Sale Log",
                   onPressed: () => {},
                   image: SvgPicture.asset(
                     imageConstants.navigator,

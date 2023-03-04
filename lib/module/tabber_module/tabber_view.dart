@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view.dart';
+import 'package:i_densfa/module/checkin_module/check_in_view.dart';
 import 'package:i_densfa/module/leaves_module/leave_view.dart';
 import 'package:i_densfa/module/login_module/login_view.dart';
 import 'package:i_densfa/module/my_activity_module/my_activity_view.dart';
@@ -140,9 +141,15 @@ class AppSideMenu extends StatelessWidget {
                           CupertinoSwitch(
                               value: context.read<TabberBloc>().isOnline,
                               onChanged: (newVal) {
-                                context
-                                    .read<TabberBloc>()
-                                    .add(UpdateOnlineStatusEvent(newVal));
+                                Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            const CheckInView())));
+                                // context
+                                //     .read<TabberBloc>()
+                                //     .add(UpdateOnlineStatusEvent(newVal));
                               }),
                           Text(
                             context.read<TabberBloc>().isOnline
@@ -158,20 +165,20 @@ class AppSideMenu extends StatelessWidget {
               ],
               accountName: const Text("Gopal Krishan"),
               accountEmail: const Text("ce.gopal@denave.com")),
-          ListTile(
-            leading: const Icon(Icons.group),
-            title: const Text('Team'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(CupertinoIcons.tag),
-            title: const Text('Schemes'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(Icons.group),
+          //   title: const Text('Team'),
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //   },
+          // ),
+          // ListTile(
+          //   leading: const Icon(CupertinoIcons.tag),
+          //   title: const Text('Schemes'),
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //   },
+          // ),
           ListTile(
             leading: const Icon(CupertinoIcons.calendar_today),
             title: const Text('Attendance'),
@@ -210,20 +217,20 @@ class AppSideMenu extends StatelessWidget {
                       builder: ((context) => const PromoterView())));
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.help_outline),
-            title: const Text('Help and Support'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings_outlined),
-            title: const Text('Settings'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(Icons.help_outline),
+          //   title: const Text('Help and Support'),
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //   },
+          // ),
+          // ListTile(
+          //   leading: const Icon(Icons.settings_outlined),
+          //   title: const Text('Settings'),
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //   },
+          // ),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),

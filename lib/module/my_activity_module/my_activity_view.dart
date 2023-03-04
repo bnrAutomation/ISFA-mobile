@@ -112,12 +112,14 @@ class MyActivityView extends StatelessWidget {
                       )),
                       Expanded(
                           child: Center(
-                        child: Text(
-                          "Span(Hrs)",
-                          style: TextStyle(
-                            fontSize: 11.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
+                        child: FittedBox(
+                          child: Text(
+                            "Span(Hrs)",
+                            style: TextStyle(
+                              fontSize: 11.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
                           ),
                         ),
                       )),
