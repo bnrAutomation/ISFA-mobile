@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view/campain_list.dart';
+import 'package:i_densfa/module/dynamic_questions_module/model.dart';
 import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions_view.dart';
 import 'package:i_densfa/module/inventory_module/inventory_view.dart';
 import 'package:i_densfa/module/ui/custom_image_button.dart';
@@ -175,7 +176,7 @@ class PromoterView extends StatelessWidget {
               ),
               Expanded(
                 child: CustomImageButton(
-                  buttonText: "Start Campaign",
+                  buttonText: "Start\nCampaign",
                   onPressed: () {
                     AppPopup.showAppBottomSheet(
                         context: context, child: _openCampaignSheet(context));
@@ -208,6 +209,7 @@ class PromoterView extends StatelessWidget {
   }
 
   Widget _openCampaignSheet(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -215,10 +217,7 @@ class PromoterView extends StatelessWidget {
         children: [
           Text(
             "Campaign",
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold),
+            style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
           Expanded(
@@ -230,11 +229,55 @@ class PromoterView extends StatelessWidget {
                       Navigator.pop(context);
                       AppPopup.showAppBottomSheet(
                         context: context,
-                        child: const DynamicQuestionsView(),
+                        child: salesLogForm(textTheme),
                       );
                     },
                     child: const CampaignList())),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget salesLogForm(TextTheme textTheme) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Sales Log Form",
+                  style: textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                DynamicQuestionsView(questions: dummySalesLogFormList),
+              ],
+            ),
+          ),
+          Container(
+            color: const Color(0xff278bbc).withOpacity(0.2),
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Customer Details",
+                  style: textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                DynamicQuestionsView(questions: dummyCustomerDetails),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: DynamicQuestionsView(questions: dummyOtherInfo),
+          ),
+          CustomMaterialButton(buttonText: "Submit", onPressed: () {}),
         ],
       ),
     );
@@ -263,49 +306,19 @@ class PromoterView extends StatelessWidget {
               Text("Select Purpose",
                   style: Theme.of(context).textTheme.labelLarge),
               const SizedBox(height: 5),
-              Container(
-                width: 1.sw,
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                  // value:
-                  //     context.read<LeaveBloc>().selectLeaveType.isNotEmpty
-                  //         ? context.read<LeaveBloc>().selectLeaveType
-                  //         : null,
-                  items: <String>[
-                    'This is Dummy Purpose',
-                    'This is Dummy Purpose',
-                    'This is Dummy Purpose',
-                    'Other'
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    // BlocProvider.of<LeaveBloc>(context)
-                    //     .add(ChangeLeaveTypeEvent(value ?? ""));
-                  },
-                  hint: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Choose an option",
-                      style: TextStyle(color: Colors.grey),
-                      //textAlign: TextAlign.end,
-                    ),
-                  ),
-                )),
+              AppPopup.dropDownMenu(
+                options: [
+                  'This is Dummy Purpose',
+                  'This is Dummy Purpose',
+                  'This is Dummy Purpose',
+                  'Other'
+                ],
+                placeholder: "Choose an option",
+                onChanged: (p0) {},
               ),
               const SizedBox(height: 10),
               Text("Reason", style: Theme.of(context).textTheme.labelLarge),
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               Container(
                 width: 1.sw,
                 decoration: BoxDecoration(

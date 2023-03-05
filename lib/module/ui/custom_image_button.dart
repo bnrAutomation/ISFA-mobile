@@ -39,10 +39,13 @@ class CustomImageButton extends StatelessWidget {
               const SizedBox(
                 height: 5,
               ),
-              Text(
-                buttonText,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white),
+              FittedBox(
+                child: Text(
+                  buttonText,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
