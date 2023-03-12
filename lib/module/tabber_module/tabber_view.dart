@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:i_densfa/module/assessment_module/bloc/assessment_bloc.dart';
+import 'package:i_densfa/module/assessment_module/views/assessment_list_view.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view.dart';
 import 'package:i_densfa/module/checkin_module/check_in_view.dart';
 import 'package:i_densfa/module/leaves_module/leave_view.dart';
@@ -56,7 +58,7 @@ class TabberView extends StatelessWidget {
             ),
             bottomNavigationBar: Container(
               decoration: BoxDecoration(
-                color: const Color(0XFF003D5B),
+                color: Theme.of(context).primaryColor,
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 20,
@@ -128,7 +130,7 @@ class AppSideMenu extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-              decoration: const BoxDecoration(color: Color(0XFF003D5B)),
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
               currentAccountPicture: const CircleAvatar(),
               otherAccountsPictures: [
                 BlocBuilder<TabberBloc, TabberState>(
@@ -141,15 +143,8 @@ class AppSideMenu extends StatelessWidget {
                           CupertinoSwitch(
                               value: context.read<TabberBloc>().isOnline,
                               onChanged: (newVal) {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) =>
-                                            const CheckInView())));
-                                // context
-                                //     .read<TabberBloc>()
-                                //     .add(UpdateOnlineStatusEvent(newVal));
+                                closeDrawerAndPushView(
+                                    context, const CheckInView());
                               }),
                           Text(
                             context.read<TabberBloc>().isOnline
@@ -190,33 +185,37 @@ class AppSideMenu extends StatelessWidget {
             leading: const Icon(Icons.timer_outlined),
             title: const Text('My Activities'),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: ((context) => const MyActivityView())));
+              closeDrawerAndPushView(context, const MyActivityView());
             },
           ),
           ListTile(
             leading: const Icon(Icons.timer_outlined),
             title: const Text('Leave'),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: ((context) => LeaveView())));
+              closeDrawerAndPushView(context, LeaveView());
             },
           ),
           ListTile(
             leading: const Icon(Icons.handshake_outlined),
             title: const Text('Promoter'),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: ((context) => const PromoterView())));
+              closeDrawerAndPushView(context, const PromoterView());
             },
           ),
+
+          ListTile(
+            leading: const Icon(Icons.assessment_outlined),
+            title: const Text('Assessment'),
+            onTap: () {
+              closeDrawerAndPushView(
+                  context,
+                  BlocProvider(
+                    create: (context) => AssessmentBloc(),
+                    child: const AssessmentListView(),
+                  ));
+            },
+          ),
+
           // ListTile(
           //   leading: const Icon(Icons.help_outline),
           //   title: const Text('Help and Support'),
@@ -235,13 +234,19 @@ class AppSideMenu extends StatelessWidget {
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: ((context) => LoginView())));
+              final login =
+                  MaterialPageRoute(builder: (context) => LoginView());
+              Navigator.pushAndRemoveUntil(context, login, (route) => false);
             },
           ),
         ],
       ),
     );
+  }
+
+  void closeDrawerAndPushView(BuildContext context, Widget toView) {
+    Scaffold.of(context).closeDrawer();
+    final route = MaterialPageRoute(builder: (c) => toView);
+    Navigator.push(context, route);
   }
 }

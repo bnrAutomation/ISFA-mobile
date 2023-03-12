@@ -92,7 +92,7 @@ class BeatPlanMI extends StatelessWidget {
                           onPressed: () {},
                           style: TextButton.styleFrom(
                             alignment: Alignment.center,
-                            backgroundColor: const Color(0xff003D5B),
+                            backgroundColor: Theme.of(context).primaryColor,
                           ),
                           child: Center(
                             child: Text('Assign',
@@ -160,7 +160,7 @@ class BeatPlanSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      color: const Color(0xff003D5B),
+      color: Theme.of(context).primaryColor,
       child: TextField(
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(

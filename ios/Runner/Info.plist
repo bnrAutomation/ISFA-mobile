@@ -47,5 +47,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>App needs camera access to capture and upload your selfie.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>App needs microphone access to capture and upload your selfie.</string>
 </dict>
 </plist>

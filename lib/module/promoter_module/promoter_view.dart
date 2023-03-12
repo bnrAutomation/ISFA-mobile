@@ -18,9 +18,8 @@ class PromoterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: const Color(0XFF003D5B),
+        backgroundColor: Theme.of(context).primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Promoter",
@@ -119,16 +118,19 @@ class PromoterView extends StatelessWidget {
 
                     CustomMaterialButton(
                         buttonText: "Check-In Store",
-                        gradient: const LinearGradient(colors: <Color>[
-                          Color(0XFF003D5B),
-                          Color(0XFF278BBC),
+                        gradient: LinearGradient(colors: <Color>[
+                          Theme.of(context).primaryColor,
+                          const Color(0XFF278BBC),
                         ]),
                         onPressed: () => {}),
 
                     const SizedBox(height: 8),
                     CustomMaterialButton(
-                        gradient: const LinearGradient(
-                          colors: <Color>[Color(0XFFC92434), Color(0XFF003D5B)],
+                        gradient: LinearGradient(
+                          colors: <Color>[
+                            const Color(0XFFC92434),
+                            Theme.of(context).primaryColor
+                          ],
                         ),
                         buttonText: "Check-Out Store",
                         onPressed: () => {})

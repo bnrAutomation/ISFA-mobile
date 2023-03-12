@@ -17,7 +17,7 @@ class MyActivityView extends StatelessWidget {
           return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
             appBar: AppBar(
-              backgroundColor: const Color(0XFF003D5B),
+              backgroundColor: Theme.of(context).primaryColor,
               iconTheme: const IconThemeData(color: Colors.white),
               title: Text(
                 "My Activity",
@@ -106,7 +106,7 @@ class MyActivityView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.bold,
-                            color: const Color(0XFF003D5B),
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                       )),

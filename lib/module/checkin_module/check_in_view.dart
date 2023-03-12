@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
+import 'package:i_densfa/module/upload_selfie/upload_selfie.dart';
+
+import '../upload_selfie/bloc/upload_selfie_bloc.dart';
 
 class CheckInView extends StatelessWidget {
   const CheckInView({super.key});
@@ -9,7 +13,7 @@ class CheckInView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0XFF003D5B),
+        backgroundColor: Theme.of(context).primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Check-In",
@@ -77,7 +81,17 @@ class CheckInView extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          CustomMaterialButton(buttonText: "Take Selfie ", onPressed: () => {}),
+          CustomMaterialButton(
+              buttonText: "Take Selfie ",
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (c) => BlocProvider(
+                              create: (context) => UploadSelfieBloc(),
+                              child: const UploadSelfieView(),
+                            )));
+              }),
           const SizedBox(
             height: 10,
           )
