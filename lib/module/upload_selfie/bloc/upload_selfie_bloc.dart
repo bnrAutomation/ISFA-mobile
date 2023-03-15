@@ -62,7 +62,7 @@ class UploadSelfieBloc extends Bloc<UploadSelfieEvent, UploadSelfieState> {
       await controller.resumePreview();
     } catch (e) {
       // If an error occurs, log the error to the console.
-      print(e);
+      //print(e);
     }
   }
 }

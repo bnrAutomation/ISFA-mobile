@@ -47,10 +47,10 @@ class SplashView extends StatelessWidget {
                       // width: 0.5.sw,
                       // height: 0.5.sh,
                     ),
-                    const Text(
-                      "Sales Force Automation",
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
+                    // const Text(
+                    //   "Sales Force Automation",
+                    //   style: TextStyle(fontStyle: FontStyle.italic),
+                    // ),
                   ],
                 ),
               )
