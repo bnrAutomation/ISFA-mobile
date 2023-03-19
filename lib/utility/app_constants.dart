@@ -40,3 +40,8 @@ class StatusConstants {
   final int weekOffTypeLeave = 2;
   final int otherTypeLeave = 3;
 }
+
+class URLConstants {
+  static const baseUrl = "https://staging.denave.com:8451/DenaveIDAM/api";
+  static const loginURl = "$baseUrl/login";
+}

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/splash_module/splash_view.dart';
 import 'package:month_year_picker/month_year_picker.dart';
+
+import 'utility/network_helper.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,6 +38,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BuildContext? networkAlertContext;
     return ScreenUtilInit(
         builder: (context, child) => MaterialApp(
               localizationsDelegates: const [
@@ -45,7 +49,28 @@ class MyApp extends StatelessWidget {
               theme: _lightTheme,
               darkTheme: _darkTheme,
               themeMode: ThemeMode.light,
-              home: const SplashView(),
+              home: BlocProvider(
+                create: (context) => NetworkBloc()..add(NetworkObserve()),
+                child: BlocConsumer<NetworkBloc, NetworkState>(
+                    builder: (context, state) => const SplashView(),
+                    listener: (context, state) {
+                      if (state is NetworkFailure) {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (c) {
+                              networkAlertContext = c;
+                              return const AlertDialog(
+                                content: Text("No Internet Connection"),
+                              );
+                            });
+                      } else {
+                        if (networkAlertContext != null) {
+                          Navigator.pop(networkAlertContext!);
+                        }
+                      }
+                    }),
+              ),
             ));
   }
 }

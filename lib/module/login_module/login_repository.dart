@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:i_densfa/module/login_module/models/login_model.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 
 class LoginRepository {
-  String loginUrl = 'https://staging.denave.com:8451/DenaveIDAM/api/login';
   final device = Device();
   Future<LoginResponse> userLogin(String userId, String userPassword) async {
     final requestBody = LoginRequest(
@@ -17,8 +17,8 @@ class LoginRepository {
         userId: userId,
         userPassword: userPassword,
         userToken: '');
-    final response =
-        await post(Uri.parse(loginUrl), body: requestBody.toJson());
+    final response = await post(Uri.parse(URLConstants.loginURl),
+        body: requestBody.toJson());
     if (response.statusCode == 200) {
       return LoginResponse.fromRawJson(response.body);
     } else {
