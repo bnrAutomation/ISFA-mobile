@@ -41,7 +41,7 @@ class Background extends StatelessWidget {
           bottom: 0,
           left: 0,
           child: SvgPicture.asset(
-            imageConstants.triangle,
+            ImageConstants.triangle,
           ),
         ),
         Positioned(

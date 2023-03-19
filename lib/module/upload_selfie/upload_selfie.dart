@@ -80,25 +80,3 @@ class UploadSelfieView extends StatelessWidget {
     );
   }
 }
-
-class ClipPathClass extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final double boxHalfWidth = size.width * 0.3;
-    final double boxHalfHeight = size.height * 0.2;
-    final p = Path()
-      ..moveTo(center.dx - boxHalfWidth, center.dy - boxHalfHeight)
-      ..lineTo(center.dx + boxHalfWidth, center.dy - boxHalfHeight)
-      ..lineTo(center.dx + boxHalfWidth, center.dy + boxHalfHeight)
-      ..lineTo(center.dx - boxHalfWidth, center.dy + boxHalfHeight)
-      ..close();
-
-    return Path()
-      ..addRRect(
-          RRect.fromRectAndRadius(p.getBounds(), const Radius.circular(20)));
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
-}

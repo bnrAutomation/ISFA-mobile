@@ -14,11 +14,22 @@ class StoreDetailView extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-        backgroundColor: Theme.of(context).primaryColor,
-        child: Icon(
-          Icons.add,
-          size: 30.w,
-          color: Colors.white,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(colors: [
+                Theme.of(context).primaryColor,
+                const Color(0xff278BBC)
+              ])),
+          child: SizedBox(
+            width: 60,
+            height: 60,
+            child: Icon(
+              Icons.add,
+              size: 30.w,
+              color: Colors.white,
+            ),
+          ),
         ),
         onPressed: () {},
       ),
@@ -43,20 +54,20 @@ class StoreDetailView extends StatelessWidget {
             headerImage(context),
             nameAddress(context),
             blueCard(context,
-                leadingIcon: '',
+                leadingSVGImage: ImageConstants.miniCalendar,
                 subtitle: 'Scheduled visits & Calls',
                 title: '28 Feb 2023',
-                trailingSVGImage: ''),
+                trailingSVGImage: ImageConstants.visitsCalls),
             blueCard(context,
-                leadingIcon: '',
+                leadingSVGImage: ImageConstants.creditCard,
                 subtitle: 'Available Credits',
                 title: '₹ 500.0',
-                trailingSVGImage: ''),
+                trailingSVGImage: ImageConstants.credits),
             blueCard(context,
-                leadingIcon: '',
+                leadingSVGImage: ImageConstants.notesT,
                 subtitle: 'Notes of important discussion with the sub dealer',
                 title: 'Recent Notes (2)',
-                trailingSVGImage: ''),
+                trailingSVGImage: ImageConstants.paperPen),
             Row(
               children: [
                 Expanded(
@@ -64,7 +75,7 @@ class StoreDetailView extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.stacked_line_chart_rounded),
+                        SvgPicture.asset(ImageConstants.statistic),
                         const SizedBox(width: 8),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,37 +83,33 @@ class StoreDetailView extends StatelessWidget {
                             Text("Stage",
                                 style: Theme.of(context).textTheme.bodyMedium),
                             Text("Select Stage",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(
-                                        color: Theme.of(context).primaryColor)),
+                                style: GoogleFonts.inter(
+                                    fontSize: 10.sp,
+                                    color: const Color(0xff278BBC))),
                           ],
                         ),
-                        Icon(
-                          Icons.border_color,
-                          size: 16,
-                          color: Theme.of(context).primaryColor,
-                        )
                       ],
                     ),
                   ),
                 ),
-                // const SizedBox(width: 8),
                 Expanded(
                   child: StoreDetailCard(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.auto_awesome),
+                        SvgPicture.asset(ImageConstants.stars),
                         const SizedBox(width: 8),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Class",
                                 style: Theme.of(context).textTheme.bodyMedium),
-                            Text("Other",
-                                style: Theme.of(context).textTheme.titleSmall),
+                            Text(
+                              "Select Class",
+                              style: GoogleFonts.inter(
+                                  fontSize: 10.sp,
+                                  color: const Color(0xff278BBC)),
+                            )
                           ],
                         ),
                       ],
@@ -110,24 +117,6 @@ class StoreDetailView extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-            StoreDetailCard(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(Icons.credit_card),
-                  const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Available Credit",
-                          style: Theme.of(context).textTheme.bodyMedium),
-                      Text("\$ 0.0",
-                          style: Theme.of(context).textTheme.titleSmall),
-                    ],
-                  ),
-                ],
-              ),
             ),
             StoreDetailCard(
               child: ListTile(
@@ -161,7 +150,8 @@ class StoreDetailView extends StatelessWidget {
                 trailing: Icon(Icons.arrow_forward_ios,
                     color: Theme.of(context).primaryColor),
               ),
-            )
+            ),
+            const SizedBox(height: 100)
           ],
         ),
       ),
@@ -207,7 +197,7 @@ class StoreDetailView extends StatelessWidget {
 
   Card blueCard(
     BuildContext context, {
-    required String leadingIcon,
+    required String leadingSVGImage,
     required String title,
     required String subtitle,
     required String trailingSVGImage,
@@ -219,10 +209,7 @@ class StoreDetailView extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(
-              Icons.calendar_month_rounded,
-              color: Colors.white,
-            ),
+            SvgPicture.asset(leadingSVGImage),
             SizedBox(width: 10.w),
             Expanded(
               child: Column(
@@ -245,7 +232,7 @@ class StoreDetailView extends StatelessWidget {
             ),
             SizedBox(width: 10.w),
             SvgPicture.asset(
-              imageConstants.scan,
+              trailingSVGImage,
               width: 65.w,
               height: 50.h,
             )
@@ -266,44 +253,45 @@ class StoreDetailView extends StatelessWidget {
                 imageUrl: 'https://picsum.photos/200/300',
                 fit: BoxFit.fitWidth),
           ),
-          Column(
-            children: [
-              SizedBox(height: 5.h),
-              Container(
-                margin: EdgeInsets.all(15.w),
-                decoration: BoxDecoration(
-                    color: const Color(0xffC92434),
-                    borderRadius: BorderRadius.circular(5)),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-                child: Text("Metro",
-                    style: GoogleFonts.inter(
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white)),
-              ),
-              const Spacer(),
-              CircleAvatar(
-                backgroundColor: Colors.white,
-                child: IconButton(
+          Padding(
+            padding: EdgeInsets.all(10.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                SizedBox(height: 5.h),
+                Container(
+                  decoration: BoxDecoration(
+                      color: const Color(0xffC92434),
+                      borderRadius: BorderRadius.circular(5)),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                  child: Text("SEMI-URBAN",
+                      style: GoogleFonts.inter(
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white)),
+                ),
+                const Spacer(),
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: IconButton(
+                      color: Theme.of(context).primaryColor,
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.location_off,
+                      )),
+                ),
+                SizedBox(height: 5.h),
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: IconButton(
                     color: Theme.of(context).primaryColor,
                     onPressed: () {},
-                    icon: const Icon(
-                      Icons.location_off_outlined,
-                    )),
-              ),
-              SizedBox(height: 5.h),
-              CircleAvatar(
-                backgroundColor: Colors.white,
-                child: IconButton(
-                    color: Theme.of(context).primaryColor,
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.call,
-                    )),
-              ),
-              SizedBox(height: 5.h),
-            ],
+                    icon: SvgPicture.asset(ImageConstants.telephone),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -325,7 +313,7 @@ class StoreDetailCard extends StatelessWidget {
             BoxShadow(color: Colors.black.withOpacity(0.07), blurRadius: 12)
           ],
           borderRadius: BorderRadius.circular(7.w)),
-      margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+      margin: const EdgeInsets.all(6),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: child,

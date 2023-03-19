@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:i_densfa/module/store_list_module/store_list_view.dart';
 
 class BeatPlanView extends StatelessWidget {
   const BeatPlanView({super.key});
@@ -106,18 +107,10 @@ class BeatPlanMI extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(right: 24),
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
-              color: Color(0xffC92434)),
-          child: Text(
-            "MARK IN",
-            style: GoogleFonts.inter(
-                fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white),
-          ),
-        )
+        const Padding(
+          padding: EdgeInsets.only(right: 20),
+          child: NoteClip(text: 'MARK IN'),
+        ),
       ],
     );
   }

@@ -54,7 +54,7 @@ class ResetPasswordView extends StatelessWidget {
                           height: 10,
                         ),
                         Image.asset(
-                          imageConstants.logo,
+                          ImageConstants.logo,
                           width: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
                           // height: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
                         ),

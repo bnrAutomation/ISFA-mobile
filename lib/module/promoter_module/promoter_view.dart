@@ -150,7 +150,7 @@ class PromoterView extends StatelessWidget {
                   buttonText: "Sale Log",
                   onPressed: () => {},
                   image: SvgPicture.asset(
-                    imageConstants.navigator,
+                    ImageConstants.navigator,
                   ),
                 ),
               ),
@@ -167,7 +167,7 @@ class PromoterView extends StatelessWidget {
                             builder: ((context) => const InventoryView())))
                   },
                   image: SvgPicture.asset(
-                    imageConstants.box,
+                    ImageConstants.box,
                   ),
                 ),
               ),
@@ -182,7 +182,7 @@ class PromoterView extends StatelessWidget {
                         context: context, child: _openCampaignSheet(context));
                   },
                   image: SvgPicture.asset(
-                    imageConstants.campaign,
+                    ImageConstants.campaign,
                   ),
                 ),
               ),
@@ -197,7 +197,7 @@ class PromoterView extends StatelessWidget {
                         context: context, child: _openFeedbackSheet(context));
                   },
                   image: SvgPicture.asset(
-                    imageConstants.feedback,
+                    ImageConstants.feedback,
                   ),
                 ),
               ),
@@ -345,12 +345,12 @@ class PromoterView extends StatelessWidget {
               Row(
                 children: [
                   CircleAvatar(
-                      // backgroundImage: AssetImage(imageConstants.scan),
+                      // backgroundImage: AssetImage(ImageConstants.scan),
                       backgroundColor: Colors.grey,
                       radius: 50,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
-                        child: SvgPicture.asset(imageConstants.scan),
+                        child: SvgPicture.asset(ImageConstants.scan),
                       )),
                   const SizedBox(
                     height: 10,

@@ -163,7 +163,7 @@ class ScheduleVisitView extends StatelessWidget {
               ),
             );
 
-            print(selectedItem);
+            debugPrint(selectedItem);
           },
           decoration: const InputDecoration(
               suffixIcon: Icon(Icons.keyboard_arrow_down),

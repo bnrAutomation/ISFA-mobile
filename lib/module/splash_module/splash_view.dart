@@ -43,7 +43,7 @@ class SplashView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
-                      imageConstants.logo,
+                      ImageConstants.logo,
                       // width: 0.5.sw,
                       // height: 0.5.sh,
                     ),

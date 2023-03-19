@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_view.dart';
 
+import '../../utility/custom_paints.dart';
 import 'bloc/schedule_visit_call_bloc.dart';
 import 'schedule_visit_view.dart';
 
@@ -131,7 +132,12 @@ class StoreCardView extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   FilledButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (c) => const StoreDetailView()));
+                      },
                       style: TextButton.styleFrom(
                         alignment: Alignment.center,
                         backgroundColor: Theme.of(context).primaryColor,
@@ -146,17 +152,9 @@ class StoreCardView extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(right: 24),
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
-              color: Color(0xffC92434)),
-          child: Text(
-            "Semi-urban",
-            style: GoogleFonts.inter(
-                fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white),
-          ),
+        const Padding(
+          padding: EdgeInsets.only(right: 20),
+          child: NoteClip(text: 'Semi-urban'),
         ),
         Positioned.fill(
           child: Align(
@@ -172,6 +170,46 @@ class StoreCardView extends StatelessWidget {
                 child: Image.network(
                     'https://media.istockphoto.com/id/912819604/vector/storefront-flat-design-e-commerce-icon.jpg?s=612x612&w=0&k=20&c=_x_QQJKHw_B9Z2HcbA2d1FH1U1JVaErOAp2ywgmmoTI=',
                     fit: BoxFit.fitWidth)),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class NoteClip extends StatelessWidget {
+  final String text;
+  const NoteClip({
+    super.key,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topRight,
+      children: [
+        CustomPaint(
+          painter: TrianglePainter(
+            strokeColor: const Color(0xff7B000C),
+            strokeWidth: 10,
+            paintingStyle: PaintingStyle.fill,
+          ),
+          child: SizedBox(
+            height: 10.h,
+            width: 10.h,
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(right: 5),
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
+              color: Color(0xffC92434)),
+          child: Text(
+            text,
+            style: GoogleFonts.inter(
+                fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white),
           ),
         ),
       ],

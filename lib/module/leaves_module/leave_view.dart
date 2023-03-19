@@ -222,7 +222,7 @@ class LeaveView extends StatelessWidget {
         child: Stack(
           children: [
             SvgPicture.asset(
-              imageConstants.leavemask,
+              ImageConstants.leavemask,
               fit: BoxFit.fill,
             ),
             Positioned(
@@ -236,7 +236,7 @@ class LeaveView extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: SvgPicture.asset(
-                      imageConstants.doorOut,
+                      ImageConstants.doorOut,
                     ),
                   ),
                 )),
@@ -273,7 +273,7 @@ class LeaveView extends StatelessWidget {
         child: Stack(
           children: [
             SvgPicture.asset(
-              imageConstants.leavemask,
+              ImageConstants.leavemask,
               fit: BoxFit.fill,
             ),
             Positioned(
@@ -287,7 +287,7 @@ class LeaveView extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: SvgPicture.asset(
-                      imageConstants.sick,
+                      ImageConstants.sick,
                     ),
                   ),
                 )),
@@ -324,7 +324,7 @@ class LeaveView extends StatelessWidget {
         child: Stack(
           children: [
             SvgPicture.asset(
-              imageConstants.leavemask,
+              ImageConstants.leavemask,
               fit: BoxFit.fill,
             ),
             Positioned(
@@ -338,7 +338,7 @@ class LeaveView extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: SvgPicture.asset(
-                      imageConstants.walkman,
+                      ImageConstants.walkman,
                     ),
                   ),
                 )),
@@ -375,7 +375,7 @@ class LeaveView extends StatelessWidget {
         child: Stack(
           children: [
             SvgPicture.asset(
-              imageConstants.leavemask,
+              ImageConstants.leavemask,
               fit: BoxFit.fill,
             ),
             Positioned(
@@ -389,7 +389,7 @@ class LeaveView extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: SvgPicture.asset(
-                      imageConstants.sunumbrella,
+                      ImageConstants.sunumbrella,
                     ),
                   ),
                 )),
@@ -437,7 +437,7 @@ class LeaveView extends StatelessWidget {
                 width: 1.sw,
               ),
               SvgPicture.asset(
-                imageConstants.line,
+                ImageConstants.line,
               ),
               const SizedBox(
                 height: 15,

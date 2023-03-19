@@ -33,7 +33,7 @@ class InventoryView extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary,
                 textColor: Colors.white,
                 shape: const CircleBorder(),
-                child: SvgPicture.asset(imageConstants.filter),
+                child: SvgPicture.asset(ImageConstants.filter),
               ),
             ),
             Padding(
@@ -55,7 +55,7 @@ class InventoryView extends StatelessWidget {
                     child: Stack(
                       children: [
                         SvgPicture.asset(
-                          imageConstants.inventoryMask,
+                          ImageConstants.inventoryMask,
                           fit: BoxFit.fill,
                         ),
                         Padding(
@@ -320,7 +320,7 @@ class ItemsList extends StatelessWidget {
           children: [
             SizedBox(
               width: 0.2.sw,
-              child: SvgPicture.asset(imageConstants.product),
+              child: SvgPicture.asset(ImageConstants.product),
             ),
             const SizedBox(
               width: 5,

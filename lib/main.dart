@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/splash_module/splash_view.dart';
 import 'package:month_year_picker/month_year_picker.dart';
-import 'module/tabber_module/tabber_view.dart';
 
 void main() {
   runApp(MyApp());
