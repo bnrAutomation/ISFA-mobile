@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/ui/background.dart';
 import 'package:i_densfa/module/verification_module/verification/verification_bloc.dart';
-
-import '../reset_password_module/reset_password_view.dart';
+import 'package:i_densfa/routes.dart';
 
 class VerificationView extends StatelessWidget {
   const VerificationView({super.key});
@@ -145,10 +145,7 @@ class VerificationView extends StatelessWidget {
                   child: BlocConsumer<VerificationBloc, VerificationState>(
                     listener: (context, state) {
                       if (state is VerificationSuccesfullState) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => ResetPasswordView())));
+                        context.pushNamed(AppPaths.resetPass);
                       }
                     },
                     builder: (context, state) {

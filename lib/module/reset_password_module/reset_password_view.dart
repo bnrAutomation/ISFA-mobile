@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:i_densfa/module/login_module/login_view.dart';
+import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/reset_password_module/reset_password/reset_password_bloc.dart';
 import 'package:i_densfa/module/ui/background.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
+import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 
 class ResetPasswordView extends StatelessWidget {
@@ -163,11 +164,7 @@ class ResetPasswordView extends StatelessWidget {
                         BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
                           listener: (context, state) {
                             if (state is ResetPasswordSuccesfullState) {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: ((context) => LoginView())),
-                                  (route) => false);
+                              context.go(AppPaths.login);
                             }
                           },
                           builder: (context, state) {

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:i_densfa/module/store_detail_module/store_detail_view.dart';
+import 'package:i_densfa/routes.dart';
 
 import '../../utility/custom_paints.dart';
-import 'bloc/schedule_visit_call_bloc.dart';
-import 'schedule_visit_view.dart';
 
 class StoreListView extends StatelessWidget {
   const StoreListView({super.key});
@@ -21,16 +19,7 @@ class StoreListView extends StatelessWidget {
           Icons.pending_actions,
           color: Colors.white,
         ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                  create: (context) => ScheduleVisitCallBloc(),
-                  child: const ScheduleVisitView()),
-            ),
-          );
-        },
+        onPressed: () => context.pushNamed(AppPaths.scheduleVisit),
       ),
       body: Column(
         children: [
@@ -71,10 +60,7 @@ class StoreListView extends StatelessWidget {
             separatorBuilder: (context, index) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
               return InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (c) => const StoreDetailView()));
-                  },
+                  onTap: () => context.pushNamed(AppPaths.store),
                   child: const StoreCardView());
             },
           ))
@@ -132,12 +118,7 @@ class StoreCardView extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   FilledButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (c) => const StoreDetailView()));
-                      },
+                      onPressed: () => context.pushNamed(AppPaths.store),
                       style: TextButton.styleFrom(
                         alignment: Alignment.center,
                         backgroundColor: Theme.of(context).primaryColor,

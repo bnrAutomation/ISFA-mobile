@@ -5,21 +5,51 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "iSFA",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "iSFA (profile mode)",
+            "name": "iSFA-staging-debug",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "toolArgs": [
+                "--dart-define",
+                "APP_NAME=iDenSFA-Staging",
+                "--dart-define",
+                "BASE_URL=https://staging.denave.com:8451"
+            ]
         },
         {
-            "name": "iSFA (release mode)",
+            "name": "iSFA-staging-release",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "toolArgs": [
+                "--dart-define",
+                "APP_NAME=iDenSFA-Staging",
+                "--dart-define",
+                "BASE_URL=https://staging.denave.com:8451"
+            ]
+        },
+        {
+            "name": "iSFA-prod-profile",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "toolArgs": [
+                "--dart-define",
+                "APP_NAME=iDenSFA",
+                "--dart-define",
+                "BASE_URL=https://denave.com"
+            ]
+        },
+        {
+            "name": "iSFA-prod-release",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "toolArgs": [
+                "--dart-define",
+                "APP_NAME=iDenSFA",
+                "--dart-define",
+                "BASE_URL=https://denave.com"
+            ]
         }
     ]
 }

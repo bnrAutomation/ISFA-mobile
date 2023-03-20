@@ -42,6 +42,7 @@ class StatusConstants {
 }
 
 class URLConstants {
-  static const baseUrl = "https://staging.denave.com:8451/DenaveIDAM/api";
+  static const baseURLStart = String.fromEnvironment('BASE_URL');
+  static const baseUrl = "$baseURLStart/DenaveIDAM/api";
   static const loginURl = "$baseUrl/login";
 }

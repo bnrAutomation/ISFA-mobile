@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:i_densfa/module/assessment_module/bloc/assessment_bloc.dart';
-import 'package:i_densfa/module/assessment_module/views/assessment_questions_view.dart';
+import 'package:i_densfa/routes.dart';
 
 class SelectedAssessmentView extends StatelessWidget {
   const SelectedAssessmentView({super.key});
@@ -48,10 +49,8 @@ class SelectedAssessmentView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: FilledButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (c) => const AssessmentQuestionsView()));
-                  },
+                  onPressed: () =>
+                      context.pushNamed(AppPaths.assessmentQuestion),
                   style: TextButton.styleFrom(
                     elevation: 2,
                     alignment: Alignment.center,

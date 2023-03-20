@@ -1,16 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:i_densfa/module/assessment_module/bloc/assessment_bloc.dart';
-import 'package:i_densfa/module/assessment_module/views/assessment_list_view.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view.dart';
-import 'package:i_densfa/module/checkin_module/check_in_view.dart';
-import 'package:i_densfa/module/leaves_module/leave_view.dart';
-import 'package:i_densfa/module/login_module/login_view.dart';
-import 'package:i_densfa/module/my_activity_module/my_activity_view.dart';
-import 'package:i_densfa/module/promoter_module/promoter_view.dart';
 import 'package:i_densfa/module/tabber_module/tabber/tabber_bloc.dart';
+import 'package:i_densfa/routes.dart';
 
 import '../beat_plan_module/beat_plan_view.dart';
 import '../store_list_module/store_list_view.dart';
@@ -142,10 +137,8 @@ class AppSideMenu extends StatelessWidget {
                         children: [
                           CupertinoSwitch(
                               value: context.read<TabberBloc>().isOnline,
-                              onChanged: (newVal) {
-                                closeDrawerAndPushView(
-                                    context, const CheckInView());
-                              }),
+                              onChanged: (newVal) => closeDrawerAndPushView(
+                                  context, AppPaths.checkin)),
                           Text(
                             context.read<TabberBloc>().isOnline
                                 ? "On-Duty"
@@ -160,83 +153,38 @@ class AppSideMenu extends StatelessWidget {
               ],
               accountName: const Text("Gopal Krishan"),
               accountEmail: const Text("ce.gopal@denave.com")),
-          // ListTile(
-          //   leading: const Icon(Icons.group),
-          //   title: const Text('Team'),
-          //   onTap: () {
-          //     Navigator.pop(context);
-          //   },
-          // ),
-          // ListTile(
-          //   leading: const Icon(CupertinoIcons.tag),
-          //   title: const Text('Schemes'),
-          //   onTap: () {
-          //     Navigator.pop(context);
-          //   },
-          // ),
           ListTile(
             leading: const Icon(CupertinoIcons.calendar_today),
             title: const Text('Attendance'),
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () => context.pop(),
           ),
           ListTile(
             leading: const Icon(Icons.timer_outlined),
             title: const Text('My Activities'),
-            onTap: () {
-              closeDrawerAndPushView(context, const MyActivityView());
-            },
+            onTap: () => closeDrawerAndPushView(context, AppPaths.activity),
           ),
           ListTile(
             leading: const Icon(Icons.timer_outlined),
             title: const Text('Leave'),
-            onTap: () {
-              closeDrawerAndPushView(context, LeaveView());
-            },
+            onTap: () => closeDrawerAndPushView(context, AppPaths.leave),
           ),
           ListTile(
             leading: const Icon(Icons.handshake_outlined),
             title: const Text('Promoter'),
-            onTap: () {
-              closeDrawerAndPushView(context, const PromoterView());
-            },
+            onTap: () => closeDrawerAndPushView(context, AppPaths.promoter),
           ),
-
           ListTile(
             leading: const Icon(Icons.assessment_outlined),
             title: const Text('Assessment'),
-            onTap: () {
-              closeDrawerAndPushView(
-                  context,
-                  BlocProvider(
-                    create: (context) => AssessmentBloc(),
-                    child: const AssessmentListView(),
-                  ));
-            },
+            onTap: () =>
+                closeDrawerAndPushView(context, AppPaths.assessmentList),
           ),
-
-          // ListTile(
-          //   leading: const Icon(Icons.help_outline),
-          //   title: const Text('Help and Support'),
-          //   onTap: () {
-          //     Navigator.pop(context);
-          //   },
-          // ),
-          // ListTile(
-          //   leading: const Icon(Icons.settings_outlined),
-          //   title: const Text('Settings'),
-          //   onTap: () {
-          //     Navigator.pop(context);
-          //   },
-          // ),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
             onTap: () {
-              final login =
-                  MaterialPageRoute(builder: (context) => LoginView());
-              Navigator.pushAndRemoveUntil(context, login, (route) => false);
+              Scaffold.of(context).closeDrawer();
+              context.go(AppPaths.login);
             },
           ),
         ],
@@ -244,9 +192,8 @@ class AppSideMenu extends StatelessWidget {
     );
   }
 
-  void closeDrawerAndPushView(BuildContext context, Widget toView) {
+  void closeDrawerAndPushView(BuildContext context, String path) {
     Scaffold.of(context).closeDrawer();
-    final route = MaterialPageRoute(builder: (c) => toView);
-    Navigator.push(context, route);
+    context.pushNamed(path);
   }
 }

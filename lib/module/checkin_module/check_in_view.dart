@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
-import 'package:i_densfa/module/upload_selfie/upload_selfie.dart';
-
-import '../upload_selfie/bloc/upload_selfie_bloc.dart';
+import 'package:i_densfa/routes.dart';
 
 class CheckInView extends StatelessWidget {
   const CheckInView({super.key});
@@ -78,23 +76,11 @@ class CheckInView extends StatelessWidget {
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           CustomMaterialButton(
               buttonText: "Take Selfie ",
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (c) => BlocProvider(
-                              create: (context) => UploadSelfieBloc(),
-                              child: const UploadSelfieView(),
-                            )));
-              }),
-          const SizedBox(
-            height: 10,
-          )
+              onPressed: () => context.pushNamed(AppPaths.selfie)),
+          const SizedBox(height: 10)
         ],
       ),
     );

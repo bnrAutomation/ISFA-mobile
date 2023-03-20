@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/splash_module/splash/splash_bloc.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
+import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
-import '../login_module/login_view.dart';
 import '../ui/background.dart';
 
 class SplashView extends StatelessWidget {
@@ -29,12 +30,7 @@ class SplashView extends StatelessWidget {
                     child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: CustomMaterialButton(
-                          onPressed: () => {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: ((context) => LoginView())))
-                          },
+                          onPressed: () => context.go(AppPaths.login),
                           buttonText: "Get Start",
                         )),
                   )),

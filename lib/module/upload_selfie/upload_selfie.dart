@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/upload_selfie/bloc/upload_selfie_bloc.dart';
 
 class UploadSelfieView extends StatelessWidget {
@@ -49,7 +50,7 @@ class UploadSelfieView extends StatelessWidget {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => context.pop(),
                     icon: const Icon(
                       Icons.keyboard_backspace,
                       color: Colors.white,

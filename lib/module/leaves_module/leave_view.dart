@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/leaves_module/leave/leave_bloc.dart';
 import 'package:i_densfa/module/leaves_module/model/leave_model.dart';
 import 'package:i_densfa/module/ui/app_tabview_view.dart';
@@ -664,15 +665,11 @@ class LeaveView extends StatelessWidget {
                         keyboardType: TextInputType.multiline,
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     CustomMaterialButton(
                         buttonText: "Submit for Approve",
-                        onPressed: () => {Navigator.pop(context)}),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                        onPressed: () => context.pop()),
+                    const SizedBox(height: 10),
                   ],
                 ),
               )

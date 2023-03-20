@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/forgot_password_module/forgotpassword/forgot_password_bloc.dart';
 import 'package:i_densfa/module/ui/background.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
-import 'package:i_densfa/module/verification_module/verification_view.dart';
+import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 
 class ForgotPasswordView extends StatelessWidget {
@@ -101,11 +102,7 @@ class ForgotPasswordView extends StatelessWidget {
                         BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
                           listener: (context, state) {
                             if (state is ForgotPasswordSuccesfullState) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: ((context) =>
-                                          const VerificationView())));
+                              context.pushNamed(AppPaths.passVerification);
                             }
                           },
                           builder: (context, state) {

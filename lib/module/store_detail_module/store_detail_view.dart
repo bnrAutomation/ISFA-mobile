@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../utility/app_constants.dart';
@@ -37,14 +38,13 @@ class StoreDetailView extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
         leading: IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
             icon: const Icon(Icons.arrow_back_ios)),
         actions: [
           IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.share)),
+              onPressed: () => context.pop(), icon: const Icon(Icons.share)),
           IconButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => context.pop(),
               icon: const Icon(Icons.more_vert)),
         ],
       ),

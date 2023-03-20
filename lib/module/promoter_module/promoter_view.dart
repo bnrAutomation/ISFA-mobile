@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view/campain_list.dart';
 import 'package:i_densfa/module/dynamic_questions_module/model.dart';
 import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions_view.dart';
-import 'package:i_densfa/module/inventory_module/inventory_view.dart';
 import 'package:i_densfa/module/ui/custom_image_button.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
+import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_pop_view.dart';
 
@@ -160,20 +161,11 @@ class PromoterView extends StatelessWidget {
               Expanded(
                 child: CustomImageButton(
                   buttonText: "Inventory",
-                  onPressed: () => {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) => const InventoryView())))
-                  },
-                  image: SvgPicture.asset(
-                    ImageConstants.box,
-                  ),
+                  onPressed: () => context.pushNamed(AppPaths.inventory),
+                  image: SvgPicture.asset(ImageConstants.box),
                 ),
               ),
-              const SizedBox(
-                width: 5,
-              ),
+              const SizedBox(width: 5),
               Expanded(
                 child: CustomImageButton(
                   buttonText: "Start\nCampaign",
@@ -226,7 +218,7 @@ class PromoterView extends StatelessWidget {
                 separatorBuilder: (context, index) => const SizedBox(height: 5),
                 itemBuilder: (context, index) => InkWell(
                     onTap: () {
-                      Navigator.pop(context);
+                      context.pop();
                       AppPopup.showAppBottomSheet(
                         context: context,
                         child: salesLogForm(textTheme),
@@ -358,7 +350,7 @@ class PromoterView extends StatelessWidget {
                   Expanded(
                     child: CustomMaterialButton(
                         buttonText: "Click Image",
-                        onPressed: () => {Navigator.pop(context)}),
+                        onPressed: () => context.pop()),
                   ),
                   const SizedBox(
                     height: 5,
@@ -380,8 +372,7 @@ class PromoterView extends StatelessWidget {
                 height: 10,
               ),
               CustomMaterialButton(
-                  buttonText: "Save Feedback",
-                  onPressed: () => {Navigator.pop(context)}),
+                  buttonText: "Save Feedback", onPressed: () => context.pop()),
               const SizedBox(
                 height: 10,
               ),

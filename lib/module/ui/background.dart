@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 
 class Background extends StatelessWidget {
@@ -72,9 +73,7 @@ class Background extends StatelessWidget {
                       size: 20,
                       color: Colors.orange,
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => context.pop(),
                   ),
                 ),
               )

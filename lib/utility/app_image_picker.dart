@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AppImagePicker {
@@ -14,7 +15,7 @@ class AppImagePicker {
             actions: [
               CupertinoActionSheetAction(
                   onPressed: () async {
-                    Navigator.pop(context);
+                    context.pop();
                     final image = await ImagePicker()
                         .pickImage(source: ImageSource.camera);
                     if (image != null) {
@@ -25,7 +26,7 @@ class AppImagePicker {
                   child: const Text("Camera")),
               CupertinoActionSheetAction(
                   onPressed: () async {
-                    Navigator.pop(context);
+                    context.pop();
                     final image = await ImagePicker()
                         .pickImage(source: ImageSource.gallery);
                     if (image != null) {
@@ -35,7 +36,7 @@ class AppImagePicker {
                   child: const Text("Gallery"))
             ],
             cancelButton: CupertinoActionSheetAction(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => context.pop(),
                 isDestructiveAction: true,
                 child: const Text("Cancel")),
           );

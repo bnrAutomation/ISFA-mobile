@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/login_module/bloc/login_bloc.dart';
-import 'package:i_densfa/module/tabber_module/tabber_view.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
+import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
-import '../forgot_password_module/forgot_password_view.dart';
 import '../ui/background.dart';
 import 'login_repository.dart';
 
@@ -126,12 +126,10 @@ class LoginView extends StatelessWidget {
                           Align(
                             alignment: Alignment.centerRight,
                             child: InkWell(
-                              onTap: () => {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) =>
-                                            ForgotPasswordView())))
+                              onTap: () {
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
+                                context.pushNamed(AppPaths.forgotpass);
                               },
                               child: Text(
                                 "I've forgotten my password",
@@ -147,11 +145,9 @@ class LoginView extends StatelessWidget {
                           BlocConsumer<LoginBloc, LoginState>(
                             listener: (context, state) {
                               if (state is LoginedSuccesfullState) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) =>
-                                            const TabberView())));
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
+                                context.go(AppPaths.tabbar);
                               }
                             },
                             builder: (context, state) {
