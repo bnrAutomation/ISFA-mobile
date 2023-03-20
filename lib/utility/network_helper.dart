@@ -20,21 +20,29 @@ class NetworkObserve extends NetworkEvent {}
 class NetworkNotify extends NetworkEvent {
   final bool isConnected;
 
-  NetworkNotify({this.isConnected = false});
+  NetworkNotify(this.isConnected);
 }
 
 class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
+  final _connectivity = Connectivity();
   NetworkBloc() : super(NetworkInitial()) {
     on<NetworkObserve>(_observe);
     on<NetworkNotify>(_notifyStatus);
   }
 
   void _observe(event, emit) {
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    _connectivity.checkConnectivity().then((result) {
       if (result == ConnectivityResult.none) {
-        add(NetworkNotify());
+        add(NetworkNotify(false));
       } else {
-        add(NetworkNotify(isConnected: true));
+        add(NetworkNotify(true));
+      }
+    });
+    _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        add(NetworkNotify(false));
+      } else {
+        add(NetworkNotify(true));
       }
     });
   }
