@@ -59,7 +59,7 @@ final router = GoRouter(
       name: AppPaths.assessment,
       builder: (context, state) {
         return BlocProvider.value(
-            value: context.read<AssessmentBloc>(),
+            value: state.extra as AssessmentBloc,
             child: const SelectedAssessmentView());
       },
     ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:i_densfa/module/assessment_module/bloc/assessment_bloc.dart';
 import 'package:i_densfa/routes.dart';
 
 class AssessmentListView extends StatelessWidget {
@@ -45,7 +47,8 @@ class AssessmentListView extends StatelessWidget {
                   style: TextStyle(fontSize: 10.sp),
                 ),
               ),
-              onTap: () => context.pushNamed(AppPaths.assessment),
+              onTap: () => context.pushNamed(AppPaths.assessment,
+                  extra: context.read<AssessmentBloc>()),
             ),
           );
         },
