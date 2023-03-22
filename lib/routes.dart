@@ -129,10 +129,14 @@ final router = GoRouter(
     ),
   ],
   errorBuilder: (context, state) {
-    return Text(state.fullpath ??
-        state.error?.toString() ??
-        state.name ??
-        "unknown error");
+    return Scaffold(
+      body: Center(
+        child: Text(state.fullpath ??
+            state.error?.toString() ??
+            state.name ??
+            "unknown error"),
+      ),
+    );
   },
 );
 
