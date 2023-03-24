@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/leaves_module/model/leave_model.dart';
-import 'package:i_densfa/utility/app_constants.dart';
 
 part 'leave_event.dart';
 part 'leave_state.dart';
 
 class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
-  DateTime? fromDate = DateTime.now();
-  DateTime? toDate = DateTime.now();
-  String selectLeaveType = "";
+  DateTime? fromDate;
+  DateTime? toDate;
+  String? selectLeaveType;
+
+  String selectedLeaveDayPart = 'Full';
+  List<String> leaveDayParts = ['Full', 'First half', 'Second half'];
 
   LeaveBloc() : super(LeaveInitial()) {
     on<LeaveEvent>((event, emit) {
@@ -24,32 +26,36 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         emit(DateChangeLeaveState());
       }
     });
+    on((ChangeLeaveDayPartEvent event, emit) {
+      selectedLeaveDayPart = event.part;
+      emit(ChangeLeaveTypeState());
+    });
   }
 
   final List<LeavesData> leaveList = [
     LeavesData(
-      statusConstants.casualTypeLeave,
+      LeaveType.casual,
       "28 Jan 2023",
       "30 Jan 2023",
-      statusConstants.requestLeave,
+      LeaveStatus.request,
     ), //requested
     LeavesData(
-      statusConstants.sickTypeLeave,
+      LeaveType.sick,
       "28 Jan 2023",
       "30 Jan 2023",
-      statusConstants.approveLeave,
+      LeaveStatus.approve,
     ), //approved
     LeavesData(
-      statusConstants.weekOffTypeLeave,
+      LeaveType.weekOff,
       "28 Jan 2023",
       "30 Jan 2023",
-      statusConstants.rejectLeave,
+      LeaveStatus.reject,
     ), //rejected
     LeavesData(
-      statusConstants.otherTypeLeave,
+      LeaveType.other,
       "28 Jan 2023",
       "30 Jan 2023",
-      statusConstants.rejectLeave,
+      LeaveStatus.reject,
     ), //rejected
   ];
 }

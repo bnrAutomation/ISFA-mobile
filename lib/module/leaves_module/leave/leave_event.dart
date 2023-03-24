@@ -17,3 +17,8 @@ class ToDateLeaveTypeEvent extends LeaveEvent {
   final DateTime? dateTime;
   ToDateLeaveTypeEvent(this.dateTime);
 }
+
+class ChangeLeaveDayPartEvent extends LeaveEvent {
+  final String part;
+  ChangeLeaveDayPartEvent(this.part);
+}

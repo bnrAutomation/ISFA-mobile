@@ -24,7 +24,7 @@ import 'module/upload_selfie/upload_selfie.dart';
 import 'module/verification_module/verification_view.dart';
 
 final router = GoRouter(
-  initialLocation: AppPaths.initial,
+  initialLocation: AppPaths.tabbar,
   routes: <RouteBase>[
     GoRoute(
       path: AppPaths.initial,

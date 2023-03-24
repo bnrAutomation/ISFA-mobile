@@ -30,7 +30,7 @@ class AppTabViewController extends StatelessWidget {
               tabs: titles.map((e) => Tab(text: e)).toList(),
             ),
           ),
-          Expanded(child: TabBarView(children: children))
+          Flexible(child: TabBarView(children: children))
         ],
       ),
     );

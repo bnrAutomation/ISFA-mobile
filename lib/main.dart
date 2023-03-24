@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/routes.dart';
-import 'package:i_densfa/utility/network_helper.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
 void main() {
@@ -37,41 +35,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BuildContext? networkAlertContext;
-
     return ScreenUtilInit(builder: (context, child) {
-      return BlocProvider(
-        create: (context) => NetworkBloc()..add(NetworkObserve()),
-        child: BlocListener<NetworkBloc, NetworkState>(
-          listener: (context, state) {
-            if (state is NetworkFailure) {
-              showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (c) {
-                    networkAlertContext = c;
-                    return const AlertDialog(
-                      content: Text("No Internet Connection"),
-                    );
-                  });
-            } else {
-              if (networkAlertContext != null) {
-                Navigator.pop(networkAlertContext!);
-              }
-            }
-          },
-          child: MaterialApp.router(
-            routerConfig: router,
-            localizationsDelegates: const [
-              MonthYearPickerLocalizations.delegate
-            ],
-            title: const String.fromEnvironment('APP_NAME'),
-            debugShowCheckedModeBanner: false,
-            theme: _lightTheme,
-            darkTheme: _darkTheme,
-            themeMode: ThemeMode.light,
-          ),
-        ),
+      return MaterialApp.router(
+        routerConfig: router,
+        localizationsDelegates: const [MonthYearPickerLocalizations.delegate],
+        title: const String.fromEnvironment('APP_NAME'),
+        debugShowCheckedModeBanner: false,
+        theme: _lightTheme,
+        darkTheme: _darkTheme,
+        themeMode: ThemeMode.light,
       );
     });
   }

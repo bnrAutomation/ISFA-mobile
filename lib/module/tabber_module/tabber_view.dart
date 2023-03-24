@@ -7,6 +7,7 @@ import 'package:i_densfa/module/campaign_module/campaign_view.dart';
 import 'package:i_densfa/module/tabber_module/tabber/tabber_bloc.dart';
 import 'package:i_densfa/routes.dart';
 
+import '../../utility/network_helper.dart';
 import '../beat_plan_module/beat_plan_view.dart';
 import '../store_list_module/store_list_view.dart';
 
@@ -31,85 +32,109 @@ class TabberView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TabberBloc(),
-      child: BlocBuilder<TabberBloc, TabberState>(
-        builder: (context, state) {
-          return Scaffold(
-            drawer: const AppSideMenu(),
-            appBar: AppBar(
-              title: Text(context.read<TabberBloc>().tabTitle()),
-              leading: Builder(
-                  builder: (context) => IconButton(
-                      onPressed: () => Scaffold.of(context).openDrawer(),
-                      icon: const Icon(
-                        Icons.blur_on_sharp,
-                        color: Colors.black,
-                      ))),
-            ),
-            body: Center(
-              child: widgetOptions[
-                  BlocProvider.of<TabberBloc>(context).selectIndex],
-            ),
-            bottomNavigationBar: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 20,
-                    color: Colors.white.withOpacity(.1),
-                  )
-                ],
-              ),
-              child: SafeArea(
-                  child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8),
-                child: GNav(
-                  rippleColor: Colors.grey[300]!,
-                  hoverColor: Colors.grey[100]!,
-                  gap: 6,
-                  activeColor: Colors.black,
-                  //iconSize: 24,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
-                  curve: Curves.linear,
-                  duration: const Duration(milliseconds: 400),
-                  tabBackgroundColor: Colors.grey[100]!,
-                  color: Colors.white,
-                  tabs: const [
-                    GButton(
-                      icon: Icons.calendar_month_outlined,
-                      text: 'My Schedule',
-                    ),
-                    GButton(
-                      icon: Icons.book_online,
-                      text: 'Learner',
-                    ),
-                    GButton(
-                      icon: Icons.leaderboard_outlined,
-                      text: 'Leaderboard',
-                    ),
-                    GButton(
-                      icon: Icons.campaign_outlined,
-                      text: 'Campaign',
-                    ),
-                    GButton(
-                      icon: Icons.pie_chart_outline,
-                      text: 'Analytics',
-                    ),
-                  ],
-
-                  selectedIndex: context.read<TabberBloc>().selectIndex,
-                  onTabChange: (index) {
-                    BlocProvider.of<TabberBloc>(context)
-                        .add(ChangeTabEvent(index));
-                  },
-                ),
-              )),
-            ),
-          );
+    BuildContext? networkAlertContext;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => TabberBloc()),
+        BlocProvider(
+          create: (context) => NetworkBloc()..add(NetworkObserve()),
+        ),
+      ],
+      child: BlocListener<NetworkBloc, NetworkState>(
+        listener: (c, state) {
+          if (state is NetworkFailure) {
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (c) {
+                  networkAlertContext = c;
+                  return const AlertDialog(
+                    content: Text("No Internet Connection"),
+                  );
+                });
+          } else {
+            if (networkAlertContext != null) {
+              Navigator.pop(networkAlertContext!);
+            }
+          }
         },
+        child: BlocBuilder<TabberBloc, TabberState>(
+          builder: (context, state) {
+            return Scaffold(
+              drawer: const AppSideMenu(),
+              appBar: AppBar(
+                title: Text(context.read<TabberBloc>().tabTitle()),
+                leading: Builder(
+                    builder: (context) => IconButton(
+                        onPressed: () => Scaffold.of(context).openDrawer(),
+                        icon: const Icon(
+                          Icons.blur_on_sharp,
+                          color: Colors.black,
+                        ))),
+              ),
+              body: Center(
+                child: widgetOptions[context.read<TabberBloc>().selectIndex],
+              ),
+              bottomNavigationBar: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 20,
+                      color: Colors.white.withOpacity(.1),
+                    )
+                  ],
+                ),
+                child: SafeArea(
+                    child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8),
+                  child: GNav(
+                    rippleColor: Colors.grey[300]!,
+                    hoverColor: Colors.grey[100]!,
+                    gap: 6,
+                    activeColor: Colors.black,
+                    //iconSize: 24,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+                    curve: Curves.linear,
+                    duration: const Duration(milliseconds: 400),
+                    tabBackgroundColor: Colors.grey[100]!,
+                    color: Colors.white,
+                    tabs: const [
+                      GButton(
+                        icon: Icons.calendar_month_outlined,
+                        text: 'My Schedule',
+                      ),
+                      GButton(
+                        icon: Icons.book_online,
+                        text: 'Learner',
+                      ),
+                      GButton(
+                        icon: Icons.leaderboard_outlined,
+                        text: 'Leaderboard',
+                      ),
+                      GButton(
+                        icon: Icons.campaign_outlined,
+                        text: 'Campaign',
+                      ),
+                      GButton(
+                        icon: Icons.pie_chart_outline,
+                        text: 'Analytics',
+                      ),
+                    ],
+
+                    selectedIndex: context.read<TabberBloc>().selectIndex,
+                    onTabChange: (index) {
+                      BlocProvider.of<TabberBloc>(context)
+                          .add(ChangeTabEvent(index));
+                    },
+                  ),
+                )),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
