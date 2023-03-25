@@ -12,7 +12,7 @@
                 "--dart-define",
                 "APP_NAME=iDenSFA-Staging",
                 "--dart-define",
-                "BASE_URL=https://staging.denave.com:8451"
+                "BASE_URL=https://devapps.denave.com:8448"
             ]
         },
         {
@@ -24,7 +24,7 @@
                 "--dart-define",
                 "APP_NAME=iDenSFA-Staging",
                 "--dart-define",
-                "BASE_URL=https://staging.denave.com:8451"
+                "BASE_URL=https://devapps.denave.com:8448"
             ]
         },
         {

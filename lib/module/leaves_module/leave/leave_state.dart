@@ -5,6 +5,6 @@ abstract class LeaveState {}
 
 class LeaveInitial extends LeaveState {}
 
-class ChangeLeaveTypeState extends LeaveState {}
+class LeaveViewLoading extends LeaveState {}
 
-class DateChangeLeaveState extends LeaveState {}
+class LeaveViewWithData extends LeaveState {}

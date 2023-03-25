@@ -30,6 +30,7 @@ class ImageConstants {
 
 class URLConstants {
   static const baseURLStart = String.fromEnvironment('BASE_URL');
-  static const baseUrl = "$baseURLStart/DenaveIDAM/api";
+  static const baseUrl = "$baseURLStart/iSFA/api";
   static const loginURl = "$baseUrl/login";
+  static const leaveDetails = "$baseUrl/getEmpLeaveDetails";
 }
