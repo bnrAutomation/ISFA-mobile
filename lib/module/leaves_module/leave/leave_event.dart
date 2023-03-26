@@ -21,6 +21,15 @@ class ToDateLeaveTypeEvent extends LeaveEvent {
 }
 
 class ChangeLeaveDayPartEvent extends LeaveEvent {
-  final String part;
+  final LeaveDayPart part;
   ChangeLeaveDayPartEvent(this.part);
+}
+
+class ApplyNewLeave extends LeaveEvent {}
+
+class RespondToLeaveEvent extends LeaveEvent {
+  final bool approved;
+  final int id;
+
+  RespondToLeaveEvent(this.approved, this.id);
 }

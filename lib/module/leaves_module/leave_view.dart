@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 
 import '../ui/app_tabview_view.dart';
 import 'leave_repository.dart';
+import 'model/leave_enums.dart';
 
 class LeaveView extends StatelessWidget {
   LeaveView({super.key});
@@ -39,7 +40,16 @@ class LeaveView extends StatelessWidget {
         child: BlocProvider(
           create: (context) =>
               LeaveBloc(context.read())..add(GetLeaveDetailsEvent()),
-          child: BlocBuilder<LeaveBloc, LeaveState>(
+          child: BlocConsumer<LeaveBloc, LeaveState>(
+            listenWhen: (previous, current) => current is LeaveViewShowSnack,
+            listener: (context, state) {
+              if (state is LeaveViewShowSnack) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(state.message),
+                ));
+              }
+            },
+            buildWhen: (previous, current) => current is! LeaveViewShowSnack,
             builder: (context, state) {
               if (state is LeaveViewLoading) {
                 return const Center(child: CircularProgressIndicator());
@@ -53,6 +63,7 @@ class LeaveView extends StatelessWidget {
                   ),
                 );
               }
+
               return SafeArea(
                 child: CustomScrollView(
                   slivers: [
@@ -76,6 +87,8 @@ class LeaveView extends StatelessWidget {
                     SliverFillRemaining(
                         child: AppTabViewController(
                       backgroundColor: Colors.transparent,
+                      initialIndex: bloc.bottomTabSelectedIndex,
+                      onTabTap: (p0) => bloc.bottomTabSelectedIndex = p0,
                       titles: const ['Applied Leave', 'Requested Leave'],
                       children: [
                         Builder(
@@ -144,7 +157,7 @@ class LeaveView extends StatelessWidget {
                   context: context,
                   child: BlocProvider.value(
                     value: bloc,
-                    child: _openSheet(context),
+                    child: _leaveApplyForm(),
                   ),
                 );
               },
@@ -289,204 +302,217 @@ class LeaveView extends StatelessWidget {
     );
   }
 
-  Widget _openSheet(BuildContext context) {
-    return Builder(builder: (context) {
-      final textTheme = Theme.of(context).textTheme;
-      final bloc = context.read<LeaveBloc>();
-      return Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 5,
-              width: 1.sw,
-            ),
-            Text(
-              "Apply for leave",
-              style:
-                  textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text("Leave Type", style: textTheme.labelLarge),
-            const SizedBox(height: 5),
-            LeaveDropDownOptions(
-              options: LeaveType.values.map((e) => "${e.name} Leave").toList(),
-              hint: "Please select leave type",
-              selectedVal:
-                  context.select((LeaveBloc value) => value.selectLeaveType),
-              valChanged: (value) {
-                if (value != null) {
-                  bloc.add(ChangeLeaveTypeEvent(value));
-                }
-              },
-            ),
-            const SizedBox(height: 10),
-            Text("Day part", style: textTheme.labelLarge),
-            const SizedBox(height: 5),
-            SizedBox(
-              width: 1.sw,
-              child: CupertinoSlidingSegmentedControl(
-                  padding: const EdgeInsets.all(0),
-                  thumbColor: Theme.of(context).colorScheme.background,
-                  groupValue: context
-                      .select((LeaveBloc value) => value.selectedLeaveDayPart),
-                  children: {
-                    for (var partName in bloc.leaveDayParts)
-                      partName: Center(child: Text(partName))
-                  },
-                  onValueChanged: (val) {
-                    if (val != null) {
-                      bloc.add(ChangeLeaveDayPartEvent(val));
-                    }
-                  }),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _leaveApplyForm() {
+    return Scaffold(
+      body: BlocConsumer<LeaveBloc, LeaveState>(
+          listenWhen: (previous, current) => current is LeaveAppliedSuccess,
+          listener: (context, state) => context.pop(),
+          builder: (context, state) {
+            final textTheme = Theme.of(context).textTheme;
+            final bloc = context.read<LeaveBloc>();
+            if (state is LeaveApplyLoadingState) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 5,
+                    width: 1.sw,
+                  ),
+                  Text(
+                    "Apply for leave",
+                    style: textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Text("Leave Type", style: textTheme.labelLarge),
+                  const SizedBox(height: 5),
+                  LeaveDropDownOptions(
+                    options: bloc.leaveOptions.map((e) => e.leaveType).toList(),
+                    hint: "Please select leave type",
+                    selectedVal: context
+                        .select((LeaveBloc value) => value.selectLeaveType),
+                    valChanged: (value) {
+                      if (value != null) {
+                        bloc.add(ChangeLeaveTypeEvent(value));
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  Text("Day part", style: textTheme.labelLarge),
+                  const SizedBox(height: 5),
+                  SizedBox(
+                    width: 1.sw,
+                    child: CupertinoSlidingSegmentedControl<LeaveDayPart>(
+                        padding: const EdgeInsets.all(0),
+                        thumbColor: Theme.of(context).colorScheme.background,
+                        groupValue: context.select(
+                            (LeaveBloc value) => value.selectedLeaveDayPart),
+                        children: {
+                          for (var partName in LeaveDayPart.values)
+                            partName: Center(child: Text(partName.name))
+                        },
+                        onValueChanged: (val) {
+                          if (val != null) {
+                            bloc.add(ChangeLeaveDayPartEvent(val));
+                          }
+                        }),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
                     children: [
-                      Text("From", style: textTheme.labelLarge),
-                      const SizedBox(height: 5),
-                      Container(
-                        width: 1.sw,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("From", style: textTheme.labelLarge),
+                            const SizedBox(height: 5),
+                            Container(
+                              width: 1.sw,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: BlocListener<LeaveBloc, LeaveState>(
+                                listener: (context, state) {
+                                  final fromDate = bloc.fromDate;
+                                  if (fromDate != null) {
+                                    fromDateController.text = DateFormat()
+                                        .addPattern("dd/MM/yyyy")
+                                        .format(fromDate);
+                                  }
+                                },
+                                child: TextFormField(
+                                  controller: fromDateController,
+                                  decoration: const InputDecoration(
+                                      suffixIcon:
+                                          Icon(Icons.calendar_month_outlined),
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(
+                                          left: 8,
+                                          bottom: 11,
+                                          top: 11,
+                                          right: 8),
+                                      hintText: "DD/MM/YYYY"),
+                                  readOnly: true,
+                                  onTap: () async {
+                                    final now = DateTime.now();
+                                    final date = await showDatePicker(
+                                        context: context,
+                                        initialDate: now,
+                                        firstDate: now,
+                                        lastDate: DateTime(now.year, 12, 31));
+                                    if (date != null && context.mounted) {
+                                      bloc.add(FromDateLeaveTypeEvent(date));
+                                    }
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                        child: BlocListener<LeaveBloc, LeaveState>(
-                          listener: (context, state) {
-                            final fromDate = bloc.fromDate;
-                            if (fromDate != null) {
-                              fromDateController.text = DateFormat()
-                                  .addPattern("dd/MM/yyyy")
-                                  .format(fromDate);
-                            }
-                          },
-                          child: TextFormField(
-                            controller: fromDateController,
-                            decoration: const InputDecoration(
-                                suffixIcon: Icon(Icons.calendar_month_outlined),
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                contentPadding: EdgeInsets.only(
-                                    left: 8, bottom: 11, top: 11, right: 8),
-                                hintText: "DD/MM/YYYY"),
-                            readOnly: true,
-                            onTap: () async {
-                              final now = DateTime.now();
-                              final date = await showDatePicker(
-                                  context: context,
-                                  initialDate: now,
-                                  firstDate: now,
-                                  lastDate: DateTime(now.year, 12, 31));
-                              if (date != null && context.mounted) {
-                                context
-                                    .read<LeaveBloc>()
-                                    .add(FromDateLeaveTypeEvent(date));
-                              }
-                            },
-                          ),
+                      ),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("To", style: textTheme.labelLarge),
+                            const SizedBox(height: 5),
+                            Container(
+                              width: 1.sw,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: BlocListener<LeaveBloc, LeaveState>(
+                                listener: (context, state) {
+                                  final fromDate = bloc.toDate;
+                                  if (fromDate != null) {
+                                    toDateController.text = DateFormat()
+                                        .addPattern("dd/MM/yyyy")
+                                        .format(fromDate);
+                                  }
+                                },
+                                child: TextFormField(
+                                  controller: toDateController,
+                                  decoration: const InputDecoration(
+                                      suffixIcon:
+                                          Icon(Icons.calendar_month_outlined),
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(
+                                          left: 8,
+                                          bottom: 11,
+                                          top: 11,
+                                          right: 8),
+                                      hintText: "DD/MM/YYYY"),
+                                  readOnly: true,
+                                  onTap: () async {
+                                    final now = DateTime.now();
+                                    final date = await showDatePicker(
+                                      context: context,
+                                      initialDate: now,
+                                      firstDate: now,
+                                      lastDate: DateTime(now.year, 12, 31),
+                                    );
+                                    if (date != null && context.mounted) {
+                                      bloc.add(ToDateLeaveTypeEvent(date));
+                                    }
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       )
                     ],
                   ),
-                ),
-                const SizedBox(width: 5),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("To", style: textTheme.labelLarge),
-                      const SizedBox(height: 5),
-                      Container(
-                        width: 1.sw,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: BlocListener<LeaveBloc, LeaveState>(
-                          listener: (context, state) {
-                            final fromDate = bloc.toDate;
-                            if (fromDate != null) {
-                              toDateController.text = DateFormat()
-                                  .addPattern("dd/MM/yyyy")
-                                  .format(fromDate);
-                            }
-                          },
-                          child: TextFormField(
-                            controller: toDateController,
-                            decoration: const InputDecoration(
-                                suffixIcon: Icon(Icons.calendar_month_outlined),
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                contentPadding: EdgeInsets.only(
-                                    left: 8, bottom: 11, top: 11, right: 8),
-                                hintText: "DD/MM/YYYY"),
-                            readOnly: true,
-                            onTap: () async {
-                              final now = DateTime.now();
-                              final date = await showDatePicker(
-                                context: context,
-                                initialDate: now,
-                                firstDate: now,
-                                lastDate: DateTime(now.year, 12, 31),
-                              );
-                              if (date != null && context.mounted) {
-                                context
-                                    .read<LeaveBloc>()
-                                    .add(ToDateLeaveTypeEvent(date));
-                              }
-                            },
-                          ),
-                        ),
-                      )
-                    ],
+                  const SizedBox(height: 10),
+                  Text("Reason", style: textTheme.labelLarge),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: 1.sw,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.only(
+                              left: 8, bottom: 8, top: 8, right: 8),
+                          hintText: "Type your reason here..."),
+                      minLines: 2,
+                      maxLines: 5,
+                      keyboardType: TextInputType.multiline,
+                      onChanged: (value) => bloc.reason = value,
+                    ),
                   ),
-                )
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text("Reason", style: textTheme.labelLarge),
-            const SizedBox(height: 5),
-            Container(
-              width: 1.sw,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(10),
+                  const SizedBox(height: 10),
+                  CustomMaterialButton(
+                      buttonText: "Submit for Approval",
+                      onPressed: () => bloc.add(ApplyNewLeave())),
+                  const SizedBox(height: 10),
+                ],
               ),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    contentPadding:
-                        EdgeInsets.only(left: 8, bottom: 8, top: 8, right: 8),
-                    hintText: "Type your reason here..."),
-                minLines: 2,
-                maxLines: 5,
-                keyboardType: TextInputType.multiline,
-              ),
-            ),
-            const SizedBox(height: 10),
-            CustomMaterialButton(
-                buttonText: "Submit for Approve",
-                onPressed: () => context.pop()),
-            const SizedBox(height: 10),
-          ],
-        ),
-      );
-    });
+            );
+          }),
+    );
   }
 }
 
@@ -535,79 +561,111 @@ class LeaveDropDownOptions extends StatelessWidget {
 }
 
 class ApproveLeave extends StatelessWidget {
-  final AppliedLeaveModel leaveList;
+  final AppliedLeaveModel leaveListItem;
 
-  const ApproveLeave(this.leaveList, {super.key});
+  const ApproveLeave(this.leaveListItem, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (leaveList.userName != null)
-                  Text(leaveList.userName!,
-                      style: const TextStyle(
-                          color: Colors.red,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold)),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: Icon(Icons.circle,
-                          size: 12, color: leaveList.leaveType?.refColor),
-                    ),
-                    Expanded(
-                      child: RichText(
-                          text: TextSpan(
-                              text: "${leaveList.leaveType?.toStr()}",
-                              style: GoogleFonts.inter(
-                                  fontSize: 12.sp,
-                                  color: leaveList.leaveType?.refColor,
-                                  fontWeight: FontWeight.bold),
-                              children: [
-                            TextSpan(
-                              text:
-                                  ' Applied from ${DateFormat('dd MMM yyyy').format(leaveList.fromDate)} to ${DateFormat('dd MMM yyyy').format(leaveList.toDate)}',
-                              style: GoogleFonts.inter(
-                                  fontSize: 11.sp, color: Colors.black),
-                            )
-                          ])),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: leaveList.leaveStatus == LeaveStatus.approve
-                    ? Colors.green
-                    : leaveList.leaveStatus == LeaveStatus.reject
-                        ? Colors.red
-                        : Colors.amber),
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-            margin: const EdgeInsets.only(left: 5),
-            child: Text(
-              leaveList.leaveStatus.toStr().toUpperCase(),
-              style: TextStyle(
-                  color: leaveList.leaveStatus == LeaveStatus.request
-                      ? Colors.black
-                      : Colors.white,
-                  fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: 50.h),
+      child: ListTile(
+        trailing: (leaveListItem.userName != null)
+            ? FilledButton(
+                style: FilledButton.styleFrom(
+                    backgroundColor:
+                        leaveListItem.leaveStatus == LeaveStatus.approved
+                            ? Colors.green
+                            : leaveListItem.leaveStatus == LeaveStatus.rejected
+                                ? Colors.red
+                                : Colors.amber),
+                onPressed: leaveListItem.leaveStatus == LeaveStatus.pending
+                    ? () => _showResponseOptions(context, context.read())
+                    : null,
+                child: Text(
+                  leaveListItem.leaveStatus.toStr().toUpperCase(),
+                  style: TextStyle(
+                      color: leaveListItem.leaveStatus == LeaveStatus.pending
+                          ? Colors.black
+                          : Colors.white,
+                      fontWeight: FontWeight.bold),
+                ))
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Text(leaveListItem.leaveStatus.toStr().toUpperCase(),
+                    style: TextStyle(
+                        color: leaveListItem.leaveStatus == LeaveStatus.approved
+                            ? Colors.green
+                            : leaveListItem.leaveStatus == LeaveStatus.rejected
+                                ? Colors.red
+                                : Colors.amber,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14)),
+              ),
+        title: leaveListItem.userName == null
+            ? null
+            : Text(leaveListItem.userName!,
+                style: TextStyle(color: Theme.of(context).primaryColor)),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+                text: TextSpan(
+                    text: "● ${leaveListItem.leaveType}",
+                    style: GoogleFonts.inter(
+                        fontSize: 12.sp,
+                        color: context.read<LeaveBloc>().getColorFromLeaveType(
+                            leaveListItem.leaveType ?? ''),
+                        fontWeight: FontWeight.bold),
+                    children: [
+                  TextSpan(
+                    text:
+                        ' Applied from ${DateFormat('dd MMM yyyy').format(leaveListItem.fromDate)} to ${DateFormat('dd MMM yyyy').format(leaveListItem.toDate)}',
+                    style:
+                        GoogleFonts.inter(fontSize: 11.sp, color: Colors.black),
+                  )
+                ])),
+            if (leaveListItem.reason != null) Text(leaveListItem.reason!)
+          ],
+        ),
       ),
     );
+  }
+
+  void _showResponseOptions(BuildContext context, LeaveBloc bloc) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context) {
+          return CupertinoActionSheet(
+            title: const Text('Leave response'),
+            cancelButton: TextButton(
+                onPressed: () => context.pop(), child: const Text('Cancel')),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (leaveListItem.leaveRequestId != null) {
+                      final event = RespondToLeaveEvent(
+                          true, leaveListItem.leaveRequestId!);
+                      bloc.add(event);
+                    }
+                  },
+                  child: const Text('Approve')),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (leaveListItem.leaveRequestId != null) {
+                      final event = RespondToLeaveEvent(
+                          false, leaveListItem.leaveRequestId!);
+                      bloc.add(event);
+                    }
+                  },
+                  child: const Text(
+                    'Reject',
+                    style: TextStyle(color: Colors.red),
+                  )),
+            ],
+          );
+        });
   }
 }

@@ -1,76 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
-enum LeaveType { casual, sick, weekOff, other }
-
-enum LeaveStatus { request, approve, reject }
-
-extension LeaveStatusHelper on LeaveStatus {
-  LeaveStatus fromString(String val) {
-    switch (val.toLowerCase()) {
-      case 'approved':
-        return LeaveStatus.approve;
-      case 'reject':
-        return LeaveStatus.reject;
-      default:
-        return LeaveStatus.request;
-    }
-  }
-
-  String toStr() {
-    switch (this) {
-      case LeaveStatus.request:
-        return 'pending';
-      case LeaveStatus.approve:
-        return 'approved';
-      case LeaveStatus.reject:
-        return 'reject';
-    }
-  }
-}
-
-extension LeaveTypeHelper on LeaveType {
-  // ignore: unused_element
-  Color get refColor {
-    switch (this) {
-      case LeaveType.casual:
-        return Colors.green;
-      case LeaveType.sick:
-        return Colors.red;
-      case LeaveType.weekOff:
-        return Colors.amber;
-      case LeaveType.other:
-        return Colors.black;
-    }
-  }
-
-  LeaveType fromString(String val) {
-    switch (val.toLowerCase().replaceAll('leave', '').replaceAll(' ', '')) {
-      case 'sick':
-        return LeaveType.sick;
-      case 'casual':
-        return LeaveType.sick;
-      case 'weekoff':
-        return LeaveType.weekOff;
-      default:
-        return LeaveType.other;
-    }
-  }
-
-  String toStr() {
-    switch (this) {
-      case LeaveType.casual:
-        return 'Casual leave';
-      case LeaveType.sick:
-        return 'Sick leave';
-      case LeaveType.weekOff:
-        return 'Week Off';
-      case LeaveType.other:
-        return 'Other';
-    }
-  }
-}
+import 'leave_enums.dart';
 
 class EmpLeaveDetailsModel {
   EmpLeaveDetailsModel({
@@ -123,19 +54,22 @@ class EmpLeaveDetailsModel {
 }
 
 class AppliedLeaveModel {
-  AppliedLeaveModel({
-    required this.leaveStatus,
-    this.leaveType,
-    required this.fromDate,
-    required this.toDate,
-    this.userName,
-  });
+  AppliedLeaveModel(
+      {required this.leaveStatus,
+      this.leaveType,
+      required this.fromDate,
+      required this.toDate,
+      this.userName,
+      this.leaveRequestId,
+      this.reason});
 
   LeaveStatus leaveStatus;
-  LeaveType? leaveType;
+  String? leaveType;
   DateTime fromDate;
   DateTime toDate;
   String? userName;
+  int? leaveRequestId;
+  String? reason;
 
   factory AppliedLeaveModel.fromRawJson(String str) =>
       AppliedLeaveModel.fromJson(json.decode(str));
@@ -144,19 +78,22 @@ class AppliedLeaveModel {
 
   factory AppliedLeaveModel.fromJson(Map<String, dynamic> json) =>
       AppliedLeaveModel(
-        leaveStatus: LeaveStatus.request.fromString(json["leaveStatus"]),
-        leaveType: LeaveType.other.fromString(json["leaveType"] ?? ''),
-        fromDate: DateTime.parse(json["fromDate"]),
-        toDate: DateTime.parse(json["toDate"]),
-        userName: json["userName"],
-      );
+          leaveStatus: LeaveStatus.pending.fromString(json["leaveStatus"]),
+          leaveType: json["leaveType"],
+          fromDate: DateTime.parse(json["fromDate"]),
+          toDate: DateTime.parse(json["toDate"]),
+          userName: json["userName"],
+          leaveRequestId: json['leaveRequestId'],
+          reason: json['reason']);
 
   Map<String, dynamic> toJson() => {
         "leaveStatus": leaveStatus.toStr(),
-        "leaveType": leaveType?.toStr(),
+        "leaveType": leaveType,
         "fromDate": DateFormat('yyyy-MM-dd').format(fromDate),
         "toDate": DateFormat('yyyy-MM-dd').format(toDate),
         "userName": userName,
+        'leaveRequestId': leaveRequestId,
+        'reason': reason
       };
 }
 

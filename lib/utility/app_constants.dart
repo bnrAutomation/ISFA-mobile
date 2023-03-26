@@ -33,4 +33,7 @@ class URLConstants {
   static const baseUrl = "$baseURLStart/iSFA/api";
   static const loginURl = "$baseUrl/login";
   static const leaveDetails = "$baseUrl/getEmpLeaveDetails";
+  static const leaves = '$baseUrl/leave';
+  static const applyLeave = '$leaves/addLeaveRequest';
+  static const leaveRequest = '$leaves/request';
 }

@@ -1,17 +1,72 @@
+import 'dart:convert';
+
 import 'package:http/http.dart';
+import 'package:i_densfa/module/leaves_module/model/leave_enums.dart';
 import 'package:i_densfa/module/leaves_module/model/leave_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:intl/intl.dart';
+
+import 'model/leave_type_model.dart';
 
 class LeaveRepository {
+  final empId = 3;
+  final companyId = 4;
   Future<EmpLeaveDetailsModel> getDetails() async {
-    const empId = 3;
-    const companyId = 4;
     final response =
         await get(Uri.parse('${URLConstants.leaveDetails}/$empId/$companyId'));
     if (response.statusCode == 200) {
       return EmpLeaveDetailsModel.fromRawJson(response.body);
     } else {
-      throw response.statusCode;
+      throw json.decode(response.body)['message'];
     }
+  }
+
+  Future<bool> applyLeave(
+      {required int leaveTypeId,
+      required int dayId,
+      required DateTime fromDate,
+      required DateTime toDate,
+      required String reason}) async {
+    final formatter = DateFormat('yyyy-MM-dd');
+    final body = {
+      "companyId": companyId,
+      "userId": empId,
+      "leaveId": leaveTypeId,
+      "dayId": dayId,
+      "leaveStatus": LeaveStatus.pending.toStr(),
+      "dateFrom": formatter.format(fromDate),
+      "dateTo": formatter.format(toDate),
+      "reason": reason,
+    };
+    final response = await post(Uri.parse(URLConstants.applyLeave),
+        body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
+    if (response.statusCode == 201) {
+      return true;
+    } else {
+      throw json.decode(response.body)['message'];
+    }
+  }
+
+  Future<bool> leaveAction(bool isApproved, int id) async {
+    final body = {
+      "userId": empId,
+      "leaveStatus": isApproved
+          ? LeaveStatus.approved.toStr()
+          : LeaveStatus.rejected.toStr(),
+      "leaveRequestId": id
+    };
+
+    final response = await put(Uri.parse('${URLConstants.leaveRequest}/$id'),
+        body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw json.decode(response.body)['message'];
+    }
+  }
+
+  Future<List<LeaveTypeModel>> getLeaveTypes() async {
+    final response = await get(Uri.parse(URLConstants.leaves));
+    return leaveTypeListfromBody(response.body);
   }
 }
