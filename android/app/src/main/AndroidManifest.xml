@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.i_densfa">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="i_densfa"
         android:name="${applicationName}"
