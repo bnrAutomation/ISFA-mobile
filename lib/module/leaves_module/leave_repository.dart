@@ -49,14 +49,13 @@ class LeaveRepository {
 
   Future<bool> leaveAction(bool isApproved, int id) async {
     final body = {
-      "userId": empId,
       "leaveStatus": isApproved
           ? LeaveStatus.approved.toStr()
           : LeaveStatus.rejected.toStr(),
       "leaveRequestId": id
     };
 
-    final response = await put(Uri.parse('${URLConstants.leaveRequest}/$id'),
+    final response = await put(Uri.parse('${URLConstants.leaveRequest}/$empId'),
         body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       return true;

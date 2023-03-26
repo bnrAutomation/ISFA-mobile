@@ -30,6 +30,24 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   double get completeLeavePercent =>
       ((details?.usedLeave ?? 1) / (details?.totalLeave ?? 1)) * 100;
 
+  List<String> get tabbarTitles {
+    final empLeaves = details?.empAppliedLeave ?? [];
+    final reporteeLeaves = details?.reporteeRequestedLeave ?? [];
+    List<String> titles = [];
+    if (reporteeLeaves.isNotEmpty) titles.add('Requested Leaves');
+    if (empLeaves.isNotEmpty) titles.add('Applied Leaves');
+    return titles;
+  }
+
+  List<List<AppliedLeaveModel>> get tabbarLeavesList {
+    final empLeaves = details?.empAppliedLeave ?? [];
+    final reporteeLeaves = details?.reporteeRequestedLeave ?? [];
+    List<List<AppliedLeaveModel>> lists = [];
+    if (reporteeLeaves.isNotEmpty) lists.add(reporteeLeaves);
+    if (empLeaves.isNotEmpty) lists.add(empLeaves);
+    return lists;
+  }
+
   String getLeaveTypeBalanceIcon(int index) {
     switch (index) {
       case 0:
@@ -74,6 +92,8 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     on((ApplyNewLeave event, emit) async => await _applyLeave(emit));
     on((RespondToLeaveEvent event, emit) async =>
         await _respondToLeave(event.approved, event.id, emit));
+
+    on((GetLeaveTypes event, emit) async => await _getLeaveOptions(emit));
   }
 
   Future<void> _getEmpDetails(Emitter<LeaveState> emit) async {
@@ -86,7 +106,6 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       emit(LeaveViewWithData());
       emit(LeaveViewShowSnack(error.toString()));
     });
-    _getLeaveOptions();
   }
 
   Future<void> _applyLeave(Emitter<LeaveState> emit) async {
@@ -117,17 +136,33 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       return false;
     });
     if (response) {
+      if (tabbarTitles.length > 1) {
+        bottomTabSelectedIndex = 1;
+      }
       emit(LeaveAppliedSuccess());
-      await _getEmpDetails(emit);
-      fromDate = null;
-      toDate = null;
-      selectLeaveType = null;
-      selectedLeaveDayPart = LeaveDayPart.full;
+      add(GetLeaveDetailsEvent());
     }
   }
 
-  Future<void> _getLeaveOptions() async {
-    leaveOptions = await repo.getLeaveTypes();
+  Future<void> _getLeaveOptions(Emitter<LeaveState> emit) async {
+    emit(LeaveApplyLoadingState());
+    var list = await repo.getLeaveTypes().catchError((error) {
+      emit(LeaveViewWithData());
+      emit(LeaveViewShowSnack(error.toString()));
+      return <LeaveTypeModel>[];
+    });
+    list = list.where((element) => element.active).toList();
+    Map<String, int> uniques = {};
+    for (var item in list) {
+      uniques[item.leaveType] = item.leaveId;
+    }
+    List<LeaveTypeModel> newList = [];
+    for (var val in uniques.values) {
+      final i = list.firstWhere((element) => element.leaveId == val);
+      newList.add(i);
+    }
+    leaveOptions = newList;
+    emit(LeaveViewWithData());
   }
 
   Future<bool> _respondToLeave(
@@ -139,7 +174,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       return false;
     });
     if (resp) {
-      await _getEmpDetails(emit);
+      add(GetLeaveDetailsEvent());
     }
     return resp;
   }

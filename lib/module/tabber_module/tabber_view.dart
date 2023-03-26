@@ -181,7 +181,7 @@ class AppSideMenu extends StatelessWidget {
           ListTile(
             leading: const Icon(CupertinoIcons.calendar_today),
             title: const Text('Attendance'),
-            onTap: () => context.pop(),
+            onTap: () => Navigator.pop(context),
           ),
           ListTile(
             leading: const Icon(Icons.timer_outlined),

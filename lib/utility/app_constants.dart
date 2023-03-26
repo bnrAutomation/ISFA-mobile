@@ -35,5 +35,5 @@ class URLConstants {
   static const leaveDetails = "$baseUrl/getEmpLeaveDetails";
   static const leaves = '$baseUrl/leave';
   static const applyLeave = '$leaves/addLeaveRequest';
-  static const leaveRequest = '$leaves/request';
+  static const leaveRequest = '$leaves/updateLeaveRequest';
 }

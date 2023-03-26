@@ -33,3 +33,5 @@ class RespondToLeaveEvent extends LeaveEvent {
 
   RespondToLeaveEvent(this.approved, this.id);
 }
+
+class GetLeaveTypes extends LeaveEvent {}

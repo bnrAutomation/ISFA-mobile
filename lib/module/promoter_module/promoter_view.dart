@@ -218,7 +218,7 @@ class PromoterView extends StatelessWidget {
                 separatorBuilder: (context, index) => const SizedBox(height: 5),
                 itemBuilder: (context, index) => InkWell(
                     onTap: () {
-                      context.pop();
+                      Navigator.pop(context);
                       AppPopup.showAppBottomSheet(
                         context: context,
                         child: salesLogForm(textTheme),
@@ -350,7 +350,7 @@ class PromoterView extends StatelessWidget {
                   Expanded(
                     child: CustomMaterialButton(
                         buttonText: "Click Image",
-                        onPressed: () => context.pop()),
+                        onPressed: () => Navigator.pop(context)),
                   ),
                   const SizedBox(
                     height: 5,
