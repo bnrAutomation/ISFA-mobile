@@ -36,6 +36,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       selectedLeaveDayPart = event.part;
       emit(LeaveViewWithData());
     });
+    on((GetLeaveDetailsEvent event, emit) => getEmpDetails(emit));
   }
 
   Future<void> getEmpDetails(Emitter<LeaveState> emit) async {
