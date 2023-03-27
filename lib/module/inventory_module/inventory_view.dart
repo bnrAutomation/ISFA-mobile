@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_densfa/module/ui/custom_search_bar.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 
+import '../../utility/app_pop_view.dart';
+import '../../utility/button_views.dart';
+import '../ui/custom_material_button.dart';
+
 class InventoryView extends StatelessWidget {
   const InventoryView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: AddFloatingActionButton(onTap: () {
+        AppPopup.showAppBottomSheet(
+          context: context,
+          child: AddProductQuantityPopup(
+            title: "Add Product Quantity",
+            onSubmit: () {
+              Navigator.pop(context);
+            },
+          ),
+        );
+      }),
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -301,6 +316,77 @@ class InventoryView extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class AddProductQuantityPopup extends StatelessWidget {
+  final String title;
+  final void Function() onSubmit;
+  const AddProductQuantityPopup({
+    super.key,
+    required this.title,
+    required this.onSubmit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.w700),
+          ),
+          SizedBox(height: 12.h),
+          Text("Category", style: Theme.of(context).textTheme.labelLarge),
+          const SizedBox(height: 5),
+          DropDownWithOptions(
+            options: const ['Category 1', 'category 2', 'option 3'],
+            hint: "Please select category",
+            selectedVal: null,
+            valChanged: (value) {
+              if (value != null) {}
+            },
+          ),
+          SizedBox(height: 8.h),
+          Text("Product", style: Theme.of(context).textTheme.labelLarge),
+          const SizedBox(height: 5),
+          DropDownWithOptions(
+            options: const ['product 1', 'product 2', 'product 3'],
+            hint: "Please select product",
+            selectedVal: null,
+            valChanged: (value) {
+              if (value != null) {}
+            },
+          ),
+          SizedBox(height: 8.h),
+          Text("Quantity", style: Theme.of(context).textTheme.labelLarge),
+          const SizedBox(height: 5),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: TextField(
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                hintText: 'Enter quantity',
+              ),
+            ),
+          ),
+          SizedBox(height: 12.h),
+          CustomMaterialButton(buttonText: "Submit", onPressed: onSubmit),
+        ],
       ),
     );
   }

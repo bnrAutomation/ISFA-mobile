@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../utility/app_constants.dart';
+import '../../utility/button_views.dart';
 
 class StoreDetailView extends StatelessWidget {
   const StoreDetailView({super.key});
@@ -13,26 +14,8 @@ class StoreDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(colors: [
-                Theme.of(context).primaryColor,
-                const Color(0xff278BBC)
-              ])),
-          child: SizedBox(
-            width: 60,
-            height: 60,
-            child: Icon(
-              Icons.add,
-              size: 30.w,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        onPressed: () {},
+      floatingActionButton: AddFloatingActionButton(
+        onTap: () {},
       ),
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
