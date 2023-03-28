@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
+import '../../utility/button_views.dart';
 import '../ui/custom_material_button.dart';
 import 'leave/leave_bloc.dart';
 import 'model/leave_enums.dart';
@@ -55,7 +56,7 @@ class _ApplyLeaveFormViewState extends State<ApplyLeaveFormView> {
                     const SizedBox(height: 10),
                     Text("Leave Type", style: textTheme.labelLarge),
                     const SizedBox(height: 5),
-                    LeaveDropDownOptions(
+                    DropDownWithOptions(
                       options:
                           bloc.leaveOptions.map((e) => e.leaveType).toList(),
                       hint: "Please select leave type",
@@ -253,49 +254,5 @@ class _ApplyLeaveFormViewState extends State<ApplyLeaveFormView> {
                 ),
               );
             }));
-  }
-}
-
-class LeaveDropDownOptions extends StatelessWidget {
-  final List<String> options;
-  final String hint;
-  final void Function(String?)? valChanged;
-  final String? selectedVal;
-  const LeaveDropDownOptions({
-    super.key,
-    required this.options,
-    required this.hint,
-    required this.valChanged,
-    this.selectedVal,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 1.sw,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-        value: selectedVal,
-        items: options.map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: valChanged,
-        hint: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            hint,
-            style: const TextStyle(color: Colors.grey),
-          ),
-        ),
-      )),
-    );
   }
 }

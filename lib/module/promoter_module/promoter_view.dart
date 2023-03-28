@@ -13,6 +13,8 @@ import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_pop_view.dart';
 
+import '../inventory_module/inventory_view.dart';
+
 class PromoterView extends StatelessWidget {
   const PromoterView({super.key});
 
@@ -149,7 +151,17 @@ class PromoterView extends StatelessWidget {
               Expanded(
                 child: CustomImageButton(
                   buttonText: "Sale Log",
-                  onPressed: () => {},
+                  onPressed: () {
+                    AppPopup.showAppBottomSheet(
+                      context: context,
+                      child: AddProductQuantityPopup(
+                        title: "Add Sale Log",
+                        onSubmit: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    );
+                  },
                   image: SvgPicture.asset(
                     ImageConstants.navigator,
                   ),
