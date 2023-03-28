@@ -131,6 +131,14 @@ class _ApplyLeaveFormViewState extends State<ApplyLeaveFormView> {
                                     onTap: () async {
                                       final now = DateTime.now();
                                       final date = await showDatePicker(
+                                          selectableDayPredicate:
+                                              (DateTime date) {
+                                            if (date.weekday ==
+                                                DateTime.sunday) {
+                                              return false;
+                                            }
+                                            return true;
+                                          },
                                           context: context,
                                           initialDate: now,
                                           firstDate: now,
@@ -187,9 +195,16 @@ class _ApplyLeaveFormViewState extends State<ApplyLeaveFormView> {
                                     onTap: () async {
                                       final now = DateTime.now();
                                       final date = await showDatePicker(
+                                        selectableDayPredicate:
+                                            (DateTime date) {
+                                          if (date.weekday == DateTime.sunday) {
+                                            return false;
+                                          }
+                                          return true;
+                                        },
                                         context: context,
-                                        initialDate: now,
-                                        firstDate: now,
+                                        initialDate: bloc.fromDate ?? now,
+                                        firstDate: bloc.fromDate ?? now,
                                         lastDate: DateTime(now.year, 12, 31),
                                       );
                                       if (date != null && context.mounted) {

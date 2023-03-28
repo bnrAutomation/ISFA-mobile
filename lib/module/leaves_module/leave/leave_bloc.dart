@@ -121,6 +121,10 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       emit(LeaveViewShowSnack('Please select leave type'));
       return;
     }
+    if (reason.isEmpty) {
+      emit(LeaveViewShowSnack('Please enter reason'));
+      return;
+    }
     final leaveTypeId = leaveOptions
         .firstWhere((element) => element.leaveType == selectLeaveType)
         .leaveId;

@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'model/leave_type_model.dart';
 
 class LeaveRepository {
-  final empId = 3;
+  final empId = 21;
   final companyId = 4;
   Future<EmpLeaveDetailsModel> getDetails() async {
     final response =
