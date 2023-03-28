@@ -129,25 +129,7 @@ class _ApplyLeaveFormViewState extends State<ApplyLeaveFormView> {
                                             right: 8),
                                         hintText: "DD/MM/YYYY"),
                                     readOnly: true,
-                                    onTap: () async {
-                                      final now = DateTime.now();
-                                      final date = await showDatePicker(
-                                          selectableDayPredicate:
-                                              (DateTime date) {
-                                            if (date.weekday ==
-                                                DateTime.sunday) {
-                                              return false;
-                                            }
-                                            return true;
-                                          },
-                                          context: context,
-                                          initialDate: now,
-                                          firstDate: now,
-                                          lastDate: DateTime(now.year, 12, 31));
-                                      if (date != null && context.mounted) {
-                                        bloc.add(FromDateLeaveTypeEvent(date));
-                                      }
-                                    },
+                                    onTap: () => _selectFromDate(context),
                                   ),
                                 ),
                               )
@@ -254,5 +236,18 @@ class _ApplyLeaveFormViewState extends State<ApplyLeaveFormView> {
                 ),
               );
             }));
+  }
+
+  void _selectFromDate(BuildContext context) async {
+    final now = DateTime.now();
+    final date = await showDatePicker(
+        selectableDayPredicate: (date) => date.weekday != DateTime.sunday,
+        context: context,
+        initialDate: now,
+        firstDate: now,
+        lastDate: DateTime(now.year, 12, 31));
+    if (date != null && context.mounted) {
+      bloc.add(FromDateLeaveTypeEvent(date));
+    }
   }
 }

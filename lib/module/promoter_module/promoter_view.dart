@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -7,13 +8,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view/campain_list.dart';
 import 'package:i_densfa/module/dynamic_questions_module/model.dart';
 import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions_view.dart';
+import 'package:i_densfa/module/inventory_module/modify_product_quantity/bloc/modify_quantity_bloc.dart';
+import 'package:i_densfa/module/inventory_module/modify_product_quantity/repository.dart';
 import 'package:i_densfa/module/ui/custom_image_button.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_pop_view.dart';
 
-import '../inventory_module/inventory_view.dart';
+import '../inventory_module/modify_product_quantity/view.dart';
 
 class PromoterView extends StatelessWidget {
   const PromoterView({super.key});
@@ -154,11 +157,14 @@ class PromoterView extends StatelessWidget {
                   onPressed: () {
                     AppPopup.showAppBottomSheet(
                       context: context,
-                      child: AddProductQuantityPopup(
-                        title: "Add Sale Log",
-                        onSubmit: () {
-                          Navigator.pop(context);
-                        },
+                      child: BlocProvider(
+                        create: (context) =>
+                            ModifyQuantityBloc(ModifyProductsRepository(), true)
+                              ..add(GetCategoriesListEvent()),
+                        child: ModifyProductQuantityPopup(
+                          title: "Add Sale Log",
+                          onPop: () {},
+                        ),
                       ),
                     );
                   },
