@@ -11,8 +11,13 @@ class ForgotPasswordErrorState extends ForgotPasswordState {
   final String errorMessage;
 }
 
+class ForgotPasswordLoadingState extends ForgotPasswordState {}
+
 class ForgotPasswordValidState extends ForgotPasswordState {}
 
 class ForgotPasswordSubmitState extends ForgotPasswordState {}
 
-class ForgotPasswordSuccesfullState extends ForgotPasswordState {}
+class ForgotPasswordSuccesfullState extends ForgotPasswordState {
+  final String message;
+  ForgotPasswordSuccesfullState(this.message);
+}

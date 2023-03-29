@@ -1,24 +1,34 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_densfa/module/forgot_password_module/forget_password_repository.dart';
 
 part 'forgot_password_event.dart';
 part 'forgot_password_state.dart';
 
 class ForgotPasswordBloc
     extends Bloc<ForgotPasswordEvent, ForgotPasswordState> {
-  ForgotPasswordBloc() : super(ForgotPasswordInitial()) {
-    on<ForgotPasswordEvent>((event, emit) {
-      if (event is ChangeTextEvent) {
-        if (event.useridValue.isEmpty) {
-          emit(ForgotPasswordErrorState("Feild should not be empty."));
-        } else {
-          emit(ForgotPasswordValidState());
-        }
-      } else if (event is ForgotPasswordSubmitEvent) {
-        if (event.userid.isEmpty) {
-          emit(ForgotPasswordErrorState("Feild should not be empty."));
-        } else {
-          emit(ForgotPasswordSuccesfullState());
+  final ForgotPasswordRepository repo;
+  ForgotPasswordBloc(this.repo) : super(ForgotPasswordInitial()) {
+    on<ChangeTextEvent>((event, emit) {
+      if (event.useridValue.isEmpty) {
+        emit(ForgotPasswordErrorState("Feild should not be empty."));
+      } else {
+        emit(ForgotPasswordValidState());
+      }
+    });
+    on<ForgotPasswordSubmitEvent>((event, emit) async {
+      if (event.userid.isEmpty) {
+        emit(ForgotPasswordErrorState("Feild should not be empty."));
+      } else {
+        try {
+          emit(ForgotPasswordLoadingState());
+          final forgotPasswordResponse =
+              await repo.forgotPassword(username: event.userid);
+          debugPrint(forgotPasswordResponse.toString());
+          emit(ForgotPasswordSuccesfullState(
+              forgotPasswordResponse.forgotPassword.message));
+        } catch (err) {
+          emit(ForgotPasswordErrorState(err.toString()));
         }
       }
     });

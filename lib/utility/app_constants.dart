@@ -31,7 +31,14 @@ class ImageConstants {
 class URLConstants {
   static const baseURLStart = String.fromEnvironment('BASE_URL');
   static const baseUrl = "$baseURLStart/iSFA/api";
-  static const loginURl = "$baseUrl/login";
+  static const baseUrlSec = "$baseURLStart/isfalogin/api/auth";
+  static const version = "v1";
+
+  static const login = "$baseUrlSec/login";
+  static const forgotPassword = "$baseUrlSec/$version/forgot-password";
+  static const verifyotp = "$baseUrlSec/$version/verify-otp";
+  static const resetPassword = "$baseUrlSec/$version/reset-password";
+
   static const leaveDetails = "$baseUrl/getEmpLeaveDetails";
   static const leaves = '$baseUrl/leave';
   static const applyLeave = '$leaves/addLeaveRequest';

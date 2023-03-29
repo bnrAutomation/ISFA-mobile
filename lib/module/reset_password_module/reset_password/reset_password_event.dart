@@ -16,5 +16,9 @@ class ChangePassword extends ResetPasswordEvent {
 class SubmitChangePasswordEvent extends ResetPasswordEvent {
   final String newPassword;
   final String confirmassword;
-  SubmitChangePasswordEvent(this.newPassword, this.confirmassword);
+  final String otp;
+  final String email;
+
+  SubmitChangePasswordEvent(
+      this.newPassword, this.confirmassword, this.otp, this.email);
 }

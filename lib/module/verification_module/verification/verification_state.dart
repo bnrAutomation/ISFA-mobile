@@ -10,8 +10,14 @@ class VerificationErrorState extends VerificationState {
   VerificationErrorState(this.errorMessage);
 }
 
+class VerificationSuccesfullState extends VerificationState {
+  final String email;
+  final String otp;
+  VerificationSuccesfullState(this.email, this.otp);
+}
+
 class VerificationValidState extends VerificationState {}
 
-class VerificationSuccesfullState extends VerificationState {}
-
 class VerificationCodeResend extends VerificationState {}
+
+class VerificationLoadingState extends VerificationState {}

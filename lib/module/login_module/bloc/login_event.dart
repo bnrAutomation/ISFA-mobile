@@ -15,9 +15,4 @@ class LoginSubmitEvent extends LoginEvent {
   LoginSubmitEvent(this.username, this.password);
 }
 
-class LoginShowPasswordButtonEvent extends LoginEvent {
-  //final bool visble;
-  //PasswordVisibleEvent(this.visble);
-}
-
-class ForgotPasswordEvent extends LoginEvent {}
+class LoginShowPasswordButtonEvent extends LoginEvent {}

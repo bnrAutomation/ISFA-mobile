@@ -23,3 +23,5 @@ class ResetPasswordErrorState extends ResetPasswordState {
 }
 
 class ResetPasswordSuccesfullState extends ResetPasswordState {}
+
+class ResetPasswordLoadingState extends ResetPasswordState {}

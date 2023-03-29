@@ -5,12 +5,19 @@ abstract class VerificationEvent {}
 
 class VerificationTextChangeEvent extends VerificationEvent {
   final String otpValue;
-  VerificationTextChangeEvent(this.otpValue);
+  final String username;
+  VerificationTextChangeEvent(this.otpValue, this.username);
 }
 
 class VerificationSubmitEvent extends VerificationEvent {
   final String verificationCode;
-  VerificationSubmitEvent(this.verificationCode);
+  final String username;
+  VerificationSubmitEvent(this.verificationCode, this.username);
 }
 
 class ReSendPasswordEvent extends VerificationEvent {}
+
+class VerificationErrorEvent extends VerificationEvent {
+  final String msg;
+  VerificationErrorEvent(this.msg);
+}

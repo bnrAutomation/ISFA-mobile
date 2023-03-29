@@ -20,36 +20,37 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: RepositoryProvider(
-        create: (context) => LoginRepository(),
-        child: BlocProvider(
-          create: (context) => LoginBloc(context.read()),
-          child: BlocBuilder<LoginBloc, LoginState>(
-            builder: (context, state) {
-              return Stack(
-                children: [
-                  const Background(false),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(15.0),
-                        boxShadow: const [
-                          BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 1.0, // soften the shadow
-                              spreadRadius: 1.0, //extend the shadow
-                              offset: Offset(
-                                1.0, // Move to right 5  horizontally
-                                1.0, // Move to bottom 5 Vertically
-                              ))
-                        ],
-                      ),
-                      width: 0.9.sw >= 0.9.sh ? 0.9.sh : 0.9.sw,
-                      // height: 0.7.sw >= 0.7.sh ? 0.7.sh:0.7.sw,
-                      padding: const EdgeInsets.all(6),
-                      child: Column(
+      body: Stack(
+        children: [
+          const Background(false),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(15.0),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 1.0, // soften the shadow
+                      spreadRadius: 1.0, //extend the shadow
+                      offset: Offset(
+                        1.0, // Move to right 5  horizontally
+                        1.0, // Move to bottom 5 Vertically
+                      ))
+                ],
+              ),
+              width: 0.9.sw >= 0.9.sh ? 0.9.sh : 0.9.sw,
+              // height: 0.7.sw >= 0.7.sh ? 0.7.sh:0.7.sw,
+              padding: const EdgeInsets.all(6),
+              child: RepositoryProvider(
+                create: (context) => LoginRepository(),
+                child: BlocProvider(
+                  create: (context) => LoginBloc(context.read()),
+                  child: BlocBuilder<LoginBloc, LoginState>(
+                    builder: (context, state) {
+                      var bloc = context.read<LoginBloc>();
+                      return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
@@ -79,7 +80,7 @@ class LoginView extends StatelessWidget {
                               filled: true,
                               fillColor:
                                   const Color.fromARGB(74, 158, 158, 158),
-                              hintText: "User Id",
+                              hintText: "Email Id",
                               border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.circular(10)),
@@ -89,18 +90,16 @@ class LoginView extends StatelessWidget {
                           TextField(
                             controller: passwordController,
                             onChanged: (change) {
-                              BlocProvider.of<LoginBloc>(context).add(
-                                  LoginTextChangeEvent(usernameController.text,
-                                      passwordController.text));
+                              bloc.add(LoginTextChangeEvent(
+                                  usernameController.text,
+                                  passwordController.text));
                             },
                             obscureText:
                                 context.read<LoginBloc>().isShowingPassword,
                             decoration: InputDecoration(
                               suffixIcon: GestureDetector(
-                                onTap: () => {
-                                  BlocProvider.of<LoginBloc>(context)
-                                      .add(LoginShowPasswordButtonEvent())
-                                },
+                                onTap: () =>
+                                    {bloc.add(LoginShowPasswordButtonEvent())},
                                 child: Container(
                                   color: Colors.transparent,
                                   child: Icon(
@@ -158,10 +157,12 @@ class LoginView extends StatelessWidget {
                                       horizontal: 20),
                                   child: CustomMaterialButton(
                                     onPressed: () => {
-                                      BlocProvider.of<LoginBloc>(context).add(
-                                          LoginSubmitEvent(
+                                      if (state is! LogInLoadingState)
+                                        {
+                                          bloc.add(LoginSubmitEvent(
                                               usernameController.text,
                                               passwordController.text))
+                                        }
                                     },
                                     buttonText: state is LogInLoadingState
                                         ? "Loading..."
@@ -173,14 +174,14 @@ class LoginView extends StatelessWidget {
                           ),
                           const SizedBox(height: 10)
                         ],
-                      ),
-                    ),
-                  )
-                ],
-              );
-            },
-          ),
-        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

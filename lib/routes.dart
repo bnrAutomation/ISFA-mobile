@@ -24,7 +24,7 @@ import 'module/upload_selfie/upload_selfie.dart';
 import 'module/verification_module/verification_view.dart';
 
 final router = GoRouter(
-  initialLocation: AppPaths.tabbar,
+  initialLocation: AppPaths.initial,
   routes: <RouteBase>[
     GoRoute(
       path: AppPaths.initial,
@@ -88,24 +88,30 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: AppPaths.resetPass,
-      name: AppPaths.resetPass,
-      builder: (context, state) => ResetPasswordView(),
-    ),
-    GoRoute(
       path: AppPaths.login,
       name: AppPaths.login,
       builder: (context, state) => LoginView(),
     ),
     GoRoute(
-      path: AppPaths.passVerification,
-      name: AppPaths.passVerification,
-      builder: (context, state) => const VerificationView(),
-    ),
-    GoRoute(
       path: AppPaths.forgotpass,
       name: AppPaths.forgotpass,
       builder: (context, state) => ForgotPasswordView(),
+    ),
+    GoRoute(
+      path: "${AppPaths.passVerification}/:email/:msg",
+      name: AppPaths.passVerification,
+      builder: (context, state) => VerificationView(
+        email: state.params['email'] ?? "",
+        msg: state.params['msg'] ?? "",
+      ),
+    ),
+    GoRoute(
+      path: "${AppPaths.resetPass}/:email/:otp",
+      name: AppPaths.resetPass,
+      builder: (context, state) => ResetPasswordView(
+        email: state.params['email'] ?? "",
+        otp: state.params['otp'] ?? "",
+      ),
     ),
     GoRoute(
       path: AppPaths.checkin,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 
 import '../login_repository.dart';
 
@@ -11,38 +12,39 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   bool isShowingPassword = false;
 
   LoginBloc(this.repo) : super(LoginInitialState()) {
-    on<LoginEvent>((event, emit) {
-      if (event is LoginShowPasswordButtonEvent) {
-        isShowingPassword = !isShowingPassword;
-        emit(LoginShowPasswordState(isShowingPassword));
-      } else if (event is LoginTextChangeEvent) {
-        if (event.userValue.isEmpty || event.passwordValue.isEmpty) {
-          emit(LogInErrorState("Invalid Username & Password"));
-        } else {
-          emit(LogInValidState());
+    on<LoginEvent>((event, emit) {});
+    on<LoginShowPasswordButtonEvent>((event, emit) {
+      isShowingPassword = !isShowingPassword;
+      emit(LoginShowPasswordState(isShowingPassword));
+    });
+    on<LoginTextChangeEvent>((event, emit) {
+      if (event.userValue.isEmpty || event.passwordValue.isEmpty) {
+        emit(LogInErrorState("Invalid Username & Password"));
+      } else {
+        emit(LogInValidState());
+      }
+    });
+    on<LoginSubmitEvent>((event, emit) async {
+      if (event.username.isEmpty) {
+        emit(LogInErrorState("Username is empty"));
+      } else if (event.password.isEmpty) {
+        emit(LogInErrorState("Password is empty"));
+      } else if (event.password.length < 6) {
+        emit(LogInErrorState("Short password"));
+      } else {
+        try {
+          emit(LogInLoadingState());
+          final loginResponse = await repo.login(
+              username: event.username, password: event.password);
+          debugPrint(loginResponse.toString());
+          var appStorage = await AppStorage.objectValue();
+          appStorage.userDetail = loginResponse.logindata.userInfo;
+
+          emit(LoginedSuccesfullState());
+        } catch (err) {
+          emit(LogInErrorState(err.toString()));
         }
       }
     });
-
-    on(_handleLogin);
-  }
-
-  void _handleLogin(LoginSubmitEvent event, Emitter<LoginState> emit) async {
-    if (event.username.isEmpty) {
-      emit(LogInErrorState("Username is empty"));
-    } else if (event.password.isEmpty) {
-      emit(LogInErrorState("Password is empty"));
-    } else if (event.password.length < 6) {
-      emit(LogInErrorState("Short password"));
-    } else {
-      try {
-        emit(LogInLoadingState());
-        // final resp = await repo.userLogin(event.username, event.password);
-        // debugPrint(resp.toString());
-        emit(LoginedSuccesfullState());
-      } catch (err) {
-        emit(LogInErrorState(err.toString()));
-      }
-    }
   }
 }
