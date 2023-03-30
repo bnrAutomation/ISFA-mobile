@@ -14,9 +14,11 @@ import 'package:i_densfa/module/ui/custom_image_button.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
-import 'package:i_densfa/utility/app_pop_view.dart';
+import 'package:i_densfa/module/ui/app_pop_view.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../inventory_module/modify_product_quantity/view.dart';
+import 'bloc/promoter_bloc.dart';
 
 class PromoterView extends StatelessWidget {
   const PromoterView({super.key});
@@ -24,7 +26,6 @@ class PromoterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: const Color(0XFF003D5B),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -37,9 +38,7 @@ class PromoterView extends StatelessWidget {
         ),
       ),
       body: Column(children: [
-        const SizedBox(
-          height: 5,
-        ),
+        const SizedBox(height: 5),
         Card(
           color: const Color(0xffBFD1DF),
           margin: const EdgeInsets.symmetric(horizontal: 5),
@@ -53,100 +52,19 @@ class PromoterView extends StatelessWidget {
                   height: 0.2.sh,
                   decoration: const BoxDecoration(
                     color: Color(0xffBFD1DF),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-
-                      //Radius.circular(20)
-                    ),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20)),
                   ),
                   alignment: Alignment.center,
                   child: Image.network(
                     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpo1BfypXH0JcsdyjZI_w3rK-T4utQ_RAVjBx5ELNHpuN9fUdPBNuwjLjSxaVfCpXhsRQ&usqp=CAU",
                     fit: BoxFit.fitWidth,
                   )),
-              Container(
-                padding: const EdgeInsets.all(15),
-                decoration: const BoxDecoration(
-                  color: Color(0xffBFD1DF),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-
-                    //Radius.circular(20)
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "Chroma Store",
-                            style: GoogleFonts.inter(
-                                fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        IconButton(
-                            onPressed: () => {},
-                            icon: const Icon(
-                              Icons.location_on,
-                              color: Colors.red,
-                            ))
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        const Icon(CupertinoIcons.person, size: 12),
-                        const SizedBox(width: 8),
-                        Text('Retailer', style: GoogleFonts.inter(fontSize: 10))
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(CupertinoIcons.placemark, size: 12),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                              '9, 6 Number Bus stop, No 6 Locality, Shiv Nagar, Bhopal, Madhya Pradesh 462011, India, Bhopal, MP',
-                              maxLines: 3,
-                              overflow: TextOverflow.fade,
-                              style: GoogleFonts.inter(fontSize: 10)),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-
-// Visible only one  either Check_in or Check-Out button.
-
-                    CustomMaterialButton(
-                        buttonText: "Check-In Store",
-                        gradient: const LinearGradient(colors: <Color>[
-                          Color(0XFF003D5B),
-                          Color(0XFF278BBC),
-                        ]),
-                        onPressed: () => {}),
-
-                    const SizedBox(height: 8),
-                    CustomMaterialButton(
-                        gradient: const LinearGradient(
-                          colors: <Color>[Color(0XFFC92434), Color(0XFF003D5B)],
-                        ),
-                        buttonText: "Check-Out Store",
-                        onPressed: () => {})
-                  ],
-                ),
-              )
+              _storeDetailsView()
             ],
           ),
         ),
-        const SizedBox(
-          height: 8,
-        ),
+        const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -173,13 +91,12 @@ class PromoterView extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                width: 5,
-              ),
+              const SizedBox(width: 5),
               Expanded(
                 child: CustomImageButton(
                   buttonText: "Inventory",
-                  onPressed: () => context.pushNamed(AppPaths.inventory),
+                  onPressed: () => context.pushNamed(AppPaths.inventory,
+                      extra: context.read<PromoterBloc>()),
                   image: SvgPicture.asset(ImageConstants.box),
                 ),
               ),
@@ -196,9 +113,7 @@ class PromoterView extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                width: 5,
-              ),
+              const SizedBox(width: 5),
               Expanded(
                 child: CustomImageButton(
                   buttonText: "Feedback",
@@ -215,6 +130,97 @@ class PromoterView extends StatelessWidget {
           ),
         ),
       ]),
+    );
+  }
+
+  BlocConsumer<PromoterBloc, PromoterState> _storeDetailsView() {
+    return BlocConsumer<PromoterBloc, PromoterState>(
+      listenWhen: (previous, current) => current is PromoterToastMessageState,
+      listener: (context, state) {
+        if (state is PromoterToastMessageState) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(state.message),
+          ));
+        }
+      },
+      builder: (context, state) {
+        final bloc = context.read<PromoterBloc>();
+        return Container(
+          padding: const EdgeInsets.all(15),
+          decoration: const BoxDecoration(
+            color: Color(0xffBFD1DF),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      bloc.storeDetail?.name ?? "",
+                      style: GoogleFonts.inter(
+                          fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  if (bloc.storeDetail?.latitude != null)
+                    IconButton(
+                        onPressed: () {
+                          final lat = bloc.storeDetail?.latitude ?? "";
+                          final long = bloc.storeDetail?.longtitude ?? "";
+                          final url =
+                              'http://www.google.com/maps/place/$lat,$long';
+
+                          launchUrlString(url);
+                        },
+                        icon: const Icon(
+                          Icons.location_on,
+                          color: Colors.red,
+                        ))
+                ],
+              ),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  const Icon(CupertinoIcons.person, size: 12),
+                  const SizedBox(width: 8),
+                  Text(bloc.storeDetail?.storeBranch ?? "",
+                      style: GoogleFonts.inter(fontSize: 10))
+                ],
+              ),
+              const SizedBox(height: 5),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(CupertinoIcons.placemark, size: 12),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(bloc.storeDetail?.address ?? "",
+                        maxLines: 3,
+                        overflow: TextOverflow.fade,
+                        style: GoogleFonts.inter(fontSize: 10)),
+                  )
+                ],
+              ),
+              const SizedBox(height: 8),
+              CustomMaterialButton(
+                  buttonText: "Check-In Store",
+                  gradient: const LinearGradient(colors: <Color>[
+                    Color(0XFF003D5B),
+                    Color(0XFF278BBC),
+                  ]),
+                  onPressed: () {}),
+              const SizedBox(height: 8),
+              CustomMaterialButton(
+                  gradient: const LinearGradient(
+                    colors: <Color>[Color(0XFFC92434), Color(0XFF003D5B)],
+                  ),
+                  buttonText: "Check-Out Store",
+                  onPressed: () {})
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -345,7 +351,6 @@ class PromoterView extends StatelessWidget {
                       contentPadding:
                           EdgeInsets.only(left: 8, bottom: 8, top: 8, right: 8),
                       hintText: "Type your reason here..."),
-                  // onTap: () => {},
                   minLines: 2,
                   maxLines: 5,
                   keyboardType: TextInputType.multiline,

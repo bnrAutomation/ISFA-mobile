@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 class AppStorage {
   String prefrenceName = "isfa_admin_prefrence";
   late Box stroagePrefrence;
-  AppStorage._() {}
+  AppStorage._();
 
   Future<AppStorage> _init() async {
     final documentDirectory = await getApplicationDocumentsDirectory();

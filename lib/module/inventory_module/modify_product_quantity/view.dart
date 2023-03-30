@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
-import 'package:i_densfa/utility/button_views.dart';
+import 'package:i_densfa/module/ui/button_views.dart';
 
 import 'bloc/modify_quantity_bloc.dart';
 

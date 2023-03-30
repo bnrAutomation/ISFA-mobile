@@ -6,6 +6,7 @@ import 'package:i_densfa/module/inventory_module/inventory_view.dart';
 import 'package:i_densfa/module/leaves_module/leave_view.dart';
 import 'package:i_densfa/module/login_module/login_view.dart';
 import 'package:i_densfa/module/my_activity_module/my_activity_view.dart';
+import 'package:i_densfa/module/promoter_module/bloc/promoter_bloc.dart';
 import 'package:i_densfa/module/promoter_module/promoter_view.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_view.dart';
 
@@ -14,6 +15,7 @@ import 'module/assessment_module/views/assessment_list_view.dart';
 import 'module/assessment_module/views/assessment_questions_view.dart';
 import 'module/assessment_module/views/selected_assessment_view.dart';
 import 'module/forgot_password_module/forgot_password_view.dart';
+import 'module/promoter_module/promoter_repository.dart';
 import 'module/reset_password_module/reset_password_view.dart';
 import 'module/splash_module/splash_view.dart';
 import 'module/store_list_module/bloc/schedule_visit_call_bloc.dart';
@@ -76,7 +78,10 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.inventory,
       name: AppPaths.inventory,
-      builder: (context, state) => const InventoryView(),
+      builder: (context, state) => BlocProvider.value(
+        value: (state.extra as PromoterBloc)..add(GetInventoryDetailEvent()),
+        child: const InventoryView(),
+      ),
     ),
     GoRoute(
       path: AppPaths.scheduleVisit,
@@ -126,12 +131,16 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.promoter,
       name: AppPaths.promoter,
-      builder: (context, state) => const PromoterView(),
+      builder: (context, state) => BlocProvider(
+        create: (context) =>
+            PromoterBloc(PromoterRepository())..add(GetStoreDetailEvent()),
+        child: const PromoterView(),
+      ),
     ),
     GoRoute(
       path: AppPaths.leave,
       name: AppPaths.leave,
-      builder: (context, state) => LeaveView(),
+      builder: (context, state) => const LeaveView(),
     ),
   ],
   errorBuilder: (context, state) {

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-import '../../utility/button_views.dart';
+import '../ui/button_views.dart';
 import '../ui/custom_material_button.dart';
 import 'leave/leave_bloc.dart';
 import 'model/leave_enums.dart';

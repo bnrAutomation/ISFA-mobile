@@ -29,18 +29,28 @@ class ImageConstants {
 }
 
 class URLConstants {
+  URLConstants._();
+
   static const baseURLStart = String.fromEnvironment('BASE_URL');
   static const baseUrl = "$baseURLStart/iSFA/api";
-  static const baseUrlSec = "$baseURLStart/isfalogin/api/auth";
+  static const loginAuth = "$baseUrl/auth";
+  static const sidemenuDetails = '$baseUrl/user/home';
   static const version = "v1";
 
-  static const login = "$baseUrlSec/login";
-  static const forgotPassword = "$baseUrlSec/$version/forgot-password";
-  static const verifyotp = "$baseUrlSec/$version/verify-otp";
-  static const resetPassword = "$baseUrlSec/$version/reset-password";
+  static const login = "$loginAuth/login";
+  static const forgotPassword = "$loginAuth/$version/forgot-password";
+  static const verifyotp = "$loginAuth/$version/verify-otp";
+  static const resetPassword = "$loginAuth/$version/reset-password";
 
   static const leaveDetails = "$baseUrl/getEmpLeaveDetails";
   static const leaves = '$baseUrl/leave';
   static const applyLeave = '$leaves/addLeaveRequest';
   static const leaveRequest = '$leaves/updateLeaveRequest';
+
+  static const getCategoryList = '$baseUrl/getCategoryList';
+  static const addInventory = '$baseUrl/addInventory';
+  static const saleProduct = '$baseUrl/saleProduct';
+
+  static const promoterStoreDetail = '$baseUrl/getPromoterDetail';
+  static const getInventory = '$baseUrl/getInventory';
 }

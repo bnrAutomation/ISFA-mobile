@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/store_list_module/bloc/schedule_visit_call_bloc.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
-import 'package:i_densfa/utility/app_pop_view.dart';
+import 'package:i_densfa/module/ui/app_pop_view.dart';
 
 import 'store_list_view.dart';
 

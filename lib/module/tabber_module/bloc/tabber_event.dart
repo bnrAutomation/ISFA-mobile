@@ -13,3 +13,5 @@ class UpdateOnlineStatusEvent extends TabberEvent {
 
   UpdateOnlineStatusEvent(this.updatedStatus);
 }
+
+class UpdateSideMenuDetailsEvent extends TabberEvent {}

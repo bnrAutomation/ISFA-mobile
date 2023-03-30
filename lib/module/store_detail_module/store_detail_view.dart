@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../utility/app_constants.dart';
-import '../../utility/button_views.dart';
+import '../ui/button_views.dart';
 
 class StoreDetailView extends StatelessWidget {
   const StoreDetailView({super.key});

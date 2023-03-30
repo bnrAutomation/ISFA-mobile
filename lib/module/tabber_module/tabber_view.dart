@@ -1,15 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view.dart';
-import 'package:i_densfa/module/tabber_module/tabber/tabber_bloc.dart';
+import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
+import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
 import 'package:i_densfa/routes.dart';
 
 import '../../utility/network_helper.dart';
 import '../beat_plan_module/beat_plan_view.dart';
 import '../store_list_module/store_list_view.dart';
+import 'bloc/tabber_bloc.dart';
 
 class TabberView extends StatelessWidget {
   const TabberView({super.key});
@@ -35,7 +39,9 @@ class TabberView extends StatelessWidget {
     BuildContext? networkAlertContext;
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => TabberBloc()),
+        BlocProvider(
+            create: (context) => TabberBloc(TabbarRepository())
+              ..add(UpdateSideMenuDetailsEvent())),
         BlocProvider(
           create: (context) => NetworkBloc()..add(NetworkObserve()),
         ),
@@ -61,7 +67,9 @@ class TabberView extends StatelessWidget {
         child: BlocBuilder<TabberBloc, TabberState>(
           builder: (context, state) {
             return Scaffold(
-              drawer: const AppSideMenu(),
+              drawer: context.read<TabberBloc>().sideMenuData == null
+                  ? null
+                  : AppSideMenu(data: context.read<TabberBloc>().sideMenuData!),
               appBar: AppBar(
                 title: Text(context.read<TabberBloc>().tabTitle()),
                 leading: Builder(
@@ -141,13 +149,13 @@ class TabberView extends StatelessWidget {
 }
 
 class AppSideMenu extends StatelessWidget {
-  const AppSideMenu({super.key});
+  final SideMenuModel data;
+  const AppSideMenu({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
-        padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: Theme.of(context).primaryColor),
@@ -176,34 +184,44 @@ class AppSideMenu extends StatelessWidget {
                   },
                 )
               ],
-              accountName: const Text("Gopal Krishan"),
-              accountEmail: const Text("ce.gopal@denave.com")),
-          ListTile(
-            leading: const Icon(CupertinoIcons.calendar_today),
-            title: const Text('Attendance'),
-            onTap: () => Navigator.pop(context),
-          ),
-          ListTile(
-            leading: const Icon(Icons.timer_outlined),
-            title: const Text('My Activities'),
-            onTap: () => closeDrawerAndPushView(context, AppPaths.activity),
-          ),
-          ListTile(
-            leading: const Icon(Icons.timer_outlined),
-            title: const Text('Leave'),
-            onTap: () => closeDrawerAndPushView(context, AppPaths.leave),
-          ),
-          ListTile(
-            leading: const Icon(Icons.handshake_outlined),
-            title: const Text('Promoter'),
-            onTap: () => closeDrawerAndPushView(context, AppPaths.promoter),
-          ),
-          ListTile(
-            leading: const Icon(Icons.assessment_outlined),
-            title: const Text('Assessment'),
-            onTap: () =>
-                closeDrawerAndPushView(context, AppPaths.assessmentList),
-          ),
+              accountName: Text(data.userInfo.userName),
+              accountEmail: Text(data.userInfo.email)),
+          ...data.menu.where((element) => element.isActive).map(
+            (e) {
+              return ListTile(
+                leading: CachedNetworkImage(
+                  fit: BoxFit.contain,
+                  imageUrl: e.icon,
+                  width: 25.w,
+                  height: 25.w,
+                  errorWidget: (context, url, error) =>
+                      const ColoredBox(color: Colors.red),
+                ),
+                title: Text(e.name),
+                onTap: () {
+                  switch (e.key) {
+                    case 'promoter':
+                      closeDrawerAndPushView(context, AppPaths.promoter);
+                      break;
+                    case 'leave':
+                      closeDrawerAndPushView(context, AppPaths.leave);
+                      break;
+                    case 'attendance':
+                      Navigator.pop(context);
+                      break;
+                    case 'My Activities':
+                      closeDrawerAndPushView(context, AppPaths.activity);
+                      break;
+                    case 'Assessment':
+                      closeDrawerAndPushView(context, AppPaths.assessmentList);
+                      break;
+                    default:
+                      Navigator.pop(context);
+                  }
+                },
+              );
+            },
+          ).toList(),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),

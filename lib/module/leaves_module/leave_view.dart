@@ -9,7 +9,7 @@ import 'package:i_densfa/module/leaves_module/apply_leave_form_view.dart';
 import 'package:i_densfa/module/leaves_module/leave/leave_bloc.dart';
 import 'package:i_densfa/module/leaves_module/model/leave_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
-import 'package:i_densfa/utility/app_pop_view.dart';
+import 'package:i_densfa/module/ui/app_pop_view.dart';
 import 'package:intl/intl.dart';
 
 import '../ui/app_tabview_view.dart';
