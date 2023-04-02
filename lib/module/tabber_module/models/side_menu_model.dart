@@ -6,7 +6,7 @@ class SideMenuModel {
     required this.menu,
   });
 
-  UserInfo userInfo;
+  HomeUserInfo userInfo;
   List<Menu> menu;
 
   factory SideMenuModel.fromRawJson(String str) =>
@@ -15,7 +15,7 @@ class SideMenuModel {
   String toRawJson() => json.encode(toJson());
 
   factory SideMenuModel.fromJson(Map<String, dynamic> json) => SideMenuModel(
-        userInfo: UserInfo.fromJson(json["user_info"]),
+        userInfo: HomeUserInfo.fromJson(json["user_info"]),
         menu: List<Menu>.from(json["menu"].map((x) => Menu.fromJson(x))),
       );
 
@@ -57,35 +57,42 @@ class Menu {
       };
 }
 
-class UserInfo {
-  UserInfo({
-    this.phoneNo,
-    this.role,
+class HomeUserInfo {
+  HomeUserInfo({
+    required this.mobile,
     required this.userName,
     required this.email,
+    required this.companyId,
+    required this.companyName,
+    required this.storeId,
   });
 
-  String? phoneNo;
-  String? role;
+  String mobile;
   String userName;
   String email;
+  int storeId;
+  int companyId;
+  String companyName;
 
-  factory UserInfo.fromRawJson(String str) =>
-      UserInfo.fromJson(json.decode(str));
+  factory HomeUserInfo.fromRawJson(String str) =>
+      HomeUserInfo.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory UserInfo.fromJson(Map<String, dynamic> json) => UserInfo(
-        phoneNo: json["phone_no"],
-        role: json["role"],
-        userName: json["user_name"],
-        email: json["email"],
-      );
+  factory HomeUserInfo.fromJson(Map<String, dynamic> json) => HomeUserInfo(
+      mobile: json["mobile"] ?? "",
+      userName: json["username"] ?? "N/A",
+      email: json["email"],
+      companyId: json["companyId"],
+      companyName: json["companyName"] ?? "N/A",
+      storeId: json["storeId"]);
 
   Map<String, dynamic> toJson() => {
-        "phone_no": phoneNo,
-        "role": role,
-        "user_name": userName,
+        "mobile": mobile,
+        "username": userName,
         "email": email,
+        "storeId": storeId,
+        "companyId": companyId,
+        "companyName": companyName,
       };
 }

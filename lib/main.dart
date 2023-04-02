@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/routes.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
-void main() {
+void main() async {
+  await AppStorage.objectValue();
   runApp(MyApp());
 }
 

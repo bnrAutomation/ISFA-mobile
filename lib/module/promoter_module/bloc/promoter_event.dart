@@ -6,4 +6,15 @@ abstract class PromoterEvent {}
 class GetInventoryDetailEvent extends PromoterEvent {}
 
 class GetStoreDetailEvent extends PromoterEvent {}
-// class GetInventoryDetailEvent extends PromoterEvent {}
+
+class SearchByNamePromoterEvent extends PromoterEvent {
+  final String name;
+
+  SearchByNamePromoterEvent(this.name);
+}
+
+class PromoterShowToastMessageEvent extends PromoterEvent {
+  final String message;
+
+  PromoterShowToastMessageEvent(this.message);
+}

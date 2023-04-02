@@ -9,6 +9,7 @@ import 'package:i_densfa/module/campaign_module/campaign_view.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
 import 'package:i_densfa/routes.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 
 import '../../utility/network_helper.dart';
 import '../beat_plan_module/beat_plan_view.dart';
@@ -184,8 +185,8 @@ class AppSideMenu extends StatelessWidget {
                   },
                 )
               ],
-              accountName: Text(data.userInfo.userName),
-              accountEmail: Text(data.userInfo.email)),
+              accountName: Text(data.userInfo.companyName),
+              accountEmail: Text(data.userInfo.userName)),
           ...data.menu.where((element) => element.isActive).map(
             (e) {
               return ListTile(
@@ -227,6 +228,7 @@ class AppSideMenu extends StatelessWidget {
             title: const Text('Logout'),
             onTap: () {
               Scaffold.of(context).closeDrawer();
+              AppStorage().userDetail = null;
               context.go(AppPaths.login);
             },
           ),

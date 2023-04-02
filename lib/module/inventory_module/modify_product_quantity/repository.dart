@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:i_densfa/module/inventory_module/modify_product_quantity/product_category_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 
 class ModifyProductsRepository {
-  final userId = 1;
-  final compId = 1;
-  final storeId = 1;
+  final userId = AppStorage().userDetail!.id;
+  final compId = AppStorage().homeInfo!.userInfo.companyId;
+  final int storeId;
+
+  ModifyProductsRepository(this.storeId);
   Future<List<ProductCategoryModel>> getCategoryList() async {
     final url =
         Uri.parse('${URLConstants.getCategoryList}/$userId/$compId/$storeId');
@@ -41,14 +44,18 @@ class ModifyProductsRepository {
   }
 
   Future<bool> addSaleQty(
-      {required int catId, required int productId, required int qty}) async {
+      {required int catId,
+      required int productId,
+      required int qty,
+      required double price}) async {
     final url = Uri.parse('${URLConstants.saleProduct}/$userId');
 
     final body = {
       "storeId": storeId,
       "productId": productId,
       "categoryId": catId,
-      "transUnit": qty
+      "transUnit": qty,
+      "price": price
     };
 
     final response = await post(url,

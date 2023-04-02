@@ -81,25 +81,27 @@ class LeaveView extends StatelessWidget {
                         ),
                       ),
                     ])),
-                    SliverFillRemaining(
-                        child: AppTabViewController(
-                      backgroundColor: Colors.transparent,
-                      initialIndex: bloc.bottomTabSelectedIndex,
-                      onTabTap: (p0) => bloc.bottomTabSelectedIndex = p0,
-                      titles: bloc.tabbarTitles,
-                      children: bloc.tabbarLeavesList.map((leaves) {
-                        return ListView.separated(
-                            itemCount: leaves.length,
-                            padding: const EdgeInsets.all(5),
-                            separatorBuilder: (context, index) => const Divider(
-                                  height: 5,
-                                  thickness: 1.0,
-                                  color: Colors.black12,
-                                ),
-                            itemBuilder: (c, index) =>
-                                ApproveLeave(leaves[index]));
-                      }).toList(),
-                    ))
+                    if (bloc.tabbarTitles.isNotEmpty)
+                      SliverFillRemaining(
+                          child: AppTabViewController(
+                        backgroundColor: Colors.transparent,
+                        initialIndex: bloc.bottomTabSelectedIndex,
+                        onTabTap: (p0) => bloc.bottomTabSelectedIndex = p0,
+                        titles: bloc.tabbarTitles,
+                        children: bloc.tabbarLeavesList.map((leaves) {
+                          return ListView.separated(
+                              itemCount: leaves.length,
+                              padding: const EdgeInsets.all(5),
+                              separatorBuilder: (context, index) =>
+                                  const Divider(
+                                    height: 5,
+                                    thickness: 1.0,
+                                    color: Colors.black12,
+                                  ),
+                              itemBuilder: (c, index) =>
+                                  ApproveLeave(leaves[index]));
+                        }).toList(),
+                      ))
                   ],
                 ),
               );
@@ -141,8 +143,7 @@ class LeaveView extends StatelessWidget {
                     alignment: Alignment.center,
                     children: [
                       RotationTransition(
-                        turns: AlwaysStoppedAnimation(
-                            bloc.details!.usedLeave / bloc.details!.totalLeave),
+                        turns: AlwaysStoppedAnimation(bloc.fadeRotatedAngle),
                         child: SizedBox(
                           width: bloc.fadeCirlceDiameter,
                           height: bloc.fadeCirlceDiameter,

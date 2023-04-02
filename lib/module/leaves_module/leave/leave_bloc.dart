@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/leaves_module/leave_repository.dart';
@@ -25,10 +27,24 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
 
   final double circleRadius = 60;
   double get fadeCirlceDiameter => circleRadius * 2 + 15;
-  double get incompleteLeavePercent =>
-      (details?.leaveBalance ?? 1) / (details?.totalLeave ?? 1);
-  double get completeLeavePercent =>
-      ((details?.usedLeave ?? 1) / (details?.totalLeave ?? 1)) * 100;
+  double get incompleteLeavePercent {
+    if ((details?.totalLeave ?? 0) == 0) return 0;
+    return (details?.leaveBalance ?? 1) / (details?.totalLeave ?? 1);
+  }
+
+  double get completeLeavePercent {
+    final total = details?.totalLeave ?? 1;
+    final used = details?.usedLeave ?? 1;
+    if (total == 0) return 100;
+    var calculated = (used / total) * 100;
+    calculated = min(calculated, 100);
+    return max(0, calculated);
+  }
+
+  double get fadeRotatedAngle {
+    if (details?.totalLeave == 0) return 0;
+    return details!.usedLeave / details!.totalLeave;
+  }
 
   List<String> get tabbarTitles {
     final empLeaves = details?.empAppliedLeave ?? [];
@@ -144,6 +160,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         bottomTabSelectedIndex = 1;
       }
       emit(LeaveAppliedSuccess());
+      emit(LeaveViewShowSnack('Your leave is pending for approval.'));
       add(GetLeaveDetailsEvent());
     }
   }
@@ -179,6 +196,11 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     });
     if (resp) {
       add(GetLeaveDetailsEvent());
+      if (approve) {
+        emit(LeaveViewShowSnack('Leave is approved'));
+      } else {
+        emit(LeaveViewShowSnack('Leave is rejected'));
+      }
     }
     return resp;
   }

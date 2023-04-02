@@ -6,11 +6,15 @@ class InventoryDetailModel {
     required this.numberOfSelling,
     required this.lastReciveDate,
     required this.productList,
+    required this.openingBalance,
+    required this.closingBalance,
   });
 
   int numberOfProduct;
   int numberOfSelling;
   DateTime lastReciveDate;
+  String openingBalance;
+  String closingBalance;
   List<InventoryProductDetailModel> productList;
 
   factory InventoryDetailModel.fromRawJson(String str) =>
@@ -22,6 +26,8 @@ class InventoryDetailModel {
       InventoryDetailModel(
         numberOfProduct: json["numberOfProduct"],
         numberOfSelling: json["numberOfSelling"],
+        openingBalance: json['openingBalance'],
+        closingBalance: json['closingBalance'],
         lastReciveDate: DateTime.parse(json["lastReciveDate"]),
         productList: List<InventoryProductDetailModel>.from(json["productList"]
             .map((x) => InventoryProductDetailModel.fromJson(x))),
@@ -30,6 +36,8 @@ class InventoryDetailModel {
   Map<String, dynamic> toJson() => {
         "numberOfProduct": numberOfProduct,
         "numberOfSelling": numberOfSelling,
+        "openingBalance": openingBalance,
+        "closingBalance": closingBalance,
         "lastReciveDate":
             "${lastReciveDate.year.toString().padLeft(4, '0')}-${lastReciveDate.month.toString().padLeft(2, '0')}-${lastReciveDate.day.toString().padLeft(2, '0')}",
         "productList": List<dynamic>.from(productList.map((x) => x.toJson())),

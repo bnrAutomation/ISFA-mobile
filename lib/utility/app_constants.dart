@@ -6,7 +6,7 @@ class ImageConstants {
   static const product = "assets/images/product.svg";
 
   static const filter = "assets/icons/filter.svg";
-  static const doorOut = "assets/icons/door0ut.svg";
+  static const doorOut = "assets/icons/doorOut.svg";
   static const sick = "assets/icons/sick.svg";
   static const walkman = "assets/icons/walkman.svg";
   static const sunumbrella = "assets/icons/sunumbrella.svg";

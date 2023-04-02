@@ -13,6 +13,7 @@ class ModifyQuantityBloc
   ProductCategoryModel? selectedCategory;
   ProductList? selectedProduct;
   int? selectedQuantity;
+  double enteredPrice = 0;
   final bool isSale;
 
   List<ProductList> get products {
@@ -29,11 +30,18 @@ class ModifyQuantityBloc
       final val = int.tryParse(event.value) ?? 0;
       selectedQuantity = val;
     });
+    on((AddPriceSaleProductEvent event, emit) {
+      final val = double.tryParse(event.price) ?? 0;
+      enteredPrice = val;
+    });
   }
 
   Future<void> _getCategoryList(Emitter<ModifyQuantityState> emit) async {
     emit(LoadingState());
-    categories = await repo.getCategoryList();
+    categories = await repo.getCategoryList().catchError((onError) {
+      emit(ToastMessageState(onError.toString()));
+      return <ProductCategoryModel>[];
+    });
     emit(LoadedState());
   }
 
@@ -71,14 +79,19 @@ class ModifyQuantityBloc
 
     if (isSale) {
       if (selectedQuantity! > (selectedProduct!.stockBalance ?? 0)) {
-        emit(ToastMessageState('Quanity entered is more than stock balance'));
+        emit(ToastMessageState('Quantity entered is more than stock balance'));
+        return;
+      }
+      if (enteredPrice <= 0) {
+        emit(ToastMessageState('Please enter price'));
         return;
       }
       final response = await repo
           .addSaleQty(
               catId: selectedCategory!.categoryId,
               productId: selectedProduct!.productId,
-              qty: selectedQuantity!)
+              qty: selectedQuantity!,
+              price: enteredPrice)
           .catchError((onError) {
         emit(ToastMessageState(onError.toString()));
         return false;

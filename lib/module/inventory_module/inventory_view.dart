@@ -20,15 +20,23 @@ class InventoryView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: AddFloatingActionButton(onTap: () {
+        final promoterBloc = context.read<PromoterBloc>();
+        final storeId = promoterBloc.storeDetail?.storeId;
+        if (storeId == null) {
+          promoterBloc.add(PromoterShowToastMessageEvent("Store not found"));
+          return;
+        }
         AppPopup.showAppBottomSheet(
           context: context,
           child: BlocProvider(
             create: (context) =>
-                ModifyQuantityBloc(ModifyProductsRepository(), false)
+                ModifyQuantityBloc(ModifyProductsRepository(storeId), false)
                   ..add(GetCategoriesListEvent()),
             child: ModifyProductQuantityPopup(
               title: "Add Product Quantity",
-              onPop: () {},
+              onPop: () {
+                context.read<PromoterBloc>().add(GetInventoryDetailEvent());
+              },
             ),
           ),
         );
@@ -76,6 +84,9 @@ class InventoryView extends StatelessWidget {
                           current is StoreInventoryLoadedState,
                       builder: (context, state) {
                         final bloc = context.read<PromoterBloc>();
+                        if (bloc.inventoryDetail == null) {
+                          return const SizedBox();
+                        }
                         return Padding(
                           padding: const EdgeInsets.all(15),
                           child: Column(
@@ -121,24 +132,17 @@ class InventoryView extends StatelessWidget {
                               _detailDivider(),
                               if (bloc.inventoryDetail != null)
                                 _detailNameVal(context,
-                                    name: "Last recived on",
+                                    name: "Stock recived on",
                                     val: DateFormat('dd MMM yyyy').format(
                                         bloc.inventoryDetail!.lastReciveDate)),
                               _detailDivider(),
                               _detailNameVal(context,
-                                  name: 'Sustem Opening', val: ''),
+                                  name: 'Opening Balance',
+                                  val: bloc.inventoryDetail!.openingBalance),
                               _detailDivider(),
                               _detailNameVal(context,
-                                  name: "Received as Reporded", val: ""),
-                              _detailDivider(),
-                              _detailNameVal(context,
-                                  name: "System Opening", val: ""),
-                              _detailDivider(),
-                              _detailNameVal(context,
-                                  name: "Sell-Out as Reported", val: ""),
-                              _detailDivider(),
-                              _detailNameVal(context,
-                                  name: "Sell-Out as Dervived", val: ""),
+                                  name: "Closing Balance",
+                                  val: bloc.inventoryDetail!.closingBalance),
                             ],
                           ),
                         );
@@ -158,10 +162,15 @@ class InventoryView extends StatelessWidget {
                       ?.copyWith(color: Colors.black),
                 ),
               ),
-              const CustomSearchBar(
-                colors: Colors.white,
-                iconColor: Colors.black,
-                hintText: "Search by name...",
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.w),
+                child: CustomSearchBar(
+                  onChange: (p0) => context
+                      .read<PromoterBloc>()
+                      .add(SearchByNamePromoterEvent(p0)),
+                  color: Colors.black,
+                  hintText: "Search by name...",
+                ),
               ),
               const SizedBox(height: 5),
             ]),
@@ -174,12 +183,12 @@ class InventoryView extends StatelessWidget {
               builder: (context, state) {
                 final bloc = context.read<PromoterBloc>();
                 return ListView.separated(
-                    itemCount: bloc.inventoryDetail?.productList.length ?? 0,
+                    itemCount: bloc.filteredList.length,
                     padding: const EdgeInsets.all(5),
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 5),
-                    itemBuilder: (context, index) => ItemsList(
-                        detail: bloc.inventoryDetail!.productList[index]));
+                    itemBuilder: (context, index) =>
+                        ItemsList(detail: bloc.filteredList[index]));
               },
             ),
           )
@@ -250,11 +259,11 @@ class ItemsList extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      "MOP :",
+                      "MOP: ",
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text(
-                      "333/Unit",
+                      detail.price.toStringAsFixed(2),
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],

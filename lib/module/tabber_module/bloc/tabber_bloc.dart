@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 
 part 'tabber_event.dart';
 part 'tabber_state.dart';
@@ -33,6 +34,9 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
 
   Future<void> _getSideMenuData(Emitter<TabberState> emit) async {
     sideMenuData = await repo.getSideMenuDetails();
+    AppStorage().homeInfo = sideMenuData;
+    debugPrint("user id: ${AppStorage().userDetail!.id}");
+    debugPrint("Home info received: ${sideMenuData?.toRawJson()}");
     emit(state);
   }
 }

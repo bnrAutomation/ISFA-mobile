@@ -4,13 +4,14 @@ import 'package:http/http.dart';
 import 'package:i_densfa/module/leaves_module/model/leave_enums.dart';
 import 'package:i_densfa/module/leaves_module/model/leave_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 import 'package:intl/intl.dart';
 
 import 'model/leave_type_model.dart';
 
 class LeaveRepository {
-  final empId = 21;
-  final companyId = 4;
+  final empId = AppStorage().userDetail!.id;
+  final companyId = AppStorage().homeInfo!.userInfo.companyId;
   Future<EmpLeaveDetailsModel> getDetails() async {
     final response =
         await get(Uri.parse('${URLConstants.leaveDetails}/$empId/$companyId'));

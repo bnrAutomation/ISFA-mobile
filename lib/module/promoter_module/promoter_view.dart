@@ -72,20 +72,7 @@ class PromoterView extends StatelessWidget {
               Expanded(
                 child: CustomImageButton(
                   buttonText: "Sale Log",
-                  onPressed: () {
-                    AppPopup.showAppBottomSheet(
-                      context: context,
-                      child: BlocProvider(
-                        create: (context) =>
-                            ModifyQuantityBloc(ModifyProductsRepository(), true)
-                              ..add(GetCategoriesListEvent()),
-                        child: ModifyProductQuantityPopup(
-                          title: "Add Sale Log",
-                          onPop: () {},
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: () => _saleLogTapped(context),
                   image: SvgPicture.asset(
                     ImageConstants.navigator,
                   ),
@@ -402,6 +389,27 @@ class PromoterView extends StatelessWidget {
             ],
           )
         ],
+      ),
+    );
+  }
+
+  void _saleLogTapped(BuildContext context) {
+    final promoterBloc = context.read<PromoterBloc>();
+    final storeId = promoterBloc.storeDetail?.storeId;
+    if (storeId == null) {
+      promoterBloc.add(PromoterShowToastMessageEvent("Store not found"));
+      return;
+    }
+    AppPopup.showAppBottomSheet(
+      context: context,
+      child: BlocProvider(
+        create: (context) =>
+            ModifyQuantityBloc(ModifyProductsRepository(storeId), true)
+              ..add(GetCategoriesListEvent()),
+        child: ModifyProductQuantityPopup(
+          title: "Add Sale Log",
+          onPop: () {},
+        ),
       ),
     );
   }

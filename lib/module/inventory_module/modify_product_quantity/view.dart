@@ -91,7 +91,7 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                 SizedBox(height: 8.h),
                 if (bloc.selectedProduct != null) ...[
                   Text(
-                      "Quantity ${bloc.isSale ? "(Out of ${bloc.selectedProduct!.stockBalance})" : "current is ${bloc.selectedProduct!.stockBalance}"}",
+                      "Quantity (Stock count is ${bloc.selectedProduct!.stockBalance})",
                       style: Theme.of(context).textTheme.labelLarge),
                   const SizedBox(height: 5),
                   DecoratedBox(
@@ -110,6 +110,32 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                       onChanged: (value) => bloc.add(ChangeQtyEvent(value)),
                     ),
                   ),
+                  if (bloc.isSale && bloc.selectedProduct != null) ...[
+                    SizedBox(height: 8.h),
+                    Text("Price",
+                        style: Theme.of(context).textTheme.labelLarge),
+                    const SizedBox(height: 5),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextField(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^(\d+)?\.?\d{0,2}'))
+                        ],
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                          hintText: 'Enter Price',
+                        ),
+                        onChanged: (value) =>
+                            bloc.add(AddPriceSaleProductEvent(value)),
+                      ),
+                    ),
+                  ],
                 ],
                 SizedBox(height: 12.h),
                 CustomMaterialButton(
