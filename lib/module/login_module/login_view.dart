@@ -156,13 +156,14 @@ class LoginView extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20),
                                   child: CustomMaterialButton(
-                                    onPressed: () => {
-                                      if (state is! LogInLoadingState)
-                                        {
-                                          bloc.add(LoginSubmitEvent(
-                                              usernameController.text,
-                                              passwordController.text))
-                                        }
+                                    onPressed: () {
+                                      if (state is! LogInLoadingState) {
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
+                                        bloc.add(LoginSubmitEvent(
+                                            usernameController.text,
+                                            passwordController.text));
+                                      }
                                     },
                                     buttonText: state is LogInLoadingState
                                         ? "Loading..."

@@ -53,4 +53,6 @@ class URLConstants {
 
   static const promoterStoreDetail = '$baseUrl/getPromoterDetail';
   static const getInventory = '$baseUrl/getInventory';
+  static const getFeedbackPurposes = '$baseUrl/getFeedbackPurposes';
+  static const createFeedback = '$baseUrl/createFeedback';
 }

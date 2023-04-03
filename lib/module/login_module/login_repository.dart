@@ -12,8 +12,12 @@ class LoginRepository {
         body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       return LoginModel.fromRawJson(response.body);
+    } else if (response.statusCode == 401) {
+      throw "User doesn't exist";
     } else {
-      throw json.decode(response.body)['message'];
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : json.decode(response.body)['message'] ?? "Something went wrong";
     }
   }
 }

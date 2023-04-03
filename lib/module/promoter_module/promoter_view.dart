@@ -10,6 +10,7 @@ import 'package:i_densfa/module/dynamic_questions_module/model.dart';
 import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions_view.dart';
 import 'package:i_densfa/module/inventory_module/modify_product_quantity/bloc/modify_quantity_bloc.dart';
 import 'package:i_densfa/module/inventory_module/modify_product_quantity/repository.dart';
+import 'package:i_densfa/module/promoter_module/Feedback/feedback_View.dart';
 import 'package:i_densfa/module/ui/custom_image_button.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
@@ -82,8 +83,16 @@ class PromoterView extends StatelessWidget {
               Expanded(
                 child: CustomImageButton(
                   buttonText: "Inventory",
-                  onPressed: () => context.pushNamed(AppPaths.inventory,
-                      extra: context.read<PromoterBloc>()),
+                  onPressed: () {
+                    final promoterBloc = context.read<PromoterBloc>();
+                    final storeId = promoterBloc.storeDetail?.storeId;
+                    if (storeId == null) {
+                      promoterBloc.add(
+                          PromoterShowToastMessageEvent("Store not found"));
+                      return;
+                    }
+                    context.pushNamed(AppPaths.inventory, extra: promoterBloc);
+                  },
                   image: SvgPicture.asset(ImageConstants.box),
                 ),
               ),
@@ -92,8 +101,8 @@ class PromoterView extends StatelessWidget {
                 child: CustomImageButton(
                   buttonText: "Start\nCampaign",
                   onPressed: () {
-                    AppPopup.showAppBottomSheet(
-                        context: context, child: _openCampaignSheet(context));
+                    // AppPopup.showAppBottomSheet(
+                    //     context: context, child: _openCampaignSheet(context));
                   },
                   image: SvgPicture.asset(
                     ImageConstants.campaign,
@@ -105,12 +114,18 @@ class PromoterView extends StatelessWidget {
                 child: CustomImageButton(
                   buttonText: "Feedback",
                   onPressed: () {
-                    AppPopup.showAppBottomSheet(
-                        context: context, child: _openFeedbackSheet(context));
+                    final storeDetail =
+                        context.read<PromoterBloc>().storeDetail;
+                    if (storeDetail != null) {
+                      AppPopup.showAppBottomSheet(
+                        context: context,
+                        child: FeedbackView(
+                            storeName:
+                                "${storeDetail.name} ${storeDetail.storeBranch}"),
+                      );
+                    }
                   },
-                  image: SvgPicture.asset(
-                    ImageConstants.feedback,
-                  ),
+                  image: SvgPicture.asset(ImageConstants.feedback),
                 ),
               ),
             ],
@@ -281,113 +296,6 @@ class PromoterView extends StatelessWidget {
             child: DynamicQuestionsView(questions: dummyOtherInfo),
           ),
           CustomMaterialButton(buttonText: "Submit", onPressed: () {}),
-        ],
-      ),
-    );
-  }
-
-  Widget _openFeedbackSheet(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            "Take Feedback",
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Neeraj Pan Bhandar,New Delhi.",
-                  style: Theme.of(context).textTheme.labelLarge),
-              const SizedBox(height: 5),
-              Text("Select Purpose",
-                  style: Theme.of(context).textTheme.labelLarge),
-              const SizedBox(height: 5),
-              AppPopup.dropDownMenu(
-                options: [
-                  'This is Dummy Purpose',
-                  'This is Dummy Purpose',
-                  'This is Dummy Purpose',
-                  'Other'
-                ],
-                placeholder: "Choose an option",
-                onChanged: (p0) {},
-              ),
-              const SizedBox(height: 10),
-              Text("Reason", style: Theme.of(context).textTheme.labelLarge),
-              const SizedBox(height: 5),
-              Container(
-                width: 1.sw,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      contentPadding:
-                          EdgeInsets.only(left: 8, bottom: 8, top: 8, right: 8),
-                      hintText: "Type your reason here..."),
-                  minLines: 2,
-                  maxLines: 5,
-                  keyboardType: TextInputType.multiline,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  CircleAvatar(
-                      // backgroundImage: AssetImage(ImageConstants.scan),
-                      backgroundColor: Colors.grey,
-                      radius: 50,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: SvgPicture.asset(ImageConstants.scan),
-                      )),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Expanded(
-                    child: CustomMaterialButton(
-                        buttonText: "Click Image",
-                        onPressed: () => Navigator.pop(context)),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  MaterialButton(
-                    onPressed: () {},
-                    color: Colors.black,
-                    textColor: Colors.white,
-                    padding: const EdgeInsets.all(16),
-                    shape: const CircleBorder(),
-                    child: const Icon(
-                      Icons.delete_outline,
-                      size: 18,
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              CustomMaterialButton(
-                  buttonText: "Save Feedback", onPressed: () => context.pop()),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
-          )
         ],
       ),
     );

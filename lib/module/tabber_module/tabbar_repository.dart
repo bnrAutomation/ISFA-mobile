@@ -14,7 +14,9 @@ class TabbarRepository {
     if (response.statusCode == 200) {
       return SideMenuModel.fromJson(jsonRec['data']);
     } else {
-      throw jsonRec['message'];
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : json.decode(response.body)['message'] ?? "Something went wrong";
     }
 
     // final r = jsonEncode({

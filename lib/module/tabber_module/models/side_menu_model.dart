@@ -64,13 +64,11 @@ class HomeUserInfo {
     required this.email,
     required this.companyId,
     required this.companyName,
-    required this.storeId,
   });
 
   String mobile;
   String userName;
   String email;
-  int storeId;
   int companyId;
   String companyName;
 
@@ -84,14 +82,12 @@ class HomeUserInfo {
       userName: json["username"] ?? "N/A",
       email: json["email"],
       companyId: json["companyId"],
-      companyName: json["companyName"] ?? "N/A",
-      storeId: json["storeId"]);
+      companyName: json["companyName"] ?? "N/A");
 
   Map<String, dynamic> toJson() => {
         "mobile": mobile,
         "username": userName,
         "email": email,
-        "storeId": storeId,
         "companyId": companyId,
         "companyName": companyName,
       };

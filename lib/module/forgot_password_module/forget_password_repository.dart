@@ -12,7 +12,9 @@ class ForgotPasswordRepository {
     if (response.statusCode == 200) {
       return ForgotPasswordModel.fromRawJson(response.body);
     } else {
-      throw json.decode(response.body)['message'];
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : json.decode(response.body)['message'] ?? "Something went wrong";
     }
   }
 }

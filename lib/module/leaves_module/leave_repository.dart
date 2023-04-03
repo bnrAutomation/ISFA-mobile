@@ -18,7 +18,9 @@ class LeaveRepository {
     if (response.statusCode == 200) {
       return EmpLeaveDetailsModel.fromRawJson(response.body);
     } else {
-      throw json.decode(response.body)['message'];
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : json.decode(response.body)['message'] ?? "Something went wrong";
     }
   }
 
@@ -44,7 +46,9 @@ class LeaveRepository {
     if (response.statusCode == 201) {
       return true;
     } else {
-      throw json.decode(response.body)['message'];
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : json.decode(response.body)['message'] ?? "Something went wrong";
     }
   }
 
@@ -61,7 +65,9 @@ class LeaveRepository {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw json.decode(response.body)['message'];
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : json.decode(response.body)['message'] ?? "Something went wrong";
     }
   }
 
