@@ -10,7 +10,7 @@ import 'package:i_densfa/module/dynamic_questions_module/model.dart';
 import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions_view.dart';
 import 'package:i_densfa/module/inventory_module/modify_product_quantity/bloc/modify_quantity_bloc.dart';
 import 'package:i_densfa/module/inventory_module/modify_product_quantity/repository.dart';
-import 'package:i_densfa/module/promoter_module/Feedback/feedback_View.dart';
+import 'package:i_densfa/module/promoter_module/feedback/feedback_view.dart';
 import 'package:i_densfa/module/ui/custom_image_button.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';

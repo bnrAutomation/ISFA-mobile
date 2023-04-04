@@ -72,8 +72,8 @@ class InventoryProductDetailModel {
         categoryId: json["categoryId"],
         categoryName: json["categoryName"],
         productName: json["productName"],
-        price: json["price"],
-        stockBalance: json["stockBalance"],
+        price: json["price"] ?? 0.0,
+        stockBalance: json["stockBalance"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {

@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -49,31 +50,52 @@ class DropDownWithOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 1.sw,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-        value: selectedVal,
-        items: options.map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: valChanged,
-        hint: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            hint,
-            style: const TextStyle(color: Colors.grey),
-          ),
+    return DropdownSearch<String>(
+      popupProps:
+          const PopupProps.menu(showSelectedItems: true, showSearchBox: true),
+      items: options,
+      selectedItem: selectedVal,
+      onChanged: valChanged,
+      dropdownDecoratorProps: DropDownDecoratorProps(
+        dropdownSearchDecoration: InputDecoration(
+          hintText: hint,
+          border: const OutlineInputBorder(),
         ),
-      )),
+      ),
     );
+
+    // Container(
+    //   width: 1.sw,
+    //   // padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    //   // decoration: BoxDecoration(
+    //   //   border: Border.all(color: Colors.black),
+    //   //   borderRadius: BorderRadius.circular(10),
+    //   // ),
+    //  // child:
+
+    //   //  DropdownButtonHideUnderline(
+    //   //   child: DropdownSearch<String>(
+    //   //     items: options,
+    //   //   ),
+
+    //   //     child: DropdownButton<String>(
+    //   //   value: selectedVal,
+    //   // items: options.map((String value) {
+    //   //   return DropdownMenuItem<String>(
+    //   //     value: value,
+    //   //     child: Text(value),
+    //   //   );
+    //   // }).toList(),
+    //   //   onChanged: valChanged,
+    //   //   hint: Padding(
+    //   //     padding: const EdgeInsets.all(8.0),
+    //   //     child: Text(
+    //   //       hint,
+    //   //       style: const TextStyle(color: Colors.grey),
+    //   //     ),
+    //   //   ),
+    //   // )
+    //   // ),
+    // );
   }
 }

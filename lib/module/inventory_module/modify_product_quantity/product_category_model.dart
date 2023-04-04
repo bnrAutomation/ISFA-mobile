@@ -66,7 +66,7 @@ class ProductList {
         productId: json["productId"],
         categoryId: json["categoryId"],
         productName: json["productName"],
-        price: double.parse(json["price"].toString()),
+        price: double.parse((json["price"] ?? 0.0).toString()),
         stockBalance: json["stockBalance"],
       );
 

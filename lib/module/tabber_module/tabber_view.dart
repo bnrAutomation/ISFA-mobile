@@ -190,14 +190,16 @@ class AppSideMenu extends StatelessWidget {
           ...data.menu.where((element) => element.isActive).map(
             (e) {
               return ListTile(
-                leading: CachedNetworkImage(
-                  fit: BoxFit.contain,
-                  imageUrl: e.icon,
-                  width: 25.w,
-                  height: 25.w,
-                  errorWidget: (context, url, error) =>
-                      const ColoredBox(color: Colors.red),
-                ),
+                leading: const Icon(Icons.logout),
+
+                //  CachedNetworkImage(
+                //   fit: BoxFit.contain,
+                //   imageUrl: e.icon,
+                //   width: 25.w,
+                //   height: 25.w,
+                //   errorWidget: (context, url, error) =>
+                //       const ColoredBox(color: Colors.red),
+                // ),
                 title: Text(e.name),
                 onTap: () {
                   switch (e.key) {

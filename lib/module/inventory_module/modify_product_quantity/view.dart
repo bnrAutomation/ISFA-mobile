@@ -91,13 +91,13 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                 SizedBox(height: 8.h),
                 if (bloc.selectedProduct != null) ...[
                   Text(
-                      "Quantity (Stock count is ${bloc.selectedProduct!.stockBalance})",
+                      "Quantity (Stock count is ${bloc.selectedProduct!.stockBalance ?? 0})",
                       style: Theme.of(context).textTheme.labelLarge),
                   const SizedBox(height: 5),
                   DecoratedBox(
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: TextField(
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -118,7 +118,7 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                     DecoratedBox(
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                       child: TextField(
                         inputFormatters: [
@@ -126,6 +126,8 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                               RegExp(r'^(\d+)?\.?\d{0,2}'))
                         ],
                         keyboardType: TextInputType.number,
+                        controller: TextEditingController(
+                            text: (bloc.selectedProduct!.price).toString()),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(horizontal: 8),

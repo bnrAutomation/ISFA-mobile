@@ -119,20 +119,20 @@ class InventoryView extends StatelessWidget {
                               ),
                               SizedBox(height: 5.h),
                               _detailNameVal(context,
-                                  name: "Products",
+                                  name: "Products Recived",
                                   val: bloc.inventoryDetail?.numberOfProduct
                                           .toString() ??
                                       '0'),
                               _detailDivider(),
                               _detailNameVal(context,
-                                  name: "Selling",
+                                  name: "Products Sold",
                                   val: bloc.inventoryDetail?.numberOfSelling
                                           .toString() ??
                                       '0'),
                               _detailDivider(),
                               if (bloc.inventoryDetail != null)
                                 _detailNameVal(context,
-                                    name: "Stock recived on",
+                                    name: "Last Stock Recived On",
                                     val: DateFormat('dd MMM yyyy').format(
                                         bloc.inventoryDetail!.lastReciveDate)),
                               _detailDivider(),
@@ -273,7 +273,7 @@ class ItemsList extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "Qty :",
+                  "Qty : ",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(

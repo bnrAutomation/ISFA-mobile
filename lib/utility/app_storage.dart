@@ -11,7 +11,7 @@ class AppStorage {
 
   AppStorage._internal();
 
-  final String _prefrenceName = "isfa_admin_prefrence";
+  final String _prefrenceName = "isfa_prefrence";
   late Box _box;
 
   Future<AppStorage> _init() async {
