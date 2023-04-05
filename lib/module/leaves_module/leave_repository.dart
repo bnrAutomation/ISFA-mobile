@@ -12,6 +12,7 @@ import 'model/leave_type_model.dart';
 class LeaveRepository {
   final empId = AppStorage().userDetail!.id;
   final companyId = AppStorage().homeInfo!.userInfo.companyId;
+
   Future<EmpLeaveDetailsModel> getDetails() async {
     final response =
         await get(Uri.parse('${URLConstants.leaveDetails}/$empId/$companyId'));

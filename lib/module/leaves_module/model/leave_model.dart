@@ -13,9 +13,9 @@ class EmpLeaveDetailsModel {
     required this.reporteeRequestedLeave,
   });
 
-  int totalLeave;
-  int leaveBalance;
-  int usedLeave;
+  double totalLeave;
+  double leaveBalance;
+  double usedLeave;
   List<LeaveBalanceModel> leaveTypeBalance;
   List<AppliedLeaveModel> empAppliedLeave;
   List<AppliedLeaveModel> reporteeRequestedLeave;
@@ -27,10 +27,9 @@ class EmpLeaveDetailsModel {
 
   factory EmpLeaveDetailsModel.fromJson(Map<String, dynamic> json) =>
       EmpLeaveDetailsModel(
-        totalLeave: json["totalLeave"],
-        leaveBalance:
-            double.tryParse(json["leaveBalance"].toString())?.toInt() ?? 0,
-        usedLeave: double.tryParse(json["usedLeave"].toString())?.toInt() ?? 0,
+        totalLeave: double.tryParse(json["totalLeave"].toString()) ?? 0.0,
+        leaveBalance: double.tryParse(json["leaveBalance"].toString()) ?? 0.0,
+        usedLeave: double.tryParse(json["usedLeave"].toString()) ?? 0,
         leaveTypeBalance: List<LeaveBalanceModel>.from(
             json["leaveTypeBalance"].map((x) => LeaveBalanceModel.fromJson(x))),
         empAppliedLeave: List<AppliedLeaveModel>.from(
