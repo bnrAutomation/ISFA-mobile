@@ -56,6 +56,8 @@ class ModifyQuantityBloc
       SelectProductEvent event, Emitter<ModifyQuantityState> emit) {
     selectedProduct = products
         .firstWhere((element) => element.productName == event.productName);
+
+    enteredPrice = selectedProduct?.price ?? 0.0;
     emit(LoadedState());
   }
 

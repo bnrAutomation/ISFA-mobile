@@ -35,7 +35,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         try {
           emit(LogInLoadingState());
           final loginResponse = await repo.login(
-              username: event.username, password: event.password);
+              username: event.username.trim(), password: event.password.trim());
           debugPrint(loginResponse.toString());
           AppStorage().userDetail = loginResponse.logindata.userInfo;
           emit(LoginedSuccesfullState());
