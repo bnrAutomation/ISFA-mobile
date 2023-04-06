@@ -14,6 +14,8 @@ class LeaveTypeModel {
     required this.leaveDesc,
     required this.specialLeave,
     required this.active,
+    required this.color,
+    required this.icon,
   });
 
   int leaveId;
@@ -21,6 +23,8 @@ class LeaveTypeModel {
   String leaveDesc;
   bool specialLeave;
   bool active;
+  String color;
+  String icon;
 
   factory LeaveTypeModel.fromRawJson(String str) =>
       LeaveTypeModel.fromJson(json.decode(str));
@@ -30,9 +34,11 @@ class LeaveTypeModel {
   factory LeaveTypeModel.fromJson(Map<String, dynamic> json) => LeaveTypeModel(
         leaveId: json["leaveId"],
         leaveType: json["leaveType"],
-        leaveDesc: json["leaveDesc"],
+        leaveDesc: json["leaveDesc"] ?? "",
         specialLeave: json["specialLeave"],
         active: json["active"],
+        color: json["color"],
+        icon: json["icon"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -41,5 +47,7 @@ class LeaveTypeModel {
         "leaveDesc": leaveDesc,
         "specialLeave": specialLeave,
         "active": active,
+        "color": color,
+        "icon": icon,
       };
 }
