@@ -18,3 +18,9 @@ class PromoterShowToastMessageEvent extends PromoterEvent {
 
   PromoterShowToastMessageEvent(this.message);
 }
+
+class PromoterCheckInStoreEvent extends PromoterEvent {}
+
+class PromoterCheckOutStoreEvent extends PromoterEvent {}
+
+class GoToMapPromoterEvent extends PromoterEvent {}

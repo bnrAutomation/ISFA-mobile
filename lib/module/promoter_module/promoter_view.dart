@@ -16,8 +16,6 @@ import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-
 import '../inventory_module/modify_product_quantity/view.dart';
 import 'bloc/promoter_bloc.dart';
 
@@ -167,14 +165,7 @@ class PromoterView extends StatelessWidget {
                   ),
                   if (bloc.storeDetail?.latitude != null)
                     IconButton(
-                        onPressed: () {
-                          final lat = bloc.storeDetail?.latitude ?? "";
-                          final long = bloc.storeDetail?.longtitude ?? "";
-                          final url =
-                              'http://www.google.com/maps/place/$lat,$long';
-
-                          launchUrlString(url);
-                        },
+                        onPressed: () => bloc.add(GoToMapPromoterEvent()),
                         icon: const Icon(
                           Icons.location_on,
                           color: Colors.red,
@@ -211,7 +202,7 @@ class PromoterView extends StatelessWidget {
                     Color(0XFF003D5B),
                     Color(0XFF278BBC),
                   ]),
-                  onPressed: () {}),
+                  onPressed: () => bloc.add(PromoterCheckInStoreEvent())),
               const SizedBox(height: 8),
               CustomMaterialButton(
                   gradient: const LinearGradient(

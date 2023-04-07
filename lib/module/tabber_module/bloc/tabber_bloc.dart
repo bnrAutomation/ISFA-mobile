@@ -35,8 +35,6 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
   Future<void> _getSideMenuData(Emitter<TabberState> emit) async {
     sideMenuData = await repo.getSideMenuDetails();
     AppStorage().homeInfo = sideMenuData;
-    debugPrint("user id: ${AppStorage().userDetail!.id}");
-    debugPrint("Home info received: ${sideMenuData?.toRawJson()}");
     emit(state);
   }
 }
