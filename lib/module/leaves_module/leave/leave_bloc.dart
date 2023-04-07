@@ -94,6 +94,9 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     });
     on<FromDateLeaveTypeEvent>((event, emit) {
       fromDate = event.dateTime;
+      if (toDate?.isBefore(event.dateTime) ?? false) {
+        toDate = event.dateTime;
+      }
       emit(LeaveViewWithData());
     });
     on<ToDateLeaveTypeEvent>((event, emit) {
