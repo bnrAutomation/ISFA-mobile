@@ -131,7 +131,7 @@ class LoginView extends StatelessWidget {
                                 context.pushNamed(AppPaths.forgotpass);
                               },
                               child: Text(
-                                "I've forgotten my password",
+                                "Forgot Password?",
                                 textAlign: TextAlign.right,
                                 style: GoogleFonts.metrophobic(
                                   fontWeight: FontWeight.w600,

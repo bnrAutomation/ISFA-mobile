@@ -100,7 +100,10 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: TextField(
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(3),
+                      ],
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         border: InputBorder.none,

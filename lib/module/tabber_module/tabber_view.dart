@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view.dart';
@@ -67,22 +65,27 @@ class TabberView extends StatelessWidget {
         },
         child: BlocBuilder<TabberBloc, TabberState>(
           builder: (context, state) {
+            final bloc = context.read<TabberBloc>();
+
             return Scaffold(
-              drawer: context.read<TabberBloc>().sideMenuData == null
+              drawer: bloc.sideMenuData == null
                   ? null
-                  : AppSideMenu(data: context.read<TabberBloc>().sideMenuData!),
+                  : AppSideMenu(data: bloc.sideMenuData!),
               appBar: AppBar(
-                title: Text(context.read<TabberBloc>().tabTitle()),
-                leading: Builder(
-                    builder: (context) => IconButton(
-                        onPressed: () => Scaffold.of(context).openDrawer(),
-                        icon: const Icon(
-                          Icons.blur_on_sharp,
-                          color: Colors.black,
-                        ))),
+                title: Text(bloc.tabTitle()),
+                leading: Builder(builder: (context) {
+                  return (bloc.sideMenuData == null)
+                      ? const SizedBox()
+                      : IconButton(
+                          onPressed: () => Scaffold.of(context).openDrawer(),
+                          icon: const Icon(
+                            Icons.blur_on_sharp,
+                            color: Colors.black,
+                          ));
+                }),
               ),
               body: Center(
-                child: widgetOptions[context.read<TabberBloc>().selectIndex],
+                child: widgetOptions[bloc.selectIndex],
               ),
               bottomNavigationBar: Container(
                 decoration: BoxDecoration(
@@ -133,7 +136,7 @@ class TabberView extends StatelessWidget {
                       ),
                     ],
 
-                    selectedIndex: context.read<TabberBloc>().selectIndex,
+                    selectedIndex: bloc.selectIndex,
                     onTabChange: (index) {
                       BlocProvider.of<TabberBloc>(context)
                           .add(ChangeTabEvent(index));
@@ -166,17 +169,16 @@ class AppSideMenu extends StatelessWidget {
                   buildWhen: (previous, current) =>
                       (current is OnlineStatusUpdateState),
                   builder: (context, state) {
+                    final bloc = context.read<TabberBloc>();
                     return FittedBox(
                       child: Column(
                         children: [
                           CupertinoSwitch(
-                              value: context.read<TabberBloc>().isOnline,
+                              value: bloc.isOnline,
                               onChanged: (newVal) => closeDrawerAndPushView(
                                   context, AppPaths.checkin)),
                           Text(
-                            context.read<TabberBloc>().isOnline
-                                ? "On-Duty"
-                                : "Off-Duty",
+                            bloc.isOnline ? "On-Duty" : "Off-Duty",
                             style: const TextStyle(color: Colors.white),
                           )
                         ],
@@ -225,6 +227,34 @@ class AppSideMenu extends StatelessWidget {
               );
             },
           ).toList(),
+          ListTile(
+            leading: const Icon(Icons.notifications_outlined),
+            title: const Text('Notification'),
+            onTap: () {
+              Scaffold.of(context).closeDrawer();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings_outlined),
+            title: const Text('Setting'),
+            onTap: () {
+              Scaffold.of(context).closeDrawer();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.help_outline),
+            title: const Text('Help'),
+            onTap: () {
+              Scaffold.of(context).closeDrawer();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.live_help_outlined),
+            title: const Text('Query'),
+            onTap: () {
+              Scaffold.of(context).closeDrawer();
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),

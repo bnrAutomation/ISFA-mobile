@@ -149,7 +149,9 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
             leaveTypeId: leaveTypeId,
             dayId: selectedLeaveDayPart.getId,
             fromDate: fromDate!,
-            toDate: toDate!,
+            toDate: selectedLeaveDayPart == LeaveDayPart.full
+                ? toDate!
+                : fromDate!, // same date for half leaves
             reason: reason)
         .catchError((e) {
       emit(LeaveViewShowSnack(e.toString()));

@@ -95,7 +95,12 @@ class _ApplyLeaveFormViewState extends State<ApplyLeaveFormView> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("From", style: textTheme.labelLarge),
+                              Text(
+                                  (bloc.selectedLeaveDayPart ==
+                                          LeaveDayPart.full)
+                                      ? "From"
+                                      : "On",
+                                  style: textTheme.labelLarge),
                               const SizedBox(height: 5),
                               Container(
                                 width: 1.sw,
@@ -137,69 +142,71 @@ class _ApplyLeaveFormViewState extends State<ApplyLeaveFormView> {
                           ),
                         ),
                         const SizedBox(width: 5),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("To", style: textTheme.labelLarge),
-                              const SizedBox(height: 5),
-                              Container(
-                                width: 1.sw,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: BlocListener<LeaveBloc, LeaveState>(
-                                  listener: (context, state) {
-                                    final fromDate = bloc.toDate;
-                                    if (fromDate != null) {
-                                      toDateController.text = DateFormat()
-                                          .addPattern("dd/MM/yyyy")
-                                          .format(fromDate);
-                                    }
-                                  },
-                                  child: TextFormField(
-                                    controller: toDateController,
-                                    decoration: const InputDecoration(
-                                        suffixIcon:
-                                            Icon(Icons.calendar_month_outlined),
-                                        border: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        enabledBorder: InputBorder.none,
-                                        errorBorder: InputBorder.none,
-                                        disabledBorder: InputBorder.none,
-                                        contentPadding: EdgeInsets.only(
-                                            left: 8,
-                                            bottom: 11,
-                                            top: 11,
-                                            right: 8),
-                                        hintText: "DD/MM/YYYY"),
-                                    readOnly: true,
-                                    onTap: () async {
-                                      final now = DateTime.now();
-                                      final date = await showDatePicker(
-                                        selectableDayPredicate:
-                                            (DateTime date) {
-                                          if (date.weekday == DateTime.sunday) {
-                                            return false;
-                                          }
-                                          return true;
-                                        },
-                                        context: context,
-                                        initialDate: bloc.fromDate ?? now,
-                                        firstDate: bloc.fromDate ?? now,
-                                        lastDate: DateTime(now.year, 12, 31),
-                                      );
-                                      if (date != null && context.mounted) {
-                                        bloc.add(ToDateLeaveTypeEvent(date));
+                        if (bloc.selectedLeaveDayPart == LeaveDayPart.full)
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("To", style: textTheme.labelLarge),
+                                const SizedBox(height: 5),
+                                Container(
+                                  width: 1.sw,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: BlocListener<LeaveBloc, LeaveState>(
+                                    listener: (context, state) {
+                                      final fromDate = bloc.toDate;
+                                      if (fromDate != null) {
+                                        toDateController.text = DateFormat()
+                                            .addPattern("dd/MM/yyyy")
+                                            .format(fromDate);
                                       }
                                     },
+                                    child: TextFormField(
+                                      controller: toDateController,
+                                      decoration: const InputDecoration(
+                                          suffixIcon: Icon(
+                                              Icons.calendar_month_outlined),
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                          contentPadding: EdgeInsets.only(
+                                              left: 8,
+                                              bottom: 11,
+                                              top: 11,
+                                              right: 8),
+                                          hintText: "DD/MM/YYYY"),
+                                      readOnly: true,
+                                      onTap: () async {
+                                        final now = DateTime.now();
+                                        final date = await showDatePicker(
+                                          selectableDayPredicate:
+                                              (DateTime date) {
+                                            if (date.weekday ==
+                                                DateTime.sunday) {
+                                              return false;
+                                            }
+                                            return true;
+                                          },
+                                          context: context,
+                                          initialDate: bloc.fromDate ?? now,
+                                          firstDate: bloc.fromDate ?? now,
+                                          lastDate: DateTime(now.year, 12, 31),
+                                        );
+                                        if (date != null && context.mounted) {
+                                          bloc.add(ToDateLeaveTypeEvent(date));
+                                        }
+                                      },
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
+                                )
+                              ],
+                            ),
+                          )
                       ],
                     ),
                     const SizedBox(height: 10),
