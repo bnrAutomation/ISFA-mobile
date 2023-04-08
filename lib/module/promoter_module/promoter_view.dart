@@ -99,8 +99,9 @@ class PromoterView extends StatelessWidget {
                 child: CustomImageButton(
                   buttonText: "Start\nCampaign",
                   onPressed: () {
-                    // AppPopup.showAppBottomSheet(
-                    //     context: context, child: _openCampaignSheet(context));
+                    return;
+                    AppPopup.showAppBottomSheet(
+                        context: context, child: _openCampaignSheet(context));
                   },
                   image: SvgPicture.asset(
                     ImageConstants.campaign,
@@ -197,19 +198,35 @@ class PromoterView extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               CustomMaterialButton(
-                  buttonText: "Check-In Store",
+                  buttonText: state is PromoterStoreDetailLoadingState ||
+                          bloc.storeDetail == null
+                      ? "Loading..."
+                      : "Check-In Store",
                   gradient: const LinearGradient(colors: <Color>[
                     Color(0XFF003D5B),
                     Color(0XFF278BBC),
                   ]),
-                  onPressed: () => bloc.add(PromoterCheckInStoreEvent())),
+                  onPressed: () {
+                    if (state is! PromoterStoreDetailLoadingState ||
+                        bloc.storeDetail != null) {
+                      bloc.add(PromoterCheckInStoreEvent());
+                    }
+                  }),
               const SizedBox(height: 8),
               CustomMaterialButton(
                   gradient: const LinearGradient(
                     colors: <Color>[Color(0XFFC92434), Color(0XFF003D5B)],
                   ),
-                  buttonText: "Check-Out Store",
-                  onPressed: () {})
+                  buttonText: state is PromoterStoreDetailLoadingState ||
+                          bloc.storeDetail == null
+                      ? "Loading..."
+                      : "Check-Out Store",
+                  onPressed: () {
+                    if (state is! PromoterStoreDetailLoadingState ||
+                        bloc.storeDetail != null) {
+                      bloc.add(PromoterCheckOutStoreEvent());
+                    }
+                  })
             ],
           ),
         );

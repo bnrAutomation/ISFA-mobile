@@ -8,6 +8,7 @@ import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../utility/network_helper.dart';
 import '../beat_plan_module/beat_plan_view.dart';
@@ -73,16 +74,27 @@ class TabberView extends StatelessWidget {
                   : AppSideMenu(data: bloc.sideMenuData!),
               appBar: AppBar(
                 title: Text(bloc.tabTitle()),
-                leading: Builder(builder: (context) {
-                  return (bloc.sideMenuData == null)
-                      ? const SizedBox()
-                      : IconButton(
-                          onPressed: () => Scaffold.of(context).openDrawer(),
-                          icon: const Icon(
-                            Icons.blur_on_sharp,
-                            color: Colors.black,
-                          ));
-                }),
+                leading: BlocListener<TabberBloc, TabberState>(
+                  listenWhen: (previous, current) =>
+                      current is TabbarSnackBarMessageState,
+                  listener: (context, state) {
+                    if (state is TabbarSnackBarMessageState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.message)),
+                      );
+                    }
+                  },
+                  child: Builder(builder: (context) {
+                    return (bloc.sideMenuData == null)
+                        ? const SizedBox()
+                        : IconButton(
+                            onPressed: () => Scaffold.of(context).openDrawer(),
+                            icon: const Icon(
+                              Icons.blur_on_sharp,
+                              color: Colors.black,
+                            ));
+                  }),
+                ),
               ),
               body: Center(
                 child: widgetOptions[bloc.selectIndex],
@@ -175,8 +187,16 @@ class AppSideMenu extends StatelessWidget {
                         children: [
                           CupertinoSwitch(
                               value: bloc.isOnline,
-                              onChanged: (newVal) => closeDrawerAndPushView(
-                                  context, AppPaths.checkin)),
+                              onChanged: (newVal) async {
+                                Scaffold.of(context).closeDrawer();
+                                if (newVal) {
+                                  final XFile? image =
+                                      await context.pushNamed(AppPaths.checkin);
+                                  bloc.add(StartDutyStatusTabberEvent(image));
+                                } else {
+                                  bloc.add(EndDutyStatusTabberEvent());
+                                }
+                              }),
                           Text(
                             bloc.isOnline ? "On-Duty" : "Off-Duty",
                             style: const TextStyle(color: Colors.white),

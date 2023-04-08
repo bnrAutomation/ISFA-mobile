@@ -8,10 +8,12 @@ class ChangeTabEvent extends TabberEvent {
   ChangeTabEvent(this.selectIndex);
 }
 
-class UpdateOnlineStatusEvent extends TabberEvent {
-  final bool updatedStatus;
+class EndDutyStatusTabberEvent extends TabberEvent {}
 
-  UpdateOnlineStatusEvent(this.updatedStatus);
+class StartDutyStatusTabberEvent extends TabberEvent {
+  final XFile? file;
+
+  StartDutyStatusTabberEvent(this.file);
 }
 
 class UpdateSideMenuDetailsEvent extends TabberEvent {}

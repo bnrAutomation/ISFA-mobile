@@ -11,3 +11,9 @@ class UpdateIndexState extends TabberState {
 }
 
 class OnlineStatusUpdateState extends TabberState {}
+
+class TabbarSnackBarMessageState extends TabberState {
+  final String message;
+
+  TabbarSnackBarMessageState(this.message);
+}

@@ -32,9 +32,10 @@ class URLConstants {
   URLConstants._();
 
   static const baseURLStart = String.fromEnvironment('BASE_URL');
-  static const baseUrl = "$baseURLStart/iSFA/api";
-  static const loginAuth = "$baseUrl/auth";
-  static const sidemenuDetails = '$baseUrl/user/home';
+  static const isfaBaseURL = '$baseURLStart/iSFA';
+  static const apiBaseUrl = "$isfaBaseURL/api";
+  static const loginAuth = "$apiBaseUrl/auth";
+  static const sidemenuDetails = '$apiBaseUrl/user/home';
   static const version = "v1";
 
   static const login = "$loginAuth/login";
@@ -42,17 +43,22 @@ class URLConstants {
   static const verifyotp = "$loginAuth/$version/verify-otp";
   static const resetPassword = "$loginAuth/$version/reset-password";
 
-  static const leaveDetails = "$baseUrl/getEmpLeaveDetails";
-  static const leaves = '$baseUrl/leave';
+  static const leaveDetails = "$apiBaseUrl/getEmpLeaveDetails";
+  static const leaves = '$apiBaseUrl/leave';
   static const applyLeave = '$leaves/addLeaveRequest';
   static const leaveRequest = '$leaves/updateLeaveRequest';
 
-  static const getCategoryList = '$baseUrl/getCategoryList';
-  static const addInventory = '$baseUrl/addInventory';
-  static const saleProduct = '$baseUrl/saleProduct';
+  static const getCategoryList = '$apiBaseUrl/getCategoryList';
+  static const addInventory = '$apiBaseUrl/addInventory';
+  static const saleProduct = '$apiBaseUrl/saleProduct';
 
-  static const promoterStoreDetail = '$baseUrl/getPromoterDetail';
-  static const getInventory = '$baseUrl/getInventory';
-  static const getFeedbackPurposes = '$baseUrl/getFeedbackPurposes';
-  static const createFeedback = '$baseUrl/createFeedback';
+  static const promoterStoreDetail = '$apiBaseUrl/getPromoterDetail';
+  static const getInventory = '$apiBaseUrl/getInventory';
+  static const getFeedbackPurposes = '$apiBaseUrl/getFeedbackPurposes';
+  static const createFeedback = '$apiBaseUrl/createFeedback';
+
+  static const markin = '$isfaBaseURL/MarkIn';
+  static const markOut = '$isfaBaseURL/MarkOut';
+  static const startDuty = '$isfaBaseURL/StartDuty';
+  static const endDuty = '$isfaBaseURL/EndDuty';
 }

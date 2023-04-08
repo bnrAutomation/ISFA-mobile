@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
-import 'package:i_densfa/routes.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CheckInView extends StatelessWidget {
   const CheckInView({super.key});
@@ -79,7 +79,13 @@ class CheckInView extends StatelessWidget {
           const SizedBox(height: 20),
           CustomMaterialButton(
               buttonText: "Take Selfie ",
-              onPressed: () => context.pushNamed(AppPaths.selfie)),
+              onPressed: () async {
+                final image =
+                    await ImagePicker().pickImage(source: ImageSource.camera);
+                if (context.mounted) {
+                  context.pop(image);
+                }
+              }),
           const SizedBox(height: 10)
         ],
       ),
