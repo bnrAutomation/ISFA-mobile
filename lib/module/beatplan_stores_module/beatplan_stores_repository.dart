@@ -23,8 +23,9 @@ class BeatPlanStoresRepository {
         }));
 
     if (response.statusCode == 200) {
-      final List data = json.decode(response.body)["data"];
-      return data.map((e) => BeatPlanModel.fromJson(e)).toList();
+      final data = json.decode(response.body)["data"];
+      final List plans = data is List ? data : [];
+      return plans.map((e) => BeatPlanModel.fromJson(e)).toList();
     } else {
       throw response.body.isEmpty
           ? "Something went wrong"

@@ -54,6 +54,7 @@ class URLConstants {
 
   static const promoterStoreDetail = '$apiBaseUrl/getPromoterDetail';
   static const getInventory = '$apiBaseUrl/getInventory';
+  static const getCompaingns = '$isfaBaseURL/storeActivity';
   static const getFeedbackPurposes = '$apiBaseUrl/getFeedbackPurposes';
   static const createFeedback = '$apiBaseUrl/createFeedback';
 

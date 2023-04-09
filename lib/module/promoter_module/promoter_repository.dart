@@ -8,6 +8,8 @@ import 'package:i_densfa/utility/app_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
+import 'models/compaigns_model.dart';
+
 class PromoterRepository {
   final userId = AppStorage().userDetail!.id;
   final compId = AppStorage().homeInfo!.userInfo.companyId;
@@ -77,6 +79,25 @@ class PromoterRepository {
       throw body.isEmpty
           ? "Something went wrong"
           : json.decode(body)['message'] ?? "Something went wrong";
+    }
+  }
+
+  Future<List<CompaignsModel>> getCompaignList(int storeId) async {
+    final response =
+        await get(Uri.parse('${URLConstants.getCompaingns}/$storeId'));
+
+    if (response.statusCode == 200) {
+      final resJson = json.decode(response.body);
+      if (resJson['dataList'] is List) {
+        return (resJson['dataList'] as List)
+            .map((e) => CompaignsModel.fromJson(e))
+            .toList();
+      } else {
+        return [];
+      }
+    } else {
+      final resJson = json.decode(response.body);
+      throw resJson['message'];
     }
   }
 }

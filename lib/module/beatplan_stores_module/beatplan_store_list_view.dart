@@ -76,19 +76,23 @@ class BeatPlanStoreListView extends StatelessWidget {
                         Text(bloc.selectedDate.toStringFormat('dd MMM yyyy'))),
               ),
               Expanded(
-                  child: (state is BeatPlanStoresLoadingState)
-                      ? const Center(child: CircularProgressIndicator())
-                      : ListView.separated(
-                          padding: const EdgeInsets.all(10),
-                          itemCount: 10,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(height: 10),
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                                onTap: () => context.pushNamed(AppPaths.store),
-                                child: const StoreCardView());
-                          },
-                        ))
+                child: (state is BeatPlanStoresLoadingState)
+                    ? const Center(child: CircularProgressIndicator())
+                    : bloc.beatPlans.isEmpty
+                        ? const Center(child: Text("No data"))
+                        : ListView.separated(
+                            padding: const EdgeInsets.all(10),
+                            itemCount: 10,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: 10),
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                  onTap: () =>
+                                      context.pushNamed(AppPaths.store),
+                                  child: const StoreCardView());
+                            },
+                          ),
+              )
             ],
           );
         },

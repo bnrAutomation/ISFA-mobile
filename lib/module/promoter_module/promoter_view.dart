@@ -11,6 +11,7 @@ import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions
 import 'package:i_densfa/module/inventory_module/modify_product_quantity/bloc/modify_quantity_bloc.dart';
 import 'package:i_densfa/module/inventory_module/modify_product_quantity/repository.dart';
 import 'package:i_densfa/module/promoter_module/feedback/feedback_view.dart';
+import 'package:i_densfa/module/promoter_module/models/compaigns_model.dart';
 import 'package:i_densfa/module/ui/custom_image_button.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
@@ -98,14 +99,9 @@ class PromoterView extends StatelessWidget {
               Expanded(
                 child: CustomImageButton(
                   buttonText: "Start\nCampaign",
-                  onPressed: () {
-                    return;
-                    AppPopup.showAppBottomSheet(
-                        context: context, child: _openCampaignSheet(context));
-                  },
-                  image: SvgPicture.asset(
-                    ImageConstants.campaign,
-                  ),
+                  onPressed: () =>
+                      context.read<PromoterBloc>().add(GotoCompaignEvent()),
+                  image: SvgPicture.asset(ImageConstants.campaign),
                 ),
               ),
               const SizedBox(width: 5),
@@ -136,12 +132,19 @@ class PromoterView extends StatelessWidget {
 
   BlocConsumer<PromoterBloc, PromoterState> _storeDetailsView() {
     return BlocConsumer<PromoterBloc, PromoterState>(
-      listenWhen: (previous, current) => current is PromoterToastMessageState,
+      listenWhen: (previous, current) =>
+          current is PromoterToastMessageState ||
+          current is CompaignsLoadedPromoterState,
       listener: (context, state) {
         if (state is PromoterToastMessageState) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(state.message),
           ));
+        } else if (state is CompaignsLoadedPromoterState) {
+          final PromoterBloc bloc = context.read();
+          AppPopup.showAppBottomSheet(
+              context: context,
+              child: _openCampaignSheet(context, bloc.compaigns));
         }
       },
       builder: (context, state) {
@@ -234,7 +237,7 @@ class PromoterView extends StatelessWidget {
     );
   }
 
-  Widget _openCampaignSheet(BuildContext context) {
+  Widget _openCampaignSheet(BuildContext context, List<CompaignsModel> items) {
     final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -248,7 +251,7 @@ class PromoterView extends StatelessWidget {
           const SizedBox(height: 10),
           Expanded(
             child: ListView.separated(
-                itemCount: 10,
+                itemCount: items.length,
                 separatorBuilder: (context, index) => const SizedBox(height: 5),
                 itemBuilder: (context, index) => InkWell(
                     onTap: () {
@@ -258,7 +261,7 @@ class PromoterView extends StatelessWidget {
                         child: salesLogForm(textTheme),
                       );
                     },
-                    child: const CampaignList())),
+                    child: CampaignListItem(item: items[index]))),
           ),
         ],
       ),

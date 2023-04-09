@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:i_densfa/module/promoter_module/models/compaigns_model.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
-class CampaignList extends StatelessWidget {
-  const CampaignList({super.key});
+class CampaignListItem extends StatelessWidget {
+  final CompaignsModel item;
+  const CampaignListItem({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +21,14 @@ class CampaignList extends StatelessWidget {
                 height: 5,
               ),
               Text(
-                "Demonstaration",
+                item.createdBy,
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge
                     ?.copyWith(fontWeight: FontWeight.w600, color: Colors.blue),
               ),
               Text(
-                "9, 6 Number Bus stop, Bhopal, Madhya Pradesh 462011, India, Bhopal, MP",
+                "",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(
@@ -43,7 +46,7 @@ class CampaignList extends StatelessWidget {
                         ?.copyWith(fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    "5 March 2023",
+                    item.dateCreated.toStringFormat("d MMMM yyyy"),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
@@ -59,7 +62,7 @@ class CampaignList extends StatelessWidget {
                         ?.copyWith(fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    "5 April 2023",
+                    item.fromdate.toStringFormat("d MMMM yyyy"),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),

@@ -24,3 +24,5 @@ class PromoterCheckInStoreEvent extends PromoterEvent {}
 class PromoterCheckOutStoreEvent extends PromoterEvent {}
 
 class GoToMapPromoterEvent extends PromoterEvent {}
+
+class GotoCompaignEvent extends PromoterEvent {}

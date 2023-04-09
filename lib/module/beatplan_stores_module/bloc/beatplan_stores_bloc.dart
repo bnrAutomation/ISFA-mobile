@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beatplan_stores_repository.dart';
 
 part 'beatplan_stores_event.dart';
@@ -10,11 +11,14 @@ class BeatplanStoresBloc
   final BeatPlanStoresRepository repo;
 
   var selectedDate = DateTime.now();
-
+  List<BeatPlanModel> beatPlans = [];
   BeatplanStoresBloc(this.repo) : super(BeatPlanStoresLoadingState()) {
     on((BeatPlanStoresUpdateData event, emit) async {
       emit(BeatPlanStoresLoadingState());
-      await Future.delayed(const Duration(seconds: 1));
+      beatPlans = await repo.getBeatPlans(selectedDate).catchError((onError) {
+        emit(BeatPlanSnackBarMessage(onError.toString()));
+        return <BeatPlanModel>[];
+      });
       emit(BeatPlanStoreLoaded());
     });
 

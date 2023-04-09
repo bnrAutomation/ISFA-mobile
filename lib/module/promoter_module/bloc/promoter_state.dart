@@ -17,3 +17,5 @@ class PromoterToastMessageState extends PromoterState {
   final String message;
   PromoterToastMessageState(this.message);
 }
+
+class CompaignsLoadedPromoterState extends PromoterState {}

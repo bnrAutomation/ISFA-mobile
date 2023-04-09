@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:i_densfa/module/promoter_module/models/compaigns_model.dart';
 import 'package:i_densfa/module/promoter_module/models/inventory_detail_model.dart';
 import 'package:i_densfa/module/promoter_module/models/promoter_store_detail_model.dart';
 import 'package:i_densfa/module/promoter_module/promoter_repository.dart';
@@ -17,7 +18,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
   InventoryDetailModel? inventoryDetail;
   PromoterStoreDetailModel? storeDetail;
   List<InventoryProductDetailModel> filteredList = [];
-
+  List<CompaignsModel> compaigns = [];
   PromoterBloc(this.repo) : super(PromoterInitial()) {
     on((GetInventoryDetailEvent event, emit) async =>
         await _getInventoryDetails(emit));
@@ -35,6 +36,26 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
       final url = 'http://www.google.com/maps/place/$lat,$long';
       launchUrlString(url);
     });
+
+    on(gotoCompaignEvent);
+  }
+
+  Future<void> gotoCompaignEvent(GotoCompaignEvent event, emit) async {
+    if (storeDetail?.storeId == null) {
+      emit(PromoterToastMessageState('Store not found'));
+      return;
+    }
+    compaigns =
+        await repo.getCompaignList(storeDetail!.storeId).catchError((onError) {
+      emit(PromoterToastMessageState(onError.toString()));
+      return <CompaignsModel>[];
+    });
+
+    if (compaigns.isNotEmpty) {
+      emit(CompaignsLoadedPromoterState());
+    } else {
+      emit(PromoterToastMessageState("No Campaign"));
+    }
   }
 
   Future<void> _markOutStore(PromoterCheckOutStoreEvent event, emit) async {
