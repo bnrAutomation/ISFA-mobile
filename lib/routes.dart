@@ -8,6 +8,8 @@ import 'package:i_densfa/module/login_module/login_view.dart';
 import 'package:i_densfa/module/my_activity_module/my_activity_view.dart';
 import 'package:i_densfa/module/promoter_module/bloc/promoter_bloc.dart';
 import 'package:i_densfa/module/promoter_module/promoter_view.dart';
+import 'package:i_densfa/module/store_detail_module/storeDetal/store_detail_bloc.dart';
+import 'package:i_densfa/module/store_detail_module/store_detail_repositry.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_view.dart';
 
 import 'module/assessment_module/bloc/assessment_bloc.dart';
@@ -39,9 +41,16 @@ final router = GoRouter(
       builder: (context, state) => const TabberView(),
     ),
     GoRoute(
-      path: AppPaths.store,
+      path: "${AppPaths.store}/:storeId",
       name: AppPaths.store,
-      builder: (context, state) => const StoreDetailView(),
+      builder: (context, state) => BlocProvider(
+        create: (context) => StoreDetailBloc(StoreDetailRepository()),
+        child: StoreDetailView(
+          storeId: state.params['storeId'] ?? "",
+          // storeName: state.params['storeName'] ?? ""
+        ),
+      ),
+      // builder: (context, state) => ,
     ),
     GoRoute(
       path: AppPaths.assessmentQuestion,

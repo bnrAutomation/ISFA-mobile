@@ -147,25 +147,25 @@ class ScheduleVisitView extends StatelessWidget {
         const Text("Select Store*"),
         TextField(
           readOnly: true,
-          onTap: () async {
-            final selectedItem = await AppPopup.showAppBottomSheet(
-              context: context,
-              child: ListView.separated(
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(10),
-                itemCount: 10,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 10),
-                itemBuilder: (context, index) => InkWell(
-                    onTap: () {
-                      context.pop('name');
-                    },
-                    child: const StoreCardView()),
-              ),
-            );
+          // onTap: () async {
+          //   final selectedItem = await AppPopup.showAppBottomSheet(
+          //     context: context,
+          //     child: ListView.separated(
+          //       shrinkWrap: true,
+          //       padding: const EdgeInsets.all(10),
+          //       itemCount: 10,
+          //       separatorBuilder: (context, index) =>
+          //           const SizedBox(height: 10),
+          //       itemBuilder: (context, index) => InkWell(
+          //           onTap: () {
+          //             context.pop('name');
+          //           },
+          //           child: StoreCardView()),
+          //     ),
+          //   );
 
-            debugPrint(selectedItem);
-          },
+          //   debugPrint(selectedItem);
+          // },
           decoration: const InputDecoration(
               suffixIcon: Icon(Icons.keyboard_arrow_down),
               hintText: 'Store Name'),

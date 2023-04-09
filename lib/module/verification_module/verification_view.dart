@@ -146,7 +146,7 @@ class VerificationView extends StatelessWidget {
                                             'email': state.email,
                                             'otp': state.otp
                                           });
-                                      context.pushNamed(AppPaths.resetPass);
+                                      // context.pushNamed(AppPaths.resetPass);
                                     }
                                   },
                                   builder: (context, state) {

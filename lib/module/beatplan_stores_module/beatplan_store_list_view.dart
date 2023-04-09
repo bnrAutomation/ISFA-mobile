@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
@@ -82,14 +85,19 @@ class BeatPlanStoreListView extends StatelessWidget {
                         ? const Center(child: Text("No data"))
                         : ListView.separated(
                             padding: const EdgeInsets.all(10),
-                            itemCount: 10,
+                            itemCount: bloc.beatPlans.length,
                             separatorBuilder: (context, index) =>
                                 const SizedBox(height: 10),
                             itemBuilder: (context, index) {
                               return InkWell(
-                                  onTap: () =>
-                                      context.pushNamed(AppPaths.store),
-                                  child: const StoreCardView());
+                                  onTap: () => context
+                                          .pushNamed(AppPaths.store, params: {
+                                        'storeId': jsonEncode(
+                                            bloc.beatPlans[index].toJson())
+
+                                        // 'storeName': beatPlan.storeName
+                                      }),
+                                  child: StoreCardView(bloc.beatPlans[index]));
                             },
                           ),
               )
@@ -102,7 +110,8 @@ class BeatPlanStoreListView extends StatelessWidget {
 }
 
 class StoreCardView extends StatelessWidget {
-  const StoreCardView({super.key});
+  final BeatPlanModel beatPlan;
+  const StoreCardView(this.beatPlan, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -124,13 +133,12 @@ class StoreCardView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Gour pan sadan",
+                    beatPlan.storeName,
                     style: GoogleFonts.inter(
                         fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                      '6 No. Bus stop, Shiv Nagar, Madhya Pradesh 462011, India, Bhopal, MP',
+                  Text(beatPlan.address,
                       style: GoogleFonts.inter(fontSize: 10)),
                   const SizedBox(height: 8),
                   Row(
@@ -149,7 +157,13 @@ class StoreCardView extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   FilledButton(
-                      onPressed: () => context.pushNamed(AppPaths.store),
+                      onPressed: () => {
+                            context.pushNamed(AppPaths.store, params: {
+                              'storeId': jsonEncode(beatPlan.toJson())
+                              // beatPlan.toJson(),
+                              // 'storeName': beatPlan.storeName
+                            })
+                          }, //context.pushNamed(AppPaths.store),
                       style: TextButton.styleFrom(
                         alignment: Alignment.center,
                         backgroundColor: Theme.of(context).primaryColor,

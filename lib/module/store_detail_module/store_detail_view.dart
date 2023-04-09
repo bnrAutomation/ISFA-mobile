@@ -1,21 +1,35 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
+import 'package:i_densfa/module/campaign_module/campaign_view/campain_list.dart';
+import 'package:i_densfa/module/promoter_module/models/compaigns_model.dart';
+import 'package:i_densfa/module/store_detail_module/storeDetal/store_detail_bloc.dart';
+
+import 'package:i_densfa/module/ui/app_pop_view.dart';
 
 import '../../utility/app_constants.dart';
 import '../ui/button_views.dart';
 
 class StoreDetailView extends StatelessWidget {
-  const StoreDetailView({super.key});
+  final String storeId;
+  // late BeatPlanModel beatPlanModel;
+  const StoreDetailView({super.key, required this.storeId});
 
   @override
   Widget build(BuildContext context) {
+    BeatPlanModel beatPlanModel = BeatPlanModel.fromRawJson(storeId);
+
     return Scaffold(
       floatingActionButton: AddFloatingActionButton(
-        onTap: () {},
+        onTap: () {
+          final StoreDetailBloc bloc = context.read<StoreDetailBloc>();
+          bloc.add(GotoCompaignEvent(beatPlanModel.storeId));
+        },
       ),
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -32,127 +46,148 @@ class StoreDetailView extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            headerImage(context),
-            nameAddress(context),
-            blueCard(context,
-                leadingSVGImage: ImageConstants.miniCalendar,
-                subtitle: 'Scheduled visits & Calls',
-                title: '28 Feb 2023',
-                trailingSVGImage: ImageConstants.visitsCalls),
-            blueCard(context,
-                leadingSVGImage: ImageConstants.creditCard,
-                subtitle: 'Available Credits',
-                title: '₹ 500.0',
-                trailingSVGImage: ImageConstants.credits),
-            blueCard(context,
-                leadingSVGImage: ImageConstants.notesT,
-                subtitle: 'Notes of important discussion with the sub dealer',
-                title: 'Recent Notes (2)',
-                trailingSVGImage: ImageConstants.paperPen),
-            Row(
+        child: BlocConsumer<StoreDetailBloc, StoreDetailState>(
+          listenWhen: (previous, current) =>
+              current is StoreDetailToastMessageState ||
+              current is CompaignsLoadedStoreDetailState,
+          listener: (context, state) {
+            if (state is StoreDetailToastMessageState) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.message),
+              ));
+            } else if (state is CompaignsLoadedStoreDetailState) {
+              final StoreDetailBloc bloc = context.read();
+              AppPopup.showAppBottomSheet(
+                  context: context,
+                  child: _openCampaignSheet(context, bloc.compaigns));
+            }
+          },
+          builder: (context, state) {
+            return Column(
               children: [
-                Expanded(
-                  child: StoreDetailCard(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(ImageConstants.statistic),
-                        const SizedBox(width: 8),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Stage",
-                                style: Theme.of(context).textTheme.bodyMedium),
-                            Text("Select Stage",
-                                style: GoogleFonts.inter(
-                                    fontSize: 10.sp,
-                                    color: const Color(0xff278BBC))),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: StoreDetailCard(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(ImageConstants.stars),
-                        const SizedBox(width: 8),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Class",
-                                style: Theme.of(context).textTheme.bodyMedium),
-                            Text(
-                              "Select Class",
-                              style: GoogleFonts.inter(
-                                  fontSize: 10.sp,
-                                  color: const Color(0xff278BBC)),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            StoreDetailCard(
-              child: ListTile(
-                title: Text("Sub Dealer History",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: Theme.of(context).primaryColor)),
-                subtitle: Row(
+                headerImage(context),
+                nameAddress(context, beatPlanModel),
+                blueCard(context,
+                    leadingSVGImage: ImageConstants.miniCalendar,
+                    subtitle: 'Scheduled visits & Calls',
+                    title: '28 Feb 2023',
+                    trailingSVGImage: ImageConstants.visitsCalls),
+                blueCard(context,
+                    leadingSVGImage: ImageConstants.creditCard,
+                    subtitle: 'Available Credits',
+                    title: '₹ 500.0',
+                    trailingSVGImage: ImageConstants.credits),
+                blueCard(context,
+                    leadingSVGImage: ImageConstants.notesT,
+                    subtitle:
+                        'Notes of important discussion with the sub dealer',
+                    title: 'Recent Notes (2)',
+                    trailingSVGImage: ImageConstants.paperPen),
+                Row(
                   children: [
-                    Text("Last Activity:",
-                        style: Theme.of(context).textTheme.titleSmall),
-                    Text("Compaign, 28 Feb 2023",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall
-                            ?.copyWith(color: Colors.grey)),
+                    Expanded(
+                      child: StoreDetailCard(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SvgPicture.asset(ImageConstants.statistic),
+                            const SizedBox(width: 8),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Stage",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
+                                Text("Select Stage",
+                                    style: GoogleFonts.inter(
+                                        fontSize: 10.sp,
+                                        color: const Color(0xff278BBC))),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: StoreDetailCard(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SvgPicture.asset(ImageConstants.stars),
+                            const SizedBox(width: 8),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Class",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
+                                Text(
+                                  "Select Class",
+                                  style: GoogleFonts.inter(
+                                      fontSize: 10.sp,
+                                      color: const Color(0xff278BBC)),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-                trailing: Icon(Icons.arrow_forward_ios,
-                    color: Theme.of(context).primaryColor),
-              ),
-            ),
-            StoreDetailCard(
-              child: ListTile(
-                title: Text("More",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: Theme.of(context).primaryColor)),
-                trailing: Icon(Icons.arrow_forward_ios,
-                    color: Theme.of(context).primaryColor),
-              ),
-            ),
-            const SizedBox(height: 100)
-          ],
+                StoreDetailCard(
+                  child: ListTile(
+                    title: Text("Sub Dealer History",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(color: Theme.of(context).primaryColor)),
+                    subtitle: Row(
+                      children: [
+                        Text("Last Activity:",
+                            style: Theme.of(context).textTheme.titleSmall),
+                        Text("Compaign, 28 Feb 2023",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(color: Colors.grey)),
+                      ],
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios,
+                        color: Theme.of(context).primaryColor),
+                  ),
+                ),
+                StoreDetailCard(
+                  child: ListTile(
+                    title: Text("More",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(color: Theme.of(context).primaryColor)),
+                    trailing: Icon(Icons.arrow_forward_ios,
+                        color: Theme.of(context).primaryColor),
+                  ),
+                ),
+                const SizedBox(height: 100)
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Padding nameAddress(BuildContext context) {
+  Padding nameAddress(BuildContext context, BeatPlanModel beatPlanModel) {
     return Padding(
       padding: EdgeInsets.all(15.sp),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Shree Sai Mangala Enterprise",
+          Text(beatPlanModel.storeName,
               style: GoogleFonts.inter(
                   fontSize: 16.sp, fontWeight: FontWeight.w600)),
           SizedBox(height: 10.h),
-          Text(
-              "PLOT NO.77, BLOCK NO 179/1, SYNO-159/11, GABBARMATA MANDIR GALI, KADODARA, SURAT, Surat, Gujarat, Surat, Surat, India 123456",
+          Text(beatPlanModel.address,
               style: GoogleFonts.inter(
                   fontSize: 12.sp, fontWeight: FontWeight.w400)),
           SizedBox(height: 10.h),
@@ -275,6 +310,37 @@ class StoreDetailView extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _openCampaignSheet(BuildContext context, List<CompaignsModel> items) {
+    final textTheme = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(
+            "Campaign",
+            style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: ListView.separated(
+                itemCount: items.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 5),
+                itemBuilder: (context, index) => InkWell(
+                    onTap: () {
+                      // Navigator.pop(context);
+                      // AppPopup.showAppBottomSheet(
+                      //   context: context,
+                      //   child: salesLogForm(textTheme),
+                      // );
+                    },
+                    child: CampaignListItem(item: items[index]))),
           ),
         ],
       ),
