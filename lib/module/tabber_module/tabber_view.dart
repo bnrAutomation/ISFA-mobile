@@ -205,12 +205,12 @@ class AppSideMenu extends StatelessWidget {
                               value: bloc.isOnline,
                               onChanged: (newVal) async {
                                 Scaffold.of(context).closeDrawer();
+                                final XFile? image =
+                                    await context.pushNamed(AppPaths.checkin);
                                 if (newVal) {
-                                  final XFile? image =
-                                      await context.pushNamed(AppPaths.checkin);
                                   bloc.add(StartDutyStatusTabberEvent(image));
                                 } else {
-                                  bloc.add(EndDutyStatusTabberEvent());
+                                  bloc.add(EndDutyStatusTabberEvent(image));
                                 }
                               }),
                           Text(

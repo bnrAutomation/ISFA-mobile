@@ -8,7 +8,11 @@ class ChangeTabEvent extends TabberEvent {
   ChangeTabEvent(this.selectIndex);
 }
 
-class EndDutyStatusTabberEvent extends TabberEvent {}
+class EndDutyStatusTabberEvent extends TabberEvent {
+  final XFile? file;
+
+  EndDutyStatusTabberEvent(this.file);
+}
 
 class StartDutyStatusTabberEvent extends TabberEvent {
   final XFile? file;

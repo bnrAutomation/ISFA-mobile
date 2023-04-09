@@ -26,8 +26,8 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
 
     on((UpdateSideMenuDetailsEvent event, emit) async =>
         await _getSideMenuData(emit));
-    on(_markOffLine);
-    on(_markOnLine);
+    on(_endDuty);
+    on(_startDuty);
   }
 
   String tabTitle() {
@@ -44,7 +44,7 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
     emit(state);
   }
 
-  Future<void> _markOnLine(StartDutyStatusTabberEvent event, emit) async {
+  Future<void> _startDuty(StartDutyStatusTabberEvent event, emit) async {
     final loc = await Device().userPosition().onError((error, stackTrace) {
       emit(TabbarSnackBarMessageState(error.toString()));
       throw error ?? stackTrace;
@@ -54,29 +54,33 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
       emit(TabbarSnackBarMessageState("Please add image"));
     }
     final response = await repo
-        .startDuty(event.file!, loc.latitude, loc.longitude)
+        .startEndDuty(event.file!, loc.latitude, loc.longitude, true)
         .catchError((onError) {
-      emit(TabbarSnackBarMessageState(onError.toString()));
-      return false;
+      return onError.toString();
     });
 
-    isOnline = response;
+    isOnline = true;
+    emit(TabbarSnackBarMessageState(response));
     emit(OnlineStatusUpdateState());
   }
 
-  Future<void> _markOffLine(EndDutyStatusTabberEvent event, emit) async {
+  Future<void> _endDuty(EndDutyStatusTabberEvent event, emit) async {
     final loc = await Device().userPosition().onError((error, stackTrace) {
       emit(TabbarSnackBarMessageState(error.toString()));
       throw error ?? stackTrace;
     });
 
-    final response =
-        await repo.endDuty(loc.latitude, loc.longitude).catchError((onError) {
-      emit(TabbarSnackBarMessageState(onError.toString()));
-      return false;
+    if (event.file == null) {
+      emit(TabbarSnackBarMessageState("Please add image"));
+    }
+    final response = await repo
+        .startEndDuty(event.file!, loc.latitude, loc.longitude, false)
+        .catchError((onError) {
+      return onError.toString();
     });
 
-    isOnline = !response;
+    isOnline = false;
+    emit(TabbarSnackBarMessageState(response));
     emit(OnlineStatusUpdateState());
   }
 }

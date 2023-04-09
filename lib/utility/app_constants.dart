@@ -57,8 +57,11 @@ class URLConstants {
   static const getFeedbackPurposes = '$apiBaseUrl/getFeedbackPurposes';
   static const createFeedback = '$apiBaseUrl/createFeedback';
 
-  static const markin = '$isfaBaseURL/MarkIn';
-  static const markOut = '$isfaBaseURL/MarkOut';
-  static const startDuty = '$isfaBaseURL/StartDuty';
-  static const endDuty = '$isfaBaseURL/EndDuty';
+  static const markin = '$apiBaseUrl/MarkIn';
+  static const markOut = '$apiBaseUrl/MarkOut';
+  static const startDuty = '$apiBaseUrl/StartDuty';
+  static const endDuty = '$apiBaseUrl/EndDuty';
+
+  static const beatPlans = '$apiBaseUrl/V2/beatPlan';
+  static const attendence = '$apiBaseUrl/attendance';
 }

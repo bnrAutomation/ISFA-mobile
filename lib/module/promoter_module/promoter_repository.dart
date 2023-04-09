@@ -33,39 +33,16 @@ class PromoterRepository {
     }
   }
 
-  Future<bool> markOutStore(
-      double latitude, double longitude, int storeId) async {
-    final reqBody = {
-      "userId": userId.toString(),
-      "storeId": storeId.toString(),
-      "status": "false",
-      "outLatitude": latitude.toString(),
-      "outLongitude": longitude.toString(),
-      // "pjpId": "122"
-    };
-
-    final response = await post(Uri.parse(URLConstants.markOut),
-        body: jsonEncode(reqBody),
-        headers: {'Content-Type': 'application/json'});
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
-    }
-  }
-
-  Future<bool> markInStore(
-      XFile file, double latitude, double longitude, int storeId) async {
-    final url = Uri.parse(URLConstants.markin);
+  Future<String> markInOutStore(XFile file, double latitude, double longitude,
+      int storeId, bool isIn) async {
+    final url = Uri.parse(isIn ? URLConstants.markin : URLConstants.markOut);
     final request = MultipartRequest('POST', url);
 
     final fileStream = ByteStream(file.openRead());
     final fileLength = await file.length();
 
     final multipartFile = MultipartFile(
-      'image',
+      'file',
       fileStream,
       fileLength,
       filename: basename(file.path),
@@ -75,17 +52,27 @@ class PromoterRepository {
     request.fields.addAll({
       "userId": userId.toString(),
       "storeId": storeId.toString(),
-      "status": "true",
-      "inLatitude": latitude.toString(),
-      "inLongitude": longitude.toString(),
+      "status": isIn.toString(),
+
       // "pjpId": "122"
     });
+    if (isIn) {
+      request.fields.addAll({
+        "inLatitude": latitude.toString(),
+        "inLongitude": longitude.toString(),
+      });
+    } else {
+      request.fields.addAll({
+        "outLatitude": latitude.toString(),
+        "outLongitude": longitude.toString(),
+      });
+    }
 
     final response = await request.send();
     String body = await response.stream.transform(utf8.decoder).join();
 
     if (response.statusCode == 200) {
-      return true;
+      return json.decode(body)['message'] ?? "";
     } else {
       throw body.isEmpty
           ? "Something went wrong"

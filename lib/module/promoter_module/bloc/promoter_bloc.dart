@@ -49,16 +49,23 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
       emit(PromoterStoreDetailLoadedState());
       return Future<Position>.error(onError);
     });
+
+    final img = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (img == null) {
+      emit(PromoterToastMessageState('Please click image'));
+      emit(PromoterStoreDetailLoadedState());
+      return;
+    }
+
     final response = await repo
-        .markOutStore(loc.latitude, loc.longitude, storeDetail!.storeId)
+        .markInOutStore(
+            img, loc.latitude, loc.longitude, storeDetail!.storeId, false)
         .catchError((error) {
-      emit(PromoterToastMessageState(error.toString()));
-      return false;
+      return error.toString();
     });
 
-    if (response) {
-      emit(PromoterToastMessageState('Successfully Marked Out.'));
-    }
+    emit(PromoterToastMessageState(response));
+
     emit(PromoterStoreDetailLoadedState());
   }
 
@@ -84,15 +91,14 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     }
 
     final response = await repo
-        .markInStore(img, loc.latitude, loc.longitude, storeDetail!.storeId)
+        .markInOutStore(
+            img, loc.latitude, loc.longitude, storeDetail!.storeId, true)
         .catchError((error) {
-      emit(PromoterToastMessageState(error.toString()));
-      return false;
+      return error.toString();
     });
 
-    if (response) {
-      emit(PromoterToastMessageState('Successfully Marked In.'));
-    }
+    emit(PromoterToastMessageState(response));
+
     emit(PromoterStoreDetailLoadedState());
   }
 

@@ -35,7 +35,6 @@ class BeatPlanStoreListView extends StatelessWidget {
         },
         builder: (context, state) {
           final BeatplanStoresBloc bloc = context.read();
-
           return Column(
             children: [
               ListTile(
