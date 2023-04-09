@@ -8,7 +8,7 @@ import 'package:i_densfa/module/promoter_module/bloc/promoter_bloc.dart';
 import 'package:i_densfa/module/promoter_module/models/inventory_detail_model.dart';
 import 'package:i_densfa/module/ui/custom_search_bar.dart';
 import 'package:i_densfa/utility/app_constants.dart';
-import 'package:intl/intl.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 import '../ui/app_pop_view.dart';
 import '../ui/button_views.dart';
@@ -133,8 +133,8 @@ class InventoryView extends StatelessWidget {
                               if (bloc.inventoryDetail != null)
                                 _detailNameVal(context,
                                     name: "Last Stock Recived On",
-                                    val: DateFormat('dd MMM yyyy').format(
-                                        bloc.inventoryDetail!.lastReciveDate)),
+                                    val: bloc.inventoryDetail!.lastReciveDate
+                                        .toStringFormat('dd MMM yyyy')),
                               _detailDivider(),
                               _detailNameVal(context,
                                   name: 'Opening Balance',

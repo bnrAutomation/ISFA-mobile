@@ -5,7 +5,7 @@ import 'package:i_densfa/module/leaves_module/model/leave_enums.dart';
 import 'package:i_densfa/module/leaves_module/model/leave_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
-import 'package:intl/intl.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 import 'model/leave_type_model.dart';
 
@@ -31,15 +31,14 @@ class LeaveRepository {
       required DateTime fromDate,
       required DateTime toDate,
       required String reason}) async {
-    final formatter = DateFormat('yyyy-MM-dd');
     final body = {
       "companyId": companyId,
       "userId": empId,
       "leaveId": leaveTypeId,
       "dayId": dayId,
       "leaveStatus": LeaveStatus.pending.toStr(),
-      "dateFrom": formatter.format(fromDate),
-      "dateTo": formatter.format(toDate),
+      "dateFrom": fromDate.toStringFormat('yyyy-MM-dd'),
+      "dateTo": toDate.toStringFormat('yyyy-MM-dd'),
       "reason": reason,
     };
     final response = await post(Uri.parse(URLConstants.applyLeave),

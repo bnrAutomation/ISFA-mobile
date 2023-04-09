@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:intl/intl.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 import 'leave_enums.dart';
 
@@ -88,8 +88,8 @@ class AppliedLeaveModel {
   Map<String, dynamic> toJson() => {
         "leaveStatus": leaveStatus.toStr(),
         "leaveType": leaveType,
-        "fromDate": DateFormat('yyyy-MM-dd').format(fromDate),
-        "toDate": DateFormat('yyyy-MM-dd').format(toDate),
+        "fromDate": fromDate.toStringFormat('yyyy-MM-dd'),
+        "toDate": toDate.toStringFormat('yyyy-MM-dd'),
         "userName": userName,
         'leaveRequestId': leaveRequestId,
         'reason': reason

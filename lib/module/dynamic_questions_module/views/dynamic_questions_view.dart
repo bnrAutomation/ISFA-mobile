@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/ui/app_image_picker.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';
-import 'package:intl/intl.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 import '../model.dart';
 
@@ -135,7 +135,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                                 firstDate: DateTime(1960),
                                 lastDate: DateTime(DateTime.now().year + 1));
                           });
-                      question.answer = DateFormat("dd/MM/yy").format(date);
+                      question.answer = date.toStringFormat("dd/MM/yy");
                       setState(() {});
                     },
                     child: InputDecorator(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/my_activity_module/myactivity/myactivity_bloc.dart';
+import 'package:i_densfa/utility/extensions.dart';
 import 'package:month_year_picker/month_year_picker.dart';
-import 'package:intl/intl.dart';
 
 class MyActivityView extends StatelessWidget {
   const MyActivityView({super.key});
@@ -45,10 +45,9 @@ class MyActivityView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          DateFormat().addPattern("MMMM yyyy").format(
-                              BlocProvider.of<MyActivityBloc>(context)
-                                      .selected ??
-                                  DateTime.now()),
+                          (context.read<MyActivityBloc>().selected ??
+                                  DateTime.now())
+                              .toStringFormat("MMMM yyyy"),
                           style: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
@@ -57,7 +56,7 @@ class MyActivityView extends StatelessWidget {
                         ),
                         IconButton(
                             onPressed: () async => {
-                                  BlocProvider.of<MyActivityBloc>(context).add(
+                                  context.read<MyActivityBloc>().add(
                                       MyActivityChangeMonth(
                                           await showMonthYearPicker(
                                               context: context,
@@ -187,7 +186,7 @@ class SingleActivity extends StatelessWidget {
               Expanded(
                   child: Center(
                 child: Text(
-                  "${index + 1} ${DateFormat().addPattern("MMM").format(BlocProvider.of<MyActivityBloc>(context).selected ?? DateTime.now())}",
+                  "${index + 1} ${(context.read<MyActivityBloc>().selected ?? DateTime.now()).toStringFormat("MMM")}",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 10.sp,

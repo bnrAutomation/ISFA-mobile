@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 import '../ui/button_views.dart';
 import '../ui/custom_material_button.dart';
@@ -112,9 +112,8 @@ class _ApplyLeaveFormViewState extends State<ApplyLeaveFormView> {
                                   listener: (context, state) {
                                     final fromDate = bloc.fromDate;
                                     if (fromDate != null) {
-                                      fromDateController.text = DateFormat()
-                                          .addPattern("dd/MM/yyyy")
-                                          .format(fromDate);
+                                      fromDateController.text =
+                                          fromDate.toStringFormat("dd/MM/yyyy");
                                     }
                                   },
                                   child: TextFormField(
@@ -159,9 +158,8 @@ class _ApplyLeaveFormViewState extends State<ApplyLeaveFormView> {
                                     listener: (context, state) {
                                       final fromDate = bloc.toDate;
                                       if (fromDate != null) {
-                                        toDateController.text = DateFormat()
-                                            .addPattern("dd/MM/yyyy")
-                                            .format(fromDate);
+                                        toDateController.text = fromDate
+                                            .toStringFormat("dd/MM/yyyy");
                                       }
                                     },
                                     child: TextFormField(

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:i_densfa/module/beatplan_stores_module/beatplan_store_list_view.dart';
+import 'package:i_densfa/module/beatplan_stores_module/beatplan_stores_repository.dart';
+import 'package:i_densfa/module/beatplan_stores_module/bloc/beatplan_stores_bloc.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
@@ -12,27 +15,10 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../utility/network_helper.dart';
 import '../beat_plan_module/beat_plan_view.dart';
-import '../store_list_module/store_list_view.dart';
 import 'bloc/tabber_bloc.dart';
 
 class TabberView extends StatelessWidget {
   const TabberView({super.key});
-  static const TextStyle optionStyle =
-      TextStyle(color: Colors.black, fontWeight: FontWeight.w600);
-
-  static const List<Widget> widgetOptions = <Widget>[
-    StoreListView(),
-    Text(
-      'Learner',
-      style: optionStyle,
-    ),
-    BeatPlanView(),
-    CampaignView(),
-    Text(
-      'Analytics',
-      style: optionStyle,
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +82,7 @@ class TabberView extends StatelessWidget {
                   }),
                 ),
               ),
-              body: Center(
-                child: widgetOptions[bloc.selectIndex],
-              ),
+              body: Center(child: atSelectedIndex(bloc)),
               bottomNavigationBar: Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
@@ -161,6 +145,38 @@ class TabberView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget atSelectedIndex(TabberBloc bloc) {
+    switch (bloc.selectIndex) {
+      case 0:
+        return (bloc.sideMenuData == null)
+            ? const CircularProgressIndicator()
+            : BlocProvider(
+                create: (context) =>
+                    BeatplanStoresBloc(BeatPlanStoresRepository(1))
+                      ..add(BeatPlanStoresUpdateData()),
+                child: const BeatPlanStoreListView(),
+              );
+
+      case 1:
+        return const Text(
+          'Learner',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+        );
+
+      case 2:
+        return const BeatPlanView();
+      case 3:
+        return const CampaignView();
+      case 4:
+        return const Text(
+          'Analytics',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+        );
+      default:
+        return const SizedBox();
+    }
   }
 }
 

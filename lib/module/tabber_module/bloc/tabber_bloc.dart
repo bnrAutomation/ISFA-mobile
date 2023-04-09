@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
@@ -34,7 +36,10 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
   }
 
   Future<void> _getSideMenuData(Emitter<TabberState> emit) async {
-    sideMenuData = await repo.getSideMenuDetails();
+    sideMenuData = await repo.getSideMenuDetails().catchError((onError) {
+      emit(TabbarSnackBarMessageState(onError.toString()));
+      return Future<SideMenuModel>.error(onError);
+    });
     AppStorage().homeInfo = sideMenuData;
     emit(state);
   }

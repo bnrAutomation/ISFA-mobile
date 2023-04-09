@@ -10,7 +10,7 @@ import 'package:i_densfa/module/leaves_module/leave/leave_bloc.dart';
 import 'package:i_densfa/module/leaves_module/model/leave_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';
-import 'package:intl/intl.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 import '../ui/app_tabview_view.dart';
 import 'leave_repository.dart';
@@ -337,7 +337,7 @@ class ApproveLeave extends StatelessWidget {
                     children: [
                   TextSpan(
                     text:
-                        ' Applied from ${DateFormat('dd MMM yyyy').format(leaveListItem.fromDate)} to ${DateFormat('dd MMM yyyy').format(leaveListItem.toDate)}',
+                        ' Applied from ${leaveListItem.fromDate.toStringFormat('dd MMM yyyy')} to ${leaveListItem.toDate.toStringFormat('dd MMM yyyy')}',
                     style:
                         GoogleFonts.inter(fontSize: 11.sp, color: Colors.black),
                   )

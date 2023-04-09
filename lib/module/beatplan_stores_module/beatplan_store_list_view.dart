@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/routes.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 import '../../utility/custom_paints.dart';
+import 'bloc/beatplan_stores_bloc.dart';
 
-class StoreListView extends StatelessWidget {
-  const StoreListView({super.key});
+class BeatPlanStoreListView extends StatelessWidget {
+  const BeatPlanStoreListView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,50 +24,75 @@ class StoreListView extends StatelessWidget {
         ),
         onPressed: () => context.pushNamed(AppPaths.scheduleVisit),
       ),
-      body: Column(
-        children: [
-          ListTile(
-            tileColor: const Color(0xff278BBC).withOpacity(0.2),
-            leading: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.chevron_left,
-                  color: Theme.of(context).colorScheme.primary,
-                )),
-            trailing: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.chevron_right,
-                  color: Theme.of(context).colorScheme.primary,
-                )),
-            title: TextButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => DatePickerDialog(
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(DateTime.now().year),
-                        lastDate: DateTime.now()),
-                  );
-                },
-                style: TextButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    textStyle: const TextStyle(fontWeight: FontWeight.w700),
-                    foregroundColor: Theme.of(context).colorScheme.primary),
-                child: const Text('21 Feb 2023')),
-          ),
-          Expanded(
-              child: ListView.separated(
-            padding: const EdgeInsets.all(10),
-            itemCount: 10,
-            separatorBuilder: (context, index) => const SizedBox(height: 10),
-            itemBuilder: (context, index) {
-              return InkWell(
-                  onTap: () => context.pushNamed(AppPaths.store),
-                  child: const StoreCardView());
-            },
-          ))
-        ],
+      body: BlocConsumer<BeatplanStoresBloc, BeatplanStoresState>(
+        listenWhen: (previous, current) => current is BeatPlanSnackBarMessage,
+        listener: (context, state) {
+          if (state is BeatPlanSnackBarMessage) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        builder: (context, state) {
+          final BeatplanStoresBloc bloc = context.read();
+
+          return Column(
+            children: [
+              ListTile(
+                tileColor: const Color(0xff278BBC).withOpacity(0.2),
+                leading: IconButton(
+                    onPressed: bloc.onPreviousDateSelect,
+                    icon: Icon(
+                      Icons.chevron_left,
+                      color: Theme.of(context).colorScheme.primary,
+                    )),
+                trailing: IconButton(
+                    onPressed: bloc.onNextDateSelect,
+                    icon: Icon(
+                      Icons.chevron_right,
+                      color: Theme.of(context).colorScheme.primary,
+                    )),
+                title: TextButton(
+                    onPressed: () async {
+                      var now = DateTime.now();
+                      if (now.weekday == DateTime.sunday) {
+                        now = now.add(const Duration(days: 1));
+                      }
+                      final date = await showDatePicker(
+                          selectableDayPredicate: (date) =>
+                              date.weekday != DateTime.sunday,
+                          context: context,
+                          initialDate: now,
+                          firstDate: now,
+                          lastDate: DateTime(now.year, 12, 31));
+                      if (date != null) {
+                        bloc.add(BeatPlanStoresDateChangeEvent(date));
+                      }
+                    },
+                    style: TextButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        textStyle: const TextStyle(fontWeight: FontWeight.w700),
+                        foregroundColor: Theme.of(context).colorScheme.primary),
+                    child:
+                        Text(bloc.selectedDate.toStringFormat('dd MMM yyyy'))),
+              ),
+              Expanded(
+                  child: (state is BeatPlanStoresLoadingState)
+                      ? const Center(child: CircularProgressIndicator())
+                      : ListView.separated(
+                          padding: const EdgeInsets.all(10),
+                          itemCount: 10,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                                onTap: () => context.pushNamed(AppPaths.store),
+                                child: const StoreCardView());
+                          },
+                        ))
+            ],
+          );
+        },
       ),
     );
   }
