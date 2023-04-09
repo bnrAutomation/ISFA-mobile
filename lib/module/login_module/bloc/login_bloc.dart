@@ -36,9 +36,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(LogInLoadingState());
           final loginResponse = await repo.login(
               username: event.username.trim(), password: event.password.trim());
-          debugPrint(loginResponse.toString());
-          AppStorage().userDetail = loginResponse.logindata.userInfo;
-          emit(LoginedSuccesfullState());
+
+          if (loginResponse.logindata.userInfo.roles
+              .any((element) => element.name == "ROLE_USER")) {
+            debugPrint(loginResponse.toString());
+
+            AppStorage().userDetail = loginResponse.logindata.userInfo;
+            emit(LoginedSuccesfullState());
+          } else {
+            emit(LogInErrorState("User doesn't exist."));
+          }
         } catch (err) {
           emit(LogInErrorState(err.toString()));
         }

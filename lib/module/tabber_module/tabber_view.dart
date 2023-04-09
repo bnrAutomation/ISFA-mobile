@@ -265,6 +265,13 @@ class AppSideMenu extends StatelessWidget {
           ).toList(),
           ListTile(
             leading: const Icon(Icons.notifications_outlined),
+            title: const Text('My Activities'),
+            onTap: () {
+              closeDrawerAndPushView(context, AppPaths.activity);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.notifications_outlined),
             title: const Text('Notification'),
             onTap: () {
               Scaffold.of(context).closeDrawer();
