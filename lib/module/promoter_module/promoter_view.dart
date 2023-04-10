@@ -200,36 +200,38 @@ class PromoterView extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              CustomMaterialButton(
-                  buttonText: state is PromoterStoreDetailLoadingState ||
-                          bloc.storeDetail == null
-                      ? "Loading..."
-                      : "Check-In Store",
-                  gradient: const LinearGradient(colors: <Color>[
-                    Color(0XFF003D5B),
-                    Color(0XFF278BBC),
-                  ]),
-                  onPressed: () {
-                    if (state is! PromoterStoreDetailLoadingState ||
-                        bloc.storeDetail != null) {
-                      bloc.add(PromoterCheckInStoreEvent());
-                    }
-                  }),
+              if (!bloc.isCheckedInStore)
+                CustomMaterialButton(
+                    buttonText: state is PromoterStoreDetailLoadingState ||
+                            bloc.storeDetail == null
+                        ? "Loading..."
+                        : "Check-In Store",
+                    gradient: const LinearGradient(colors: <Color>[
+                      Color(0XFF003D5B),
+                      Color(0XFF278BBC),
+                    ]),
+                    onPressed: () {
+                      if (state is! PromoterStoreDetailLoadingState ||
+                          bloc.storeDetail != null) {
+                        bloc.add(PromoterCheckInStoreEvent());
+                      }
+                    }),
               const SizedBox(height: 8),
-              CustomMaterialButton(
-                  gradient: const LinearGradient(
-                    colors: <Color>[Color(0XFFC92434), Color(0XFF003D5B)],
-                  ),
-                  buttonText: state is PromoterStoreDetailLoadingState ||
-                          bloc.storeDetail == null
-                      ? "Loading..."
-                      : "Check-Out Store",
-                  onPressed: () {
-                    if (state is! PromoterStoreDetailLoadingState ||
-                        bloc.storeDetail != null) {
-                      bloc.add(PromoterCheckOutStoreEvent());
-                    }
-                  })
+              if (bloc.isCheckedInStore)
+                CustomMaterialButton(
+                    gradient: const LinearGradient(
+                      colors: <Color>[Color(0XFFC92434), Color(0XFF003D5B)],
+                    ),
+                    buttonText: state is PromoterStoreDetailLoadingState ||
+                            bloc.storeDetail == null
+                        ? "Loading..."
+                        : "Check-Out Store",
+                    onPressed: () {
+                      if (state is! PromoterStoreDetailLoadingState ||
+                          bloc.storeDetail != null) {
+                        bloc.add(PromoterCheckOutStoreEvent());
+                      }
+                    })
             ],
           ),
         );

@@ -19,6 +19,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
   PromoterStoreDetailModel? storeDetail;
   List<InventoryProductDetailModel> filteredList = [];
   List<CompaignsModel> compaigns = [];
+  bool isCheckedInStore = false;
   PromoterBloc(this.repo) : super(PromoterInitial()) {
     on((GetInventoryDetailEvent event, emit) async =>
         await _getInventoryDetails(emit));
@@ -82,11 +83,12 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
         .markInOutStore(
             img, loc.latitude, loc.longitude, storeDetail!.storeId, false)
         .catchError((error) {
-      return error.toString();
+      emit(PromoterToastMessageState(error.toString()));
+      return Future<String>.error(error);
     });
 
     emit(PromoterToastMessageState(response));
-
+    isCheckedInStore = false;
     emit(PromoterStoreDetailLoadedState());
   }
 
@@ -115,11 +117,12 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
         .markInOutStore(
             img, loc.latitude, loc.longitude, storeDetail!.storeId, true)
         .catchError((error) {
-      return error.toString();
+      emit(PromoterToastMessageState(error.toString()));
+      return Future<String>.error(error);
     });
 
     emit(PromoterToastMessageState(response));
-
+    isCheckedInStore = true;
     emit(PromoterStoreDetailLoadedState());
   }
 
