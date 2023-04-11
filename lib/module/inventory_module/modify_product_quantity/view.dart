@@ -130,7 +130,7 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                         ],
                         keyboardType: TextInputType.number,
                         controller: TextEditingController(
-                            text: (bloc.selectedProduct!.price).toString()),
+                            text: bloc.enteredPrice.toStringAsFixed(0)),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(horizontal: 8),

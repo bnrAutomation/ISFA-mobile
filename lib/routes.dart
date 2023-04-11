@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/module/checkin_module/check_in_view.dart';
 import 'package:i_densfa/module/inventory_module/inventory_view.dart';
 import 'package:i_densfa/module/leaves_module/leave_view.dart';
@@ -41,16 +42,13 @@ final router = GoRouter(
       builder: (context, state) => const TabberView(),
     ),
     GoRoute(
-      path: "${AppPaths.store}/:storeId",
+      path: AppPaths.store,
       name: AppPaths.store,
       builder: (context, state) => BlocProvider(
-        create: (context) => StoreDetailBloc(StoreDetailRepository()),
-        child: StoreDetailView(
-          storeId: state.params['storeId'] ?? "",
-          // storeName: state.params['storeName'] ?? ""
-        ),
+        create: (context) => StoreDetailBloc(
+            StoreDetailRepository(), state.extra as BeatPlanModel),
+        child: const StoreDetailView(),
       ),
-      // builder: (context, state) => ,
     ),
     GoRoute(
       path: AppPaths.assessmentQuestion,

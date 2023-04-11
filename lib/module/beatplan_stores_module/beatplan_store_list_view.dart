@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -90,13 +88,8 @@ class BeatPlanStoreListView extends StatelessWidget {
                                 const SizedBox(height: 10),
                             itemBuilder: (context, index) {
                               return InkWell(
-                                  onTap: () => context
-                                          .pushNamed(AppPaths.store, params: {
-                                        'storeId': jsonEncode(
-                                            bloc.beatPlans[index].toJson())
-
-                                        // 'storeName': beatPlan.storeName
-                                      }),
+                                  onTap: () => context.pushNamed(AppPaths.store,
+                                      extra: bloc.beatPlans[index]),
                                   child: StoreCardView(bloc.beatPlans[index]));
                             },
                           ),
@@ -157,13 +150,8 @@ class StoreCardView extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   FilledButton(
-                      onPressed: () => {
-                            context.pushNamed(AppPaths.store, params: {
-                              'storeId': jsonEncode(beatPlan.toJson())
-                              // beatPlan.toJson(),
-                              // 'storeName': beatPlan.storeName
-                            })
-                          }, //context.pushNamed(AppPaths.store),
+                      onPressed: () =>
+                          context.pushNamed(AppPaths.store, extra: beatPlan),
                       style: TextButton.styleFrom(
                         alignment: Alignment.center,
                         backgroundColor: Theme.of(context).primaryColor,

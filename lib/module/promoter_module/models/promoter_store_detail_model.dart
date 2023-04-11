@@ -11,6 +11,7 @@ class PromoterStoreDetailModel {
       required this.storeBranch,
       required this.storeType,
       required this.activeStatus,
+      required this.markIn,
       required this.zipcode,
       required this.latitude,
       required this.longtitude});
@@ -24,6 +25,7 @@ class PromoterStoreDetailModel {
   String storeBranch;
   String storeType;
   bool activeStatus;
+  bool markIn;
   int zipcode;
   String? latitude;
   String? longtitude;
@@ -44,6 +46,7 @@ class PromoterStoreDetailModel {
           storeBranch: json["storeBranch"],
           storeType: json["storeType"],
           activeStatus: json["activeStatus"],
+          markIn: json["markIn"],
           zipcode: json["zipcode"],
           longtitude: json['longtitude'],
           latitude: json['latitude']);
@@ -58,6 +61,7 @@ class PromoterStoreDetailModel {
         "storeBranch": storeBranch,
         "storeType": storeType,
         "activeStatus": activeStatus,
+        "markIn": markIn,
         "zipcode": zipcode,
         "latitude": latitude,
         "longtitude": longtitude

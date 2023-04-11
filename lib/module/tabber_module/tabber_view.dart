@@ -227,6 +227,10 @@ class AppSideMenu extends StatelessWidget {
               accountEmail: Text(data.userInfo.userName)),
           ...data.menu.where((element) => element.isActive).map(
             (e) {
+              if (e.key == "promoter" &&
+                  AppStorage().userDetail?.designation == "fwp") {
+                return const SizedBox();
+              }
               return ListTile(
                 leading: const Icon(Icons.logout),
 

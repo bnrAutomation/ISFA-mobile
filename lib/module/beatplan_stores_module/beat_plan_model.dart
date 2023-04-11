@@ -3,6 +3,7 @@ import 'dart:convert';
 class BeatPlanModel {
   BeatPlanModel({
     required this.pjpId,
+    required this.markin,
     required this.storeId,
     required this.pjpDate,
     required this.storeName,
@@ -22,6 +23,7 @@ class BeatPlanModel {
   String storeName;
   String storeCategory;
   String address;
+  bool markin;
   double? latitude;
   double? longitude;
   bool activeStatus;
@@ -37,6 +39,7 @@ class BeatPlanModel {
   factory BeatPlanModel.fromJson(Map<String, dynamic> json) => BeatPlanModel(
         pjpId: json["pjpId"],
         storeId: json["storeId"],
+        markin: json["markin"] ?? false,
         pjpDate: DateTime.parse(json["pjpDate"]),
         storeName: json["storeName"],
         storeCategory: json["storeCategory"],
@@ -58,6 +61,7 @@ class BeatPlanModel {
         "storeCategory": storeCategory,
         "address": address,
         "latitude": latitude,
+        "markin": markin,
         "longitude": longitude,
         "activeStatus": activeStatus,
         "storeImage1": storeImage1,

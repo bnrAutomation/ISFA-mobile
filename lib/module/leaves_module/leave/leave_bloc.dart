@@ -132,7 +132,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       emit(LeaveViewShowSnack('Please select start date'));
       return;
     }
-    if (toDate == null) {
+    if (selectedLeaveDayPart == LeaveDayPart.full && toDate == null) {
       emit(LeaveViewShowSnack('Please select end date'));
       return;
     }
@@ -178,6 +178,12 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       return <LeaveTypeModel>[];
     });
     list = list.where((element) => element.active).toList();
+    list = list.where((element) {
+      return (details?.leaveTypeBalance
+              .map((e) => e.leaveTypeName)
+              .contains(element.leaveType)) ??
+          false;
+    }).toList();
     Map<String, int> uniques = {};
     for (var item in list) {
       uniques[item.leaveType] = item.leaveId;

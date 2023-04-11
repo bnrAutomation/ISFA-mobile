@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/module/campaign_module/campaign_view/campain_list.dart';
 import 'package:i_densfa/module/promoter_module/models/compaigns_model.dart';
 import 'package:i_densfa/module/store_detail_module/storeDetal/store_detail_bloc.dart';
@@ -16,19 +15,15 @@ import '../../utility/app_constants.dart';
 import '../ui/button_views.dart';
 
 class StoreDetailView extends StatelessWidget {
-  final String storeId;
-  // late BeatPlanModel beatPlanModel;
-  const StoreDetailView({super.key, required this.storeId});
+  const StoreDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    BeatPlanModel beatPlanModel = BeatPlanModel.fromRawJson(storeId);
-
     return Scaffold(
       floatingActionButton: AddFloatingActionButton(
         onTap: () {
           final StoreDetailBloc bloc = context.read<StoreDetailBloc>();
-          bloc.add(GotoCompaignEvent(beatPlanModel.storeId));
+          bloc.add(GotoCompaignEvent(bloc.beatPlanModel.storeId));
         },
       ),
       appBar: AppBar(
@@ -66,7 +61,7 @@ class StoreDetailView extends StatelessWidget {
             return Column(
               children: [
                 headerImage(context),
-                nameAddress(context, beatPlanModel),
+                nameAddress(context),
                 blueCard(context,
                     leadingSVGImage: ImageConstants.miniCalendar,
                     subtitle: 'Scheduled visits & Calls',
@@ -177,7 +172,9 @@ class StoreDetailView extends StatelessWidget {
     );
   }
 
-  Padding nameAddress(BuildContext context, BeatPlanModel beatPlanModel) {
+  Padding nameAddress(BuildContext context) {
+    final StoreDetailBloc bloc = context.read<StoreDetailBloc>();
+    final beatPlanModel = bloc.beatPlanModel;
     return Padding(
       padding: EdgeInsets.all(15.sp),
       child: Column(
@@ -261,6 +258,8 @@ class StoreDetailView extends StatelessWidget {
   }
 
   AspectRatio headerImage(BuildContext context) {
+    final StoreDetailBloc bloc = context.read<StoreDetailBloc>();
+
     return AspectRatio(
       aspectRatio: 2,
       child: Stack(
@@ -271,6 +270,27 @@ class StoreDetailView extends StatelessWidget {
                 imageUrl: 'https://picsum.photos/200/300',
                 fit: BoxFit.fitWidth),
           ),
+          Positioned.fill(
+              child: Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: TextButton(
+                  style: TextButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6)),
+                  onPressed: () {
+                    if (bloc.beatPlanModel.markin) {
+                      bloc.add(MarkOutStoreDetailEvent());
+                    } else {
+                      bloc.add(MarkInStoreDetailEvent());
+                    }
+                  },
+                  child:
+                      Text(bloc.beatPlanModel.markin ? "Mark Out" : "Mark In")),
+            ),
+          )),
           Padding(
             padding: EdgeInsets.all(10.w),
             child: Column(

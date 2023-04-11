@@ -28,7 +28,9 @@ class ModifyQuantityBloc
     on((ModifyQtySubmitEvent event, emit) async => await _onSubmitEvent(emit));
     on((ChangeQtyEvent event, emit) {
       final val = int.tryParse(event.value) ?? 0;
+      enteredPrice = (selectedProduct?.price ?? 0.0) * val;
       selectedQuantity = val;
+      emit(LoadedState());
     });
     on((AddPriceSaleProductEvent event, emit) {
       final val = double.tryParse(event.price) ?? 0;
@@ -57,7 +59,7 @@ class ModifyQuantityBloc
     selectedProduct = products
         .firstWhere((element) => element.productName == event.productName);
 
-    enteredPrice = selectedProduct?.price ?? 0.0;
+    enteredPrice = (selectedProduct?.price ?? 0.0) * (selectedQuantity ?? 1);
     emit(LoadedState());
   }
 

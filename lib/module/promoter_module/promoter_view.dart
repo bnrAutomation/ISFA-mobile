@@ -67,63 +67,72 @@ class PromoterView extends StatelessWidget {
         const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: CustomImageButton(
-                  buttonText: "Sale Log",
-                  onPressed: () => _saleLogTapped(context),
-                  image: SvgPicture.asset(
-                    ImageConstants.navigator,
+          child: BlocBuilder<PromoterBloc, PromoterState>(
+            builder: (context, state) {
+              final PromoterBloc bloc = context.read();
+              if (!bloc.isMarkedIn) {
+                return const SizedBox();
+              }
+              return Row(
+                children: [
+                  Expanded(
+                    child: CustomImageButton(
+                      buttonText: "Sale Log",
+                      onPressed: () => _saleLogTapped(context),
+                      image: SvgPicture.asset(
+                        ImageConstants.navigator,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(width: 5),
-              Expanded(
-                child: CustomImageButton(
-                  buttonText: "Inventory",
-                  onPressed: () {
-                    final promoterBloc = context.read<PromoterBloc>();
-                    final storeId = promoterBloc.storeDetail?.storeId;
-                    if (storeId == null) {
-                      promoterBloc.add(
-                          PromoterShowToastMessageEvent("Store not found"));
-                      return;
-                    }
-                    context.pushNamed(AppPaths.inventory, extra: promoterBloc);
-                  },
-                  image: SvgPicture.asset(ImageConstants.box),
-                ),
-              ),
-              const SizedBox(width: 5),
-              Expanded(
-                child: CustomImageButton(
-                  buttonText: "Start\nCampaign",
-                  onPressed: () =>
-                      context.read<PromoterBloc>().add(GotoCompaignEvent()),
-                  image: SvgPicture.asset(ImageConstants.campaign),
-                ),
-              ),
-              const SizedBox(width: 5),
-              Expanded(
-                child: CustomImageButton(
-                  buttonText: "Feedback",
-                  onPressed: () {
-                    final storeDetail =
-                        context.read<PromoterBloc>().storeDetail;
-                    if (storeDetail != null) {
-                      AppPopup.showAppBottomSheet(
-                        context: context,
-                        child: FeedbackView(
-                            storeName:
-                                "${storeDetail.name} ${storeDetail.storeBranch}"),
-                      );
-                    }
-                  },
-                  image: SvgPicture.asset(ImageConstants.feedback),
-                ),
-              ),
-            ],
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: CustomImageButton(
+                      buttonText: "Inventory",
+                      onPressed: () {
+                        final promoterBloc = context.read<PromoterBloc>();
+                        final storeId = promoterBloc.storeDetail?.storeId;
+                        if (storeId == null) {
+                          promoterBloc.add(
+                              PromoterShowToastMessageEvent("Store not found"));
+                          return;
+                        }
+                        context.pushNamed(AppPaths.inventory,
+                            extra: promoterBloc);
+                      },
+                      image: SvgPicture.asset(ImageConstants.box),
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: CustomImageButton(
+                      buttonText: "Start\nCampaign",
+                      onPressed: () =>
+                          context.read<PromoterBloc>().add(GotoCompaignEvent()),
+                      image: SvgPicture.asset(ImageConstants.campaign),
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: CustomImageButton(
+                      buttonText: "Feedback",
+                      onPressed: () {
+                        final storeDetail =
+                            context.read<PromoterBloc>().storeDetail;
+                        if (storeDetail != null) {
+                          AppPopup.showAppBottomSheet(
+                            context: context,
+                            child: FeedbackView(
+                                storeName:
+                                    "${storeDetail.name} ${storeDetail.storeBranch}"),
+                          );
+                        }
+                      },
+                      image: SvgPicture.asset(ImageConstants.feedback),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ]),
@@ -200,12 +209,13 @@ class PromoterView extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              if (!bloc.isCheckedInStore)
+              if (!bloc.isMarkedIn)
                 CustomMaterialButton(
-                    buttonText: state is PromoterStoreDetailLoadingState ||
-                            bloc.storeDetail == null
+                    buttonText: state is PromoterStoreDetailLoadingState
                         ? "Loading..."
-                        : "Check-In Store",
+                        : bloc.storeDetail == null
+                            ? "No Store"
+                            : "Check-In Store",
                     gradient: const LinearGradient(colors: <Color>[
                       Color(0XFF003D5B),
                       Color(0XFF278BBC),
@@ -217,7 +227,7 @@ class PromoterView extends StatelessWidget {
                       }
                     }),
               const SizedBox(height: 8),
-              if (bloc.isCheckedInStore)
+              if (bloc.isMarkedIn)
                 CustomMaterialButton(
                     gradient: const LinearGradient(
                       colors: <Color>[Color(0XFFC92434), Color(0XFF003D5B)],

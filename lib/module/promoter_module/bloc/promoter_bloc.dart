@@ -19,7 +19,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
   PromoterStoreDetailModel? storeDetail;
   List<InventoryProductDetailModel> filteredList = [];
   List<CompaignsModel> compaigns = [];
-  bool isCheckedInStore = false;
+  bool isMarkedIn = false;
   PromoterBloc(this.repo) : super(PromoterInitial()) {
     on((GetInventoryDetailEvent event, emit) async =>
         await _getInventoryDetails(emit));
@@ -88,7 +88,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     });
 
     emit(PromoterToastMessageState(response));
-    isCheckedInStore = false;
+    isMarkedIn = false;
     emit(PromoterStoreDetailLoadedState());
   }
 
@@ -122,7 +122,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     });
 
     emit(PromoterToastMessageState(response));
-    isCheckedInStore = true;
+    isMarkedIn = true;
     emit(PromoterStoreDetailLoadedState());
   }
 
@@ -147,6 +147,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     emit(PromoterStoreDetailLoadingState());
     await repo.getStoreDetails().then((value) {
       storeDetail = value;
+      isMarkedIn = value.markIn;
       emit(PromoterStoreDetailLoadedState());
     }).catchError((err) {
       emit(PromoterToastMessageState(err.toString()));
