@@ -227,8 +227,9 @@ class AppSideMenu extends StatelessWidget {
                   },
                 )
               ],
-              accountName: Text(data.userInfo.companyName),
-              accountEmail: Text(data.userInfo.userName)),
+              accountName: Text(
+                  "${data.userInfo.userName} (${data.userInfo.designation})"),
+              accountEmail: Text(data.userInfo.companyName)),
           ...data.menu.where((element) => element.isActive).map(
             (e) {
               if (e.key == "promoter" &&

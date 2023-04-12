@@ -58,19 +58,22 @@ class Menu {
 }
 
 class HomeUserInfo {
-  HomeUserInfo({
-    required this.mobile,
-    required this.userName,
-    required this.email,
-    required this.companyId,
-    required this.companyName,
-  });
+  HomeUserInfo(
+      {required this.mobile,
+      required this.userName,
+      required this.email,
+      required this.companyId,
+      required this.companyName,
+      required this.supervisor,
+      required this.designation});
 
   String mobile;
   String userName;
   String email;
+  String supervisor;
   int companyId;
   String companyName;
+  String designation;
 
   factory HomeUserInfo.fromRawJson(String str) =>
       HomeUserInfo.fromJson(json.decode(str));
@@ -82,7 +85,9 @@ class HomeUserInfo {
       userName: json["username"] ?? "N/A",
       email: json["email"],
       companyId: json["companyId"],
-      companyName: json["companyName"] ?? "N/A");
+      companyName: json["companyName"] ?? "N/A",
+      designation: json['designation'] ?? "",
+      supervisor: json["supervisor"] ?? "");
 
   Map<String, dynamic> toJson() => {
         "mobile": mobile,
