@@ -2,6 +2,7 @@ import 'dart:convert';
 
 class CompaignsModel {
   CompaignsModel({
+    required this.activityname,
     required this.storeId,
     required this.activityId,
     required this.fromdate,
@@ -16,6 +17,7 @@ class CompaignsModel {
   DateTime dateCreated;
   int campaignId;
   String createdBy;
+  String activityname;
 
   factory CompaignsModel.fromRawJson(String str) =>
       CompaignsModel.fromJson(json.decode(str));
@@ -29,6 +31,7 @@ class CompaignsModel {
         dateCreated: DateTime.parse(json["date_created"]),
         campaignId: json["campaign_id"],
         createdBy: json["created_by"],
+        activityname: json["activityname"],
       );
 
   Map<String, dynamic> toJson() => {

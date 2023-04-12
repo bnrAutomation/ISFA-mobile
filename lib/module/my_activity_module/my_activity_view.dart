@@ -45,14 +45,14 @@ class MyActivityView extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               final bloc = context.read<MyActivityBloc>();
-              if (bloc.attandenceData.isEmpty) {
-                return Center(
-                  child: TextButton(
-                    child: const Text("Retry"),
-                    onPressed: () => bloc.add(GetActivityEvent()),
-                  ),
-                );
-              }
+              // if (bloc.attandenceData.isEmpty) {
+              //   return Center(
+              //     child: TextButton(
+              //       child: const Text("Retry"),
+              //       onPressed: () => bloc.add(GetActivityEvent()),
+              //     ),
+              //   );
+              // }
               return Column(
                 children: [
                   Container(
@@ -177,16 +177,23 @@ class MyActivityView extends StatelessWidget {
                     height: 5,
                   ),
                   Container(color: Colors.grey[300]!, height: 1),
-                  Expanded(
-                    child: ListView.separated(
-                        itemCount: bloc.attandenceData.length,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        separatorBuilder: (context, index) =>
-                            Container(color: Colors.grey[300]!, height: 1),
-                        itemBuilder: (context, index) =>
-                            SingleActivity(index, bloc.attandenceData[index])),
-                  )
+                  bloc.attandenceData.isEmpty
+                      ? Center(
+                          child: TextButton(
+                            child: const Text("Retry"),
+                            onPressed: () => bloc.add(GetActivityEvent()),
+                          ),
+                        )
+                      : Expanded(
+                          child: ListView.separated(
+                              itemCount: bloc.attandenceData.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              separatorBuilder: (context, index) => Container(
+                                  color: Colors.grey[300]!, height: 1),
+                              itemBuilder: (context, index) => SingleActivity(
+                                  index, bloc.attandenceData[index])),
+                        )
                 ],
               );
             },
@@ -212,7 +219,7 @@ class SingleActivity extends StatelessWidget {
           Expanded(
               child: Center(
             child: Text(
-              attandenceData.date.toStringFormat("MMM"),
+              attandenceData.date.toStringFormat("dd MMM"),
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 10.sp,

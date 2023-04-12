@@ -40,12 +40,16 @@ class BeatPlanStoreListView extends StatelessWidget {
             children: [
               ListTile(
                 tileColor: const Color(0xff278BBC).withOpacity(0.2),
-                leading: IconButton(
-                    onPressed: bloc.onPreviousDateSelect,
-                    icon: Icon(
-                      Icons.chevron_left,
-                      color: Theme.of(context).colorScheme.primary,
-                    )),
+                leading: bloc.selectedDate.isAfter(DateTime.now())
+                    ? IconButton(
+                        onPressed: bloc.onPreviousDateSelect,
+                        icon: Icon(
+                          Icons.chevron_left,
+                          color: bloc.selectedDate == DateTime.now()
+                              ? Colors.grey
+                              : Theme.of(context).colorScheme.primary,
+                        ))
+                    : const SizedBox(),
                 trailing: IconButton(
                     onPressed: bloc.onNextDateSelect,
                     icon: Icon(

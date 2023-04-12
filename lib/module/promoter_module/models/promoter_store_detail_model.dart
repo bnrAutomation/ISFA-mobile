@@ -46,7 +46,7 @@ class PromoterStoreDetailModel {
           storeBranch: json["storeBranch"],
           storeType: json["storeType"],
           activeStatus: json["activeStatus"],
-          markIn: json["markIn"],
+          markIn: json["markIn"] ?? false,
           zipcode: json["zipcode"],
           longtitude: json['longtitude'],
           latitude: json['latitude']);

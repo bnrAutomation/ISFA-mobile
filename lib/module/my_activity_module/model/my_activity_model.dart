@@ -18,7 +18,7 @@ class MyActivityModel {
 
   MyActivityModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
-    status = json['status'];
+    status = int.parse(json['status'].toString());
     data = MyActivityData.fromJson(json['data']);
   }
 
@@ -64,7 +64,7 @@ class AttendanceData {
   late final DateTime date;
   late final String inTime;
   late final String outTime;
-  late final String storeid;
+  late final int? storeid;
   late final String timeSpan;
   late final String lastOutTime;
   late final String firstInTime;
@@ -73,10 +73,10 @@ class AttendanceData {
   AttendanceData.fromJson(Map<String, dynamic> json) {
     date = DateTime.parse(
         json['date'] ?? DateTime.now().toStringFormat("yyyy-MM-dd"));
-    inTime = json['inTime '] ?? "";
-    outTime = json['outTime '] ?? "";
-    storeid = json['storeid'] ?? "";
-    timeSpan = json['timeSpan '] ?? "";
+    inTime = json['inTime'] ?? "";
+    outTime = json['outTime'] ?? "";
+    storeid = json['storeid'];
+    timeSpan = json['timeSpan'] ?? "";
     lastOutTime = json['lastOutTime'] ?? "";
     firstInTime = json['firstInTime'] ?? "";
     dutyTimeSpan = json['dutyTimeSpan'] ?? "";

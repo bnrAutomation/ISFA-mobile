@@ -21,14 +21,14 @@ class CampaignListItem extends StatelessWidget {
                 height: 5,
               ),
               Text(
-                item.createdBy,
+                item.activityname,
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge
                     ?.copyWith(fontWeight: FontWeight.w600, color: Colors.blue),
               ),
               Text(
-                "",
+                "Create By : ${item.createdBy}",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(

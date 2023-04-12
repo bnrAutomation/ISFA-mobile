@@ -19,6 +19,7 @@ class MyActivityBloc extends Bloc<MyActivityEvent, MyActivityState> {
       if (event is MyActivityChangeMonth) {
         selected = event.dateTime;
         emit(MyAcivityMonthChangeState());
+        add(GetActivityEvent());
       }
     });
   }
@@ -33,8 +34,7 @@ class MyActivityBloc extends Bloc<MyActivityEvent, MyActivityState> {
       return <AttendanceData>[];
     });
 
-    attandenceData =
-        list.where((element) => element.storeid.isNotEmpty).toList();
+    attandenceData = list.where((element) => element.storeid != null).toList();
     emit(MyActivityWithData());
   }
 }

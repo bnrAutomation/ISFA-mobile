@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:i_densfa/module/ui/custom_material_button.dart';
-import 'package:i_densfa/module/ui/app_pop_view.dart';
 
-import '../beatplan_store_list_view.dart';
+import 'package:i_densfa/module/ui/custom_material_button.dart';
+
 import 'bloc/schedule_visit_call_bloc.dart';
 
 class ScheduleVisitView extends StatelessWidget {
@@ -143,8 +141,8 @@ class ScheduleVisitView extends StatelessWidget {
   Column selectStore(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text("Select Store*"),
+      children: const [
+        Text("Select Store*"),
         TextField(
           readOnly: true,
           // onTap: () async {
@@ -166,7 +164,7 @@ class ScheduleVisitView extends StatelessWidget {
 
           //   debugPrint(selectedItem);
           // },
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
               suffixIcon: Icon(Icons.keyboard_arrow_down),
               hintText: 'Store Name'),
         ),

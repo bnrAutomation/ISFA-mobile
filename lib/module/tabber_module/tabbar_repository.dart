@@ -10,7 +10,6 @@ import 'package:path/path.dart';
 class TabbarRepository {
   final userId = AppStorage().userDetail!.id;
   Future<SideMenuModel> getSideMenuDetails() async {
-    final userId = AppStorage().userDetail!.id;
     final response =
         await get(Uri.parse('${URLConstants.sidemenuDetails}/$userId'));
     final jsonRec = jsonDecode(response.body);
