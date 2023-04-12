@@ -115,7 +115,26 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                   ),
                   if (bloc.isSale && bloc.selectedProduct != null) ...[
                     SizedBox(height: 8.h),
-                    Text("Price",
+                    Text("Calculated Price",
+                        style: Theme.of(context).textTheme.labelLarge),
+                    const SizedBox(height: 5),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: TextField(
+                        readOnly: true,
+                        controller: TextEditingController(
+                            text: bloc.enteredPrice.toStringAsFixed(0)),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    Text("Actual Price",
                         style: Theme.of(context).textTheme.labelLarge),
                     const SizedBox(height: 5),
                     DecoratedBox(

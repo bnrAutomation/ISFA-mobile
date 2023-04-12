@@ -9,7 +9,7 @@ part 'myactivity_event.dart';
 part 'myactivity_state.dart';
 
 class MyActivityBloc extends Bloc<MyActivityEvent, MyActivityState> {
-  DateTime? selected = DateTime.now();
+  DateTime selected = DateTime.now();
   final MyActivityRepository repo;
   List<AttendanceData> attandenceData = [];
   MyActivityBloc(this.repo) : super(MyActivityInitial()) {
@@ -25,10 +25,9 @@ class MyActivityBloc extends Bloc<MyActivityEvent, MyActivityState> {
   }
 
   Future<void> _getAttendance(
-      Emitter<MyActivityState> emit, DateTime? dateTime) async {
+      Emitter<MyActivityState> emit, DateTime dateTime) async {
     emit(MyAcivityLoadingState());
-    var list =
-        await repo.getMyActivity(dateTime: dateTime!).catchError((error) {
+    var list = await repo.getMyActivity(dateTime: dateTime).catchError((error) {
       emit(MyActivityWithData());
       emit(MyActivityShowSnack(error.toString()));
       return <AttendanceData>[];

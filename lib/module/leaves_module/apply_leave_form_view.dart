@@ -182,14 +182,8 @@ class _ApplyLeaveFormViewState extends State<ApplyLeaveFormView> {
                                       onTap: () async {
                                         final now = DateTime.now();
                                         final date = await showDatePicker(
-                                          selectableDayPredicate:
-                                              (DateTime date) {
-                                            if (date.weekday ==
-                                                DateTime.sunday) {
-                                              return false;
-                                            }
-                                            return true;
-                                          },
+                                          // selectableDayPredicate: (date) =>
+                                          //     date.weekday != DateTime.sunday,
                                           context: context,
                                           initialDate: bloc.fromDate ?? now,
                                           firstDate: bloc.fromDate ?? now,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -71,6 +72,9 @@ class LoginView extends StatelessWidget {
                           const SizedBox(height: 10),
                           TextField(
                             controller: usernameController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.deny(" ")
+                            ],
                             onChanged: (change) {
                               BlocProvider.of<LoginBloc>(context).add(
                                   LoginTextChangeEvent(usernameController.text,
@@ -89,6 +93,9 @@ class LoginView extends StatelessWidget {
                           const SizedBox(height: 10),
                           TextField(
                             controller: passwordController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.deny(" ")
+                            ],
                             onChanged: (change) {
                               bloc.add(LoginTextChangeEvent(
                                   usernameController.text,
@@ -99,7 +106,7 @@ class LoginView extends StatelessWidget {
                             decoration: InputDecoration(
                               suffixIcon: GestureDetector(
                                 onTap: () =>
-                                    {bloc.add(LoginShowPasswordButtonEvent())},
+                                    bloc.add(LoginShowPasswordButtonEvent()),
                                 child: Container(
                                   color: Colors.transparent,
                                   child: Icon(

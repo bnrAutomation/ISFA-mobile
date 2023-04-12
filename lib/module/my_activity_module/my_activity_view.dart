@@ -63,8 +63,9 @@ class MyActivityView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            (context.read<MyActivityBloc>().selected ??
-                                    DateTime.now())
+                            context
+                                .read<MyActivityBloc>()
+                                .selected
                                 .toStringFormat("MMMM yyyy"),
                             style: TextStyle(
                               fontSize: 14.sp,
@@ -73,17 +74,20 @@ class MyActivityView extends StatelessWidget {
                             ),
                           ),
                           IconButton(
-                              onPressed: () async => {
-                                    context.read<MyActivityBloc>().add(
-                                        MyActivityChangeMonth(
-                                            await showMonthYearPicker(
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: DateTime(
-                                                    DateTime.now().year),
-                                                lastDate: DateTime(
-                                                    DateTime.now().year + 1))))
-                                  },
+                              onPressed: () async {
+                                final now = DateTime.now();
+                                final date = await showMonthYearPicker(
+                                  context: context,
+                                  initialDate: now,
+                                  firstDate: DateTime(now.year),
+                                  lastDate: DateTime(now.year + 1),
+                                );
+                                if (date != null && context.mounted) {
+                                  context
+                                      .read<MyActivityBloc>()
+                                      .add(MyActivityChangeMonth(date));
+                                }
+                              },
                               icon: const Icon(
                                 Icons.calendar_month,
                                 color: Colors.amber,
@@ -165,9 +169,7 @@ class MyActivityView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  const SizedBox(height: 5),
                   Container(color: Colors.grey[300]!, height: 1),
                   bloc.attandenceData.isEmpty
                       ? Center(

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
-import 'package:i_densfa/utility/app_storage.dart';
 import '../ui/background.dart';
 
 class SplashView extends StatelessWidget {
@@ -26,9 +25,7 @@ class SplashView extends StatelessWidget {
                 child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: CustomMaterialButton(
-                      onPressed: () => context.go(AppStorage().isLoggedIn()
-                          ? AppPaths.tabbar
-                          : AppPaths.login),
+                      onPressed: () => context.go(AppPaths.login),
                       buttonText: "Get Start",
                     )),
               )),

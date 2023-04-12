@@ -12,6 +12,7 @@ import 'package:i_densfa/module/promoter_module/promoter_view.dart';
 import 'package:i_densfa/module/store_detail_module/storeDetal/store_detail_bloc.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_repositry.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_view.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 
 import 'module/assessment_module/bloc/assessment_bloc.dart';
 import 'module/assessment_module/views/assessment_list_view.dart';
@@ -29,7 +30,8 @@ import 'module/upload_selfie/upload_selfie.dart';
 import 'module/verification_module/verification_view.dart';
 
 final router = GoRouter(
-  initialLocation: AppPaths.initial,
+  initialLocation:
+      AppStorage().isLoggedIn() ? AppPaths.tabbar : AppPaths.initial,
   routes: <RouteBase>[
     GoRoute(
       path: AppPaths.initial,
