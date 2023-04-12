@@ -192,41 +192,10 @@ class AppSideMenu extends StatelessWidget {
           UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: Theme.of(context).primaryColor),
               currentAccountPicture: const CircleAvatar(),
-              otherAccountsPictures: [
-                BlocBuilder<TabberBloc, TabberState>(
-                  buildWhen: (previous, current) =>
-                      (current is OnlineStatusUpdateState),
-                  builder: (context, state) {
-                    final bloc = context.read<TabberBloc>();
-                    return FittedBox(
-                      child: AppStorage().userDetail?.designation == "fwp"
-                          ? Column(
-                              children: [
-                                CupertinoSwitch(
-                                    value: bloc.isOnline,
-                                    onChanged: (newVal) async {
-                                      Scaffold.of(context).closeDrawer();
-                                      final XFile? image = await context
-                                          .pushNamed(AppPaths.checkin);
-                                      if (newVal) {
-                                        bloc.add(
-                                            StartDutyStatusTabberEvent(image));
-                                      } else {
-                                        bloc.add(
-                                            EndDutyStatusTabberEvent(image));
-                                      }
-                                    }),
-                                Text(
-                                  bloc.isOnline ? "On-Duty" : "Off-Duty",
-                                  style: const TextStyle(color: Colors.white),
-                                )
-                              ],
-                            )
-                          : const SizedBox(),
-                    );
-                  },
-                )
-              ],
+              otherAccountsPictures:
+                  AppStorage().userDetail?.designation != "fwp"
+                      ? null
+                      : [dutyStatus()],
               accountName: Text(
                   "${data.userInfo.userName} (${data.userInfo.designation})"),
               accountEmail: Text(data.userInfo.companyName)),
