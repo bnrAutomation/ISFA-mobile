@@ -45,14 +45,6 @@ class MyActivityView extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               final bloc = context.read<MyActivityBloc>();
-              // if (bloc.attandenceData.isEmpty) {
-              //   return Center(
-              //     child: TextButton(
-              //       child: const Text("Retry"),
-              //       onPressed: () => bloc.add(GetActivityEvent()),
-              //     ),
-              //   );
-              // }
               return Column(
                 children: [
                   Container(

@@ -321,6 +321,36 @@ class AppSideMenu extends StatelessWidget {
     );
   }
 
+  Widget dutyStatus() {
+    return BlocBuilder<TabberBloc, TabberState>(
+      buildWhen: (previous, current) => (current is OnlineStatusUpdateState),
+      builder: (context, state) {
+        final bloc = context.read<TabberBloc>();
+        return FittedBox(
+            child: Column(
+          children: [
+            CupertinoSwitch(
+                value: bloc.isOnline,
+                onChanged: (newVal) async {
+                  Scaffold.of(context).closeDrawer();
+                  final XFile? image =
+                      await context.pushNamed(AppPaths.checkin);
+                  if (newVal) {
+                    bloc.add(StartDutyStatusTabberEvent(image));
+                  } else {
+                    bloc.add(EndDutyStatusTabberEvent(image));
+                  }
+                }),
+            Text(
+              bloc.isOnline ? "On-Duty" : "Off-Duty",
+              style: const TextStyle(color: Colors.white),
+            )
+          ],
+        ));
+      },
+    );
+  }
+
   void closeDrawerAndPushView(BuildContext context, String path) {
     Scaffold.of(context).closeDrawer();
     context.pushNamed(path);
