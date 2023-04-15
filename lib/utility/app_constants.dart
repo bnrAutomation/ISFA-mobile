@@ -68,4 +68,5 @@ class URLConstants {
   static const getAssessmentListByUserId =
       '$apiBaseUrl/getAssessmentListByUserId';
   static const getAssessmentQuestions = '$apiBaseUrl/getAssessmentDetails';
+  static const saveAssessmentAnswers = '$apiBaseUrl/saveAssessmentAnswers';
 }

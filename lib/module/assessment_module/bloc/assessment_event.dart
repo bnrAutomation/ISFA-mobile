@@ -16,3 +16,17 @@ class GetQuestionsForAssessment extends AssessmentEvent {
 
   GetQuestionsForAssessment(this.id);
 }
+
+class SaveAssessmentAnswersEvent extends AssessmentEvent {
+  final bool checkLeftAnswer;
+
+  SaveAssessmentAnswersEvent(this.checkLeftAnswer);
+}
+
+class StartQuestionCountDownTimerAssessmentEvent extends AssessmentEvent {}
+
+class UpdateTimerValueEvent extends AssessmentEvent {
+  final String timeLeft;
+
+  UpdateTimerValueEvent(this.timeLeft);
+}

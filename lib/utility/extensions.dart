@@ -16,3 +16,9 @@ extension ColorExtension on String {
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 }
+
+extension Helper on String {
+  String capitalizeFirst() {
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
+}

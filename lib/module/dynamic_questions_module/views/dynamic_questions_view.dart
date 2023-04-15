@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/assessment_module/assessment_model.dart';
@@ -42,7 +43,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                 title: Text(question.question),
                 subtitle: TextField(
                     onChanged: (value) {
-                      question.answer = value;
+                      question.answer = value.trim().capitalizeFirst();
                     },
                     decoration: InputDecoration(
                         hintText: question.placholder,
@@ -88,6 +89,9 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                 contentPadding: const EdgeInsets.all(0),
                 title: Text(question.question),
                 subtitle: TextField(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
                   onChanged: (value) {
                     question.answer = value;
                   },
@@ -159,44 +163,41 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
     );
   }
 
-  Padding inputRadioTile(QuestionModel question, BuildContext context) {
+  Widget inputRadioTile(QuestionModel question, BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            question.question,
-            style: textTheme.titleMedium,
-          ),
-          GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: question.options.length,
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                childAspectRatio: 4 / 1,
-                mainAxisSpacing: 4,
-                maxCrossAxisExtent: 1.sw / 2),
-            itemBuilder: (context, index) {
-              final option = question.options[index];
-              return Row(
-                children: [
-                  Radio(
-                      value: option,
-                      groupValue: question.answer,
-                      onChanged: (val) {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        question.answer = val;
-                        setState(() {});
-                      }),
-                  Text(option)
-                ],
-              );
-            },
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          question.question,
+          style: textTheme.titleMedium,
+        ),
+        GridView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: question.options.length,
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              childAspectRatio: 4 / 1,
+              mainAxisSpacing: 4,
+              maxCrossAxisExtent: 1.sw / 2),
+          itemBuilder: (context, index) {
+            final option = question.options[index];
+            return Row(
+              children: [
+                Radio(
+                    value: option,
+                    groupValue: question.answer,
+                    onChanged: (val) {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      question.answer = val;
+                      setState(() {});
+                    }),
+                Text(option)
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 

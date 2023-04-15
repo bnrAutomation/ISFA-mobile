@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:i_densfa/module/dynamic_questions_module/model.dart';
+
 class UserAssessmentsModel {
   UserAssessmentsModel({
     required this.message,
@@ -57,6 +59,7 @@ class AssessmentDetailModel {
   String imageName;
   int duration;
   int companyId;
+  AssessmentScoreModel? userScored;
 
   factory AssessmentDetailModel.fromRawJson(String str) =>
       AssessmentDetailModel.fromJson(json.decode(str));
@@ -158,6 +161,7 @@ class AssessQuestionModel {
   int assessmentId;
   String questionText;
   String correctAnswer;
+  String? userAnswer;
   List<String> options;
   QuestionInputType questionType;
   int sequence;
@@ -188,6 +192,14 @@ class AssessQuestionModel {
         "questionType": questionType.toStringName(),
         "sequence": sequence,
       };
+
+  QuestionModel toViewQuestionModel() => QuestionModel(
+      isRequired: true,
+      options: options,
+      question: questionText,
+      questionType: questionType,
+      placholder: questionText,
+      assessmentQuestionDetails: this);
 }
 
 enum QuestionInputType {
@@ -243,4 +255,38 @@ extension Helper on QuestionInputType {
         return "";
     }
   }
+}
+
+class AssessmentScoreModel {
+  AssessmentScoreModel({
+    required this.assessmentId,
+    required this.userId,
+    required this.assessmentCompletionTime,
+    required this.assessmentScore,
+  });
+
+  int assessmentId;
+  int userId;
+  int assessmentCompletionTime;
+  int assessmentScore;
+
+  factory AssessmentScoreModel.fromRawJson(String str) =>
+      AssessmentScoreModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory AssessmentScoreModel.fromJson(Map<String, dynamic> json) =>
+      AssessmentScoreModel(
+        assessmentId: json["assessmentId"],
+        userId: json["userId"],
+        assessmentCompletionTime: json["assessmentCompletionTime"],
+        assessmentScore: json["assessmentScore"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "assessmentId": assessmentId,
+        "userId": userId,
+        "assessmentCompletionTime": assessmentCompletionTime,
+        "assessmentScore": assessmentScore,
+      };
 }

@@ -35,4 +35,30 @@ class AssessmentRepository {
           : jsonDecode(response.body)['message'] ?? "Something went wrong";
     }
   }
+
+  Future<AssessmentScoreModel> saveAssessmentAnswers(
+      List<Map<String, dynamic>> answers, int timeTook) async {
+    final bodyMap = {
+      "answerData": answers,
+      "assessmentCompletionTime": timeTook,
+      "assessmentId": answers.first['assessmentId']
+    };
+    final response = await post(
+      Uri.parse("${URLConstants.saveAssessmentAnswers}/$userId"),
+      body: jsonEncode(bodyMap),
+      headers: {'Content-Type': 'application/json'},
+    );
+    final jsonBody = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      if (jsonBody["data"] is Map) {
+        return AssessmentScoreModel.fromRawJson(jsonBody["data"]);
+      } else {
+        throw jsonBody['message'];
+      }
+    } else {
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : jsonBody['message'] ?? "Something went wrong";
+    }
+  }
 }
