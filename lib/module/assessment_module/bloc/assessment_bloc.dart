@@ -63,8 +63,10 @@ class AssessmentBloc extends Bloc<AssessmentEvent, AssessmentState> {
         emit(SnackbarMessageAssessmentState(
             "Please answer for ${notAnsweredQuestions.first.question}"));
       } else {
-        final answers =
-            questionAnswers.map((e) => e.toAssessmentRequest()).toList();
+        final answers = questionAnswers
+            .where((element) => element.answer?.isNotEmpty ?? false)
+            .map((e) => e.toAssessmentRequest())
+            .toList();
         emit(SavingAnswersLoadingState());
         final score = await repo
             .saveAssessmentAnswers(answers, _secondsTook ~/ 60)
@@ -78,18 +80,23 @@ class AssessmentBloc extends Bloc<AssessmentEvent, AssessmentState> {
     });
 
     on((StartQuestionCountDownTimerAssessmentEvent event, emit) {
+      _timer?.cancel();
+      _secondsTook = 0;
+      for (var element in questionAnswers) {
+        element.answer = null;
+      }
       _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         _secondsTook += 1;
         if ((_secondsTook ~/ 60) >= (selectedAssessment?.duration ?? 1)) {
+          timer.cancel();
           add(SaveAssessmentAnswersEvent(false));
         } else {
           add(UpdateTimerValueEvent(timeLeft()));
         }
       });
-
-      on((UpdateTimerValueEvent event, emit) {
-        emit(TimerUpdateAssessmentState(event.timeLeft));
-      });
     });
+
+    on((UpdateTimerValueEvent event, emit) =>
+        emit(TimerUpdateAssessmentState(event.timeLeft)));
   }
 }

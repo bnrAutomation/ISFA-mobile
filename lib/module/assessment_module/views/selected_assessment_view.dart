@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:i_densfa/module/assessment_module/assessment_model.dart';
 import 'package:i_densfa/module/assessment_module/bloc/assessment_bloc.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_storage.dart';
@@ -105,72 +106,80 @@ class SelectedAssessmentView extends StatelessWidget {
                 ),
               ),
             if (bloc.selectedAssessment?.userScored != null)
-              Card(
-                child: Padding(
-                  padding: EdgeInsets.all(12.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "13542",
-                        style: TextStyle(
-                            color: theme.primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.sp),
-                      ),
-                      const Text("Sub Dealer Targeted"),
-                      SizedBox(height: 6.h),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20.w),
-                        child: LinearProgressIndicator(
-                          backgroundColor: Colors.grey.shade400,
-                          color: Theme.of(context).primaryColor,
-                          minHeight: 40,
-                          value: 0.88,
-                        ),
-                      ),
-                      SizedBox(height: 15.h),
-                      Text(
-                        "63",
-                        style: TextStyle(
-                            color: theme.primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.sp),
-                      ),
-                      const Text("Sub Dealer Included in Responses"),
-                      SizedBox(height: 6.h),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20.w),
-                        child: LinearProgressIndicator(
-                          backgroundColor: Colors.grey.shade400,
-                          color: const Color(0xffDB4C5B),
-                          minHeight: 40,
-                          value: 0.4,
-                        ),
-                      ),
-                      SizedBox(height: 15.h),
-                      Text(
-                        "568",
-                        style: TextStyle(
-                            color: theme.primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.sp),
-                      ),
-                      const Text("Total Responses"),
-                      SizedBox(height: 6.h),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20.w),
-                        child: LinearProgressIndicator(
-                          backgroundColor: Colors.grey.shade400,
-                          color: const Color(0xffFFBF00),
-                          minHeight: 40,
-                          value: 0.7,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              )
+              assessmentProgress(bloc, theme, context)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Card assessmentProgress(
+      AssessmentBloc bloc, ThemeData theme, BuildContext context) {
+    final AssessmentScoreModel userScored =
+        bloc.selectedAssessment!.userScored!;
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(12.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              userScored.targetedSubDealers.toString(),
+              style: TextStyle(
+                  color: theme.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.sp),
+            ),
+            const Text("Sub Dealer Targeted"),
+            SizedBox(height: 6.h),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20.w),
+              child: LinearProgressIndicator(
+                backgroundColor: Colors.grey.shade400,
+                color: Theme.of(context).primaryColor,
+                minHeight: 40,
+                value: userScored.targetedSubDealers / userScored.subDetalers,
+              ),
+            ),
+            SizedBox(height: 15.h),
+            Text(
+              userScored.includedSubDealers.toString(),
+              style: TextStyle(
+                  color: theme.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.sp),
+            ),
+            const Text("Sub Dealer Included in Responses"),
+            SizedBox(height: 6.h),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20.w),
+              child: LinearProgressIndicator(
+                backgroundColor: Colors.grey.shade400,
+                color: const Color(0xffDB4C5B),
+                minHeight: 40,
+                value: userScored.includedSubDealers /
+                    userScored.targetedSubDealers,
+              ),
+            ),
+            SizedBox(height: 15.h),
+            Text(
+              userScored.totalResponse.toString(),
+              style: TextStyle(
+                  color: theme.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.sp),
+            ),
+            const Text("Total Responses"),
+            SizedBox(height: 6.h),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20.w),
+              child: LinearProgressIndicator(
+                backgroundColor: Colors.grey.shade400,
+                color: const Color(0xffFFBF00),
+                minHeight: 40,
+                value: 0.7,
+              ),
+            )
           ],
         ),
       ),
@@ -179,8 +188,13 @@ class SelectedAssessmentView extends StatelessWidget {
 
   Widget yourScoreChart(BuildContext context) {
     final bloc = context.read<AssessmentBloc>();
-    final score = bloc.selectedAssessment?.userScored?.assessmentScore ?? 0;
-    final totalQuestions = bloc.questionAnswers.length;
+    final userScored = bloc.selectedAssessment?.userScored;
+    if (userScored == null) {
+      return const SizedBox();
+    }
+    final score = userScored.assessmentScore;
+    final missed = userScored.nonAttempted;
+    final wrongAns = userScored.wrongAnswer;
     final theme = Theme.of(context);
     return AspectRatio(
       aspectRatio: 2.2,
@@ -192,7 +206,7 @@ class SelectedAssessmentView extends StatelessWidget {
                 padding: EdgeInsets.all(25.w),
                 child: Center(
                   child: Text(
-                    "$score/$totalQuestions",
+                    "$score/${score + wrongAns + missed}",
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: theme.primaryColor,
                       fontWeight: FontWeight.bold,
@@ -221,7 +235,7 @@ class SelectedAssessmentView extends StatelessWidget {
                   sectionsSpace: 0.5,
                   centerSpaceRadius: 50,
                   startDegreeOffset: 270,
-                  sections: showingSections(context, totalQuestions, score),
+                  sections: showingSections(context, userScored),
                 ),
               ),
             ],
@@ -232,10 +246,14 @@ class SelectedAssessmentView extends StatelessWidget {
   }
 
   List<PieChartSectionData> showingSections(
-      BuildContext context, int total, int score) {
+      BuildContext context, AssessmentScoreModel userScored) {
     final bloc = context.read<AssessmentBloc>();
     final theme = Theme.of(context);
-    final pieChartReportData = [score, 0, total - score];
+    final pieChartReportData = [
+      userScored.assessmentScore,
+      userScored.nonAttempted,
+      userScored.wrongAnswer
+    ];
     return List.generate(pieChartReportData.length, (i) {
       final isTouched = i == bloc.selectedPieChartPortionId;
       final fontSize = isTouched ? 13.sp : 10.sp;

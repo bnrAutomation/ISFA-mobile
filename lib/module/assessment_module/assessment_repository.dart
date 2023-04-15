@@ -51,7 +51,7 @@ class AssessmentRepository {
     final jsonBody = jsonDecode(response.body);
     if (response.statusCode == 200) {
       if (jsonBody["data"] is Map) {
-        return AssessmentScoreModel.fromRawJson(jsonBody["data"]);
+        return AssessmentScoreModel.fromJson(jsonBody["data"]);
       } else {
         throw jsonBody['message'];
       }

@@ -36,18 +36,18 @@ class UserAssessmentsModel {
 }
 
 class AssessmentDetailModel {
-  AssessmentDetailModel({
-    required this.assessmentId,
-    required this.name,
-    required this.description,
-    required this.startDate,
-    required this.startTime,
-    required this.endDate,
-    required this.endTime,
-    required this.imageName,
-    required this.duration,
-    required this.companyId,
-  });
+  AssessmentDetailModel(
+      {required this.assessmentId,
+      required this.name,
+      required this.description,
+      required this.startDate,
+      required this.startTime,
+      required this.endDate,
+      required this.endTime,
+      required this.imageName,
+      required this.duration,
+      required this.companyId,
+      required this.userScored});
 
   int assessmentId;
   String name;
@@ -66,31 +66,37 @@ class AssessmentDetailModel {
 
   String toRawJson() => json.encode(toJson());
 
-  factory AssessmentDetailModel.fromJson(Map<String, dynamic> json) =>
-      AssessmentDetailModel(
-        assessmentId: json["assessmentId"],
-        name: json["name"],
-        description: json["description"],
-        startDate: json["startDate"],
-        startTime: json["startTime"],
-        endDate: json["endDate"],
-        endTime: json["endTime"],
-        imageName: json["imageName"],
-        duration: json["duration"],
-        companyId: json["companyId"],
-      );
+  factory AssessmentDetailModel.fromJson(Map<String, dynamic> json) {
+    final assessJson = json["assessmentResponse"];
+    return AssessmentDetailModel(
+        assessmentId: assessJson["assessmentId"],
+        name: assessJson["name"],
+        description: assessJson["description"],
+        startDate: assessJson["startDate"],
+        startTime: assessJson["startTime"],
+        endDate: assessJson["endDate"],
+        endTime: assessJson["endTime"],
+        imageName: assessJson["imageName"],
+        duration: assessJson["duration"],
+        companyId: assessJson["companyId"],
+        userScored:
+            AssessmentScoreModel.fromJson(json["assessmentScoreResponse"]));
+  }
 
   Map<String, dynamic> toJson() => {
-        "assessmentId": assessmentId,
-        "name": name,
-        "description": description,
-        "startDate": startDate,
-        "startTime": startTime,
-        "endDate": endDate,
-        "endTime": endTime,
-        "imageName": imageName,
-        "duration": duration,
-        "companyId": companyId,
+        "assessmentScoreResponse": userScored?.toJson(),
+        "assessmentResponse": {
+          "assessmentId": assessmentId,
+          "name": name,
+          "description": description,
+          "startDate": startDate,
+          "startTime": startTime,
+          "endDate": endDate,
+          "endTime": endTime,
+          "imageName": imageName,
+          "duration": duration,
+          "companyId": companyId,
+        }
       };
 }
 
@@ -236,15 +242,11 @@ extension Helper on QuestionInputType {
   String toStringName() {
     switch (this) {
       case QuestionInputType.dropdown:
-        return "QUESTION_WITH_DROP_DOWN";
-      case QuestionInputType.amount:
-        return "";
+        return "QUESTION_WITH_OPTIONS_DROP_DOWN";
       case QuestionInputType.number:
-        return "QUESTION_WITH_CORRECT_ANSWER";
+        return "QUESTION_WITH_NUMERIC_ANSWER";
       case QuestionInputType.radio:
-        return "QUESTION_WITH_TRUE_FALSE";
-      case QuestionInputType.image:
-        return "";
+        return "QUESTION_WITH_OPTIONS_CHECK_BOX";
       case QuestionInputType.boolean:
         return "QUESTION_WITH_TRUE_FALSE";
       case QuestionInputType.singleLineText:
@@ -253,22 +255,37 @@ extension Helper on QuestionInputType {
         return "";
       case QuestionInputType.ddMMyy:
         return "";
+      case QuestionInputType.amount:
+        return "";
+      case QuestionInputType.image:
+        return "";
     }
   }
 }
 
 class AssessmentScoreModel {
-  AssessmentScoreModel({
-    required this.assessmentId,
-    required this.userId,
-    required this.assessmentCompletionTime,
-    required this.assessmentScore,
-  });
+  AssessmentScoreModel(
+      {required this.assessmentId,
+      required this.userId,
+      required this.assessmentCompletionTime,
+      required this.assessmentScore,
+      required this.wrongAnswer,
+      required this.nonAttempted,
+      required this.targetedSubDealers,
+      required this.includedSubDealers,
+      required this.subDetalers,
+      required this.totalResponse});
 
   int assessmentId;
   int userId;
   int assessmentCompletionTime;
   int assessmentScore;
+  int wrongAnswer;
+  int nonAttempted;
+  int subDetalers;
+  int targetedSubDealers;
+  int includedSubDealers;
+  int totalResponse;
 
   factory AssessmentScoreModel.fromRawJson(String str) =>
       AssessmentScoreModel.fromJson(json.decode(str));
@@ -277,16 +294,26 @@ class AssessmentScoreModel {
 
   factory AssessmentScoreModel.fromJson(Map<String, dynamic> json) =>
       AssessmentScoreModel(
-        assessmentId: json["assessmentId"],
-        userId: json["userId"],
-        assessmentCompletionTime: json["assessmentCompletionTime"],
-        assessmentScore: json["assessmentScore"],
-      );
+          assessmentId: json["assessmentId"],
+          userId: json["userId"],
+          assessmentCompletionTime: json["assessmentCompletionTime"],
+          assessmentScore: json["assessmentScore"],
+          includedSubDealers: json["includedSubDealers"],
+          nonAttempted: json["nonAttempted"] ?? 0,
+          targetedSubDealers: json["targetedSubDealers"],
+          wrongAnswer: json["wrongAnswer"] ?? 0,
+          subDetalers: json["totalSubDealers"],
+          totalResponse: json["totalResponse"] ?? 0);
 
   Map<String, dynamic> toJson() => {
         "assessmentId": assessmentId,
         "userId": userId,
         "assessmentCompletionTime": assessmentCompletionTime,
         "assessmentScore": assessmentScore,
+        "includedSubDealers": includedSubDealers,
+        "nonAttempted": nonAttempted,
+        "targetedSubDealers": targetedSubDealers,
+        "wrongAnswer": wrongAnswer,
+        "totalSubDealers": subDetalers
       };
 }
