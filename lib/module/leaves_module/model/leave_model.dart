@@ -100,13 +100,13 @@ class LeaveBalanceModel {
   LeaveBalanceModel({
     required this.leaveTypeName,
     required this.leaveTypeBalance,
-    this.leaveTypeColor,
+    required this.leaveTypeColor,
     this.leaveTypeIcon,
   });
 
   String leaveTypeName;
   int leaveTypeBalance;
-  String? leaveTypeColor;
+  String leaveTypeColor;
   String? leaveTypeIcon;
 
   factory LeaveBalanceModel.fromRawJson(String str) =>
@@ -119,7 +119,7 @@ class LeaveBalanceModel {
         leaveTypeName: json["leaveTypeName"],
         leaveTypeBalance:
             double.tryParse(json["leaveTypeBalance"].toString())?.toInt() ?? 0,
-        leaveTypeColor: json["leaveTypeColor"],
+        leaveTypeColor: json["leaveTypeColor"] ?? "#FFFFFF",
         leaveTypeIcon: json["leaveTypeIcon"],
       );
 

@@ -107,9 +107,11 @@ class ModifyQuantityBloc
     } else {
       final response = await repo
           .addInventoryQty(
-              catId: selectedCategory!.categoryId,
-              productId: selectedProduct!.productId,
-              qty: selectedQuantity!)
+        catId: selectedCategory!.categoryId,
+        productId: selectedProduct!.productId,
+        qty: selectedQuantity!,
+        price: selectedProduct!.price,
+      )
           .catchError((onError) {
         emit(ToastMessageState(onError.toString()));
         return false;

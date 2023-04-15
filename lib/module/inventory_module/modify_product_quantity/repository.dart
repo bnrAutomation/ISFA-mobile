@@ -26,14 +26,18 @@ class ModifyProductsRepository {
   }
 
   Future<bool> addInventoryQty(
-      {required int catId, required int productId, required int qty}) async {
+      {required int catId,
+      required int productId,
+      required int qty,
+      required double price}) async {
     final url = Uri.parse('${URLConstants.addInventory}/$userId');
 
     final body = {
       "storeId": storeId,
       "productId": productId,
       "categoryId": catId,
-      "transUnit": qty
+      "transUnit": qty,
+      "totalPrice": "${qty * price}"
     };
 
     final response = await post(url,
@@ -59,7 +63,8 @@ class ModifyProductsRepository {
       "productId": productId,
       "categoryId": catId,
       "transUnit": qty,
-      "price": price
+      "price": price,
+      "totalPrice": "${qty * price}"
     };
 
     final response = await post(url,

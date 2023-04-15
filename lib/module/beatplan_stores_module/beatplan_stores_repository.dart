@@ -24,13 +24,14 @@ class BeatPlanStoresRepository {
         }));
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body)["body"];
-      if (data is String) {
-        return [];
-      } else {
-        final dataResponse = json.decode(response.body)["body"]["data"];
-        final List plans = dataResponse is List ? dataResponse : [];
+      final dataResponse = json.decode(response.body)["data"];
+      final List plans = dataResponse is List ? dataResponse : [];
+      if (plans.isNotEmpty) {
         return plans.map((e) => BeatPlanModel.fromJson(e)).toList();
+      } else {
+        throw response.body.isEmpty
+            ? "Something went wrong"
+            : json.decode(response.body)['message'] ?? "Something went wrong";
       }
     } else {
       throw response.body.isEmpty

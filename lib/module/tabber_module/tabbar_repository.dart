@@ -9,6 +9,7 @@ import 'package:path/path.dart';
 
 class TabbarRepository {
   final userId = AppStorage().userDetail!.id;
+  final companyId = AppStorage().userDetail!.companyId;
   Future<SideMenuModel> getSideMenuDetails() async {
     final response =
         await get(Uri.parse('${URLConstants.sidemenuDetails}/$userId'));
@@ -73,6 +74,7 @@ class TabbarRepository {
     request.fields.addAll({
       "userId": userId.toString(),
       "status": isStart.toString(),
+      "campaignId": companyId.toString()
     });
 
     if (isStart) {

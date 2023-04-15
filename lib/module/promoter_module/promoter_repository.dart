@@ -12,10 +12,10 @@ import 'models/compaigns_model.dart';
 
 class PromoterRepository {
   final userId = AppStorage().userDetail!.id;
-  final compId = AppStorage().homeInfo!.userInfo.companyId;
+  final companyId = AppStorage().homeInfo!.userInfo.companyId;
   Future<PromoterStoreDetailModel> getStoreDetails() async {
     final response = await get(
-        Uri.parse('${URLConstants.promoterStoreDetail}/$userId/$compId'));
+        Uri.parse('${URLConstants.promoterStoreDetail}/$userId/$companyId'));
     final resJson = json.decode(response.body);
     if (response.statusCode == 200 && resJson['data'] is Map) {
       return PromoterStoreDetailModel.fromJson(resJson['data']);
@@ -26,7 +26,7 @@ class PromoterRepository {
 
   Future<InventoryDetailModel> getInventoryDetail(int storeId) async {
     final response = await get(
-        Uri.parse('${URLConstants.getInventory}/$userId/$compId/$storeId'));
+        Uri.parse('${URLConstants.getInventory}/$userId/$companyId/$storeId'));
     final resJson = json.decode(response.body);
     if (response.statusCode == 200 && resJson['data'] is Map) {
       return InventoryDetailModel.fromJson(resJson['data']);
@@ -55,6 +55,7 @@ class PromoterRepository {
       "userId": userId.toString(),
       "storeId": storeId.toString(),
       "status": isIn.toString(),
+      "campaignId": companyId.toString()
 
       // "pjpId": "122"
     });

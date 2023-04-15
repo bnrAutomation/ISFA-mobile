@@ -49,11 +49,13 @@ class StoreDetailRepository {
 
     request.files.add(multipartFile);
     final userId = AppStorage().userDetail!.id;
+    final companyId = AppStorage().userDetail!.companyId;
     request.fields.addAll({
       "userId": userId.toString(),
       "storeId": storeId.toString(),
       "status": isIn.toString(),
-      "pjpId": pjpId.toString()
+      "pjpId": pjpId.toString(),
+      "campaignId": companyId.toString()
     });
     if (isIn) {
       request.fields.addAll({

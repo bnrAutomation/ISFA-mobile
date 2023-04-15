@@ -230,16 +230,16 @@ class LeaveView extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final model = context.read<LeaveBloc>().details!.leaveTypeBalance[index];
 
-    final ccolor = index == 0
-        ? Theme.of(context).colorScheme.primary
-        : index == 1
-            ? const Color(0XFFC92434)
-            : index == 2
-                ? Colors.amber
-                : Colors.black;
+    // final ccolor = index == 0
+    //     ? Theme.of(context).colorScheme.primary
+    //     : index == 1
+    //         ? const Color(0XFFC92434)
+    //         : index == 2
+    //             ? Colors.amber
+    //             : Colors.black;
     final bloc = context.read<LeaveBloc>();
     return Card(
-      color: ccolor,
+      color: model.leaveTypeColor.toColor(),
       child: Stack(
         children: [
           SvgPicture.asset(ImageConstants.leavemask, fit: BoxFit.fill),
