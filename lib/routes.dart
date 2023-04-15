@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:i_densfa/module/assessment_module/assessment_repository.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/module/checkin_module/check_in_view.dart';
 import 'package:i_densfa/module/inventory_module/inventory_view.dart';
@@ -55,13 +56,17 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.assessmentQuestion,
       name: AppPaths.assessmentQuestion,
-      builder: (context, state) => const AssessmentQuestionsView(),
+      builder: (context, state) => BlocProvider.value(
+        value: state.extra as AssessmentBloc,
+        child: const AssessmentQuestionsView(),
+      ),
     ),
     GoRoute(
       path: AppPaths.assessmentList,
       name: AppPaths.assessmentList,
       builder: (context, state) => BlocProvider(
-        create: (context) => AssessmentBloc(),
+        create: (context) => AssessmentBloc(AssessmentRepository())
+          ..add(GetUserAssessmentsEvent()),
         child: const AssessmentListView(),
       ),
     ),

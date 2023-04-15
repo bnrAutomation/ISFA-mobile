@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:i_densfa/module/assessment_module/bloc/assessment_bloc.dart';
 import 'package:i_densfa/routes.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 
 class SelectedAssessmentView extends StatelessWidget {
   const SelectedAssessmentView({super.key});
@@ -14,6 +15,7 @@ class SelectedAssessmentView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
+    final AssessmentBloc bloc = context.read();
     return Scaffold(
       backgroundColor: const Color(0xffBFD1DF),
       appBar: AppBar(
@@ -30,8 +32,8 @@ class SelectedAssessmentView extends StatelessWidget {
             Card(
               child: ListTile(
                 leading: CircleAvatar(radius: 25.w),
-                title: const Text("Ankur Malviya"),
-                subtitle: const Text("MSI & Team"),
+                title: Text(AppStorage().userDetail!.username),
+                subtitle: Text(AppStorage().userDetail!.supervisor),
               ),
             ),
             Card(
@@ -43,14 +45,15 @@ class SelectedAssessmentView extends StatelessWidget {
                   color: theme.primaryColor,
                 ),
                 title: const Text("Change Date"),
-                subtitle: const Text("From: 15 Jan  To: 18 Jan 2023 "),
+                subtitle: Text(
+                    "From: ${bloc.selectedAssessment!.startDate} To: ${bloc.selectedAssessment!.endDate}"),
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: FilledButton(
-                  onPressed: () =>
-                      context.pushNamed(AppPaths.assessmentQuestion),
+                  onPressed: () => context
+                      .pushNamed(AppPaths.assessmentQuestion, extra: bloc),
                   style: TextButton.styleFrom(
                     elevation: 2,
                     alignment: Alignment.center,
@@ -224,12 +227,12 @@ class SelectedAssessmentView extends StatelessWidget {
   List<PieChartSectionData> showingSections(BuildContext context) {
     final bloc = context.read<AssessmentBloc>();
     final theme = Theme.of(context);
-    return List.generate(bloc.tagetCompleted.length, (i) {
-      final isTouched = i == bloc.touchedIndex;
+    return List.generate(bloc.pieChartReportData.length, (i) {
+      final isTouched = i == bloc.selectedPieChartPortionId;
       final fontSize = isTouched ? 13.sp : 10.sp;
       final radius = isTouched ? 25.0 : 20.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
-      final val = bloc.tagetCompleted[i];
+      final val = bloc.pieChartReportData[i];
       final color = i == 0
           ? theme.primaryColor
           : i == 1

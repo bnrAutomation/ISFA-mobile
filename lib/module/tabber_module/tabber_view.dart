@@ -153,9 +153,10 @@ class TabberView extends StatelessWidget {
         return (bloc.sideMenuData == null)
             ? const CircularProgressIndicator()
             : BlocProvider(
-                create: (context) =>
-                    BeatplanStoresBloc(BeatPlanStoresRepository(1))
-                      ..add(BeatPlanStoresUpdateData()),
+                create: (context) => BeatplanStoresBloc(
+                    BeatPlanStoresRepository(
+                        bloc.sideMenuData!.userInfo.companyId))
+                  ..add(BeatPlanStoresUpdateData()),
                 child: const BeatPlanStoreListView(),
               );
 
@@ -241,6 +242,13 @@ class AppSideMenu extends StatelessWidget {
               );
             },
           ).toList(),
+          ListTile(
+            leading: const Icon(Icons.assessment),
+            title: const Text('Assessment'),
+            onTap: () {
+              closeDrawerAndPushView(context, AppPaths.assessmentList);
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.notifications_outlined),
             title: const Text('My Activities'),

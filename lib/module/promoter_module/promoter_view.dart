@@ -295,7 +295,7 @@ class PromoterView extends StatelessWidget {
                   style: textTheme.titleMedium
                       ?.copyWith(fontWeight: FontWeight.w700),
                 ),
-                DynamicQuestionsView(questions: dummySalesLogFormList),
+                const DynamicQuestionsView(questions: []),
               ],
             ),
           ),
@@ -310,13 +310,13 @@ class PromoterView extends StatelessWidget {
                   style: textTheme.titleMedium
                       ?.copyWith(fontWeight: FontWeight.w700),
                 ),
-                DynamicQuestionsView(questions: dummyCustomerDetails),
+                const DynamicQuestionsView(questions: []),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: DynamicQuestionsView(questions: dummyOtherInfo),
+          const Padding(
+            padding: EdgeInsets.all(15),
+            child: DynamicQuestionsView(questions: []),
           ),
           CustomMaterialButton(buttonText: "Submit", onPressed: () {}),
         ],

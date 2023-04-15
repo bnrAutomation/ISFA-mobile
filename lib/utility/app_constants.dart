@@ -65,4 +65,7 @@ class URLConstants {
 
   static const beatPlans = '$apiBaseUrl/V2/beatPlan';
   static const attendence = '$apiBaseUrl/attendance';
+  static const getAssessmentListByUserId =
+      '$apiBaseUrl/getAssessmentListByUserId';
+  static const getAssessmentQuestions = '$apiBaseUrl/getAssessmentDetails';
 }

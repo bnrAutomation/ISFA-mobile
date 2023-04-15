@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:i_densfa/module/assessment_module/bloc/assessment_bloc.dart';
 
 import '../../dynamic_questions_module/model.dart';
 import '../../dynamic_questions_module/views/dynamic_questions_view.dart';
@@ -10,6 +12,7 @@ class AssessmentQuestionsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final AssessmentBloc bloc = context.read();
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
@@ -19,42 +22,19 @@ class AssessmentQuestionsView extends StatelessWidget {
             style: textTheme.titleMedium?.copyWith(color: Colors.white),
           )),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Sales Log Form",
-                    style: textTheme.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  DynamicQuestionsView(questions: dummySalesLogFormList),
-                ],
-              ),
-            ),
-            Container(
-              color: const Color(0xff278bbc).withOpacity(0.2),
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Customer Details",
-                    style: textTheme.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  DynamicQuestionsView(questions: dummyCustomerDetails),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: DynamicQuestionsView(questions: dummyOtherInfo),
-            ),
+            DynamicQuestionsView(
+                questions: bloc.selectedAssessQuestions.map((e) {
+              return QuestionModel(
+                  isRequired: true,
+                  options: e.options,
+                  question: e.questionText,
+                  questionType: e.questionType,
+                  placholder: e.questionText);
+            }).toList()),
             Align(
                 child: FilledButton(
                     style: TextButton.styleFrom(

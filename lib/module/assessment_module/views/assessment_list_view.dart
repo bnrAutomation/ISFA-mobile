@@ -21,35 +21,49 @@ class AssessmentListView extends StatelessWidget {
                 .titleMedium
                 ?.copyWith(color: Colors.white),
           )),
-      body: ListView.separated(
-        padding: EdgeInsets.all(10.w),
-        itemCount: 10,
-        separatorBuilder: (context, index) => SizedBox(height: 4.h),
-        itemBuilder: (context, index) {
-          final colors = [
-            Theme.of(context).primaryColor,
-            const Color(0xffDB4C5B),
-            const Color(0xffEABB55),
-            const Color(0xff464646),
-          ];
-          final colr = index < colors.length
-              ? colors[index]
-              : colors[index % colors.length];
-          return Card(
-            color: colr,
-            child: ListTile(
-              textColor: Colors.white,
-              title: const Text("Scheme Update"),
-              subtitle: Align(
-                alignment: Alignment.bottomRight,
-                child: Text(
-                  "15 Jan - 18 Jan 2023",
-                  style: TextStyle(fontSize: 10.sp),
+      body: BlocBuilder<AssessmentBloc, AssessmentState>(
+        builder: (context, state) {
+          final bloc = context.read<AssessmentBloc>();
+          final list = bloc.userAssessments;
+          if (state is AssessmentListLoadingState) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (list.isEmpty) {
+            return const Center(child: Text("No assessment assigned"));
+          }
+          return ListView.separated(
+            padding: EdgeInsets.all(10.w),
+            itemCount: list.length,
+            separatorBuilder: (context, index) => SizedBox(height: 4.h),
+            itemBuilder: (context, index) {
+              final item = list[index];
+              final colors = [
+                Theme.of(context).primaryColor,
+                const Color(0xffDB4C5B),
+                const Color(0xffEABB55),
+                const Color(0xff464646),
+              ];
+              final colr = index < colors.length
+                  ? colors[index]
+                  : colors[index % colors.length];
+              return Card(
+                color: colr,
+                child: ListTile(
+                  textColor: Colors.white,
+                  title: Text(item.name),
+                  subtitle: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Text(
+                      "${item.startDate} - ${item.endDate}",
+                      style: TextStyle(fontSize: 10.sp),
+                    ),
+                  ),
+                  onTap: () {
+                    bloc.add(GetQuestionsForAssessment(item.assessmentId));
+                    context.pushNamed(AppPaths.assessment, extra: bloc);
+                  },
                 ),
-              ),
-              onTap: () => context.pushNamed(AppPaths.assessment,
-                  extra: context.read<AssessmentBloc>()),
-            ),
+              );
+            },
           );
         },
       ),

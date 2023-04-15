@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:i_densfa/module/assessment_module/assessment_model.dart';
 import 'package:i_densfa/module/ui/app_image_picker.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';
 import 'package:i_densfa/utility/extensions.dart';
@@ -148,6 +149,10 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                           question.answer ?? question.placholder ?? "DD/MM/YY"),
                     ),
                   ));
+            case QuestionInputType.boolean:
+              var q = question;
+              q.options = ["True", "False"];
+              return inputRadioTile(q, context);
           }
         },
       ),

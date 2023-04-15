@@ -8,3 +8,11 @@ class AssessmentTouchChanged extends AssessmentEvent {
 
   AssessmentTouchChanged(this.index);
 }
+
+class GetUserAssessmentsEvent extends AssessmentEvent {}
+
+class GetQuestionsForAssessment extends AssessmentEvent {
+  final int id;
+
+  GetQuestionsForAssessment(this.id);
+}
