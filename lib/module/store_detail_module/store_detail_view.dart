@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:i_densfa/module/campaign_module/campaign_view/campain_list.dart';
+import 'package:i_densfa/module/campaign_module/view/campain_list.dart';
 import 'package:i_densfa/module/promoter_module/models/compaigns_model.dart';
 import 'package:i_densfa/module/store_detail_module/storeDetal/store_detail_bloc.dart';
 

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/assessment_module/assessment_repository.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
+import 'package:i_densfa/module/campaign_module/bloc/campaign_bloc.dart';
+import 'package:i_densfa/module/campaign_module/view/campaign_questions_view.dart';
 import 'package:i_densfa/module/checkin_module/check_in_view.dart';
 import 'package:i_densfa/module/inventory_module/inventory_view.dart';
 import 'package:i_densfa/module/leaves_module/leave_view.dart';
@@ -59,6 +61,14 @@ final router = GoRouter(
       builder: (context, state) => BlocProvider.value(
         value: state.extra as AssessmentBloc,
         child: const AssessmentQuestionsView(),
+      ),
+    ),
+    GoRoute(
+      path: AppPaths.campaignQuestion,
+      name: AppPaths.campaignQuestion,
+      builder: (context, state) => BlocProvider.value(
+        value: state.extra as CampaignBloc,
+        child: const CampaignQuestionsView(),
       ),
     ),
     GoRoute(
@@ -176,6 +186,7 @@ class AppPaths {
   static const assessment = '/assessment';
   static const assessmentList = '/assessmentlist';
   static const assessmentQuestion = '/assessmentQuestion';
+  static const campaignQuestion = '/campaignQuestion';
   static const selfie = '/selfie';
   static const inventory = '/inventory';
   static const scheduleVisit = '/scheduleVisit';

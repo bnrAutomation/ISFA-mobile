@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:i_densfa/module/assessment_module/assessment_model.dart';
+import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 
 class QuestionModel {
   final String question;
@@ -10,6 +11,7 @@ class QuestionModel {
   final TextInputType? keyboardPref;
   final bool isRequired;
   AssessQuestionModel? assessmentQuestionDetails;
+  CampQuestionModel? campQuestionModel;
 
   QuestionModel(
       {required this.question,
@@ -18,7 +20,8 @@ class QuestionModel {
       this.keyboardPref,
       required this.options,
       required this.isRequired,
-      this.assessmentQuestionDetails})
+      this.assessmentQuestionDetails,
+      this.campQuestionModel})
       : assert(
             (questionType == QuestionInputType.dropdown ||
                     questionType == QuestionInputType.radio)
@@ -34,6 +37,18 @@ class QuestionModel {
       "userAnswer": answer ?? "",
       "assessmentId": assessmentQuestionDetails?.assessmentId,
       "correctAnswer": assessmentQuestionDetails?.correctAnswer,
+      "id": assessmentQuestionDetails?.id,
+      "sequence": assessmentQuestionDetails?.sequence,
+    };
+  }
+
+  Map<String, dynamic> toCampaignRequest() {
+    return {
+      "options": options,
+      "questionText": question,
+      "questionType": questionType.toStringName(),
+      "userAnswer": answer ?? "",
+      "campaignId": campQuestionModel?.id,
       "id": assessmentQuestionDetails?.id,
       "sequence": assessmentQuestionDetails?.sequence,
     };

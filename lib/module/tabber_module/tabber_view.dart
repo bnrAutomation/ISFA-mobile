@@ -6,7 +6,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beatplan_store_list_view.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beatplan_stores_repository.dart';
 import 'package:i_densfa/module/beatplan_stores_module/bloc/beatplan_stores_bloc.dart';
-import 'package:i_densfa/module/campaign_module/campaign_view.dart';
+import 'package:i_densfa/module/campaign_module/view/campaign_view.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
 import 'package:i_densfa/routes.dart';
@@ -169,7 +169,12 @@ class TabberView extends StatelessWidget {
       case 2:
         return const BeatPlanView();
       case 3:
-        return const CampaignView();
+        final storeId = bloc.sideMenuData?.userInfo.storeId ?? 0;
+        if (storeId > 0) {
+          return CampaignView(storeID: storeId);
+        } else {
+          return const Text("No store found");
+        }
       case 4:
         return const Text(
           'Analytics',

@@ -167,7 +167,6 @@ class AssessQuestionModel {
   int assessmentId;
   String questionText;
   String correctAnswer;
-  String? userAnswer;
   List<String> options;
   QuestionInputType questionType;
   int sequence;

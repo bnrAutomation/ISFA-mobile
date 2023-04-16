@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:i_densfa/module/campaign_module/campaign_model.dart';
+import 'package:i_densfa/utility/extensions.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
 class ActiveCampaign extends StatelessWidget {
-  const ActiveCampaign({super.key});
+  final CampaignDetailModel detail;
+  const ActiveCampaign({super.key, required this.detail});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class ActiveCampaign extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Campaign Name",
+                  Text(detail.name,
                       style: Theme.of(context)
                           .textTheme
                           .titleSmall
@@ -67,7 +70,8 @@ class ActiveCampaign extends StatelessWidget {
                     children: [
                       Text("Duration: ",
                           style: Theme.of(context).textTheme.bodyMedium),
-                      Text("1 Month",
+                      Text(
+                          "${detail.startDate.toStringFormat('dd MM yyyy')} - ${detail.endDate.toStringFormat('dd MM yyyy')}",
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium

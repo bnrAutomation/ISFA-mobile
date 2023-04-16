@@ -63,6 +63,7 @@ class HomeUserInfo {
       required this.userName,
       required this.email,
       required this.companyId,
+      required this.storeId,
       required this.companyName,
       required this.supervisor,
       required this.designation});
@@ -72,6 +73,7 @@ class HomeUserInfo {
   String email;
   String supervisor;
   int companyId;
+  int? storeId;
   String companyName;
   String designation;
 
@@ -85,6 +87,7 @@ class HomeUserInfo {
       userName: json["username"] ?? "N/A",
       email: json["email"],
       companyId: json["companyId"],
+      storeId: json["storeId"],
       companyName: json["companyName"] ?? "N/A",
       designation: json['designation'] ?? "",
       supervisor: json["supervisor"] ?? "");
@@ -95,5 +98,6 @@ class HomeUserInfo {
         "email": email,
         "companyId": companyId,
         "companyName": companyName,
+        "storeId": storeId,
       };
 }
