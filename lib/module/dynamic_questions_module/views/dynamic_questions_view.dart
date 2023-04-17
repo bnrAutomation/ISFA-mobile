@@ -46,7 +46,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                       question.answer = value.trim().capitalizeFirst();
                     },
                     decoration: InputDecoration(
-                        hintText: question.placholder,
+                        hintText: "Enter your answer..",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8)))),
               );
@@ -61,7 +61,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                     minLines: 3,
                     maxLines: 3,
                     decoration: InputDecoration(
-                        hintText: question.placholder,
+                        hintText: "Enter your answer..",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8)))),
               );
@@ -75,7 +75,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                     question.answer = value;
                   },
                   decoration: InputDecoration(
-                      hintText: question.placholder,
+                      hintText: "Enter your answer..",
                       suffixIcon: const Icon(Icons.currency_rupee_sharp),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8))),
@@ -96,7 +96,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                     question.answer = value;
                   },
                   decoration: InputDecoration(
-                      hintText: question.placholder,
+                      hintText: "Enter your answer..",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8))),
                   keyboardType: TextInputType.number,
@@ -112,7 +112,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                   child: AppPopup.dropDownMenu(
                     value: question.answer,
                     options: question.options,
-                    placeholder: question.placholder ?? "",
+                    placeholder: "Choose your answer",
                     onChanged: (p0) {
                       FocusScope.of(context).requestFocus(FocusNode());
                       question.answer = p0;

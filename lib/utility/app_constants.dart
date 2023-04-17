@@ -54,7 +54,11 @@ class URLConstants {
 
   static const promoterStoreDetail = '$apiBaseUrl/getPromoterDetail';
   static const getInventory = '$apiBaseUrl/getInventory';
-  static const getCompaingns = '$isfaBaseURL/storeActivity';
+
+  static const getCompaingns = '$apiBaseUrl/getCampaignListByStoreId';
+
+  //'$isfaBaseURL/storeActivity';
+
   static const getFeedbackPurposes = '$apiBaseUrl/getFeedbackPurposes';
   static const createFeedback = '$apiBaseUrl/createFeedback';
 
@@ -65,6 +69,7 @@ class URLConstants {
 
   static const beatPlans = '$apiBaseUrl/V2/beatPlan';
   static const attendence = '$apiBaseUrl/attendance';
+
   static const getAssessmentListByUserId =
       '$apiBaseUrl/getAssessmentListByUserId';
   static const getAssessmentQuestions = '$apiBaseUrl/getAssessmentDetails';

@@ -39,6 +39,10 @@ class CampaignRepository {
   }
 
   Future<bool> saveCampaignAnswers(List<Map<String, dynamic>> answers) async {
+    if (answers.isEmpty) {
+      return false;
+    }
+
     final bodyMap = {
       "answerData": answers,
       "campaignId": answers.first['campaignId']

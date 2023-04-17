@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:i_densfa/module/promoter_module/models/compaigns_model.dart';
+import 'package:i_densfa/module/campaign_module/campaign_model.dart';
+
 import 'package:i_densfa/module/promoter_module/models/inventory_detail_model.dart';
 import 'package:i_densfa/module/promoter_module/models/promoter_store_detail_model.dart';
 import 'package:i_densfa/module/promoter_module/promoter_repository.dart';
@@ -18,7 +19,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
   InventoryDetailModel? inventoryDetail;
   PromoterStoreDetailModel? storeDetail;
   List<InventoryProductDetailModel> filteredList = [];
-  List<CompaignsModel> compaigns = [];
+  List<CampaignDetailModel> compaigns = [];
   bool isMarkedIn = false;
   PromoterBloc(this.repo) : super(PromoterInitial()) {
     on((GetInventoryDetailEvent event, emit) async =>
@@ -42,21 +43,28 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
   }
 
   Future<void> gotoCompaignEvent(GotoCompaignEvent event, emit) async {
-    if (storeDetail?.storeId == null) {
-      emit(PromoterToastMessageState('Store not found'));
-      return;
-    }
-    compaigns =
-        await repo.getCompaignList(storeDetail!.storeId).catchError((onError) {
-      emit(PromoterToastMessageState(onError.toString()));
-      return <CompaignsModel>[];
-    });
+    emit(CompaignsLoadedPromoterState());
+    // if (storeDetail?.storeId == null) {
+    //   emit(PromoterToastMessageState('Store not found'));
+    //   return;
+    // }
+    // List<CampaignDetailModel> compaignsResponse =
+    //     await repo.getCompaignList(storeDetail!.storeId).catchError((onError) {
+    //   emit(PromoterToastMessageState(onError.toString()));
+    //   return <CampaignDetailModel>[];
+    // });
 
-    if (compaigns.isNotEmpty) {
-      emit(CompaignsLoadedPromoterState());
-    } else {
-      emit(PromoterToastMessageState("No Campaign"));
-    }
+    // final now = DateTime.now();
+    // compaigns = compaignsResponse
+    //     .where((element) =>
+    //         element.startDate.isBefore(now) && element.endDate.isAfter(now))
+    //     .toList();
+
+    // if (compaigns.isNotEmpty) {
+    //   emit(CompaignsLoadedPromoterState());
+    // } else {
+    //   emit(PromoterToastMessageState("No Campaign"));
+    // }
   }
 
   Future<void> _markOutStore(PromoterCheckOutStoreEvent event, emit) async {
@@ -98,13 +106,14 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
       emit(PromoterToastMessageState('Store not found'));
       return;
     }
-
     emit(PromoterStoreDetailLoadingState());
     final loc = await Device().userPosition().catchError((onError) {
       emit(PromoterToastMessageState(onError.toString()));
       emit(PromoterStoreDetailLoadedState());
       return Future<Position>.error(onError);
     });
+
+    // if(){}
 
     final img = await ImagePicker().pickImage(source: ImageSource.camera);
     if (img == null) {

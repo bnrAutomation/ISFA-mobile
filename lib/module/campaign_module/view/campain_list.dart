@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:i_densfa/module/promoter_module/models/compaigns_model.dart';
+import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 class CampaignListItem extends StatelessWidget {
-  final CompaignsModel item;
+  final CampaignDetailModel item;
   const CampaignListItem({super.key, required this.item});
 
   @override
@@ -21,14 +21,14 @@ class CampaignListItem extends StatelessWidget {
                 height: 5,
               ),
               Text(
-                item.activityname,
+                item.name,
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge
                     ?.copyWith(fontWeight: FontWeight.w600, color: Colors.blue),
               ),
               Text(
-                "Create By : ${item.createdBy}",
+                "Description : ${item.companyId}",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(
@@ -38,22 +38,6 @@ class CampaignListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "To : ",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    item.dateCreated.toStringFormat("d MMMM yyyy"),
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text(
                     "From : ",
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
@@ -62,9 +46,28 @@ class CampaignListItem extends StatelessWidget {
                         ?.copyWith(fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    item.fromdate.toStringFormat("d MMMM yyyy"),
+                    item.startDate.toStringFormat("d MMMM yyyy"),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "To : ",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    item.endDate.toStringFormat("d MMMM yyyy"),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(
+                    width: 5,
                   ),
                 ],
               ),

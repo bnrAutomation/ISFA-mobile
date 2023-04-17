@@ -5,8 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:i_densfa/module/campaign_module/view/campain_list.dart';
-import 'package:i_densfa/module/promoter_module/models/compaigns_model.dart';
+import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
+
+import 'package:i_densfa/module/campaign_module/view/campaign_view.dart';
 import 'package:i_densfa/module/store_detail_module/storeDetal/store_detail_bloc.dart';
 
 import 'package:i_densfa/module/ui/app_pop_view.dart';
@@ -54,7 +55,7 @@ class StoreDetailView extends StatelessWidget {
               final StoreDetailBloc bloc = context.read();
               AppPopup.showAppBottomSheet(
                   context: context,
-                  child: _openCampaignSheet(context, bloc.compaigns));
+                  child: _openCampaignSheet(context, bloc.beatPlanModel));
             }
           },
           builder: (context, state) {
@@ -336,7 +337,7 @@ class StoreDetailView extends StatelessWidget {
     );
   }
 
-  Widget _openCampaignSheet(BuildContext context, List<CompaignsModel> items) {
+  Widget _openCampaignSheet(BuildContext context, BeatPlanModel beatPlanModel) {
     final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -349,18 +350,9 @@ class StoreDetailView extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Expanded(
-            child: ListView.separated(
-                itemCount: items.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 5),
-                itemBuilder: (context, index) => InkWell(
-                    onTap: () {
-                      // Navigator.pop(context);
-                      // AppPopup.showAppBottomSheet(
-                      //   context: context,
-                      //   child: salesLogForm(textTheme),
-                      // );
-                    },
-                    child: CampaignListItem(item: items[index]))),
+            child: CampaignView(
+              storeID: beatPlanModel.storeId,
+            ),
           ),
         ],
       ),

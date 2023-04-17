@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
-import 'package:i_densfa/module/promoter_module/models/compaigns_model.dart';
+import 'package:i_densfa/module/campaign_module/campaign_model.dart';
+
 import 'package:i_densfa/module/store_detail_module/store_detail_repositry.dart';
 import 'package:i_densfa/utility/device_helper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,7 +13,7 @@ part 'store_detail_state.dart';
 
 class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
   BeatPlanModel beatPlanModel;
-  List<CompaignsModel> compaigns = [];
+  List<CampaignDetailModel> compaigns = [];
   final StoreDetailRepository repo;
   StoreDetailBloc(this.repo, this.beatPlanModel) : super(StoreDetailInitial()) {
     on<StoreDetailEvent>((event, emit) {});
@@ -22,16 +23,25 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
   }
 
   Future<void> gotoCompaignEvent(GotoCompaignEvent event, emit) async {
-    compaigns = await repo.getCompaignList(event.storeId).catchError((onError) {
-      emit(StoreDetailToastMessageState(onError.toString()));
-      return <CompaignsModel>[];
-    });
+    emit(CompaignsLoadedStoreDetailState());
+    // List<CampaignDetailModel> compaignsResponse =
+    //     await repo.getCompaignList(event.storeId).catchError((onError) {
+    //   emit(StoreDetailToastMessageState(onError.toString()));
 
-    if (compaigns.isNotEmpty) {
-      emit(CompaignsLoadedStoreDetailState());
-    } else {
-      emit(StoreDetailToastMessageState("No Campaign"));
-    }
+    //   return <CampaignDetailModel>[];
+    // });
+
+    // final now = DateTime.now();
+    // compaigns = compaignsResponse
+    //     .where((element) =>
+    //         element.startDate.isBefore(now) && element.endDate.isAfter(now))
+    //     .toList();
+
+    // if (compaigns.isNotEmpty) {
+    //   emit(CompaignsLoadedStoreDetailState());
+    // } else {
+    //   emit(StoreDetailToastMessageState("No Campaign"));
+    // }
   }
 
   Future<void> _checkInStore(

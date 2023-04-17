@@ -1,14 +1,13 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/module/promoter_module/models/inventory_detail_model.dart';
 import 'package:i_densfa/module/promoter_module/models/promoter_store_detail_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-
-import 'models/compaigns_model.dart';
 
 class PromoterRepository {
   final userId = AppStorage().userDetail!.id;
@@ -83,22 +82,16 @@ class PromoterRepository {
     }
   }
 
-  Future<List<CompaignsModel>> getCompaignList(int storeId) async {
+  Future<List<CampaignDetailModel>> getCompaignList(int storeId) async {
     final response =
-        await get(Uri.parse('${URLConstants.getCompaingns}/$storeId'));
+        await get(Uri.parse("${URLConstants.getCompaingns}/$storeId"));
 
     if (response.statusCode == 200) {
-      final resJson = json.decode(response.body);
-      if (resJson['dataList'] is List) {
-        return (resJson['dataList'] as List)
-            .map((e) => CompaignsModel.fromJson(e))
-            .toList();
-      } else {
-        return [];
-      }
+      return UserCampaignsModel.fromRawJson(response.body).dataList ?? [];
     } else {
-      final resJson = json.decode(response.body);
-      throw resJson['message'];
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : jsonDecode(response.body)['message'] ?? "Something went wrong";
     }
   }
 }

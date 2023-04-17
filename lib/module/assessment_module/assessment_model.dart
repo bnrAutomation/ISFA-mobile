@@ -79,8 +79,9 @@ class AssessmentDetailModel {
         imageName: assessJson["imageName"],
         duration: assessJson["duration"],
         companyId: assessJson["companyId"],
-        userScored:
-            AssessmentScoreModel.fromJson(json["assessmentScoreResponse"]));
+        userScored: json["assessmentScoreResponse"] == null
+            ? null
+            : AssessmentScoreModel.fromJson(json["assessmentScoreResponse"]));
   }
 
   Map<String, dynamic> toJson() => {

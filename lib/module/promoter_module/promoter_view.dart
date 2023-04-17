@@ -5,12 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:i_densfa/module/campaign_module/campaign_model.dart';
+import 'package:i_densfa/module/campaign_module/view/campaign_view.dart';
 import 'package:i_densfa/module/campaign_module/view/campain_list.dart';
 import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions_view.dart';
 import 'package:i_densfa/module/inventory_module/modify_product_quantity/bloc/modify_quantity_bloc.dart';
 import 'package:i_densfa/module/inventory_module/modify_product_quantity/repository.dart';
 import 'package:i_densfa/module/promoter_module/feedback/feedback_view.dart';
-import 'package:i_densfa/module/promoter_module/models/compaigns_model.dart';
+import 'package:i_densfa/module/promoter_module/models/promoter_store_detail_model.dart';
+
 import 'package:i_densfa/module/ui/custom_image_button.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
@@ -152,7 +155,7 @@ class PromoterView extends StatelessWidget {
           final PromoterBloc bloc = context.read();
           AppPopup.showAppBottomSheet(
               context: context,
-              child: _openCampaignSheet(context, bloc.compaigns));
+              child: _openCampaignSheet(context, bloc.storeDetail!));
         }
       },
       builder: (context, state) {
@@ -248,7 +251,8 @@ class PromoterView extends StatelessWidget {
     );
   }
 
-  Widget _openCampaignSheet(BuildContext context, List<CompaignsModel> items) {
+  Widget _openCampaignSheet(
+      BuildContext context, PromoterStoreDetailModel storeDetail) {
     final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -260,20 +264,26 @@ class PromoterView extends StatelessWidget {
             style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
+
           Expanded(
-            child: ListView.separated(
-                itemCount: items.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 5),
-                itemBuilder: (context, index) => InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                      AppPopup.showAppBottomSheet(
-                        context: context,
-                        child: salesLogForm(textTheme),
-                      );
-                    },
-                    child: CampaignListItem(item: items[index]))),
+            child: CampaignView(
+              storeID: storeDetail.storeId,
+            ),
           ),
+          // Expanded(
+          //   child: ListView.separated(
+          //       itemCount: items.length,
+          //       separatorBuilder: (context, index) => const SizedBox(height: 5),
+          //       itemBuilder: (context, index) => InkWell(
+          //           onTap: () {
+          //             // Navigator.pop(context);
+          //             // AppPopup.showAppBottomSheet(
+          //             //   context: context,
+          //             //   child: salesLogForm(textTheme),
+          //             // );
+          //           },
+          //           child: CampaignListItem(item: items[index]))),
+          // ),
         ],
       ),
     );
