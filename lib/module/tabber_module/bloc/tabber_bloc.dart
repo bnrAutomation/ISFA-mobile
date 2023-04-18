@@ -55,7 +55,8 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
     final response = await repo
         .startEndDuty(event.file!, loc.latitude, loc.longitude, true)
         .catchError((onError) {
-      return onError.toString();
+      emit(TabbarSnackBarMessageState(onError.toString()));
+      return Future<String>.error(onError);
     });
 
     AppStorage().isDutyStarted = true;
@@ -64,15 +65,14 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
   }
 
   Future<void> _endDuty(EndDutyStatusTabberEvent event, emit) async {
+    if (AppStorage().isMarkedIn ?? true) {
+      emit(TabbarSnackBarMessageState('Please Markout from store first'));
+      return;
+    }
     final loc = await Device().userPosition().onError((error, stackTrace) {
       emit(TabbarSnackBarMessageState(error.toString()));
       throw error ?? stackTrace;
     });
-
-    if (AppStorage().isMarkedIn) {
-      emit(TabbarSnackBarMessageState('Please Markout from store first'));
-      return;
-    }
 
     if (event.file == null) {
       emit(TabbarSnackBarMessageState("Please add image"));
@@ -80,7 +80,8 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
     final response = await repo
         .startEndDuty(event.file!, loc.latitude, loc.longitude, false)
         .catchError((onError) {
-      return onError.toString();
+      emit(TabbarSnackBarMessageState(onError.toString()));
+      return Future<String>.error(onError);
     });
 
     AppStorage().isDutyStarted = false;

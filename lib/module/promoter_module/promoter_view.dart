@@ -70,7 +70,7 @@ class PromoterView extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: BlocBuilder<PromoterBloc, PromoterState>(
             builder: (context, state) {
-              if (!AppStorage().isMarkedIn) {
+              if (AppStorage().isMarkedIn != true) {
                 return const SizedBox();
               }
               return Row(
@@ -209,7 +209,7 @@ class PromoterView extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              if (!AppStorage().isMarkedIn)
+              if (AppStorage().isMarkedIn != true)
                 CustomMaterialButton(
                     buttonText: state is PromoterStoreDetailLoadingState
                         ? "Loading..."
@@ -227,7 +227,7 @@ class PromoterView extends StatelessWidget {
                       }
                     }),
               const SizedBox(height: 8),
-              if (AppStorage().isMarkedIn)
+              if (AppStorage().isMarkedIn == true)
                 CustomMaterialButton(
                     gradient: const LinearGradient(
                       colors: <Color>[Color(0XFFC92434), Color(0XFF003D5B)],

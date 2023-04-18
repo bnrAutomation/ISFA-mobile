@@ -49,6 +49,6 @@ class AppStorage {
 
   bool get isDutyStarted => _box.get("isDutyStarted") ?? false;
   set isDutyStarted(bool newVal) => _box.put("isDutyStarted", newVal);
-  bool get isMarkedIn => _box.get("isMarkedIn") ?? false;
-  set isMarkedIn(bool newVal) => _box.put("isMarkedIn", newVal);
+  bool? get isMarkedIn => _box.get("isMarkedIn");
+  set isMarkedIn(bool? newVal) => _box.put("isMarkedIn", newVal);
 }
