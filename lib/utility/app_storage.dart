@@ -46,4 +46,9 @@ class AppStorage {
   }
 
   set homeInfo(SideMenuModel? info) => _box.put("home_info", info?.toRawJson());
+
+  bool get isDutyStarted => _box.get("isDutyStarted") ?? false;
+  set isDutyStarted(bool newVal) => _box.put("isDutyStarted", newVal);
+  bool get isMarkedIn => _box.get("isMarkedIn") ?? false;
+  set isMarkedIn(bool newVal) => _box.put("isMarkedIn", newVal);
 }

@@ -14,7 +14,6 @@ part 'tabber_state.dart';
 class TabberBloc extends Bloc<TabberEvent, TabberState> {
   final TabbarRepository repo;
   int selectIndex = 0;
-  bool isOnline = false;
   SideMenuModel? sideMenuData;
   TabberBloc(this.repo) : super(TabberInitial()) {
     on<TabberEvent>((event, emit) {
@@ -59,7 +58,7 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
       return onError.toString();
     });
 
-    isOnline = true;
+    AppStorage().isDutyStarted = true;
     emit(TabbarSnackBarMessageState(response));
     emit(OnlineStatusUpdateState());
   }
@@ -70,6 +69,11 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
       throw error ?? stackTrace;
     });
 
+    if (AppStorage().isMarkedIn) {
+      emit(TabbarSnackBarMessageState('Please Markout from store first'));
+      return;
+    }
+
     if (event.file == null) {
       emit(TabbarSnackBarMessageState("Please add image"));
     }
@@ -79,7 +83,7 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
       return onError.toString();
     });
 
-    isOnline = false;
+    AppStorage().isDutyStarted = false;
     emit(TabbarSnackBarMessageState(response));
     emit(OnlineStatusUpdateState());
   }

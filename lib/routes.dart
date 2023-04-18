@@ -9,7 +9,6 @@ import 'package:i_densfa/module/checkin_module/check_in_view.dart';
 import 'package:i_densfa/module/inventory_module/inventory_view.dart';
 import 'package:i_densfa/module/leaves_module/leave_view.dart';
 import 'package:i_densfa/module/login_module/login_view.dart';
-import 'package:i_densfa/module/my_activity_module/my_activity_view.dart';
 import 'package:i_densfa/module/promoter_module/bloc/promoter_bloc.dart';
 import 'package:i_densfa/module/promoter_module/promoter_view.dart';
 import 'package:i_densfa/module/store_detail_module/storeDetal/store_detail_bloc.dart';
@@ -21,6 +20,7 @@ import 'module/assessment_module/bloc/assessment_bloc.dart';
 import 'module/assessment_module/views/assessment_list_view.dart';
 import 'module/assessment_module/views/assessment_questions_view.dart';
 import 'module/assessment_module/views/selected_assessment_view.dart';
+import 'module/attendance_module/attendance_view.dart';
 import 'module/beatplan_stores_module/schedule_visit/bloc/schedule_visit_call_bloc.dart';
 import 'module/beatplan_stores_module/schedule_visit/schedule_visit_view.dart';
 import 'module/forgot_password_module/forgot_password_view.dart';
@@ -148,9 +148,9 @@ final router = GoRouter(
       builder: (context, state) => const CheckInView(),
     ),
     GoRoute(
-      path: AppPaths.activity,
-      name: AppPaths.activity,
-      builder: (context, state) => const MyActivityView(),
+      path: AppPaths.attendance,
+      name: AppPaths.attendance,
+      builder: (context, state) => const AttendanceView(),
     ),
     GoRoute(
       path: AppPaths.promoter,
@@ -195,7 +195,7 @@ class AppPaths {
   static const passVerification = '/passVerification';
   static const forgotpass = '/forgotpass';
   static const checkin = '/checkin';
-  static const activity = '/activity';
+  static const attendance = '/attendance';
   static const leave = '/leave';
   static const promoter = '/promoter';
 }

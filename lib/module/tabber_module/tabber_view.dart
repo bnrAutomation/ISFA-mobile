@@ -14,7 +14,6 @@ import 'package:i_densfa/utility/app_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../utility/network_helper.dart';
-import '../beat_plan_module/beat_plan_view.dart';
 import 'bloc/tabber_bloc.dart';
 
 class TabberView extends StatelessWidget {
@@ -118,10 +117,10 @@ class TabberView extends StatelessWidget {
                         icon: Icons.book_online,
                         text: 'Learner',
                       ),
-                      GButton(
-                        icon: Icons.leaderboard_outlined,
-                        text: 'Leaderboard',
-                      ),
+                      // GButton(
+                      //   icon: Icons.leaderboard_outlined,
+                      //   text: 'Leaderboard',
+                      // ),
                       GButton(
                         icon: Icons.campaign_outlined,
                         text: 'Campaign',
@@ -166,16 +165,16 @@ class TabberView extends StatelessWidget {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
         );
 
+      // case 2:
+      //   return const BeatPlanView();
       case 2:
-        return const BeatPlanView();
-      case 3:
         final storeId = bloc.sideMenuData?.userInfo.storeId ?? 0;
         if (storeId > 0) {
           return CampaignView(storeID: storeId);
         } else {
           return const Text("No store found");
         }
-      case 4:
+      case 3:
         return const Text(
           'Analytics',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
@@ -198,10 +197,7 @@ class AppSideMenu extends StatelessWidget {
           UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: Theme.of(context).primaryColor),
               currentAccountPicture: const CircleAvatar(),
-              otherAccountsPictures:
-                  AppStorage().userDetail?.designation != "fwp"
-                      ? null
-                      : [dutyStatus()],
+              otherAccountsPictures: [dutyStatus()],
               accountName: Text(
                   "${data.userInfo.userName} (${data.userInfo.designation})"),
               accountEmail: Text(data.userInfo.companyName)),
@@ -232,10 +228,10 @@ class AppSideMenu extends StatelessWidget {
                       closeDrawerAndPushView(context, AppPaths.leave);
                       break;
                     case 'attendance':
-                      Navigator.pop(context);
+                      closeDrawerAndPushView(context, AppPaths.attendance);
                       break;
                     case 'My Activities':
-                      closeDrawerAndPushView(context, AppPaths.activity);
+                      Navigator.pop(context);
                       break;
                     case 'Assessment':
                       closeDrawerAndPushView(context, AppPaths.assessmentList);
@@ -258,7 +254,7 @@ class AppSideMenu extends StatelessWidget {
             leading: const Icon(Icons.notifications_outlined),
             title: const Text('My Activities'),
             onTap: () {
-              closeDrawerAndPushView(context, AppPaths.activity);
+              Scaffold.of(context).closeDrawer();
             },
           ),
           ListTile(
@@ -278,13 +274,6 @@ class AppSideMenu extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.help_outline),
             title: const Text('Help'),
-            onTap: () {
-              Scaffold.of(context).closeDrawer();
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.live_help_outlined),
-            title: const Text('Query'),
             onTap: () {
               Scaffold.of(context).closeDrawer();
             },
@@ -312,7 +301,7 @@ class AppSideMenu extends StatelessWidget {
             child: Column(
           children: [
             CupertinoSwitch(
-                value: bloc.isOnline,
+                value: AppStorage().isDutyStarted,
                 onChanged: (newVal) async {
                   Scaffold.of(context).closeDrawer();
                   final XFile? image =
@@ -324,7 +313,7 @@ class AppSideMenu extends StatelessWidget {
                   }
                 }),
             Text(
-              bloc.isOnline ? "On-Duty" : "Off-Duty",
+              AppStorage().isDutyStarted ? "On-Duty" : "Off-Duty",
               style: const TextStyle(color: Colors.white),
             )
           ],

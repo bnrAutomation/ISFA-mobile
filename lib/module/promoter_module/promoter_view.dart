@@ -17,6 +17,7 @@ import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 import '../inventory_module/modify_product_quantity/view.dart';
 import 'bloc/promoter_bloc.dart';
 
@@ -69,8 +70,7 @@ class PromoterView extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: BlocBuilder<PromoterBloc, PromoterState>(
             builder: (context, state) {
-              final PromoterBloc bloc = context.read();
-              if (!bloc.isMarkedIn) {
+              if (!AppStorage().isMarkedIn) {
                 return const SizedBox();
               }
               return Row(
@@ -209,7 +209,7 @@ class PromoterView extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              if (!bloc.isMarkedIn)
+              if (!AppStorage().isMarkedIn)
                 CustomMaterialButton(
                     buttonText: state is PromoterStoreDetailLoadingState
                         ? "Loading..."
@@ -227,7 +227,7 @@ class PromoterView extends StatelessWidget {
                       }
                     }),
               const SizedBox(height: 8),
-              if (bloc.isMarkedIn)
+              if (AppStorage().isMarkedIn)
                 CustomMaterialButton(
                     gradient: const LinearGradient(
                       colors: <Color>[Color(0XFFC92434), Color(0XFF003D5B)],

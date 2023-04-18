@@ -1,10 +1,11 @@
 import 'package:http/http.dart';
-import 'package:i_densfa/module/my_activity_module/model/my_activity_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
-class MyActivityRepository {
+import 'model/attendance_model.dart';
+
+class AttendanceRepository {
   final userId = AppStorage().userDetail!.id;
   final compId = AppStorage().homeInfo!.userInfo.companyId;
 
