@@ -6,6 +6,7 @@ import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/module/promoter_module/models/inventory_detail_model.dart';
 import 'package:i_densfa/module/promoter_module/models/promoter_store_detail_model.dart';
 import 'package:i_densfa/module/promoter_module/promoter_repository.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -20,7 +21,6 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
   PromoterStoreDetailModel? storeDetail;
   List<InventoryProductDetailModel> filteredList = [];
   List<CampaignDetailModel> compaigns = [];
-  bool isMarkedIn = false;
   PromoterBloc(this.repo) : super(PromoterInitial()) {
     on((GetInventoryDetailEvent event, emit) async =>
         await _getInventoryDetails(emit));
@@ -96,7 +96,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     });
 
     emit(PromoterToastMessageState(response));
-    isMarkedIn = false;
+    AppStorage().isMarkedIn = false;
     emit(PromoterStoreDetailLoadedState());
   }
 
@@ -104,6 +104,10 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
       PromoterCheckInStoreEvent event, Emitter<PromoterState> emit) async {
     if (storeDetail?.storeId == null) {
       emit(PromoterToastMessageState('Store not found'));
+      return;
+    }
+    if (!AppStorage().isDutyStarted) {
+      emit(PromoterToastMessageState('Please start your Duty first'));
       return;
     }
     emit(PromoterStoreDetailLoadingState());
@@ -131,7 +135,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     });
 
     emit(PromoterToastMessageState(response));
-    isMarkedIn = true;
+    AppStorage().isMarkedIn = true;
     emit(PromoterStoreDetailLoadedState());
   }
 
@@ -156,7 +160,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     emit(PromoterStoreDetailLoadingState());
     await repo.getStoreDetails().then((value) {
       storeDetail = value;
-      isMarkedIn = value.markIn;
+      AppStorage().isMarkedIn = value.markIn;
       emit(PromoterStoreDetailLoadedState());
     }).catchError((err) {
       emit(PromoterToastMessageState(err.toString()));

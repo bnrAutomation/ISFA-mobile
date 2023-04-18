@@ -55,8 +55,8 @@ class AttendanceData {
     required this.dutyTimeSpan,
   });
   final DateTime date;
-  final String inTime;
-  final String outTime;
+  final String? inTime;
+  final String? outTime;
   final int? storeid;
   final String timeSpan;
   final String lastOutTime;
@@ -66,8 +66,8 @@ class AttendanceData {
   factory AttendanceData.fromJson(Map<String, dynamic> json) => AttendanceData(
       date:
           json['date'] == null ? DateTime.now() : DateTime.parse(json['date']),
-      inTime: json['inTime'] ?? "",
-      outTime: json['outTime'] ?? "",
+      inTime: json['inTime'],
+      outTime: json['outTime'],
       storeid: json['storeid'],
       timeSpan: json['timeSpan'] ?? "",
       lastOutTime: json['lastOutTime'] ?? "",

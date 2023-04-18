@@ -2,34 +2,34 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:i_densfa/module/my_activity_module/model/my_activity_model.dart';
-import 'package:i_densfa/module/my_activity_module/my_activity_repository.dart';
+import 'package:i_densfa/module/attendance_module/attendance_repository.dart';
+import 'package:i_densfa/module/attendance_module/model/attendance_model.dart';
 
-part 'myactivity_event.dart';
-part 'myactivity_state.dart';
+part 'attendance_event.dart';
+part 'attendance_state.dart';
 
-class MyActivityBloc extends Bloc<MyActivityEvent, MyActivityState> {
+class AttendanceBloc extends Bloc<MyActivityEvent, AttendanceState> {
   DateTime selected = DateTime.now();
-  final MyActivityRepository repo;
+  final AttendanceRepository repo;
   List<AttendanceData> attandenceData = [];
-  MyActivityBloc(this.repo) : super(MyActivityInitial()) {
-    on<GetActivityEvent>(
+  AttendanceBloc(this.repo) : super(MyActivityInitial()) {
+    on<GetAttendanceEvent>(
         (event, emit) async => await _getAttendance(emit, selected));
     on<MyActivityEvent>((event, emit) {
       if (event is MyActivityChangeMonth) {
         selected = event.dateTime;
         emit(MyAcivityMonthChangeState());
-        add(GetActivityEvent());
+        add(GetAttendanceEvent());
       }
     });
   }
 
   Future<void> _getAttendance(
-      Emitter<MyActivityState> emit, DateTime dateTime) async {
-    emit(MyAcivityLoadingState());
+      Emitter<AttendanceState> emit, DateTime dateTime) async {
+    emit(AttendanceLoadingState());
     var list = await repo.getMyActivity(dateTime: dateTime).catchError((error) {
       emit(MyActivityWithData());
-      emit(MyActivityShowSnack(error.toString()));
+      emit(AttendanceShowSnack(error.toString()));
       return <AttendanceData>[];
     });
 
