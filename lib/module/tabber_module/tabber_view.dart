@@ -204,7 +204,8 @@ class AppSideMenu extends StatelessWidget {
           ...data.menu.where((element) => element.isActive).map(
             (e) {
               if (e.key == "promoter" &&
-                  AppStorage().userDetail?.designation == "fwp") {
+                  ["fwp", "manager"]
+                      .contains(AppStorage().userDetail?.designation)) {
                 return const SizedBox();
               }
               return ListTile(
