@@ -4,12 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:i_densfa/module/assessment_module/assessment_model.dart';
 import 'package:i_densfa/module/campaign_module/bloc/campaign_bloc.dart';
+import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/module/campaign_module/campaign_repository.dart';
 import 'package:i_densfa/module/campaign_module/view/campain_list.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 class CampaignView extends StatelessWidget {
   final int storeID;
@@ -37,7 +38,7 @@ class CampaignView extends StatelessWidget {
                             onTap: () {
                               bloc.add(GetQuestionsForCampaign(
                                   bloc.storeCampaigns[index].campaignId));
-                              context.pushNamed(AppPaths.campaignQuestion,
+                              context.push(AppPaths.selectedCampaignView,
                                   extra: bloc);
                             },
                             child: CampaignListItem(
@@ -86,8 +87,7 @@ class CampaignSearchBar extends StatelessWidget {
 }
 
 class SelectedCampaignView extends StatelessWidget {
-  const SelectedCampaignView({super.key, required this.userScored});
-  final AssessmentScoreModel userScored;
+  const SelectedCampaignView({super.key});
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -98,116 +98,133 @@ class SelectedCampaignView extends StatelessWidget {
           backgroundColor: theme.primaryColor,
           iconTheme: const IconThemeData(color: Colors.white),
           title: Text(
-            "Assessment",
+            "Campaign",
             style: textTheme.titleMedium?.copyWith(color: Colors.white),
           )),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Card(
-              child: ListTile(
-                leading: CircleAvatar(radius: 25.w),
-                title: Text(AppStorage().userDetail!.username),
-                subtitle: Text(AppStorage().userDetail!.supervisor),
-              ),
-            ),
-            Card(
-              child: ListTile(
-                textColor: theme.primaryColor,
-                horizontalTitleGap: 0,
-                leading: Icon(
-                  Icons.calendar_month_outlined,
-                  color: theme.primaryColor,
-                ),
-                subtitle: const Text("From: startDate To: endDate"),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: FilledButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    elevation: 2,
-                    alignment: Alignment.center,
-                    backgroundColor: theme.primaryColor,
+        child: BlocBuilder<CampaignBloc, CampaignState>(
+          builder: (context, state) {
+            final CampaignBloc bloc = context.read();
+            final selectedCamp = bloc.selectedCampaign;
+            final CampaignDataModel? campaignData =
+                bloc.selectedCampaign?.campaignData;
+            return Column(
+              children: [
+                Card(
+                  child: ListTile(
+                    leading: CircleAvatar(radius: 25.w),
+                    title: Text(AppStorage().userDetail!.username),
+                    subtitle: Text(AppStorage().userDetail!.supervisor),
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40.w),
-                    child: Text('Enter Questionnaire',
-                        style: GoogleFonts.inter(
-                            fontSize: 14.sp, color: Colors.white)),
-                  )),
-            ),
-            Card(
-              child: Padding(
-                padding: EdgeInsets.all(12.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      userScored.targetedSubDealers.toString(),
-                      style: TextStyle(
-                          color: theme.primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.sp),
-                    ),
-                    const Text("Sub Dealer Targeted"),
-                    SizedBox(height: 6.h),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.w),
-                      child: LinearProgressIndicator(
-                        backgroundColor: Colors.grey.shade400,
-                        color: Theme.of(context).primaryColor,
-                        minHeight: 40,
-                        value: userScored.targetedSubDealers /
-                            userScored.subDetalers,
-                      ),
-                    ),
-                    SizedBox(height: 15.h),
-                    Text(
-                      userScored.includedSubDealers.toString(),
-                      style: TextStyle(
-                          color: theme.primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.sp),
-                    ),
-                    const Text("Sub Dealer Included in Responses"),
-                    SizedBox(height: 6.h),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.w),
-                      child: LinearProgressIndicator(
-                        backgroundColor: Colors.grey.shade400,
-                        color: const Color(0xffDB4C5B),
-                        minHeight: 40,
-                        value: userScored.includedSubDealers /
-                            userScored.targetedSubDealers,
-                      ),
-                    ),
-                    SizedBox(height: 15.h),
-                    Text(
-                      userScored.totalResponse.toString(),
-                      style: TextStyle(
-                          color: theme.primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.sp),
-                    ),
-                    const Text("Total Responses"),
-                    SizedBox(height: 6.h),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.w),
-                      child: LinearProgressIndicator(
-                        backgroundColor: Colors.grey.shade400,
-                        color: const Color(0xffFFBF00),
-                        minHeight: 40,
-                        value: 0.7,
-                      ),
-                    )
-                  ],
                 ),
-              ),
-            )
-          ],
+                if (selectedCamp != null)
+                  Card(
+                    child: ListTile(
+                      textColor: theme.primaryColor,
+                      horizontalTitleGap: 0,
+                      leading: Icon(
+                        Icons.calendar_month_outlined,
+                        color: theme.primaryColor,
+                      ),
+                      title: Text(selectedCamp.name),
+                      subtitle: Text(
+                          "From ${selectedCamp.startDate.toStringFormat('dd MMM yy')} To ${selectedCamp.endDate.toStringFormat('dd MMM yy')}"),
+                    ),
+                  ),
+                if (selectedCamp != null &&
+                    DateTime.now().isBefore(selectedCamp.endDate))
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: FilledButton(
+                        onPressed: () {
+                          context.pushNamed(AppPaths.campaignQuestion,
+                              extra: bloc);
+                        },
+                        style: TextButton.styleFrom(
+                          elevation: 2,
+                          alignment: Alignment.center,
+                          backgroundColor: theme.primaryColor,
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 40.w),
+                          child: Text('Enter Questionnaire',
+                              style: GoogleFonts.inter(
+                                  fontSize: 14.sp, color: Colors.white)),
+                        )),
+                  ),
+                if (campaignData != null)
+                  Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(12.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            campaignData.targetedSubDealers.toString(),
+                            style: TextStyle(
+                                color: theme.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.sp),
+                          ),
+                          const Text("Sub Dealer Targeted"),
+                          SizedBox(height: 6.h),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20.w),
+                            child: LinearProgressIndicator(
+                              backgroundColor: Colors.grey.shade400,
+                              color: Theme.of(context).primaryColor,
+                              minHeight: 40,
+                              value: campaignData.targetedSubDealers /
+                                  campaignData.subDetalers,
+                            ),
+                          ),
+                          SizedBox(height: 15.h),
+                          Text(
+                            campaignData.includedSubDealers.toString(),
+                            style: TextStyle(
+                                color: theme.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.sp),
+                          ),
+                          const Text("Sub Dealer Included in Responses"),
+                          SizedBox(height: 6.h),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20.w),
+                            child: LinearProgressIndicator(
+                              backgroundColor: Colors.grey.shade400,
+                              color: const Color(0xffDB4C5B),
+                              minHeight: 40,
+                              value: campaignData.includedSubDealers /
+                                  campaignData.targetedSubDealers,
+                            ),
+                          ),
+                          SizedBox(height: 15.h),
+                          Text(
+                            campaignData.totalResponse.toString(),
+                            style: TextStyle(
+                                color: theme.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.sp),
+                          ),
+                          const Text("Total Responses"),
+                          SizedBox(height: 6.h),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20.w),
+                            child: LinearProgressIndicator(
+                              backgroundColor: Colors.grey.shade400,
+                              color: const Color(0xffFFBF00),
+                              minHeight: 40,
+                              value: 0.7,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+              ],
+            );
+          },
         ),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 
 import 'package:i_densfa/module/store_detail_module/store_detail_repositry.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -46,6 +47,12 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
 
   Future<void> _checkInStore(
       MarkInStoreDetailEvent event, Emitter<StoreDetailState> emit) async {
+    if (AppStorage().isMarkedIn != null &&
+        AppStorage().isMarkedIn != beatPlanModel.storeId) {
+      emit(StoreDetailToastMessageState(
+          'You are already marked In for other store\nPlease mark Out first.'));
+      return;
+    }
     final loc = await Device().userPosition().catchError((onError) {
       emit(StoreDetailToastMessageState(onError.toString()));
       return Future<Position>.error(onError);
@@ -70,6 +77,7 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       return Future<String>.error(error);
     });
     beatPlanModel.markin = true;
+    AppStorage().isMarkedIn = beatPlanModel.storeId;
     emit(StoreDetailToastMessageState(response));
   }
 
@@ -98,6 +106,7 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       return Future<String>.error(error);
     });
     beatPlanModel.markin = false;
+    AppStorage().isMarkedIn = null;
     emit(StoreDetailToastMessageState(response));
   }
 }

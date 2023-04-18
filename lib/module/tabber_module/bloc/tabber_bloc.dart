@@ -65,7 +65,7 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
   }
 
   Future<void> _endDuty(EndDutyStatusTabberEvent event, emit) async {
-    if (AppStorage().isMarkedIn ?? true) {
+    if (AppStorage().isMarkedIn != null) {
       emit(TabbarSnackBarMessageState('Please Markout from store first'));
       return;
     }

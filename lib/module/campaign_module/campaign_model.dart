@@ -49,6 +49,7 @@ class CampaignDetailModel {
     required this.endTime,
     required this.imageName,
     required this.companyId,
+    required this.campaignData,
   });
 
   int campaignId;
@@ -60,6 +61,7 @@ class CampaignDetailModel {
   String endTime;
   String imageName;
   int companyId;
+  CampaignDataModel? campaignData;
 
   factory CampaignDetailModel.fromRawJson(String str) =>
       CampaignDetailModel.fromJson(json.decode(str));
@@ -76,6 +78,9 @@ class CampaignDetailModel {
         endDate: DateTime.parse(json["endDate"]),
         endTime: json["endTime"],
         imageName: json["imageName"],
+        campaignData: json["campaignData"] == null
+            ? null
+            : CampaignDataModel.fromJson(json["campaignData"]),
         companyId: json["companyId"]);
   }
 
@@ -195,4 +200,37 @@ class CampQuestionModel {
       questionType: questionType,
       placholder: questionText,
       campQuestionModel: this);
+}
+
+class CampaignDataModel {
+  CampaignDataModel({
+    required this.targetedSubDealers,
+    required this.includedSubDealers,
+    required this.subDetalers,
+    required this.totalResponse,
+  });
+
+  int subDetalers;
+  int targetedSubDealers;
+  int includedSubDealers;
+  int totalResponse;
+
+  factory CampaignDataModel.fromRawJson(String str) =>
+      CampaignDataModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory CampaignDataModel.fromJson(Map<String, dynamic> json) =>
+      CampaignDataModel(
+          includedSubDealers: json["includedSubDealers"],
+          targetedSubDealers: json["targetedSubDealers"],
+          subDetalers: json["totalSubDealers"],
+          totalResponse: json["totalResponse"] ?? 0);
+
+  Map<String, dynamic> toJson() => {
+        "totalResponse": totalResponse,
+        "includedSubDealers": includedSubDealers,
+        "targetedSubDealers": targetedSubDealers,
+        "totalSubDealers": subDetalers
+      };
 }

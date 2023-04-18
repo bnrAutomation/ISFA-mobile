@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:i_densfa/routes.dart';
+import 'package:simple_speed_dial/simple_speed_dial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +15,6 @@ import 'package:i_densfa/module/store_detail_module/storeDetal/store_detail_bloc
 import 'package:i_densfa/module/ui/app_pop_view.dart';
 
 import '../../utility/app_constants.dart';
-import '../ui/button_views.dart';
 
 class StoreDetailView extends StatelessWidget {
   const StoreDetailView({super.key});
@@ -21,12 +22,58 @@ class StoreDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: AddFloatingActionButton(
-        onTap: () {
-          final StoreDetailBloc bloc = context.read<StoreDetailBloc>();
-          bloc.add(GotoCompaignEvent(bloc.beatPlanModel.storeId));
-        },
-      ),
+      floatingActionButton: SpeedDial(
+          speedDialChildren: [
+            SpeedDialChild(
+              child: const Icon(Icons.campaign),
+              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(context).primaryColor,
+              label: 'Campaign',
+              onPressed: () {
+                final StoreDetailBloc bloc = context.read<StoreDetailBloc>();
+                bloc.add(GotoCompaignEvent(bloc.beatPlanModel.storeId));
+              },
+              closeSpeedDialOnPressed: false,
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.feedback),
+              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(context).primaryColor,
+              label: 'Feedback',
+              onPressed: () {},
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.schedule),
+              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(context).primaryColor,
+              label: 'Schedule',
+              onPressed: () {
+                context.pushNamed(AppPaths.scheduleVisit);
+              },
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.history),
+              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(context).primaryColor,
+              label: 'History',
+              onPressed: () {},
+            ),
+          ],
+          closedForegroundColor: Colors.white,
+          closedBackgroundColor: Theme.of(context).primaryColor,
+          openForegroundColor: Theme.of(context).primaryColor,
+          openBackgroundColor: Colors.white,
+          child: Icon(
+            Icons.add,
+            size: 30.w,
+          )),
+
+      // AddFloatingActionButton(
+      //   onTap: () {
+      //     final StoreDetailBloc bloc = context.read<StoreDetailBloc>();
+      //     bloc.add(GotoCompaignEvent(bloc.beatPlanModel.storeId));
+      //   },
+      // ),
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -68,11 +115,11 @@ class StoreDetailView extends StatelessWidget {
                     subtitle: 'Scheduled visits & Calls',
                     title: '28 Feb 2023',
                     trailingSVGImage: ImageConstants.visitsCalls),
-                blueCard(context,
-                    leadingSVGImage: ImageConstants.creditCard,
-                    subtitle: 'Available Credits',
-                    title: '₹ 500.0',
-                    trailingSVGImage: ImageConstants.credits),
+                // blueCard(context,
+                //     leadingSVGImage: ImageConstants.creditCard,
+                //     subtitle: 'Available Credits',
+                //     title: '₹ 500.0',
+                //     trailingSVGImage: ImageConstants.credits),
                 blueCard(context,
                     leadingSVGImage: ImageConstants.notesT,
                     subtitle:
@@ -131,39 +178,39 @@ class StoreDetailView extends StatelessWidget {
                     ),
                   ],
                 ),
-                StoreDetailCard(
-                  child: ListTile(
-                    title: Text("Sub Dealer History",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(color: Theme.of(context).primaryColor)),
-                    subtitle: Row(
-                      children: [
-                        Text("Last Activity:",
-                            style: Theme.of(context).textTheme.titleSmall),
-                        Text("Compaign, 28 Feb 2023",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.copyWith(color: Colors.grey)),
-                      ],
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios,
-                        color: Theme.of(context).primaryColor),
-                  ),
-                ),
-                StoreDetailCard(
-                  child: ListTile(
-                    title: Text("More",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(color: Theme.of(context).primaryColor)),
-                    trailing: Icon(Icons.arrow_forward_ios,
-                        color: Theme.of(context).primaryColor),
-                  ),
-                ),
+                // StoreDetailCard(
+                //   child: ListTile(
+                //     title: Text("Sub Dealer History",
+                //         style: Theme.of(context)
+                //             .textTheme
+                //             .titleMedium
+                //             ?.copyWith(color: Theme.of(context).primaryColor)),
+                //     subtitle: Row(
+                //       children: [
+                //         Text("Last Activity:",
+                //             style: Theme.of(context).textTheme.titleSmall),
+                //         Text("Compaign, 28 Feb 2023",
+                //             style: Theme.of(context)
+                //                 .textTheme
+                //                 .titleSmall
+                //                 ?.copyWith(color: Colors.grey)),
+                //       ],
+                //     ),
+                //     trailing: Icon(Icons.arrow_forward_ios,
+                //         color: Theme.of(context).primaryColor),
+                //   ),
+                // ),
+                // StoreDetailCard(
+                //   child: ListTile(
+                //     title: Text("More",
+                //         style: Theme.of(context)
+                //             .textTheme
+                //             .titleMedium
+                //             ?.copyWith(color: Theme.of(context).primaryColor)),
+                //     trailing: Icon(Icons.arrow_forward_ios,
+                //         color: Theme.of(context).primaryColor),
+                //   ),
+                // ),
                 const SizedBox(height: 100)
               ],
             );

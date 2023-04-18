@@ -42,6 +42,10 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     on(gotoCompaignEvent);
   }
 
+  bool get isMarkedIn =>
+      AppStorage().isMarkedIn != null &&
+      AppStorage().isMarkedIn == storeDetail?.storeId;
+
   Future<void> gotoCompaignEvent(GotoCompaignEvent event, emit) async {
     emit(CompaignsLoadedPromoterState());
     // if (storeDetail?.storeId == null) {
@@ -96,7 +100,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     });
 
     emit(PromoterToastMessageState(response));
-    AppStorage().isMarkedIn = false;
+    AppStorage().isMarkedIn = null;
     emit(PromoterStoreDetailLoadedState());
   }
 
@@ -117,8 +121,6 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
       return Future<Position>.error(onError);
     });
 
-    // if(){}
-
     final img = await ImagePicker().pickImage(source: ImageSource.camera);
     if (img == null) {
       emit(PromoterToastMessageState('Please click image'));
@@ -135,7 +137,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     });
 
     emit(PromoterToastMessageState(response));
-    AppStorage().isMarkedIn = true;
+    AppStorage().isMarkedIn = storeDetail!.storeId;
     emit(PromoterStoreDetailLoadedState());
   }
 
@@ -160,7 +162,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     emit(PromoterStoreDetailLoadingState());
     await repo.getStoreDetails().then((value) {
       storeDetail = value;
-      AppStorage().isMarkedIn = value.markIn;
+      AppStorage().isMarkedIn = value.markIn ? value.storeId : null;
       emit(PromoterStoreDetailLoadedState());
     }).catchError((err) {
       emit(PromoterToastMessageState(err.toString()));

@@ -21,13 +21,7 @@ class QuestionModel {
       required this.options,
       required this.isRequired,
       this.assessmentQuestionDetails,
-      this.campQuestionModel})
-      : assert(
-            (questionType == QuestionInputType.dropdown ||
-                    questionType == QuestionInputType.radio)
-                ? options.isNotEmpty
-                : options.isEmpty,
-            'Dropdown/radio question must have options to show');
+      this.campQuestionModel});
 
   Map<String, dynamic> toAssessmentRequest() {
     return {

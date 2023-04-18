@@ -50,25 +50,29 @@ class SelectedAssessmentView extends StatelessWidget {
                     "From: ${bloc.selectedAssessment!.startDate} To: ${bloc.selectedAssessment!.endDate}"),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: FilledButton(
-                  onPressed: () {
-                    bloc.add(StartQuestionCountDownTimerAssessmentEvent());
-                    context.pushNamed(AppPaths.assessmentQuestion, extra: bloc);
-                  },
-                  style: TextButton.styleFrom(
-                    elevation: 2,
-                    alignment: Alignment.center,
-                    backgroundColor: theme.primaryColor,
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40.w),
-                    child: Text('Enter Questionnaire',
-                        style: GoogleFonts.inter(
-                            fontSize: 14.sp, color: Colors.white)),
-                  )),
-            ),
+            if (bloc.selectedAssessment?.userScored == null &&
+                DateTime.now()
+                    .isBefore(DateTime.parse(bloc.selectedAssessment!.endDate)))
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: FilledButton(
+                    onPressed: () {
+                      bloc.add(StartQuestionCountDownTimerAssessmentEvent());
+                      context.pushNamed(AppPaths.assessmentQuestion,
+                          extra: bloc);
+                    },
+                    style: TextButton.styleFrom(
+                      elevation: 2,
+                      alignment: Alignment.center,
+                      backgroundColor: theme.primaryColor,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40.w),
+                      child: Text('Enter Questionnaire',
+                          style: GoogleFonts.inter(
+                              fontSize: 14.sp, color: Colors.white)),
+                    )),
+              ),
             if (bloc.selectedAssessment?.userScored != null)
               Card(
                 child: Padding(
@@ -86,17 +90,17 @@ class SelectedAssessmentView extends StatelessWidget {
                         children: <Widget>[
                           ChartIndicator(
                             color: theme.primaryColor,
-                            text: 'Targets Completed',
+                            text: 'Right Answers',
                           ),
                           const SizedBox(height: 4),
                           const ChartIndicator(
                             color: Color(0xffEABB55),
-                            text: 'Targets Missed',
+                            text: 'Missed',
                           ),
                           const SizedBox(height: 4),
                           const ChartIndicator(
                             color: Color(0xffDB4C5B),
-                            text: 'Targets Failed',
+                            text: 'Wrong answers',
                           ),
                           const SizedBox(height: 4),
                         ],
