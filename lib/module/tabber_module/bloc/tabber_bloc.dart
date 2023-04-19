@@ -15,6 +15,7 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
   final TabbarRepository repo;
   int selectIndex = 0;
   SideMenuModel? sideMenuData;
+  var tabberItems = TabbarItemCase.values.toList();
   TabberBloc(this.repo) : super(TabberInitial()) {
     on<TabberEvent>((event, emit) {
       if (event is ChangeTabEvent) {
@@ -29,16 +30,17 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
     on(_startDuty);
   }
 
-  String tabTitle() {
-    final titles = ['My Schedule', 'ISFA', 'ISFA', 'ISFA', 'ISFA'];
-    return titles[selectIndex];
-  }
-
   Future<void> _getSideMenuData(Emitter<TabberState> emit) async {
-    sideMenuData = await repo.getSideMenuDetails().catchError((onError) {
+    var data = await repo.getSideMenuDetails().catchError((onError) {
       emit(TabbarSnackBarMessageState(onError.toString()));
       return Future<SideMenuModel>.error(onError);
     });
+    if (data.userInfo.designation.toLowerCase() != 'promoter') {
+      data.menu.removeWhere((element) => element.key == 'promoter');
+    } else {
+      tabberItems.removeWhere((element) => element == TabbarItemCase.schedule);
+    }
+    sideMenuData = data;
     AppStorage().homeInfo = sideMenuData;
     emit(state);
   }

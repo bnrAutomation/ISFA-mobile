@@ -101,3 +101,29 @@ class HomeUserInfo {
         "storeId": storeId,
       };
 }
+
+enum TabbarItemCase { schedule, learner, campaign, analytics }
+
+extension TabbarHelper on TabbarItemCase {
+  String navTitle() {
+    switch (this) {
+      case TabbarItemCase.schedule:
+        return 'My Schedule';
+      default:
+        return 'ISFA';
+    }
+  }
+
+  String bottomTitle() {
+    switch (this) {
+      case TabbarItemCase.schedule:
+        return 'My Schedule';
+      case TabbarItemCase.learner:
+        return 'Learner';
+      case TabbarItemCase.campaign:
+        return 'Campaign';
+      case TabbarItemCase.analytics:
+        return 'Analytics';
+    }
+  }
+}

@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beatplan_store_list_view.dart';
@@ -58,7 +60,7 @@ class TabberView extends StatelessWidget {
                   ? null
                   : AppSideMenu(data: bloc.sideMenuData!),
               appBar: AppBar(
-                title: Text(bloc.tabTitle()),
+                title: Text(bloc.tabberItems[bloc.selectIndex].navTitle()),
                 leading: BlocListener<TabberBloc, TabberState>(
                   listenWhen: (previous, current) =>
                       current is TabbarSnackBarMessageState,
@@ -101,36 +103,16 @@ class TabberView extends StatelessWidget {
                     hoverColor: Colors.grey[100]!,
                     gap: 6,
                     activeColor: Colors.black,
-                    //iconSize: 24,
                     padding:
                         const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
                     curve: Curves.linear,
                     duration: const Duration(milliseconds: 400),
                     tabBackgroundColor: Colors.grey[100]!,
                     color: Colors.white,
-                    tabs: const [
-                      GButton(
-                        icon: Icons.calendar_month_outlined,
-                        text: 'My Schedule',
-                      ),
-                      GButton(
-                        icon: Icons.book_online,
-                        text: 'Learner',
-                      ),
-                      // GButton(
-                      //   icon: Icons.leaderboard_outlined,
-                      //   text: 'Leaderboard',
-                      // ),
-                      GButton(
-                        icon: Icons.campaign_outlined,
-                        text: 'Campaign',
-                      ),
-                      GButton(
-                        icon: Icons.pie_chart_outline,
-                        text: 'Analytics',
-                      ),
-                    ],
-
+                    tabs: bloc.tabberItems
+                        .map((e) =>
+                            GButton(icon: tabIcon(e), text: e.bottomTitle()))
+                        .toList(),
                     selectedIndex: bloc.selectIndex,
                     onTabChange: (index) {
                       BlocProvider.of<TabberBloc>(context)
@@ -146,9 +128,23 @@ class TabberView extends StatelessWidget {
     );
   }
 
+  IconData tabIcon(TabbarItemCase item) {
+    switch (item) {
+      case TabbarItemCase.schedule:
+        return Icons.calendar_month_outlined;
+      case TabbarItemCase.learner:
+        return Icons.book_online;
+      case TabbarItemCase.campaign:
+        return Icons.campaign_outlined;
+      case TabbarItemCase.analytics:
+        return Icons.pie_chart_outline;
+    }
+  }
+
   Widget atSelectedIndex(TabberBloc bloc) {
-    switch (bloc.selectIndex) {
-      case 0:
+    final tab = bloc.tabberItems[bloc.selectIndex];
+    switch (tab) {
+      case TabbarItemCase.schedule:
         return (bloc.sideMenuData == null)
             ? const CircularProgressIndicator()
             : BlocProvider(
@@ -158,29 +154,23 @@ class TabberView extends StatelessWidget {
                   ..add(BeatPlanStoresUpdateData()),
                 child: const BeatPlanStoreListView(),
               );
-
-      case 1:
+      case TabbarItemCase.learner:
         return const Text(
           'Learner',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
         );
-
-      // case 2:
-      //   return const BeatPlanView();
-      case 2:
+      case TabbarItemCase.campaign:
         final storeId = bloc.sideMenuData?.userInfo.storeId ?? 0;
         if (storeId > 0) {
           return CampaignView(storeID: storeId);
         } else {
           return const Text("No store found");
         }
-      case 3:
+      case TabbarItemCase.analytics:
         return const Text(
           'Analytics',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
         );
-      default:
-        return const SizedBox();
     }
   }
 }
@@ -203,22 +193,15 @@ class AppSideMenu extends StatelessWidget {
               accountEmail: Text(data.userInfo.companyName)),
           ...data.menu.where((element) => element.isActive).map(
             (e) {
-              if (e.key == "promoter" &&
-                  ["fwp", "manager"]
-                      .contains(AppStorage().userDetail?.designation)) {
-                return const SizedBox();
-              }
               return ListTile(
-                leading: const Icon(Icons.logout),
-
-                //  CachedNetworkImage(
-                //   fit: BoxFit.contain,
-                //   imageUrl: e.icon,
-                //   width: 25.w,
-                //   height: 25.w,
-                //   errorWidget: (context, url, error) =>
-                //       const ColoredBox(color: Colors.red),
-                // ),
+                leading: CachedNetworkImage(
+                  fit: BoxFit.contain,
+                  imageUrl: e.icon,
+                  width: 25.w,
+                  height: 25.w,
+                  errorWidget: (context, url, error) =>
+                      const ColoredBox(color: Colors.red),
+                ),
                 title: Text(e.name),
                 onTap: () {
                   switch (e.key) {
