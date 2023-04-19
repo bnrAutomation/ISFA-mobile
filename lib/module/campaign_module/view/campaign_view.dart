@@ -27,24 +27,23 @@ class CampaignView extends StatelessWidget {
         child: BlocBuilder<CampaignBloc, CampaignState>(
           builder: (context, state) {
             final CampaignBloc bloc = context.read();
-            return Column(
-              children: [
-                Expanded(
-                    child: ListView.separated(
-                        itemCount: bloc.storeCampaigns.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 5),
-                        itemBuilder: (context, index) => InkWell(
-                            onTap: () {
-                              bloc.add(GetQuestionsForCampaign(
-                                  bloc.storeCampaigns[index].campaignId));
-                              context.push(AppPaths.selectedCampaignView,
-                                  extra: bloc);
-                            },
-                            child: CampaignListItem(
-                                item: bloc.storeCampaigns[index]))))
-              ],
-            );
+            if (bloc.storeCampaigns.isEmpty) {
+              return Center(
+                  child: Text(
+                "No Campaign",
+                style: Theme.of(context).textTheme.labelLarge,
+              ));
+            }
+            return ListView.separated(
+                itemCount: bloc.storeCampaigns.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 5),
+                itemBuilder: (context, index) => InkWell(
+                    onTap: () {
+                      bloc.add(GetQuestionsForCampaign(
+                          bloc.storeCampaigns[index].campaignId));
+                      context.push(AppPaths.selectedCampaignView, extra: bloc);
+                    },
+                    child: CampaignListItem(item: bloc.storeCampaigns[index])));
           },
         ),
       ),
