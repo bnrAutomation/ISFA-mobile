@@ -22,8 +22,10 @@ class UserAssessmentsModel {
       UserAssessmentsModel(
         message: json["message"],
         status: json["status"],
-        dataList: List<AssessmentDetailModel>.from(
-            json["dataList"].map((x) => AssessmentDetailModel.fromJson(x))),
+        dataList: json["dataList"] == null
+            ? []
+            : List<AssessmentDetailModel>.from(
+                json["dataList"].map((x) => AssessmentDetailModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
