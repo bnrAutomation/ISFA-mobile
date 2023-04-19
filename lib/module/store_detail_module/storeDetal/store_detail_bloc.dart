@@ -47,8 +47,8 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
 
   Future<void> _checkInStore(
       MarkInStoreDetailEvent event, Emitter<StoreDetailState> emit) async {
-    if (AppStorage().isMarkedIn != null &&
-        AppStorage().isMarkedIn != beatPlanModel.storeId) {
+    if (AppStorage().markedInStoreId != null &&
+        AppStorage().markedInStoreId != beatPlanModel.storeId) {
       emit(StoreDetailToastMessageState(
           'You are already marked In for other store\nPlease mark Out first.'));
       return;
@@ -77,7 +77,7 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       return Future<String>.error(error);
     });
     beatPlanModel.markin = true;
-    AppStorage().isMarkedIn = beatPlanModel.storeId;
+    AppStorage().markedInStoreId = beatPlanModel.storeId;
     emit(StoreDetailToastMessageState(response));
   }
 
@@ -106,7 +106,7 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       return Future<String>.error(error);
     });
     beatPlanModel.markin = false;
-    AppStorage().isMarkedIn = null;
+    AppStorage().markedInStoreId = null;
     emit(StoreDetailToastMessageState(response));
   }
 }

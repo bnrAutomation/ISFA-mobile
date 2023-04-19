@@ -41,6 +41,8 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
       tabberItems.removeWhere((element) => element == TabbarItemCase.schedule);
     }
     sideMenuData = data;
+    AppStorage().markedInStoreId = data.userInfo.markInStoreId;
+    AppStorage().isDutyStarted = data.userInfo.startDuty;
     AppStorage().homeInfo = sideMenuData;
     emit(state);
   }
@@ -67,7 +69,7 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
   }
 
   Future<void> _endDuty(EndDutyStatusTabberEvent event, emit) async {
-    if (AppStorage().isMarkedIn != null) {
+    if (AppStorage().markedInStoreId != null) {
       emit(TabbarSnackBarMessageState('Please Markout from store first'));
       return;
     }

@@ -43,8 +43,8 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
   }
 
   bool get isMarkedIn =>
-      AppStorage().isMarkedIn != null &&
-      AppStorage().isMarkedIn == storeDetail?.storeId;
+      AppStorage().markedInStoreId != null &&
+      AppStorage().markedInStoreId == storeDetail?.storeId;
 
   Future<void> gotoCompaignEvent(GotoCompaignEvent event, emit) async {
     emit(CompaignsLoadedPromoterState());
@@ -100,7 +100,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     });
 
     emit(PromoterToastMessageState(response));
-    AppStorage().isMarkedIn = null;
+    AppStorage().markedInStoreId = null;
     emit(PromoterStoreDetailLoadedState());
   }
 
@@ -137,7 +137,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     });
 
     emit(PromoterToastMessageState(response));
-    AppStorage().isMarkedIn = storeDetail!.storeId;
+    AppStorage().markedInStoreId = storeDetail!.storeId;
     emit(PromoterStoreDetailLoadedState());
   }
 
@@ -162,7 +162,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     emit(PromoterStoreDetailLoadingState());
     await repo.getStoreDetails().then((value) {
       storeDetail = value;
-      AppStorage().isMarkedIn = value.markIn ? value.storeId : null;
+      AppStorage().markedInStoreId = value.markIn ? value.storeId : null;
       emit(PromoterStoreDetailLoadedState());
     }).catchError((err) {
       emit(PromoterToastMessageState(err.toString()));
