@@ -45,7 +45,8 @@ class CampaignRepository {
 
     final bodyMap = {
       "answerData": answers,
-      "campaignId": answers.first['campaignId']
+      "campaignId": answers.first['campaignId'],
+      "storeId": storeId
     };
     final response = await post(
       Uri.parse("${URLConstants.saveCampaignAnswers}/$userId"),
@@ -59,6 +60,20 @@ class CampaignRepository {
       throw response.body.isEmpty
           ? "Something went wrong"
           : jsonBody['message'] ?? "Something went wrong";
+    }
+  }
+
+  Future<SavedCampaignDataModel> savedCampaignResponse(int campaignId) async {
+    final response = await get(
+        Uri.parse('${URLConstants.savedCampaignResponse}/$userId/$campaignId'));
+
+    if (response.statusCode == 200) {
+      final dataJson = jsonDecode(response.body)['data'];
+      return SavedCampaignDataModel.fromJson(dataJson);
+    } else {
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : jsonDecode(response.body)['message'] ?? "Something went wrong";
     }
   }
 }

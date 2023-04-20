@@ -15,3 +15,9 @@ class SaveCampaignAnswersEvent extends CampaignEvent {
 
   SaveCampaignAnswersEvent(this.checkLeftAnswer);
 }
+
+class GetSavedCampaignResponseEvent extends CampaignEvent {
+  final int campaignId;
+
+  GetSavedCampaignResponseEvent(this.campaignId);
+}

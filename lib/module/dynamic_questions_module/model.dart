@@ -42,9 +42,9 @@ class QuestionModel {
       "questionText": question,
       "questionType": questionType.toStringName(),
       "userAnswer": answer ?? "",
-      "campaignId": campQuestionModel?.id,
-      "id": assessmentQuestionDetails?.id,
-      "sequence": assessmentQuestionDetails?.sequence,
+      "campaignId": campQuestionModel?.campaignId,
+      "id": campQuestionModel?.id,
+      "sequence": campQuestionModel?.sequence,
     };
   }
 }

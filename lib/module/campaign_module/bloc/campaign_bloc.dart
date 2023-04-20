@@ -22,9 +22,16 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       emit(CampaignListLoadedState());
     });
 
+    on((GetSavedCampaignResponseEvent event, emit) async {
+      final response = await repo.savedCampaignResponse(event.campaignId);
+      selectedCampaign?.campaignData = response;
+      emit(CampaignQuestionsLoadedState());
+    });
+
     on((GetQuestionsForCampaign event, emit) async {
       selectedCampaign = storeCampaigns
           .firstWhere((element) => element.campaignId == event.id);
+      add(GetSavedCampaignResponseEvent(event.id));
       selectedAssessQuestions = await repo.getQuestions(event.id);
       questionAnswers =
           selectedAssessQuestions.map((e) => e.toViewQuestionModel()).toList();
@@ -53,6 +60,8 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
         });
         emit(ScoreCalculatedCampaignState());
         if (score) {
+          add(GetSavedCampaignResponseEvent(
+              questionAnswers.first.campQuestionModel!.campaignId));
           emit(SnackbarMessageCampaignState("Saved Successfully"));
         }
       }
