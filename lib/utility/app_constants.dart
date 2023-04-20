@@ -78,4 +78,6 @@ class URLConstants {
       '$apiBaseUrl/getCampaignListByStoreId';
   static const getCampaignQuestions = '$apiBaseUrl/getCampaignDetails';
   static const saveCampaignAnswers = '$apiBaseUrl/saveCampaignAnswers';
+  static const getStoreDetail = '$apiBaseUrl/getStoreDetail';
+  static const addNote = '$apiBaseUrl/addNote';
 }

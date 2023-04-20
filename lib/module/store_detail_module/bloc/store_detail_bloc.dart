@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
+import 'package:i_densfa/module/store_detail_module/store_detail_model.dart';
 
 import 'package:i_densfa/module/store_detail_module/store_detail_repositry.dart';
 import 'package:i_densfa/utility/app_storage.dart';
@@ -16,33 +17,38 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
   BeatPlanModel beatPlanModel;
   List<CampaignDetailModel> compaigns = [];
   final StoreDetailRepository repo;
+  GetStoreDetailDataModel? details;
   StoreDetailBloc(this.repo, this.beatPlanModel) : super(StoreDetailInitial()) {
-    on<StoreDetailEvent>((event, emit) {});
+    on(_getStoreDetails);
     on(gotoCompaignEvent);
     on(_markOutStore);
     on(_checkInStore);
+    on(_addNote);
+    add(GetStoreDetailsEvent());
   }
 
-  Future<void> gotoCompaignEvent(GotoCompaignEvent event, emit) async {
+  String noteToAdd = "";
+  Future<void> _addNote(SaveNoteStoreDetailEvent event, emit) async {
+    final resp = await repo.addNoteForStore(noteToAdd, beatPlanModel.storeId);
+    if (resp) {
+      emit(StoreDetailToastMessageState('Successfully added note'));
+      add(GetStoreDetailsEvent());
+    } else {
+      emit(StoreDetailToastMessageState('Failed to add note'));
+    }
+  }
+
+  Future<void> _getStoreDetails(GetStoreDetailsEvent event, emit) async {
+    details =
+        await repo.getStoreDetails(beatPlanModel.storeId).catchError((onError) {
+      emit(StoreDetailToastMessageState(onError.toString()));
+      return Future<GetStoreDetailDataModel>.error(onError);
+    });
+    emit(LoadedStoreDetailState());
+  }
+
+  void gotoCompaignEvent(GotoCompaignEvent event, emit) {
     emit(CompaignsLoadedStoreDetailState());
-    // List<CampaignDetailModel> compaignsResponse =
-    //     await repo.getCompaignList(event.storeId).catchError((onError) {
-    //   emit(StoreDetailToastMessageState(onError.toString()));
-
-    //   return <CampaignDetailModel>[];
-    // });
-
-    // final now = DateTime.now();
-    // compaigns = compaignsResponse
-    //     .where((element) =>
-    //         element.startDate.isBefore(now) && element.endDate.isAfter(now))
-    //     .toList();
-
-    // if (compaigns.isNotEmpty) {
-    //   emit(CompaignsLoadedStoreDetailState());
-    // } else {
-    //   emit(StoreDetailToastMessageState("No Campaign"));
-    // }
   }
 
   Future<void> _checkInStore(
@@ -61,7 +67,12 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       emit(StoreDetailToastMessageState(onError.toString()));
       return Future<Position>.error(onError);
     });
-
+    // final storeDistance =
+    //     Geolocator.distanceBetween(0, 0, loc.latitude, loc.longitude);
+    // if (storeDistance > 100) {
+    //   emit(StoreDetailToastMessageState('You are not in store range'));
+    //   return;
+    // }
     final img = await ImagePicker().pickImage(source: ImageSource.camera);
     if (img == null) {
       emit(StoreDetailToastMessageState('Please click image'));

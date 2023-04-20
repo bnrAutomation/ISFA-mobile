@@ -266,17 +266,14 @@ extension Helper on QuestionInputType {
 }
 
 class AssessmentScoreModel {
-  AssessmentScoreModel(
-      {required this.assessmentId,
-      required this.userId,
-      required this.assessmentCompletionTime,
-      required this.assessmentScore,
-      required this.wrongAnswer,
-      required this.nonAttempted,
-      required this.targetedSubDealers,
-      required this.includedSubDealers,
-      required this.subDetalers,
-      required this.totalResponse});
+  AssessmentScoreModel({
+    required this.assessmentId,
+    required this.userId,
+    required this.assessmentCompletionTime,
+    required this.assessmentScore,
+    required this.wrongAnswer,
+    required this.nonAttempted,
+  });
 
   int assessmentId;
   int userId;
@@ -284,10 +281,6 @@ class AssessmentScoreModel {
   int assessmentScore;
   int wrongAnswer;
   int nonAttempted;
-  int subDetalers;
-  int targetedSubDealers;
-  int includedSubDealers;
-  int totalResponse;
 
   factory AssessmentScoreModel.fromRawJson(String str) =>
       AssessmentScoreModel.fromJson(json.decode(str));
@@ -296,26 +289,20 @@ class AssessmentScoreModel {
 
   factory AssessmentScoreModel.fromJson(Map<String, dynamic> json) =>
       AssessmentScoreModel(
-          assessmentId: json["assessmentId"],
-          userId: json["userId"],
-          assessmentCompletionTime: json["assessmentCompletionTime"],
-          assessmentScore: json["assessmentScore"],
-          includedSubDealers: json["includedSubDealers"],
-          nonAttempted: json["nonAttempted"] ?? 0,
-          targetedSubDealers: json["targetedSubDealers"],
-          wrongAnswer: json["wrongAnswer"] ?? 0,
-          subDetalers: json["totalSubDealers"],
-          totalResponse: json["totalResponse"] ?? 0);
+        assessmentId: json["assessmentId"],
+        userId: json["userId"],
+        assessmentCompletionTime: json["assessmentCompletionTime"],
+        assessmentScore: json["assessmentScore"],
+        nonAttempted: json["nonAttempted"] ?? 0,
+        wrongAnswer: json["wrongAnswer"] ?? 0,
+      );
 
   Map<String, dynamic> toJson() => {
         "assessmentId": assessmentId,
         "userId": userId,
         "assessmentCompletionTime": assessmentCompletionTime,
         "assessmentScore": assessmentScore,
-        "includedSubDealers": includedSubDealers,
         "nonAttempted": nonAttempted,
-        "targetedSubDealers": targetedSubDealers,
         "wrongAnswer": wrongAnswer,
-        "totalSubDealers": subDetalers
       };
 }

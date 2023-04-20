@@ -84,6 +84,12 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
       return Future<Position>.error(onError);
     });
 
+    // final storeDistance =
+    //     Geolocator.distanceBetween(0, 0, loc.latitude, loc.longitude);
+    // if (storeDistance > 100) {
+    //   emit(PromoterToastMessageState('You are not in store range'));
+    //   return;
+    // }
     final img = await ImagePicker().pickImage(source: ImageSource.camera);
     if (img == null) {
       emit(PromoterToastMessageState('Please click image'));

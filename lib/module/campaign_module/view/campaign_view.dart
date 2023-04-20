@@ -106,7 +106,7 @@ class SelectedCampaignView extends StatelessWidget {
           builder: (context, state) {
             final CampaignBloc bloc = context.read();
             final selectedCamp = bloc.selectedCampaign;
-            final CampaignDataModel? campaignData =
+            final SavedCampaignDataModel? campaignData =
                 bloc.selectedCampaign?.campaignData;
             return Column(
               children: [

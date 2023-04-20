@@ -1,23 +1,40 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:i_densfa/module/campaign_module/campaign_model.dart';
+import 'package:i_densfa/module/store_detail_module/store_detail_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
 class StoreDetailRepository {
-  Future<List<CampaignDetailModel>> getCompaignList(int storeId) async {
+  final userId = AppStorage().userDetail!.id;
+  Future<GetStoreDetailDataModel> getStoreDetails(int storeId) async {
     final response =
-        await get(Uri.parse("${URLConstants.getCompaingns}/$storeId"));
+        await get(Uri.parse("${URLConstants.getStoreDetail}/$userId/$storeId"));
 
     if (response.statusCode == 200) {
-      return UserCampaignsModel.fromRawJson(response.body).dataList ?? [];
+      final dataJson = jsonDecode(response.body)['data'];
+      return GetStoreDetailDataModel.fromJson(dataJson);
     } else {
       throw response.body.isEmpty
           ? "Something went wrong"
           : jsonDecode(response.body)['message'] ?? "Something went wrong";
+    }
+  }
+
+  Future<bool> addNoteForStore(String note, int storeId) async {
+    final requestBody = {"note": note, "storeId": storeId, "userId": userId};
+
+    final response = await post(Uri.parse(URLConstants.addNote),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(requestBody));
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      return true;
+    } else {
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : json.decode(response.body)['message'] ?? "Something went wrong";
     }
   }
 

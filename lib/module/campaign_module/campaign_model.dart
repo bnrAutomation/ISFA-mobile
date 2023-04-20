@@ -61,7 +61,7 @@ class CampaignDetailModel {
   String endTime;
   String imageName;
   int companyId;
-  CampaignDataModel? campaignData;
+  SavedCampaignDataModel? campaignData;
 
   factory CampaignDetailModel.fromRawJson(String str) =>
       CampaignDetailModel.fromJson(json.decode(str));
@@ -78,24 +78,23 @@ class CampaignDetailModel {
         endDate: DateTime.parse(json["endDate"]),
         endTime: json["endTime"],
         imageName: json["imageName"],
-        campaignData: json["campaignData"] == null
+        campaignData: json["savedCampaignData"] == null
             ? null
-            : CampaignDataModel.fromJson(json["campaignData"]),
+            : SavedCampaignDataModel.fromJson(json["savedCampaignData"]),
         companyId: json["companyId"]);
   }
 
   Map<String, dynamic> toJson() => {
-        "CampaignResponse": {
-          "campaignId": campaignId,
-          "name": name,
-          "description": description,
-          "startDate": startDate,
-          "startTime": startTime,
-          "endDate": endDate,
-          "endTime": endTime,
-          "imageName": imageName,
-          "companyId": companyId,
-        }
+        "campaignId": campaignId,
+        "name": name,
+        "description": description,
+        "startDate": startDate,
+        "startTime": startTime,
+        "endDate": endDate,
+        "endTime": endTime,
+        "imageName": imageName,
+        "companyId": companyId,
+        "savedCampaignData": campaignData?.toJson()
       };
 }
 
@@ -202,8 +201,8 @@ class CampQuestionModel {
       campQuestionModel: this);
 }
 
-class CampaignDataModel {
-  CampaignDataModel({
+class SavedCampaignDataModel {
+  SavedCampaignDataModel({
     required this.targetedSubDealers,
     required this.includedSubDealers,
     required this.subDetalers,
@@ -215,13 +214,13 @@ class CampaignDataModel {
   int includedSubDealers;
   int totalResponse;
 
-  factory CampaignDataModel.fromRawJson(String str) =>
-      CampaignDataModel.fromJson(json.decode(str));
+  factory SavedCampaignDataModel.fromRawJson(String str) =>
+      SavedCampaignDataModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory CampaignDataModel.fromJson(Map<String, dynamic> json) =>
-      CampaignDataModel(
+  factory SavedCampaignDataModel.fromJson(Map<String, dynamic> json) =>
+      SavedCampaignDataModel(
           includedSubDealers: json["includedSubDealers"],
           targetedSubDealers: json["targetedSubDealers"],
           subDetalers: json["totalSubDealers"],

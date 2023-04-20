@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:simple_speed_dial/simple_speed_dial.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +11,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 
 import 'package:i_densfa/module/campaign_module/view/campaign_view.dart';
-import 'package:i_densfa/module/store_detail_module/storeDetal/store_detail_bloc.dart';
-
 import 'package:i_densfa/module/ui/app_pop_view.dart';
 
 import '../../utility/app_constants.dart';
+import 'bloc/store_detail_bloc.dart';
 
 class StoreDetailView extends StatelessWidget {
   const StoreDetailView({super.key});
@@ -30,8 +30,7 @@ class StoreDetailView extends StatelessWidget {
               backgroundColor: Theme.of(context).primaryColor,
               label: 'Campaign',
               onPressed: () {
-                final StoreDetailBloc bloc = context.read<StoreDetailBloc>();
-                bloc.add(GotoCompaignEvent(bloc.beatPlanModel.storeId));
+                context.read<StoreDetailBloc>().add(GotoCompaignEvent());
               },
               closeSpeedDialOnPressed: false,
             ),
@@ -67,13 +66,6 @@ class StoreDetailView extends StatelessWidget {
             Icons.add,
             size: 30.w,
           )),
-
-      // AddFloatingActionButton(
-      //   onTap: () {
-      //     final StoreDetailBloc bloc = context.read<StoreDetailBloc>();
-      //     bloc.add(GotoCompaignEvent(bloc.beatPlanModel.storeId));
-      //   },
-      // ),
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -120,12 +112,7 @@ class StoreDetailView extends StatelessWidget {
                 //     subtitle: 'Available Credits',
                 //     title: '₹ 500.0',
                 //     trailingSVGImage: ImageConstants.credits),
-                blueCard(context,
-                    leadingSVGImage: ImageConstants.notesT,
-                    subtitle:
-                        'Notes of important discussion with the sub dealer',
-                    title: 'Recent Notes (2)',
-                    trailingSVGImage: ImageConstants.paperPen),
+                recentNote(context),
                 Row(
                   children: [
                     Expanded(
@@ -216,6 +203,121 @@ class StoreDetailView extends StatelessWidget {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget recentNote(BuildContext context) {
+    final StoreDetailBloc bloc = context.read();
+    return InkWell(
+      onTap: () {
+        AppPopup.showAppBottomSheet(
+            context: context,
+            child: BlocProvider.value(
+              value: bloc,
+              child: notesListView(context),
+            ));
+      },
+      child: blueCard(context,
+          leadingSVGImage: ImageConstants.notesT,
+          subtitle: 'Notes of important discussion with the sub dealer',
+          title: 'Recent Notes (${bloc.details?.userNote.length ?? 0})',
+          trailingSVGImage: ImageConstants.paperPen),
+    );
+  }
+
+  Padding notesListView(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Text(
+                "Notes",
+                style:
+                    textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                    onPressed: () {
+                      final bloc = context.read<StoreDetailBloc>();
+                      showCupertinoDialog(
+                          context: context,
+                          builder: (c) {
+                            return BlocProvider.value(
+                                value: bloc,
+                                child: Builder(builder: (context) {
+                                  return addNoteDialogWidget(context);
+                                }));
+                          });
+                    },
+                    icon: const Icon(Icons.add)),
+              )
+            ],
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: BlocBuilder<StoreDetailBloc, StoreDetailState>(
+              builder: (context, state) {
+                final notes =
+                    context.read<StoreDetailBloc>().details?.userNote ?? [];
+                return notes.isEmpty
+                    ? const Center(child: Text("No note added"))
+                    : ListView.separated(
+                        itemCount: notes.length,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 10),
+                        itemBuilder: (context, index) => ListTile(
+                          tileColor: Theme.of(context).secondaryHeaderColor,
+                          title: Text(notes[index]),
+                          trailing: IconButton(
+                              onPressed: () {}, icon: const Icon(Icons.delete)),
+                        ),
+                      );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Material addNoteDialogWidget(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: CupertinoAlertDialog(
+        title: const Text("Add Note"),
+        content: TextField(
+          onChanged: (value) {
+            context.read<StoreDetailBloc>().noteToAdd = value;
+          },
+          decoration: const InputDecoration(
+              hintText: 'Please enter note here..',
+              border: OutlineInputBorder()),
+        ),
+        actions: [
+          CupertinoButton(
+              padding: EdgeInsets.zero,
+              child: const Text("Save"),
+              onPressed: () {
+                context.read<StoreDetailBloc>().add(SaveNoteStoreDetailEvent());
+                Navigator.pop(context);
+              }),
+          CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                "Cancel",
+                style: TextStyle(color: Colors.red),
+              ))
+        ],
       ),
     );
   }
@@ -351,7 +453,7 @@ class StoreDetailView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5)),
                   padding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-                  child: Text("SEMI-URBAN",
+                  child: Text(bloc.details?.storeCategory ?? "",
                       style: GoogleFonts.inter(
                           fontSize: 10.sp,
                           fontWeight: FontWeight.w700,
@@ -397,9 +499,7 @@ class StoreDetailView extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Expanded(
-            child: CampaignView(
-              storeID: beatPlanModel.storeId,
-            ),
+            child: CampaignView(storeID: beatPlanModel.storeId),
           ),
         ],
       ),
