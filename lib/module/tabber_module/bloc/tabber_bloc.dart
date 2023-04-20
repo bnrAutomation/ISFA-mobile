@@ -48,6 +48,11 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
   }
 
   Future<void> _startDuty(StartDutyStatusTabberEvent event, emit) async {
+    if (AppStorage().markedInStoreId != null) {
+      emit(TabbarSnackBarMessageState("Please mark-out from the store first"));
+      return;
+    }
+
     final loc = await Device().userPosition().onError((error, stackTrace) {
       emit(TabbarSnackBarMessageState(error.toString()));
       throw error ?? stackTrace;

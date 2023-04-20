@@ -47,6 +47,10 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
 
   Future<void> _checkInStore(
       MarkInStoreDetailEvent event, Emitter<StoreDetailState> emit) async {
+    if (!AppStorage().isDutyStarted) {
+      emit(StoreDetailToastMessageState('Please start your Duty first'));
+      return;
+    }
     if (AppStorage().markedInStoreId != null &&
         AppStorage().markedInStoreId != beatPlanModel.storeId) {
       emit(StoreDetailToastMessageState(
