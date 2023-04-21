@@ -12,8 +12,8 @@ class CampaignRepository {
 
   CampaignRepository(this.storeId);
   Future<List<CampaignDetailModel>> getCampaignsForStore() async {
-    final response = await get(
-        Uri.parse("${URLConstants.getCampaignListByStoreId}/$storeId"));
+    final response =
+        await get(Uri.parse("${URLConstants.getCampaignListByUserId}/$userId"));
 
     if (response.statusCode == 200) {
       return UserCampaignsModel.fromRawJson(response.body).dataList ?? [];

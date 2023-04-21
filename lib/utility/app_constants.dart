@@ -74,8 +74,11 @@ class URLConstants {
       '$apiBaseUrl/getAssessmentListByUserId';
   static const getAssessmentQuestions = '$apiBaseUrl/getAssessmentDetails';
   static const saveAssessmentAnswers = '$apiBaseUrl/saveAssessmentAnswers';
-  static const getCampaignListByStoreId =
-      '$apiBaseUrl/getCampaignListByStoreId';
+
+  static const getCampaignListByUserId = '$apiBaseUrl/getCampaignListByUserId';
+
+  // static const getCampaignListByStoreId =
+  //     '$apiBaseUrl/getCampaignListByStoreId';
   static const getCampaignQuestions = '$apiBaseUrl/getCampaignDetails';
   static const saveCampaignAnswers = '$apiBaseUrl/saveCampaignAnswers';
   static const getStoreDetail = '$apiBaseUrl/getStoreDetail';
