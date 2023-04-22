@@ -58,7 +58,8 @@ class StoreDetailView extends StatelessWidget {
               backgroundColor: Theme.of(context).primaryColor,
               label: 'Schedule',
               onPressed: () {
-                context.pushNamed(AppPaths.scheduleVisit);
+                context.pushNamed(AppPaths.scheduleVisit,
+                    extra: [context.read<StoreDetailBloc>().beatPlanModel]);
               },
             ),
             SpeedDialChild(
