@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,7 +11,7 @@ import 'package:i_densfa/module/promoter_module/promoter_repository.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'promoter_event.dart';
 part 'promoter_state.dart';
@@ -33,10 +35,13 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     on(_checkInStore);
     on(_markOutStore);
     on((GoToMapPromoterEvent event, emit) {
-      final lat = storeDetail?.latitude ?? "";
-      final long = storeDetail?.longtitude ?? "";
-      final url = 'http://www.google.com/maps/place/$lat,$long';
-      launchUrlString(url);
+      final lat = storeDetail?.latitude ?? 0;
+      final long = storeDetail?.longitude ?? 0;
+
+      var uri = Uri.parse(Platform.isAndroid
+          ? "google.navigation:q=$lat,$long&mode=d"
+          : "https://maps.apple.com/?q=$lat,$long");
+      launchUrl(uri);
     });
 
     on(gotoCompaignEvent);
@@ -84,12 +89,12 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
       return Future<Position>.error(onError);
     });
 
-    // final storeDistance =
-    //     Geolocator.distanceBetween(0, 0, loc.latitude, loc.longitude);
-    // if (storeDistance > 100) {
-    //   emit(PromoterToastMessageState('You are not in store range'));
-    //   return;
-    // }
+    final storeDistance = Geolocator.distanceBetween(storeDetail?.latitude ?? 0,
+        storeDetail?.longitude ?? 0, loc.latitude, loc.longitude);
+    if (storeDistance > 100) {
+      emit(PromoterToastMessageState('You are not in store range'));
+      return;
+    }
     final img = await ImagePicker().pickImage(source: ImageSource.camera);
     if (img == null) {
       emit(PromoterToastMessageState('Please click image'));
@@ -126,6 +131,13 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
       emit(PromoterStoreDetailLoadedState());
       return Future<Position>.error(onError);
     });
+
+    final storeDistance = Geolocator.distanceBetween(storeDetail!.latitude,
+        storeDetail!.longitude, loc.latitude, loc.longitude);
+    if (storeDistance > 100) {
+      emit(PromoterToastMessageState('You are not in store range'));
+      return;
+    }
 
     final img = await ImagePicker().pickImage(source: ImageSource.camera);
     if (img == null) {

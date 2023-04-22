@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +14,7 @@ class ScheduleVisitView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        'Schedule Visit or Call',
+        'Schedule Visit', // or Call',
         style: Theme.of(context).textTheme.titleSmall,
       )),
       body: Padding(
@@ -23,25 +22,25 @@ class ScheduleVisitView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              width: double.infinity,
-              child: CupertinoSlidingSegmentedControl(
-                  padding: const EdgeInsets.all(0),
-                  thumbColor: Theme.of(context).colorScheme.background,
-                  groupValue: context.select(
-                      (ScheduleVisitCallBloc value) => value.schedulingFor),
-                  children: const {
-                    SchuduleType.visit: Center(child: Text("VISIT")),
-                    SchuduleType.call: Center(child: Text("CALL"))
-                  },
-                  onValueChanged: (val) {
-                    if (val != null) {
-                      context
-                          .read<ScheduleVisitCallBloc>()
-                          .add(ScheduleTypeChangeEvent(val));
-                    }
-                  }),
-            ),
+            // SizedBox(
+            //   width: double.infinity,
+            //   child: CupertinoSlidingSegmentedControl(
+            //       padding: const EdgeInsets.all(0),
+            //       thumbColor: Theme.of(context).colorScheme.background,
+            //       groupValue: context.select(
+            //           (ScheduleVisitCallBloc value) => value.schedulingFor),
+            //       children: const {
+            //         SchuduleType.visit: Center(child: Text("VISIT")),
+            //         SchuduleType.call: Center(child: Text("CALL"))
+            //       },
+            //       onValueChanged: (val) {
+            //         if (val != null) {
+            //           context
+            //               .read<ScheduleVisitCallBloc>()
+            //               .add(ScheduleTypeChangeEvent(val));
+            //         }
+            //       }),
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Row(

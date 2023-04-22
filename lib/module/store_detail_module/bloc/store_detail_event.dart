@@ -12,3 +12,7 @@ class MarkOutStoreDetailEvent extends StoreDetailEvent {}
 class GetStoreDetailsEvent extends StoreDetailEvent {}
 
 class SaveNoteStoreDetailEvent extends StoreDetailEvent {}
+
+class ShowStoreOnMapStoreDetailEvent extends StoreDetailEvent {}
+
+class CallStoreDetailEvent extends StoreDetailEvent {}

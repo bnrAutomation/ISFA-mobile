@@ -13,6 +13,9 @@ class GetStoreDetailDataModel {
     required this.activeStatus,
     required this.zipcode,
     required this.userNote,
+    required this.latitude,
+    required this.longitude,
+    required this.phoneNo,
   });
 
   int clusterId;
@@ -24,6 +27,9 @@ class GetStoreDetailDataModel {
   String storeBranch;
   String storeType;
   bool activeStatus;
+  double latitude;
+  double longitude;
+  String phoneNo;
   int zipcode;
   List<String> userNote;
 
@@ -44,6 +50,9 @@ class GetStoreDetailDataModel {
         storeType: json["storeType"],
         activeStatus: json["activeStatus"],
         zipcode: json["zipcode"],
+        phoneNo: json['phoneNo'],
+        latitude: double.tryParse(json['latitude'].toString()) ?? 0,
+        longitude: double.tryParse(json['logitude'].toString()) ?? 0,
         userNote: List<String>.from(json["userNote"].map((x) => x)),
       );
 
@@ -58,6 +67,9 @@ class GetStoreDetailDataModel {
         "storeType": storeType,
         "activeStatus": activeStatus,
         "zipcode": zipcode,
+        "logitude": longitude,
+        "latitude": latitude,
+        "phoneNo": phoneNo,
         "userNote": List<dynamic>.from(userNote.map((x) => x)),
       };
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,6 +11,8 @@ import 'package:i_densfa/module/store_detail_module/store_detail_repositry.dart'
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 part 'store_detail_event.dart';
 part 'store_detail_state.dart';
@@ -18,13 +22,42 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
   List<CampaignDetailModel> compaigns = [];
   final StoreDetailRepository repo;
   GetStoreDetailDataModel? details;
+  Position? userLocation;
   StoreDetailBloc(this.repo, this.beatPlanModel) : super(StoreDetailInitial()) {
     on(_getStoreDetails);
     on(gotoCompaignEvent);
     on(_markOutStore);
     on(_checkInStore);
     on(_addNote);
+    on((ShowStoreOnMapStoreDetailEvent event, emit) {
+      final lat = details?.latitude ?? 0;
+      final long = details?.longitude ?? 0;
+      var uri = Uri.parse(Platform.isAndroid
+          ? "google.navigation:q=$lat,$long&mode=d"
+          : "https://maps.apple.com/?q=$lat,$long");
+      launchUrl(uri);
+    });
+    on((CallStoreDetailEvent event, emit) {
+      final no = details?.phoneNo ?? "";
+      if (no.isEmpty) {
+        emit(StoreDetailToastMessageState('Phone number not found!'));
+      } else {
+        launchUrlString('tel://$no');
+      }
+    });
     add(GetStoreDetailsEvent());
+  }
+
+  double get distanceFromStore {
+    if (userLocation != null) {
+      return Geolocator.distanceBetween(
+          details?.latitude ?? 0,
+          details?.longitude ?? 0,
+          userLocation!.latitude,
+          userLocation!.longitude);
+    } else {
+      return 10000;
+    }
   }
 
   String noteToAdd = "";
@@ -39,6 +72,7 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
   }
 
   Future<void> _getStoreDetails(GetStoreDetailsEvent event, emit) async {
+    _updateUserPosition();
     details =
         await repo.getStoreDetails(beatPlanModel.storeId).catchError((onError) {
       emit(StoreDetailToastMessageState(onError.toString()));
@@ -63,16 +97,15 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
           'You are already marked In for other store\nPlease mark Out first.'));
       return;
     }
-    final loc = await Device().userPosition().catchError((onError) {
+    await _updateUserPosition().catchError((onError) {
       emit(StoreDetailToastMessageState(onError.toString()));
-      return Future<Position>.error(onError);
+      return Future<void>.error(onError);
     });
-    // final storeDistance =
-    //     Geolocator.distanceBetween(0, 0, loc.latitude, loc.longitude);
-    // if (storeDistance > 100) {
-    //   emit(StoreDetailToastMessageState('You are not in store range'));
-    //   return;
-    // }
+
+    if (distanceFromStore > 100) {
+      emit(StoreDetailToastMessageState('You are not in store range'));
+      return;
+    }
     final img = await ImagePicker().pickImage(source: ImageSource.camera);
     if (img == null) {
       emit(StoreDetailToastMessageState('Please click image'));
@@ -82,8 +115,8 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
     final response = await repo
         .markInOutStore(
             file: img,
-            latitude: loc.latitude,
-            longitude: loc.longitude,
+            latitude: userLocation!.latitude,
+            longitude: userLocation!.longitude,
             pjpId: beatPlanModel.pjpId,
             isIn: true,
             storeId: beatPlanModel.storeId)
@@ -97,10 +130,15 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
   }
 
   Future<void> _markOutStore(MarkOutStoreDetailEvent event, emit) async {
-    final loc = await Device().userPosition().catchError((onError) {
+    await _updateUserPosition().catchError((onError) {
       emit(StoreDetailToastMessageState(onError.toString()));
-      return Future<Position>.error(onError);
+      return Future<void>.error(onError);
     });
+
+    if (distanceFromStore > 100) {
+      emit(StoreDetailToastMessageState('You are not in store range'));
+      return;
+    }
 
     final img = await ImagePicker().pickImage(source: ImageSource.camera);
     if (img == null) {
@@ -111,8 +149,8 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
     final response = await repo
         .markInOutStore(
             file: img,
-            latitude: loc.latitude,
-            longitude: loc.longitude,
+            latitude: userLocation!.latitude,
+            longitude: userLocation!.longitude,
             pjpId: beatPlanModel.pjpId,
             isIn: false,
             storeId: beatPlanModel.storeId)
@@ -123,5 +161,10 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
     beatPlanModel.markin = false;
     AppStorage().markedInStoreId = null;
     emit(StoreDetailToastMessageState(response));
+  }
+
+  Future<void> _updateUserPosition() async {
+    final loc = await Device().userPosition();
+    userLocation = loc;
   }
 }

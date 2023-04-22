@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:i_densfa/module/promoter_module/feedback/feedback_view.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:simple_speed_dial/simple_speed_dial.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,17 @@ class StoreDetailView extends StatelessWidget {
               foregroundColor: Colors.white,
               backgroundColor: Theme.of(context).primaryColor,
               label: 'Feedback',
-              onPressed: () {},
+              onPressed: () {
+                final storeDetail = context.read<StoreDetailBloc>().details;
+                if (storeDetail != null) {
+                  AppPopup.showAppBottomSheet(
+                    context: context,
+                    child: FeedbackView(
+                        storeName:
+                            "${storeDetail.name} ${storeDetail.storeBranch}"),
+                  );
+                }
+              },
             ),
             SpeedDialChild(
               child: const Icon(Icons.schedule),
@@ -349,7 +360,7 @@ class StoreDetailView extends StatelessWidget {
                     color: Theme.of(context).primaryColor),
               ),
               Text(
-                "7 km Away",
+                "${(bloc.distanceFromStore / 1000).toStringAsFixed(2)} km Away",
                 style: GoogleFonts.inter(
                     fontSize: 12.sp, fontWeight: FontWeight.w400),
               ),
@@ -464,17 +475,16 @@ class StoreDetailView extends StatelessWidget {
                   backgroundColor: Colors.white,
                   child: IconButton(
                       color: Theme.of(context).primaryColor,
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.location_off,
-                      )),
+                      onPressed: () =>
+                          bloc.add(ShowStoreOnMapStoreDetailEvent()),
+                      icon: const Icon(Icons.location_on)),
                 ),
                 SizedBox(height: 5.h),
                 CircleAvatar(
                   backgroundColor: Colors.white,
                   child: IconButton(
                     color: Theme.of(context).primaryColor,
-                    onPressed: () {},
+                    onPressed: () => bloc.add(CallStoreDetailEvent()),
                     icon: SvgPicture.asset(ImageConstants.telephone),
                   ),
                 ),

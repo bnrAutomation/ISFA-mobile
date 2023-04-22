@@ -91,10 +91,13 @@ class BeatPlanStoreListView extends StatelessWidget {
                             separatorBuilder: (context, index) =>
                                 const SizedBox(height: 10),
                             itemBuilder: (context, index) {
+                              final store = bloc.beatPlans[index];
+                              final distance = bloc.distanceFromStore(store);
                               return InkWell(
                                   onTap: () => context.pushNamed(AppPaths.store,
                                       extra: bloc.beatPlans[index]),
-                                  child: StoreCardView(bloc.beatPlans[index]));
+                                  child: StoreCardView(store,
+                                      distanceInMeters: distance));
                             },
                           ),
               )
@@ -108,7 +111,9 @@ class BeatPlanStoreListView extends StatelessWidget {
 
 class StoreCardView extends StatelessWidget {
   final BeatPlanModel beatPlan;
-  const StoreCardView(this.beatPlan, {super.key});
+  final double distanceInMeters;
+  const StoreCardView(this.beatPlan,
+      {super.key, required this.distanceInMeters});
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +151,8 @@ class StoreCardView extends StatelessWidget {
                           style: GoogleFonts.inter(
                               fontSize: 10.sp, fontWeight: FontWeight.w500)),
                       const SizedBox(width: 8),
-                      Text('45Km Away',
+                      Text(
+                          '${(distanceInMeters / 1000).toStringAsFixed(2)}Km Away',
                           maxLines: 3,
                           overflow: TextOverflow.fade,
                           style: GoogleFonts.inter(fontSize: 10.sp))

@@ -1,20 +1,22 @@
 import 'dart:convert';
 
 class PromoterStoreDetailModel {
-  PromoterStoreDetailModel(
-      {required this.clusterId,
-      required this.storeId,
-      required this.storeCode,
-      required this.name,
-      required this.address,
-      required this.storeCategory,
-      required this.storeBranch,
-      required this.storeType,
-      required this.activeStatus,
-      required this.markIn,
-      required this.zipcode,
-      required this.latitude,
-      required this.longtitude});
+  PromoterStoreDetailModel({
+    required this.clusterId,
+    required this.storeId,
+    required this.storeCode,
+    required this.name,
+    required this.address,
+    required this.storeCategory,
+    required this.storeBranch,
+    required this.storeType,
+    required this.activeStatus,
+    required this.markIn,
+    required this.zipcode,
+    required this.latitude,
+    required this.longitude,
+    required this.phoneNo,
+  });
 
   int clusterId;
   int storeId;
@@ -27,9 +29,9 @@ class PromoterStoreDetailModel {
   bool activeStatus;
   bool markIn;
   int zipcode;
-  String? latitude;
-  String? longtitude;
-
+  double latitude;
+  double longitude;
+  String phoneNo;
   factory PromoterStoreDetailModel.fromRawJson(String str) =>
       PromoterStoreDetailModel.fromJson(json.decode(str));
 
@@ -37,19 +39,21 @@ class PromoterStoreDetailModel {
 
   factory PromoterStoreDetailModel.fromJson(Map<String, dynamic> json) =>
       PromoterStoreDetailModel(
-          clusterId: json["clusterId"],
-          storeId: json["storeId"],
-          storeCode: json["storeCode"],
-          name: json["name"],
-          address: json["address"],
-          storeCategory: json["storeCategory"],
-          storeBranch: json["storeBranch"],
-          storeType: json["storeType"],
-          activeStatus: json["activeStatus"],
-          markIn: json["markIn"] ?? false,
-          zipcode: json["zipcode"],
-          longtitude: json['longtitude'],
-          latitude: json['latitude']);
+        clusterId: json["clusterId"],
+        storeId: json["storeId"],
+        storeCode: json["storeCode"],
+        name: json["name"],
+        address: json["address"],
+        storeCategory: json["storeCategory"],
+        storeBranch: json["storeBranch"],
+        storeType: json["storeType"],
+        activeStatus: json["activeStatus"],
+        markIn: json["markIn"] ?? false,
+        zipcode: json["zipcode"],
+        phoneNo: json['phoneNo'],
+        latitude: double.tryParse(json['latitude'].toString()) ?? 0,
+        longitude: double.tryParse(json['logitude'].toString()) ?? 0,
+      );
 
   Map<String, dynamic> toJson() => {
         "clusterId": clusterId,
@@ -64,6 +68,7 @@ class PromoterStoreDetailModel {
         "markIn": markIn,
         "zipcode": zipcode,
         "latitude": latitude,
-        "longtitude": longtitude
+        "logitude": longitude,
+        "phoneNo": phoneNo,
       };
 }
