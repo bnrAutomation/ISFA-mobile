@@ -170,12 +170,11 @@ class AttendanceItemView extends StatelessWidget {
       child: Row(
         children: [
           RowCellAttendance(text: attandenceData.date.toStringFormat("dd MMM")),
-          RowCellAttendance(text: attandenceData.firstInTime),
-          RowCellAttendance(text: attandenceData.lastOutTime),
-          RowCellAttendance(text: attandenceData.inTime?.substring(0, 5) ?? ''),
-          RowCellAttendance(
-              text: attandenceData.outTime?.substring(0, 5) ?? ''),
-          RowCellAttendance(text: attandenceData.timeSpan),
+          RowCellAttendance(text: attandenceData.startDutyTime ?? '-'),
+          RowCellAttendance(text: attandenceData.endDutyTime ?? '-'),
+          RowCellAttendance(text: attandenceData.firstMarkInTime ?? '-'),
+          RowCellAttendance(text: attandenceData.lastMarkOutTime ?? '-'),
+          RowCellAttendance(text: attandenceData.timeSpan ?? '-'),
         ],
       ),
     );

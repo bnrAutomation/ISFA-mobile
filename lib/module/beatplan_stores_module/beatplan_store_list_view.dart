@@ -23,7 +23,8 @@ class BeatPlanStoreListView extends StatelessWidget {
           Icons.pending_actions,
           color: Colors.white,
         ),
-        onPressed: () => context.pushNamed(AppPaths.scheduleVisit),
+        onPressed: () => context.pushNamed(AppPaths.scheduleVisit,
+            extra: context.read<BeatplanStoresBloc>().beatPlans),
       ),
       body: BlocConsumer<BeatplanStoresBloc, BeatplanStoresState>(
         listenWhen: (previous, current) => current is BeatPlanSnackBarMessage,

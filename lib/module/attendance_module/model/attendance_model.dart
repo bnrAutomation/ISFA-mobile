@@ -1,89 +1,70 @@
 import 'dart:convert';
 
-class MyActivityModel {
-  MyActivityModel(
+class AttendanceModel {
+  AttendanceModel(
       {required this.message, required this.status, required this.data});
   final String message;
   final int status;
-  final MyActivityData data;
+  final List<AttendanceData> data;
 
-  factory MyActivityModel.fromRawJson(String str) =>
-      MyActivityModel.fromJson(json.decode(str));
+  factory AttendanceModel.fromRawJson(String str) =>
+      AttendanceModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory MyActivityModel.fromJson(Map<String, dynamic> json) =>
-      MyActivityModel(
+  factory AttendanceModel.fromJson(Map<String, dynamic> json) =>
+      AttendanceModel(
           message: json['message'],
           status: int.parse(json['status'].toString()),
-          data: MyActivityData.fromJson(json['data']));
+          data: (json['data'] as List)
+              .map((e) => AttendanceData.fromJson(e))
+              .toList());
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['message'] = message;
-    data['status'] = status;
-    data['data'] = data;
-    return data;
-  }
-}
-
-class MyActivityData {
-  MyActivityData({required this.attendanceData});
-  final List<AttendanceData> attendanceData;
-
-  factory MyActivityData.fromJson(Map<String, dynamic> json) => MyActivityData(
-      attendanceData: List.from(json['attendanceData'])
-          .map((e) => AttendanceData.fromJson(e))
-          .toList());
-
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['attendanceData'] = attendanceData.map((e) => e.toJson()).toList();
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        'message': message,
+        'status': status,
+        'data': data.map((e) => e.toJson()).toList()
+      };
 }
 
 class AttendanceData {
   AttendanceData({
     required this.date,
-    required this.inTime,
-    required this.outTime,
-    required this.storeid,
+    required this.startDutyTime,
+    required this.endDutyTime,
+    required this.firstMarkInTime,
+    required this.lastMarkOutTime,
     required this.timeSpan,
-    required this.lastOutTime,
-    required this.firstInTime,
-    required this.dutyTimeSpan,
   });
-  final DateTime date;
-  final String? inTime;
-  final String? outTime;
-  final int? storeid;
-  final String timeSpan;
-  final String lastOutTime;
-  final String firstInTime;
-  final String dutyTimeSpan;
+
+  DateTime date;
+  String? startDutyTime;
+  String? endDutyTime;
+  String? firstMarkInTime;
+  String? lastMarkOutTime;
+  String? timeSpan;
+
+  factory AttendanceData.fromRawJson(String str) =>
+      AttendanceData.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 
   factory AttendanceData.fromJson(Map<String, dynamic> json) => AttendanceData(
-      date:
-          json['date'] == null ? DateTime.now() : DateTime.parse(json['date']),
-      inTime: json['inTime'],
-      outTime: json['outTime'],
-      storeid: json['storeid'],
-      timeSpan: json['timeSpan'] ?? "",
-      lastOutTime: json['lastOutTime'] ?? "",
-      firstInTime: json['firstInTime'] ?? "",
-      dutyTimeSpan: json['dutyTimeSpan'] ?? "");
+        date: DateTime.parse(json["date"]),
+        startDutyTime: json["startDutyTime"],
+        endDutyTime: json["endDutyTime"],
+        firstMarkInTime: json["firstMarkInTime"],
+        lastMarkOutTime: json["lastMarkOutTime"],
+        timeSpan: json["timeSpan"],
+      );
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['date'] = date;
-    data['inTime '] = inTime;
-    data['outTime '] = outTime;
-    data['storeid'] = storeid;
-    data['timeSpan '] = timeSpan;
-    data['lastOutTime'] = lastOutTime;
-    data['firstInTime'] = firstInTime;
-    data['dutyTimeSpan'] = dutyTimeSpan;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "date":
+            "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
+        "startDutyTime": startDutyTime,
+        "endDutyTime": endDutyTime,
+        "firstMarkInTime": firstMarkInTime,
+        "lastMarkOutTime": lastMarkOutTime,
+        "timeSpan": timeSpan,
+      };
 }

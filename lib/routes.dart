@@ -121,7 +121,8 @@ final router = GoRouter(
       name: AppPaths.scheduleVisit,
       builder: (context, state) {
         return BlocProvider(
-            create: (context) => ScheduleVisitCallBloc(),
+            create: (context) =>
+                ScheduleVisitCallBloc(state.extra as List<BeatPlanModel>),
             child: const ScheduleVisitView());
       },
     ),

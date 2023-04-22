@@ -259,7 +259,8 @@ class AppSideMenu extends StatelessWidget {
             leading: const Icon(Icons.help_outline),
             title: const Text('Help'),
             onTap: () {
-              Scaffold.of(context).closeDrawer();
+              // Scaffold.of(context).closeDrawer();
+              closeDrawerAndPushView(context, AppPaths.attendance);
             },
           ),
           ListTile(

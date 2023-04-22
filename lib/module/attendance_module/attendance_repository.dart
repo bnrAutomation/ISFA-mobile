@@ -14,9 +14,9 @@ class AttendanceRepository {
     required DateTime dateTime,
   }) async {
     final response = await get(Uri.parse(
-        '${URLConstants.attendence}/$userId/${dateTime.toStringFormat('yyyy-MM')}'));
+        '${URLConstants.attendence}/$userId/${dateTime.toStringFormat('yyyy')}/${dateTime.toStringFormat('MM')}'));
     return response.body.isEmpty
         ? <AttendanceData>[]
-        : MyActivityModel.fromRawJson(response.body).data.attendanceData;
+        : AttendanceModel.fromRawJson(response.body).data;
   }
 }

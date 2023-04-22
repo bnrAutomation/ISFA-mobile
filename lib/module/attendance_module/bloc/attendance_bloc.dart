@@ -27,13 +27,13 @@ class AttendanceBloc extends Bloc<MyActivityEvent, AttendanceState> {
   Future<void> _getAttendance(
       Emitter<AttendanceState> emit, DateTime dateTime) async {
     emit(AttendanceLoadingState());
-    var list = await repo.getMyActivity(dateTime: dateTime).catchError((error) {
+    attandenceData =
+        await repo.getMyActivity(dateTime: dateTime).catchError((error) {
       emit(MyActivityWithData());
       emit(AttendanceShowSnack(error.toString()));
       return <AttendanceData>[];
     });
 
-    attandenceData = list.where((element) => element.storeid != null).toList();
     emit(MyActivityWithData());
   }
 }

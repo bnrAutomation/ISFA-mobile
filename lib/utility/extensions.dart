@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 extension DateTimeHelper on DateTime {
+  /// Return a string representing [date] formatted according to our locale
+  /// and internal format.
   String toStringFormat(String format) {
     return DateFormat(format).format(this);
   }
