@@ -6,12 +6,14 @@ import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/module/campaign_module/bloc/campaign_bloc.dart';
 import 'package:i_densfa/module/campaign_module/view/campaign_questions_view.dart';
 import 'package:i_densfa/module/campaign_module/view/campaign_view.dart';
+import 'package:i_densfa/module/change_password_module/change_password_view.dart';
 import 'package:i_densfa/module/checkin_module/check_in_view.dart';
 import 'package:i_densfa/module/inventory_module/inventory_view.dart';
 import 'package:i_densfa/module/leaves_module/leave_view.dart';
 import 'package:i_densfa/module/login_module/login_view.dart';
 import 'package:i_densfa/module/promoter_module/bloc/promoter_bloc.dart';
 import 'package:i_densfa/module/promoter_module/promoter_view.dart';
+import 'package:i_densfa/module/setting_module/setting_view.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_repositry.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_view.dart';
 import 'package:i_densfa/utility/app_storage.dart';
@@ -176,6 +178,16 @@ final router = GoRouter(
       name: AppPaths.leave,
       builder: (context, state) => const LeaveView(),
     ),
+    GoRoute(
+      path: AppPaths.setting,
+      name: AppPaths.setting,
+      builder: (context, state) => const SettingView(),
+    ),
+    GoRoute(
+      path: AppPaths.changePass,
+      name: AppPaths.changePass,
+      builder: (context, state) => ChangePasswordView(),
+    ),
   ],
   errorBuilder: (context, state) {
     return Scaffold(
@@ -209,4 +221,6 @@ class AppPaths {
   static const attendance = '/attendance';
   static const leave = '/leave';
   static const promoter = '/promoter';
+  static const setting = '/setting';
+  static const changePass = '/changePass';
 }

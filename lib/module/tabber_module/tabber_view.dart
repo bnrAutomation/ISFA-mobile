@@ -250,9 +250,10 @@ class AppSideMenu extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.settings_outlined),
-            title: const Text('Setting'),
+            title: const Text('Settings'),
             onTap: () {
-              Scaffold.of(context).closeDrawer();
+              closeDrawerAndPushView(context, AppPaths.setting);
+              //  Scaffold.of(context).closeDrawer();
             },
           ),
           ListTile(

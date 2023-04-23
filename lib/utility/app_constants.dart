@@ -42,6 +42,7 @@ class URLConstants {
   static const forgotPassword = "$loginAuth/$version/forgot-password";
   static const verifyotp = "$loginAuth/$version/verify-otp";
   static const resetPassword = "$loginAuth/$version/reset-password";
+  static const updatePassword = "$loginAuth/$version/update-password";
 
   static const leaveDetails = "$apiBaseUrl/getEmpLeaveDetails";
   static const leaves = '$apiBaseUrl/leave';

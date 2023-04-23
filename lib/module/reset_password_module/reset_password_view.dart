@@ -71,7 +71,7 @@ class ResetPasswordView extends StatelessWidget {
                             const Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                "Your new password must be diffrent from your previously userd password",
+                                "Your new password must be different from your previously password",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(),
                               ),
@@ -194,7 +194,7 @@ class ResetPasswordView extends StatelessWidget {
                                         },
                                         buttonText:
                                             state is ResetPasswordLoadingState
-                                                ? "Loading.."
+                                                ? "Loading..."
                                                 : "Change Passsord",
                                       )),
                                 );

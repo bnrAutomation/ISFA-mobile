@@ -64,6 +64,7 @@ class UserInfo {
   late final String email;
   late final String supervisor;
   late final int companyId;
+  late final String companyName;
   late final String designation;
   late final String iRole;
   late final String mobile;
@@ -76,6 +77,7 @@ class UserInfo {
   UserInfo.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     username = json['username'];
+    companyName = json['companyName'] ?? "";
     email = json['email'];
     supervisor = json['supervisor'];
     companyId = json['companyId'];
@@ -92,6 +94,7 @@ class UserInfo {
     data['email'] = email;
     data['supervisor'] = supervisor;
     data['companyId'] = companyId;
+    data['companyName'] = companyName;
     data['designation'] = designation;
     data['iRole'] = iRole;
     data['mobile'] = mobile;
