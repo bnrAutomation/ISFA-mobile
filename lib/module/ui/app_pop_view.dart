@@ -44,6 +44,7 @@ class AppPopup {
           borderRadius: BorderRadius.circular(10),
           value: value,
           items: options
+              .toSet()
               .map((value) => DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),

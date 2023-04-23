@@ -19,7 +19,7 @@ class BeatplanStoresBloc
   BeatplanStoresBloc(this.repo) : super(BeatPlanStoresLoadingState()) {
     on((BeatPlanStoresUpdateData event, emit) async {
       emit(BeatPlanStoresLoadingState());
-      userLocation = await Device().userPosition();
+      updateUserLocation();
       beatPlans = await repo.getBeatPlans(selectedDate).catchError((onError) {
         emit(BeatPlanSnackBarMessage(onError.toString()));
         return <BeatPlanModel>[];
@@ -36,6 +36,14 @@ class BeatplanStoresBloc
   void onPreviousDateSelect() {
     final newDate = selectedDate.subtract(const Duration(days: 1));
     add(BeatPlanStoresDateChangeEvent(newDate));
+  }
+
+  void updateUserLocation() async {
+    try {
+      userLocation = await Device().userPosition();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   double distanceFromStore(BeatPlanModel details) {

@@ -72,7 +72,9 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
   }
 
   Future<void> _getStoreDetails(GetStoreDetailsEvent event, emit) async {
-    _updateUserPosition();
+    _updateUserPosition().catchError((onError) {
+      debugPrint(onError.toString());
+    });
     details =
         await repo.getStoreDetails(beatPlanModel.storeId).catchError((onError) {
       emit(StoreDetailToastMessageState(onError.toString()));
