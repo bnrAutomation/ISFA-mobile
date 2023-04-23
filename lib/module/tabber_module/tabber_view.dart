@@ -204,7 +204,7 @@ class AppSideMenu extends StatelessWidget {
                 ),
                 title: Text(e.name),
                 onTap: () {
-                  switch (e.key) {
+                  switch (e.key.toLowerCase()) {
                     case 'promoter':
                       closeDrawerAndPushView(context, AppPaths.promoter);
                       break;
@@ -214,10 +214,10 @@ class AppSideMenu extends StatelessWidget {
                     case 'attendance':
                       closeDrawerAndPushView(context, AppPaths.attendance);
                       break;
-                    case 'My Activities':
+                    case 'my activity':
                       Navigator.pop(context);
                       break;
-                    case 'Assessment':
+                    case 'assessment':
                       closeDrawerAndPushView(context, AppPaths.assessmentList);
                       break;
                     default:
