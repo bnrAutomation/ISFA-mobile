@@ -101,6 +101,7 @@ class LoginView extends StatelessWidget {
                                   usernameController.text,
                                   passwordController.text));
                             },
+                            keyboardType: TextInputType.visiblePassword,
                             obscureText:
                                 context.read<LoginBloc>().isShowingPassword,
                             decoration: InputDecoration(

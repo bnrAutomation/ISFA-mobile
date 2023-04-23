@@ -12,17 +12,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   bool isShowingPassword = false;
 
   LoginBloc(this.repo) : super(LoginInitialState()) {
-    on<LoginEvent>((event, emit) {});
     on<LoginShowPasswordButtonEvent>((event, emit) {
       isShowingPassword = !isShowingPassword;
       emit(LoginShowPasswordState(isShowingPassword));
     });
     on<LoginTextChangeEvent>((event, emit) {
-      if (event.userValue.isEmpty || event.passwordValue.isEmpty) {
-        emit(LogInErrorState("Invalid Username & Password"));
-      } else {
-        emit(LogInValidState());
-      }
+      emit(LogInValidState());
     });
     on<LoginSubmitEvent>((event, emit) async {
       if (event.username.isEmpty) {

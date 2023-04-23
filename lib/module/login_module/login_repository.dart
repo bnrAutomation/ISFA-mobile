@@ -13,7 +13,7 @@ class LoginRepository {
     if (response.statusCode == 200) {
       return LoginModel.fromRawJson(response.body);
     } else if (response.statusCode == 401) {
-      throw "User doesn't exist";
+      throw "Incorrect Username or Password";
     } else {
       throw response.body.isEmpty
           ? "Something went wrong"
