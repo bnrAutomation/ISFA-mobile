@@ -9,6 +9,7 @@ import 'package:i_densfa/module/ui/background.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 class ForgotPasswordView extends StatelessWidget {
   ForgotPasswordView({super.key});
@@ -82,9 +83,7 @@ class ForgotPasswordView extends StatelessWidget {
                                   style: const TextStyle(color: Colors.red),
                                 )
                               : Container(),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          const SizedBox(height: 10),
                           TextField(
                             inputFormatters: [
                               FilteringTextInputFormatter.deny(" ")
@@ -128,13 +127,13 @@ class ForgotPasswordView extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 20),
                                     child: CustomMaterialButton(
-                                      onPressed: () => {
+                                      onPressed: () {
                                         if (state
-                                            is! ForgotPasswordLoadingState)
-                                          {
-                                            bloc.add(ForgotPasswordSubmitEvent(
-                                                usernameController.text))
-                                          }
+                                            is! ForgotPasswordLoadingState) {
+                                          context.hideKeyboard();
+                                          bloc.add(ForgotPasswordSubmitEvent(
+                                              usernameController.text));
+                                        }
                                       },
                                       buttonText:
                                           state is ForgotPasswordLoadingState

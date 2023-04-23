@@ -24,3 +24,9 @@ extension Helper on String {
     return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
 }
+
+extension BuildContextHelper on BuildContext {
+  void hideKeyboard() {
+    FocusScope.of(this).requestFocus(FocusNode());
+  }
+}

@@ -10,15 +10,11 @@ class ForgotPasswordBloc
   final ForgotPasswordRepository repo;
   ForgotPasswordBloc(this.repo) : super(ForgotPasswordInitial()) {
     on<ChangeTextEvent>((event, emit) {
-      if (event.useridValue.isEmpty) {
-        emit(ForgotPasswordErrorState("Feild should not be empty."));
-      } else {
-        emit(ForgotPasswordValidState());
-      }
+      emit(ForgotPasswordValidState());
     });
     on<ForgotPasswordSubmitEvent>((event, emit) async {
       if (event.userid.isEmpty) {
-        emit(ForgotPasswordErrorState("Feild should not be empty."));
+        emit(ForgotPasswordErrorState("Please enter your registered email"));
       } else {
         try {
           emit(ForgotPasswordLoadingState());

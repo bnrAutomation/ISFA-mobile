@@ -9,6 +9,7 @@ import 'package:i_densfa/module/promoter_module/feedback/feedback_repository.dar
 import 'package:i_densfa/module/ui/app_pop_view.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 class FeedbackView extends StatelessWidget {
   final String storeName;
@@ -125,8 +126,7 @@ class FeedbackView extends StatelessWidget {
                             child: CustomMaterialButton(
                                 buttonText: "Click Image",
                                 onPressed: () {
-                                  FocusScope.of(context)
-                                      .requestFocus(FocusNode());
+                                  context.hideKeyboard();
                                   bloc.add(ClickImageFeedbackEvent());
                                 }),
                           ),
@@ -149,7 +149,7 @@ class FeedbackView extends StatelessWidget {
                       CustomMaterialButton(
                           buttonText: "Save Feedback",
                           onPressed: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
+                            context.hideKeyboard();
                             bloc.add(FeedbackSaveEvent());
                           }),
                       const SizedBox(height: 10),

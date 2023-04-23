@@ -8,6 +8,7 @@ import 'package:i_densfa/module/login_module/bloc/login_bloc.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/extensions.dart';
 import '../ui/background.dart';
 import 'login_repository.dart';
 
@@ -134,8 +135,7 @@ class LoginView extends StatelessWidget {
                             alignment: Alignment.centerRight,
                             child: InkWell(
                               onTap: () {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
+                                context.hideKeyboard();
                                 context.pushNamed(AppPaths.forgotpass);
                               },
                               child: Text(
@@ -152,8 +152,7 @@ class LoginView extends StatelessWidget {
                           BlocConsumer<LoginBloc, LoginState>(
                             listener: (context, state) {
                               if (state is LoginedSuccesfullState) {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
+                                context.hideKeyboard();
                                 context.go(AppPaths.tabbar);
                               }
                             },
@@ -166,8 +165,7 @@ class LoginView extends StatelessWidget {
                                   child: CustomMaterialButton(
                                     onPressed: () {
                                       if (state is! LogInLoadingState) {
-                                        FocusScope.of(context)
-                                            .requestFocus(FocusNode());
+                                        context.hideKeyboard();
                                         bloc.add(LoginSubmitEvent(
                                             usernameController.text,
                                             passwordController.text));

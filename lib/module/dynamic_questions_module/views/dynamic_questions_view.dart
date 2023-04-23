@@ -114,7 +114,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                     options: question.options,
                     placeholder: "Choose your answer",
                     onChanged: (p0) {
-                      FocusScope.of(context).requestFocus(FocusNode());
+                      context.hideKeyboard();
                       question.answer = p0;
                       setState(() {});
                     },
@@ -131,7 +131,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                   title: Text(question.question),
                   subtitle: InkWell(
                     onTap: () async {
-                      FocusScope.of(context).requestFocus(FocusNode());
+                      context.hideKeyboard();
                       final DateTime date = await showDialog(
                           context: context,
                           builder: (c) {
@@ -188,7 +188,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                     value: option,
                     groupValue: question.answer,
                     onChanged: (val) {
-                      FocusScope.of(context).requestFocus(FocusNode());
+                      context.hideKeyboard();
                       question.answer = val;
                       setState(() {});
                     }),
