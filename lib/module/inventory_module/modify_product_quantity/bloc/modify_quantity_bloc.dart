@@ -76,7 +76,7 @@ class ModifyQuantityBloc
       return;
     }
 
-    if (selectedQuantity == null) {
+    if (selectedQuantity == null || selectedQuantity == 0) {
       emit(ToastMessageState('Please enter quantity'));
       return;
     }
