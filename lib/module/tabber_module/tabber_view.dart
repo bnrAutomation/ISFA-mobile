@@ -218,13 +218,13 @@ class AppSideMenu extends StatelessWidget {
               );
             },
           ).toList(),
-          ListTile(
-            leading: const Icon(Icons.notifications_outlined),
-            title: const Text('Notification'),
-            onTap: () {
-              Scaffold.of(context).closeDrawer();
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(Icons.notifications_outlined),
+          //   title: const Text('Notification'),
+          //   onTap: () {
+          //     Scaffold.of(context).closeDrawer();
+          //   },
+          // ),
           ListTile(
             leading: const Icon(Icons.settings_outlined),
             title: const Text('Settings'),
