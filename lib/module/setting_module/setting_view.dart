@@ -195,9 +195,7 @@ class SettingView extends StatelessWidget {
                         boxShadow: [
                           BoxShadow(
                             color: Theme.of(context).shadowColor,
-
-                            offset: const Offset(
-                                0, 0.1), // changes position of shadow
+                            offset: const Offset(0, 0.1),
                           ),
                         ],
                       ),
@@ -213,7 +211,7 @@ class SettingView extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () => context.pushNamed(AppPaths.aboutUs),
                     child: Container(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
@@ -222,9 +220,7 @@ class SettingView extends StatelessWidget {
                         boxShadow: [
                           BoxShadow(
                             color: Theme.of(context).shadowColor,
-
-                            offset: const Offset(
-                                0, 0.1), // changes position of shadow
+                            offset: const Offset(0, 0.1),
                           ),
                         ],
                       ),

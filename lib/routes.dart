@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:i_densfa/module/assessment_module/assessment_repository.dart';
-import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
-import 'package:i_densfa/module/campaign_module/bloc/campaign_bloc.dart';
-import 'package:i_densfa/module/campaign_module/view/campaign_questions_view.dart';
-import 'package:i_densfa/module/campaign_module/view/campaign_view.dart';
-import 'package:i_densfa/module/change_password_module/change_password_view.dart';
-import 'package:i_densfa/module/checkin_module/check_in_view.dart';
-import 'package:i_densfa/module/inventory_module/inventory_view.dart';
-import 'package:i_densfa/module/leaves_module/leave_view.dart';
-import 'package:i_densfa/module/login_module/login_view.dart';
-import 'package:i_densfa/module/my_activity_module/my_activity_view.dart';
-import 'package:i_densfa/module/policy_module/policy_view.dart';
-import 'package:i_densfa/module/promoter_module/bloc/promoter_bloc.dart';
-import 'package:i_densfa/module/promoter_module/promoter_view.dart';
-import 'package:i_densfa/module/setting_module/setting_view.dart';
-import 'package:i_densfa/module/store_detail_module/store_detail_repositry.dart';
-import 'package:i_densfa/module/store_detail_module/store_detail_view.dart';
-import 'package:i_densfa/module/web_module/web_view.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
+import 'module/assessment_module/assessment_repository.dart';
+import 'module/beatplan_stores_module/beat_plan_model.dart';
+import 'module/campaign_module/bloc/campaign_bloc.dart';
+import 'module/campaign_module/view/campaign_questions_view.dart';
+import 'module/campaign_module/view/campaign_view.dart';
+import 'module/change_password_module/change_password_view.dart';
+import 'module/checkin_module/check_in_view.dart';
+import 'module/inventory_module/inventory_view.dart';
+import 'module/leaves_module/leave_view.dart';
+import 'module/login_module/login_view.dart';
+import 'module/my_activity_module/my_activity_view.dart';
+import 'module/policy_module/policy_view.dart';
+import 'module/promoter_module/bloc/promoter_bloc.dart';
+import 'module/promoter_module/promoter_view.dart';
+import 'module/setting_module/setting_view.dart';
+import 'module/store_detail_module/store_detail_repositry.dart';
+import 'module/store_detail_module/store_detail_view.dart';
+import 'module/web_module/web_view.dart';
+import 'module/aboutus_module/aboutus_view.dart';
 import 'module/assessment_module/bloc/assessment_bloc.dart';
 import 'module/assessment_module/views/assessment_list_view.dart';
 import 'module/assessment_module/views/assessment_questions_view.dart';
@@ -208,6 +209,11 @@ final router = GoRouter(
       name: AppPaths.policy,
       builder: (context, state) => const PolicyView(),
     ),
+    GoRoute(
+      path: AppPaths.aboutUs,
+      name: AppPaths.aboutUs,
+      builder: (context, state) => const AboutUsView(),
+    ),
   ],
   errorBuilder: (context, state) {
     return Scaffold(
@@ -246,4 +252,5 @@ class AppPaths {
   static const appwebview = '/appwebview';
   static const policy = "/policy";
   static const myActivity = "/myActivity";
+  static const aboutUs = "/aboutus";
 }
