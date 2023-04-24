@@ -10,10 +10,10 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   bool isShowingConfirmPassword = true;
   final ResetPasswordRepository repo;
   ResetPasswordBloc(this.repo) : super(ResetPasswordInitial()) {
-    on<NewPasswordButtonEvent>((event, emit) => {
-          isShowingNewPassword = !isShowingNewPassword,
-          emit(ShowNewPasswordState(isShowingNewPassword))
-        });
+    on<NewPasswordButtonEvent>((event, emit) {
+      isShowingNewPassword = !isShowingNewPassword;
+      emit(ShowNewPasswordState(isShowingNewPassword));
+    });
     on<ConfirmPasswordButtonEvent>((event, emit) {
       isShowingConfirmPassword = !isShowingConfirmPassword;
       emit(ShowConfirmPasswordState(isShowingConfirmPassword));

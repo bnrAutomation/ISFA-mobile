@@ -90,11 +90,9 @@ class ResetPasswordView extends StatelessWidget {
                             ),
                             TextField(
                               controller: newPasswordController,
-                              onChanged: (value) => {
-                                bloc.add(ChangePassword(
-                                    newPasswordController.text,
-                                    confirmPasssordController.text))
-                              },
+                              onChanged: (value) => bloc.add(ChangePassword(
+                                  newPasswordController.text,
+                                  confirmPasssordController.text)),
                               obscureText: context
                                   .read<ResetPasswordBloc>()
                                   .isShowingNewPassword,
@@ -128,11 +126,9 @@ class ResetPasswordView extends StatelessWidget {
                             ),
                             TextField(
                               controller: confirmPasssordController,
-                              onChanged: (value) => {
-                                bloc.add(ChangePassword(
-                                    newPasswordController.text,
-                                    confirmPasssordController.text))
-                              },
+                              onChanged: (value) => bloc.add(ChangePassword(
+                                  newPasswordController.text,
+                                  confirmPasssordController.text)),
                               obscureText: context
                                   .read<ResetPasswordBloc>()
                                   .isShowingConfirmPassword,
@@ -178,19 +174,15 @@ class ResetPasswordView extends StatelessWidget {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20),
                                       child: CustomMaterialButton(
-                                        onPressed: () => {
+                                        onPressed: () {
                                           if (state
-                                              is! ResetPasswordLoadingState)
-                                            {
-                                              bloc.add(
-                                                  SubmitChangePasswordEvent(
-                                                      newPasswordController
-                                                          .text,
-                                                      confirmPasssordController
-                                                          .text,
-                                                      otp,
-                                                      email))
-                                            }
+                                              is! ResetPasswordLoadingState) {
+                                            bloc.add(SubmitChangePasswordEvent(
+                                                newPasswordController.text,
+                                                confirmPasssordController.text,
+                                                otp,
+                                                email));
+                                          }
                                         },
                                         buttonText:
                                             state is ResetPasswordLoadingState

@@ -15,11 +15,11 @@ class MyActivityBloc extends Bloc<MyActivityEvent, MyActivityState> {
     on<MyActivityEvent>((event, emit) {});
     on<GetMyAcivityEvent>(
         (event, emit) async => await _getMyActivity(emit, selected));
-    on<MyActivityChangeMonth>((event, emit) => {
-          selected = event.date,
-          emit(MyAcivityMonthChangeState()),
-          add(GetMyAcivityEvent())
-        });
+    on<MyActivityChangeMonth>((event, emit) {
+      selected = event.date;
+      emit(MyAcivityMonthChangeState());
+      add(GetMyAcivityEvent());
+    });
   }
 
   _getMyActivity(Emitter<MyActivityState> emit, DateTime selected) async {

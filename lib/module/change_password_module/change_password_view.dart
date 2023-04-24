@@ -61,7 +61,7 @@ class ChangePasswordView extends StatelessWidget {
                         obscureText: bloc.isShowingOldPassword,
                         decoration: InputDecoration(
                           suffixIcon: GestureDetector(
-                            onTap: () => {bloc.add(OldPasswordButtonEvent())},
+                            onTap: () => bloc.add(OldPasswordButtonEvent()),
                             child: Container(
                               color: Colors.transparent,
                               child: Icon(
@@ -88,7 +88,7 @@ class ChangePasswordView extends StatelessWidget {
                         obscureText: bloc.isShowingNewPassword,
                         decoration: InputDecoration(
                           suffixIcon: GestureDetector(
-                            onTap: () => {bloc.add(NewPasswordButtonEvent())},
+                            onTap: () => bloc.add(NewPasswordButtonEvent()),
                             child: Container(
                               color: Colors.transparent,
                               child: Icon(
@@ -123,14 +123,13 @@ class ChangePasswordView extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: CustomMaterialButton(
-                                  onPressed: () => {
-                                    if (state is! ChangePasswordLoadingState)
-                                      {
-                                        bloc.add(SubmitChangePasswordEvent(
-                                          newPasswordController.text,
-                                          oldPasswordController.text,
-                                        ))
-                                      }
+                                  onPressed: () {
+                                    if (state is! ChangePasswordLoadingState) {
+                                      bloc.add(SubmitChangePasswordEvent(
+                                        newPasswordController.text,
+                                        oldPasswordController.text,
+                                      ));
+                                    }
                                   },
                                   buttonText:
                                       state is ChangePasswordLoadingState

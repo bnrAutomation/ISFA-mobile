@@ -9,19 +9,21 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
   var varificationCode = "";
   final VerificationRepository repo;
   VerificationBloc(this.repo) : super(VerificationInitial()) {
-    on<VerificationErrorEvent>((event, emit) => {
-          emit(VerificationErrorState(event.msg)),
-        });
-    on<VerificationTextChangeEvent>((event, emit) => {
-          if (event.otpValue.length != 4)
-            {
-              varificationCode = event.otpValue,
-              emit(VerificationErrorState("Please Enter Valid OTP"))
-            }
-          else
-            {varificationCode = event.otpValue, emit(VerificationValidState())}
-        });
-    on<ReSendPasswordEvent>((event, emit) => {emit(VerificationCodeResend())});
+    on<VerificationErrorEvent>((event, emit) {
+      emit(VerificationErrorState(event.msg));
+    });
+    on<VerificationTextChangeEvent>((event, emit) {
+      if (event.otpValue.length != 4) {
+        varificationCode = event.otpValue;
+        emit(VerificationErrorState("Please Enter Valid OTP"));
+      } else {
+        varificationCode = event.otpValue;
+        emit(VerificationValidState());
+      }
+    });
+    on<ReSendPasswordEvent>((event, emit) {
+      emit(VerificationCodeResend());
+    });
 
     on<VerificationSubmitEvent>((event, emit) async {
       if (varificationCode.isEmpty || varificationCode.length != 4) {

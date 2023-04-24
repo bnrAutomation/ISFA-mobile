@@ -55,12 +55,11 @@ class LearnerView extends StatelessWidget {
                                   title: Text(bloc.dataList[index].title),
                                   children: [
                                     InkWell(
-                                      onTap: () => {
-                                        context.pushNamed(AppPaths.appwebview,
-                                            params: {
-                                              'link': bloc.dataList[index].link,
-                                            })
-                                      },
+                                      onTap: () => context.pushNamed(
+                                          AppPaths.appwebview,
+                                          params: {
+                                            'link': bloc.dataList[index].link,
+                                          }),
                                       child: Container(
                                         margin: const EdgeInsets.symmetric(
                                             vertical: 8, horizontal: 20),

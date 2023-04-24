@@ -89,9 +89,8 @@ class ForgotPasswordView extends StatelessWidget {
                               FilteringTextInputFormatter.deny(" ")
                             ],
                             controller: usernameController,
-                            onChanged: (value) => {
-                              bloc.add(ChangeTextEvent(usernameController.text))
-                            },
+                            onChanged: (value) => bloc
+                                .add(ChangeTextEvent(usernameController.text)),
                             decoration: InputDecoration(
                               filled: true,
                               fillColor:
