@@ -67,7 +67,6 @@ lib/generated_plugin_registrant.dart
 
 # End of https://www.toptal.com/developers/gitignore/api/flutter
 .DS_Store
-ios/Podfile
 macos/Podfile
 */Podfile.lock
 */Flutter/Flutter-Debug.xcconfig
