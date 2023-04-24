@@ -33,11 +33,6 @@ class BeatplanStoresBloc
     });
   }
 
-  void onPreviousDateSelect() {
-    final newDate = selectedDate.subtract(const Duration(days: 1));
-    add(BeatPlanStoresDateChangeEvent(newDate));
-  }
-
   void updateUserLocation() async {
     try {
       userLocation = await Device().userPosition();
@@ -60,6 +55,11 @@ class BeatplanStoresBloc
 
   void onNextDateSelect() {
     final newDate = selectedDate.add(const Duration(days: 1));
+    add(BeatPlanStoresDateChangeEvent(newDate));
+  }
+
+  void onPreviousDateSelect() {
+    final newDate = selectedDate.subtract(const Duration(days: 1));
     add(BeatPlanStoresDateChangeEvent(newDate));
   }
 }

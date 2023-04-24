@@ -20,12 +20,33 @@ class CampaignListItem extends StatelessWidget {
                 width: 1.sw,
                 height: 5,
               ),
-              Text(
-                item.name,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(fontWeight: FontWeight.w600, color: Colors.blue),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      item.name,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: DateTime.now().isBefore(item.endDate)
+                              ? Colors.blue
+                              : Colors.grey),
+                    ),
+                  ),
+                  Text(
+                    DateTime.now().isBefore(item.endDate)
+                        ? "Active"
+                        : "De-Active",
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: DateTime.now().isBefore(item.endDate)
+                            ? Colors.green
+                            : Colors.red),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  )
+                ],
               ),
               Text(
                 "Description : ${item.companyId}",

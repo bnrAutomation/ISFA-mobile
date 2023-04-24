@@ -5,10 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:i_densfa/module/analytics_module/analytics_view.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beatplan_store_list_view.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beatplan_stores_repository.dart';
 import 'package:i_densfa/module/beatplan_stores_module/bloc/beatplan_stores_bloc.dart';
 import 'package:i_densfa/module/campaign_module/view/campaign_view.dart';
+import 'package:i_densfa/module/learner_module/learner_view.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
 import 'package:i_densfa/routes.dart';
@@ -155,22 +157,11 @@ class TabberView extends StatelessWidget {
                 child: const BeatPlanStoreListView(),
               );
       case TabbarItemCase.learner:
-        return const Text(
-          'Learner',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
-        );
+        return const LearnerView();
       case TabbarItemCase.campaign:
-        final storeId = bloc.sideMenuData?.userInfo.storeId ?? 0;
-        if (storeId > 0) {
-          return CampaignView(storeID: storeId);
-        } else {
-          return const Text("No store found");
-        }
+        return const CampaignView(storeID: -1);
       case TabbarItemCase.analytics:
-        return const Text(
-          'Analytics',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
-        );
+        return const AnalyticsView();
     }
   }
 }
@@ -202,7 +193,7 @@ class AppSideMenu extends StatelessWidget {
                   errorWidget: (context, url, error) =>
                       const ColoredBox(color: Colors.red),
                 ),
-                title: Text(e.name.toLowerCase().trim()),
+                title: Text(e.name),
                 onTap: () {
                   switch (e.key.toLowerCase()) {
                     case 'promoter':
@@ -214,8 +205,8 @@ class AppSideMenu extends StatelessWidget {
                     case 'attendance':
                       closeDrawerAndPushView(context, AppPaths.attendance);
                       break;
-                    case 'myactivity':
-                      Navigator.pop(context);
+                    case 'my activity':
+                      closeDrawerAndPushView(context, AppPaths.myActivity);
                       break;
                     case 'assessment':
                       closeDrawerAndPushView(context, AppPaths.assessmentList);

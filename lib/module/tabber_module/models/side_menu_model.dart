@@ -120,6 +120,12 @@ extension TabbarHelper on TabbarItemCase {
     switch (this) {
       case TabbarItemCase.schedule:
         return 'My Schedule';
+      case TabbarItemCase.learner:
+        return 'Learner';
+      case TabbarItemCase.campaign:
+        return 'Campaign';
+      case TabbarItemCase.analytics:
+        return 'Analytics';
       default:
         return 'ISFA';
     }

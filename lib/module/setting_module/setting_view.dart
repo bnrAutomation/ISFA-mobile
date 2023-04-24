@@ -184,7 +184,9 @@ class SettingView extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      context.pushNamed(AppPaths.policy);
+                    },
                     child: Container(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),

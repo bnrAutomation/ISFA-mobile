@@ -132,7 +132,8 @@ class SelectedCampaignView extends StatelessWidget {
                     ),
                   ),
                 if (selectedCamp != null &&
-                    DateTime.now().isBefore(selectedCamp.endDate))
+                    DateTime.now().isBefore(selectedCamp.endDate) &&
+                    bloc.repo.storeId != -1)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: FilledButton(
@@ -166,7 +167,7 @@ class SelectedCampaignView extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20.sp),
                           ),
-                          const Text("Sub Dealer Targeted"),
+                          const Text("Store Targeted"),
                           SizedBox(height: 6.h),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(20.w),
@@ -186,7 +187,7 @@ class SelectedCampaignView extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20.sp),
                           ),
-                          const Text("Sub Dealer Included in Responses"),
+                          const Text("Store Included in Responses"),
                           SizedBox(height: 6.h),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(20.w),

@@ -11,11 +11,14 @@ import 'package:i_densfa/module/checkin_module/check_in_view.dart';
 import 'package:i_densfa/module/inventory_module/inventory_view.dart';
 import 'package:i_densfa/module/leaves_module/leave_view.dart';
 import 'package:i_densfa/module/login_module/login_view.dart';
+import 'package:i_densfa/module/my_activity_module/my_activity_view.dart';
+import 'package:i_densfa/module/policy_module/policy_view.dart';
 import 'package:i_densfa/module/promoter_module/bloc/promoter_bloc.dart';
 import 'package:i_densfa/module/promoter_module/promoter_view.dart';
 import 'package:i_densfa/module/setting_module/setting_view.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_repositry.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_view.dart';
+import 'package:i_densfa/module/web_module/web_view.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
 import 'module/assessment_module/bloc/assessment_bloc.dart';
@@ -165,6 +168,11 @@ final router = GoRouter(
       builder: (context, state) => const AttendanceView(),
     ),
     GoRoute(
+      path: AppPaths.myActivity,
+      name: AppPaths.myActivity,
+      builder: (context, state) => const MyActivityView(),
+    ),
+    GoRoute(
       path: AppPaths.promoter,
       name: AppPaths.promoter,
       builder: (context, state) => BlocProvider(
@@ -187,6 +195,18 @@ final router = GoRouter(
       path: AppPaths.changePass,
       name: AppPaths.changePass,
       builder: (context, state) => ChangePasswordView(),
+    ),
+    GoRoute(
+      path: "${AppPaths.appwebview}/:link",
+      name: AppPaths.appwebview,
+      builder: (context, state) => AppWebView(
+        link: state.params['link'] ?? "",
+      ),
+    ),
+    GoRoute(
+      path: AppPaths.policy,
+      name: AppPaths.policy,
+      builder: (context, state) => const PolicyView(),
     ),
   ],
   errorBuilder: (context, state) {
@@ -223,4 +243,7 @@ class AppPaths {
   static const promoter = '/promoter';
   static const setting = '/setting';
   static const changePass = '/changePass';
+  static const appwebview = '/appwebview';
+  static const policy = "/policy";
+  static const myActivity = "/myActivity";
 }

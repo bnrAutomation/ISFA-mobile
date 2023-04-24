@@ -26,6 +26,8 @@ class ImageConstants {
   static const statistic = "assets/icons/store/statistic.svg";
   static const telephone = "assets/icons/store/telephone.svg";
   static const visitsCalls = "assets/icons/store/visits-calls.svg";
+
+  static const fileView = "assets/images/file_view.svg";
 }
 
 class URLConstants {
@@ -58,8 +60,6 @@ class URLConstants {
 
   static const getCompaingns = '$apiBaseUrl/getCampaignListByStoreId';
 
-  //'$isfaBaseURL/storeActivity';
-
   static const getFeedbackPurposes = '$apiBaseUrl/getFeedbackPurposes';
   static const createFeedback = '$apiBaseUrl/createFeedback';
 
@@ -70,6 +70,7 @@ class URLConstants {
 
   static const beatPlans = '$apiBaseUrl/V2/beatPlan';
   static const attendence = '$apiBaseUrl/attendance';
+  static const activities = '$isfaBaseURL/activities';
 
   static const getAssessmentListByUserId =
       '$apiBaseUrl/getAssessmentListByUserId';
@@ -83,4 +84,5 @@ class URLConstants {
   static const addNote = '$apiBaseUrl/addNote';
   static const savedCampaignResponse = '$apiBaseUrl/savedCampaignResponse';
   static const sheduleVisit = '$apiBaseUrl/beatPlanUpload';
+  static const learnerContent = '$isfaBaseURL/server/learner-content';
 }
