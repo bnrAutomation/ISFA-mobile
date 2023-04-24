@@ -27,6 +27,9 @@ class CampaignView extends StatelessWidget {
         child: BlocBuilder<CampaignBloc, CampaignState>(
           builder: (context, state) {
             final CampaignBloc bloc = context.read();
+            if (state is CampaignListLoadingState) {
+              return const Center(child: CircularProgressIndicator());
+            }
             if (bloc.storeCampaigns.isEmpty) {
               return Center(
                   child: Text(
@@ -160,34 +163,47 @@ class SelectedCampaignView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            campaignData.targetedSubDealers.toString(),
-                            style: TextStyle(
-                                color: theme.primaryColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.sp),
-                          ),
-                          const Text("Store Targeted"),
-                          SizedBox(height: 6.h),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20.w),
-                            child: LinearProgressIndicator(
-                              backgroundColor: Colors.grey.shade400,
-                              color: Theme.of(context).primaryColor,
-                              minHeight: 40,
-                              value: campaignData.targetedSubDealers /
-                                  campaignData.subDetalers,
-                            ),
+                          Row(
+                            children: [
+                              Text(
+                                campaignData.targetedStores.toString(),
+                                style: TextStyle(
+                                    color: theme.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.sp),
+                              ),
+                              SizedBox(width: 10.w),
+                              const Text("Store Targeted"),
+                            ],
                           ),
                           SizedBox(height: 15.h),
-                          Text(
-                            campaignData.includedSubDealers.toString(),
-                            style: TextStyle(
-                                color: theme.primaryColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.sp),
+                          Row(
+                            children: [
+                              Text(
+                                campaignData.totalResponse.toString(),
+                                style: TextStyle(
+                                    color: theme.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.sp),
+                              ),
+                              SizedBox(width: 10.w),
+                              const Text("Total Responses"),
+                            ],
                           ),
-                          const Text("Store Included in Responses"),
+                          SizedBox(height: 15.h),
+                          Row(
+                            children: [
+                              Text(
+                                campaignData.includedStores.toString(),
+                                style: TextStyle(
+                                    color: theme.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.sp),
+                              ),
+                              SizedBox(width: 10.w),
+                              const Text("Store Included in Responses"),
+                            ],
+                          ),
                           SizedBox(height: 6.h),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(20.w),
@@ -195,29 +211,11 @@ class SelectedCampaignView extends StatelessWidget {
                               backgroundColor: Colors.grey.shade400,
                               color: const Color(0xffDB4C5B),
                               minHeight: 40,
-                              value: campaignData.includedSubDealers /
-                                  campaignData.targetedSubDealers,
+                              value: campaignData.includedStores /
+                                  campaignData.targetedStores,
                             ),
                           ),
-                          SizedBox(height: 15.h),
-                          Text(
-                            campaignData.totalResponse.toString(),
-                            style: TextStyle(
-                                color: theme.primaryColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.sp),
-                          ),
-                          const Text("Total Responses"),
                           SizedBox(height: 6.h),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20.w),
-                            child: LinearProgressIndicator(
-                              backgroundColor: Colors.grey.shade400,
-                              color: const Color(0xffFFBF00),
-                              minHeight: 40,
-                              value: 0.7,
-                            ),
-                          )
                         ],
                       ),
                     ),

@@ -276,8 +276,8 @@ class StoreDetailView extends StatelessWidget {
           Expanded(
             child: BlocBuilder<StoreDetailBloc, StoreDetailState>(
               builder: (context, state) {
-                final notes =
-                    context.read<StoreDetailBloc>().details?.userNote ?? [];
+                final bloc = context.read<StoreDetailBloc>();
+                final notes = bloc.details?.userNote ?? [];
                 return notes.isEmpty
                     ? const Center(child: Text("No note added"))
                     : ListView.separated(
@@ -286,9 +286,12 @@ class StoreDetailView extends StatelessWidget {
                             const SizedBox(height: 10),
                         itemBuilder: (context, index) => ListTile(
                           tileColor: Theme.of(context).secondaryHeaderColor,
-                          title: Text(notes[index]),
+                          title: Text(notes[index].note),
                           trailing: IconButton(
-                              onPressed: () {}, icon: const Icon(Icons.delete)),
+                              onPressed: () => bloc.add(
+                                  DeleteNoteStoreDetailEvent(
+                                      notes[index].noteId)),
+                              icon: const Icon(Icons.delete)),
                         ),
                       );
               },

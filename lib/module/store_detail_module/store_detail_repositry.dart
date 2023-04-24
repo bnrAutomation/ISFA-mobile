@@ -38,6 +38,18 @@ class StoreDetailRepository {
     }
   }
 
+  Future<bool> deleteNoteForStore(int noteId) async {
+    final response =
+        await delete(Uri.parse('${URLConstants.deleteNote}/$noteId'));
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : json.decode(response.body)['message'] ?? "Something went wrong";
+    }
+  }
+
   Future<String> markInOutStore(
       {required XFile file,
       required double latitude,

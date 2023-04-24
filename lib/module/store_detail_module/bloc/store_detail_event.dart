@@ -13,6 +13,12 @@ class GetStoreDetailsEvent extends StoreDetailEvent {}
 
 class SaveNoteStoreDetailEvent extends StoreDetailEvent {}
 
+class DeleteNoteStoreDetailEvent extends StoreDetailEvent {
+  final int noteId;
+
+  DeleteNoteStoreDetailEvent(this.noteId);
+}
+
 class ShowStoreOnMapStoreDetailEvent extends StoreDetailEvent {}
 
 class CallStoreDetailEvent extends StoreDetailEvent {}

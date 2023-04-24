@@ -31,7 +31,7 @@ class GetStoreDetailDataModel {
   double longitude;
   String phoneNo;
   int zipcode;
-  List<String> userNote;
+  List<StoreNoteModel> userNote;
 
   factory GetStoreDetailDataModel.fromRawJson(String str) =>
       GetStoreDetailDataModel.fromJson(json.decode(str));
@@ -53,7 +53,11 @@ class GetStoreDetailDataModel {
         phoneNo: json['phoneNo'],
         latitude: double.tryParse(json['latitude'].toString()) ?? 0,
         longitude: double.tryParse(json['logitude'].toString()) ?? 0,
-        userNote: List<String>.from(json["userNote"].map((x) => x)),
+        userNote: json["userNote"] is List
+            ? (json["userNote"] as List)
+                .map((x) => StoreNoteModel.fromJson(x))
+                .toList()
+            : [],
       );
 
   Map<String, dynamic> toJson() => {
@@ -70,6 +74,18 @@ class GetStoreDetailDataModel {
         "logitude": longitude,
         "latitude": latitude,
         "phoneNo": phoneNo,
-        "userNote": List<dynamic>.from(userNote.map((x) => x)),
+        "userNote": userNote.map((e) => e.toJson()).toList(),
       };
+}
+
+class StoreNoteModel {
+  final String note;
+  final int noteId;
+
+  StoreNoteModel({required this.note, required this.noteId});
+
+  factory StoreNoteModel.fromJson(Map<String, dynamic> json) =>
+      StoreNoteModel(note: json['note'], noteId: json['noteId']);
+
+  Map<String, dynamic> toJson() => {'noteId': noteId, 'note': note};
 }

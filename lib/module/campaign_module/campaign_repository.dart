@@ -63,12 +63,13 @@ class CampaignRepository {
     }
   }
 
-  Future<SavedCampaignDataModel> savedCampaignResponse(int campaignId) async {
+  Future<SavedCampaignDataModel?> savedCampaignResponse(int campaignId) async {
     final response = await get(
         Uri.parse('${URLConstants.savedCampaignResponse}/$userId/$campaignId'));
 
     if (response.statusCode == 200) {
       final dataJson = jsonDecode(response.body)['data'];
+      if (dataJson == null) return null;
       return SavedCampaignDataModel.fromJson(dataJson);
     } else {
       throw response.body.isEmpty

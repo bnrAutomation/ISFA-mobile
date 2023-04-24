@@ -45,18 +45,19 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
         launchUrlString('tel://$no');
       }
     });
+    on(_deleteNote);
     add(GetStoreDetailsEvent());
   }
 
   double get distanceFromStore {
-    if (userLocation != null) {
+    if (userLocation == null) {
+      return -1;
+    } else {
       return Geolocator.distanceBetween(
           details?.latitude ?? 0,
           details?.longitude ?? 0,
           userLocation!.latitude,
           userLocation!.longitude);
-    } else {
-      return 10000;
     }
   }
 
@@ -68,6 +69,16 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       add(GetStoreDetailsEvent());
     } else {
       emit(StoreDetailToastMessageState('Failed to add note'));
+    }
+  }
+
+  Future<void> _deleteNote(DeleteNoteStoreDetailEvent event, emit) async {
+    final resp = await repo.deleteNoteForStore(event.noteId);
+    if (resp) {
+      emit(StoreDetailToastMessageState('Note successfully deleted'));
+      add(GetStoreDetailsEvent());
+    } else {
+      emit(StoreDetailToastMessageState('Failed to delete note'));
     }
   }
 
@@ -107,6 +118,9 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
     if (distanceFromStore > 100) {
       emit(StoreDetailToastMessageState('You are not in store range'));
       return;
+    } else if (distanceFromStore < 0) {
+      emit(StoreDetailToastMessageState('Please enable location service'));
+      return;
     }
     final img = await ImagePicker().pickImage(source: ImageSource.camera);
     if (img == null) {
@@ -139,6 +153,9 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
 
     if (distanceFromStore > 100) {
       emit(StoreDetailToastMessageState('You are not in store range'));
+      return;
+    } else if (distanceFromStore < 0) {
+      emit(StoreDetailToastMessageState('Please enable location service'));
       return;
     }
 

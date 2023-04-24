@@ -42,14 +42,14 @@ class BeatplanStoresBloc
   }
 
   double distanceFromStore(BeatPlanModel details) {
-    if (userLocation != null) {
+    if (userLocation == null) {
+      return -1;
+    } else {
       return Geolocator.distanceBetween(
           details.latitude ?? 0,
           details.longitude ?? 0,
           userLocation!.latitude,
           userLocation!.longitude);
-    } else {
-      return 10000;
     }
   }
 

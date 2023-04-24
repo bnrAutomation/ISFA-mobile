@@ -203,15 +203,13 @@ class CampQuestionModel {
 
 class SavedCampaignDataModel {
   SavedCampaignDataModel({
-    required this.targetedSubDealers,
-    required this.includedSubDealers,
-    required this.subDetalers,
+    required this.targetedStores,
+    required this.includedStores,
     required this.totalResponse,
   });
 
-  int subDetalers;
-  int targetedSubDealers;
-  int includedSubDealers;
+  int targetedStores;
+  int includedStores;
   int totalResponse;
 
   factory SavedCampaignDataModel.fromRawJson(String str) =>
@@ -221,15 +219,13 @@ class SavedCampaignDataModel {
 
   factory SavedCampaignDataModel.fromJson(Map<String, dynamic> json) =>
       SavedCampaignDataModel(
-          includedSubDealers: json["includedSubDealers"],
-          targetedSubDealers: json["targetedSubDealers"],
-          subDetalers: json["totalSubDealers"],
+          includedStores: json["includedStores"],
+          targetedStores: json["targetedStores"],
           totalResponse: json["totalResponse"] ?? 0);
 
   Map<String, dynamic> toJson() => {
         "totalResponse": totalResponse,
-        "includedSubDealers": includedSubDealers,
-        "targetedSubDealers": targetedSubDealers,
-        "totalSubDealers": subDetalers
+        "includedStores": includedStores,
+        "targetedStores": targetedStores,
       };
 }

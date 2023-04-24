@@ -152,11 +152,12 @@ class StoreCardView extends StatelessWidget {
                           style: GoogleFonts.inter(
                               fontSize: 10.sp, fontWeight: FontWeight.w500)),
                       const SizedBox(width: 8),
-                      Text(
-                          '${(distanceInMeters / 1000).toStringAsFixed(2)}Km Away',
-                          maxLines: 3,
-                          overflow: TextOverflow.fade,
-                          style: GoogleFonts.inter(fontSize: 10.sp))
+                      if (distanceInMeters > 0)
+                        Text(
+                            '${(distanceInMeters / 1000).toStringAsFixed(2)}Km Away',
+                            maxLines: 3,
+                            overflow: TextOverflow.fade,
+                            style: GoogleFonts.inter(fontSize: 10.sp))
                     ],
                   ),
                   const SizedBox(height: 8),

@@ -24,8 +24,10 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
 
     on((GetSavedCampaignResponseEvent event, emit) async {
       final response = await repo.savedCampaignResponse(event.campaignId);
-      selectedCampaign?.campaignData = response;
-      emit(CampaignQuestionsLoadedState());
+      if (response != null) {
+        selectedCampaign?.campaignData = response;
+        emit(CampaignQuestionsLoadedState());
+      }
     });
 
     on((GetQuestionsForCampaign event, emit) async {
