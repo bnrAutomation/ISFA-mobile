@@ -11,7 +11,7 @@ class MyActivityRepository {
     required DateTime dateTime,
   }) async {
     final response = await get(Uri.parse(
-        '${URLConstants.activities}/$userId/${dateTime.toStringFormat('yyyy-MM-d')}'));
+        '${URLConstants.activities}/$userId/${dateTime.toStringFormat('yyyy-MM-dd')}'));
     return response.body.isEmpty
         ? <MyActivityDataList>[]
         : MyActivityModel.fromRawJson(response.body).dataList;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:i_densfa/module/my_activity_module/model/my_activity_model.dart';
 import 'package:i_densfa/module/my_activity_module/myActivity/my_activity_bloc.dart';
 import 'package:i_densfa/module/my_activity_module/my_activity_repository.dart';
 import 'package:i_densfa/utility/extensions.dart';
@@ -84,6 +85,25 @@ class MyActivityView extends StatelessWidget {
                               )),
                         ],
                       )),
+                  Container(color: Colors.grey.shade300, height: 1),
+                  bloc.dataList.isEmpty
+                      ? Center(
+                          child: TextButton(
+                            child: const Text("Retry"),
+                            onPressed: () => bloc.add(GetMyAcivityEvent()),
+                          ),
+                        )
+                      : Expanded(
+                          child: ListView.separated(
+                              itemCount: bloc.dataList.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              separatorBuilder: (context, index) => Container(
+                                  color: Colors.grey[300]!, height: 1),
+                              itemBuilder: (context, index) =>
+                                  MyActiviyItemView(
+                                      index, bloc.dataList[index])),
+                        )
                 ],
               );
             },
@@ -91,5 +111,47 @@ class MyActivityView extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class MyActiviyItemView extends StatelessWidget {
+  final int index;
+  final MyActivityDataList item;
+
+  const MyActiviyItemView(this.index, this.item, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        color: Colors.white,
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 1.sw,
+                  height: 5,
+                ),
+                Text(
+                  "Activity : ${item.activityName.toUpperCase()}",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w600, color: Colors.blue),
+                ),
+                Text(
+                  "Activity On : ${item.storeName}",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w600, color: Colors.black),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    "Time : ${item.time}",
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w600, color: Colors.black),
+                  ),
+                )
+              ],
+            )));
   }
 }

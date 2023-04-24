@@ -43,7 +43,8 @@ class MyActivityDataList {
   late final String activityName;
 
   MyActivityDataList.fromJson(Map<String, dynamic> json) {
-    storeName = json['storeName'] ?? "";
+    storeName =
+        json['storeName'].toString().isEmpty ? "NA" : json['storeName'] ?? "NA";
     time = json['time'];
     activityName = json['activityName'];
   }
