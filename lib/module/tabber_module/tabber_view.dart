@@ -202,7 +202,7 @@ class AppSideMenu extends StatelessWidget {
                   errorWidget: (context, url, error) =>
                       const ColoredBox(color: Colors.red),
                 ),
-                title: Text(e.name),
+                title: Text(e.name.toLowerCase().trim()),
                 onTap: () {
                   switch (e.key.toLowerCase()) {
                     case 'promoter':
@@ -214,7 +214,7 @@ class AppSideMenu extends StatelessWidget {
                     case 'attendance':
                       closeDrawerAndPushView(context, AppPaths.attendance);
                       break;
-                    case 'my activity':
+                    case 'myactivity':
                       Navigator.pop(context);
                       break;
                     case 'assessment':
@@ -227,20 +227,6 @@ class AppSideMenu extends StatelessWidget {
               );
             },
           ).toList(),
-          ListTile(
-            leading: const Icon(Icons.assessment),
-            title: const Text('Assessment'),
-            onTap: () {
-              closeDrawerAndPushView(context, AppPaths.assessmentList);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.notifications_outlined),
-            title: const Text('My Activities'),
-            onTap: () {
-              Scaffold.of(context).closeDrawer();
-            },
-          ),
           ListTile(
             leading: const Icon(Icons.notifications_outlined),
             title: const Text('Notification'),

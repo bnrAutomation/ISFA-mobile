@@ -35,6 +35,7 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
       emit(TabbarSnackBarMessageState(onError.toString()));
       return Future<SideMenuModel>.error(onError);
     });
+    data.menu.removeWhere((element) => element.key.toLowerCase() == 'campaign');
     if (data.userInfo.designation.toLowerCase() != 'promoter') {
       data.menu
           .removeWhere((element) => element.key.toLowerCase() == 'promoter');
