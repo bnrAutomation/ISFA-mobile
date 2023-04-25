@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
 class AppWebView extends StatelessWidget {
   final String link;
   const AppWebView({super.key, required this.link});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: WebViewWidget(controller: getController(link)));
+    return Scaffold(
+        appBar: AppBar(),
+        body: link.contains("pdf")
+            ? const PDF(pageSnap: false, autoSpacing: false).cachedFromUrl(
+                link,
+                placeholder: (progress) => Center(child: Text('$progress %')),
+                errorWidget: (error) => Center(child: Text(error.toString())),
+              )
+            : WebViewWidget(controller: getController(link)));
   }
 
   WebViewController getController(String link) {
-    link.contains("pdf");
     return WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
         NavigationDelegate(
-          onProgress: (int progress) {
-            // Update loading bar.
-          },
+          onProgress: (progress) {},
           onPageStarted: (String url) {},
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {},

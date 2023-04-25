@@ -259,7 +259,9 @@ class LeaveView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    model.leaveTypeBalance.toString(),
+                    model.leaveTypeBalance
+                        .toStringAsFixed(1)
+                        .replaceAll(".0", ""),
                     style: textTheme.headlineLarge?.copyWith(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),

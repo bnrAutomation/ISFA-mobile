@@ -40,7 +40,7 @@ dependencies:
   font_awesome_flutter: ^10.3.0
   google_fonts: ^4.0.0
   flutter_bloc: ^8.1.2
-  flutter_otp_text_field: ^1.1.1
+  otp_text_field: ^1.1.3
   google_nav_bar: ^5.0.6
   smooth_star_rating_null_safety: ^1.0.4+2
   flutter_svg: ^2.0.1
@@ -67,6 +67,7 @@ dependencies:
   simple_speed_dial: ^0.1.7
   webview_flutter: ^4.2.0
   flutter_html: ^0.11.1
+  flutter_cached_pdfview: ^0.4.1
 
 dev_dependencies:
   flutter_lints: ^2.0.1

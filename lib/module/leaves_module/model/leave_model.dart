@@ -105,7 +105,7 @@ class LeaveBalanceModel {
   });
 
   String leaveTypeName;
-  int leaveTypeBalance;
+  double leaveTypeBalance;
   String leaveTypeColor;
   String? leaveTypeIcon;
 
@@ -118,7 +118,7 @@ class LeaveBalanceModel {
       LeaveBalanceModel(
         leaveTypeName: json["leaveTypeName"],
         leaveTypeBalance:
-            double.tryParse(json["leaveTypeBalance"].toString())?.toInt() ?? 0,
+            double.tryParse(json["leaveTypeBalance"].toString()) ?? 0,
         leaveTypeColor: json["leaveTypeColor"] ?? "#FFFFFF",
         leaveTypeIcon: json["leaveTypeIcon"],
       );

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:otp_text_field/otp_text_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/ui/background.dart';
 import 'package:i_densfa/module/verification_module/verification/verification_bloc.dart';
 import 'package:i_densfa/module/verification_module/verification_repository.dart';
 import 'package:i_densfa/routes.dart';
+import 'package:otp_text_field/style.dart';
 
 class VerificationView extends StatelessWidget {
   final String email;
@@ -63,40 +64,21 @@ class VerificationView extends StatelessWidget {
                               const SizedBox(
                                 height: 10,
                               ),
-                              OtpTextField(
-                                numberOfFields: 4,
-                                borderColor: const Color(0xFF6A53A1),
-                                focusedBorderColor: const Color(0xFF6A53A1),
-                                enabledBorderColor: const Color(0xFF6A53A1),
-                                styles: [
-                                  Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.copyWith(
-                                          color: const Color(0xFF6A53A1)),
-                                  Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.copyWith(
-                                          color: const Color(0xFF121212)),
-                                  Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.copyWith(
-                                          color: const Color(0xFFF99BBD)),
-                                  Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.copyWith(
-                                          color: const Color(0xFF115C49)),
-                                ],
-                                showFieldAsBox: false,
-                                onCodeChanged: (String code) {
+                              OTPTextField(
+                                length: 4,
+                                width: MediaQuery.of(context).size.width,
+                                textFieldAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                fieldWidth: 45,
+                                fieldStyle: FieldStyle.underline,
+                                outlineBorderRadius: 15,
+                                style: const TextStyle(fontSize: 17),
+                                onChanged: (String code) {
                                   bloc.add(
                                       VerificationTextChangeEvent(code, email));
                                 },
                                 //runs when every textfield is filled
-                                onSubmit: (String verificationCode) {
+                                onCompleted: (String verificationCode) {
                                   bloc.add(VerificationTextChangeEvent(
                                       verificationCode, email));
                                 },
