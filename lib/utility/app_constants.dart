@@ -1,5 +1,7 @@
 class ImageConstants {
   static const logo = "assets/images/logo.png";
+  static const videoPlayer = "assets/images/videoPlayer.png";
+  static const pdf = "assets/images/pdf.png";
   static const triangle = "assets/images/triangle.svg";
   static const leavemask = "assets/images/leavemask.svg";
   static const inventoryMask = "assets/images/inventoryMask.svg";

@@ -17,7 +17,10 @@ class AddRemarkFeedbackEvent extends FeedbackEvent {
   AddRemarkFeedbackEvent(this.remark);
 }
 
-class FeedbackSaveEvent extends FeedbackEvent {}
+class FeedbackSaveEvent extends FeedbackEvent {
+  final String storeName;
+  FeedbackSaveEvent(this.storeName);
+}
 
 class RemoveSelectedImageFeedbackEvent extends FeedbackEvent {}
 

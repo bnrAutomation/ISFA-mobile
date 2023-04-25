@@ -150,7 +150,7 @@ class FeedbackView extends StatelessWidget {
                           buttonText: "Save Feedback",
                           onPressed: () {
                             context.hideKeyboard();
-                            bloc.add(FeedbackSaveEvent());
+                            bloc.add(FeedbackSaveEvent(storeName));
                           }),
                       const SizedBox(height: 10),
                     ],

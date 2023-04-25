@@ -14,14 +14,17 @@ class AboutUsView extends StatelessWidget {
         title: const Text("About Us"),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          SizedBox(
+            width: 1.sw,
+            height: 20,
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
               ImageConstants.logo,
-              width: 1.sw,
-              fit: BoxFit.contain,
             ),
           ),
           const SizedBox(height: 10),

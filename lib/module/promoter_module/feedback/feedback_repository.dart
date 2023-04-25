@@ -21,7 +21,8 @@ class FeedbackRepository {
     }
   }
 
-  Future<bool> saveFeedback(XFile file, int purposeId, String remark) async {
+  Future<bool> saveFeedback(
+      XFile file, int purposeId, String remark, String storeName) async {
     final url = Uri.parse("${URLConstants.createFeedback}/$userId");
     final request = MultipartRequest('POST', url);
 
@@ -39,7 +40,8 @@ class FeedbackRepository {
     request.fields.addAll({
       'userId': userId.toString(),
       'reason': remark,
-      'purposeId': purposeId.toString()
+      'purposeId': purposeId.toString(),
+      "storeName": storeName
     });
 
     final response = await request.send();

@@ -63,7 +63,8 @@ class FeedbackBloc extends Bloc<FeedbackEvent, FeedbackState> {
       }
       emit(FeedbackLoadingState());
       final response = await repo
-          .saveFeedback(selectedImage!, selectedPurpose!.id, remarkAdded)
+          .saveFeedback(
+              selectedImage!, selectedPurpose!.id, remarkAdded, event.storeName)
           .catchError((onError) {
         emit(FeedbackErrorState(onError.toString()));
         return false;

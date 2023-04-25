@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/learner_module/learner/learner_bloc.dart';
 import 'package:i_densfa/module/learner_module/learner_repository.dart';
@@ -76,8 +75,13 @@ class LearnerView extends StatelessWidget {
                                               MainAxisAlignment.center,
                                           children: [
                                             Expanded(
-                                              child: SvgPicture.asset(
-                                                  ImageConstants.fileView),
+                                              child: Image.asset(
+                                                bloc.dataList[index].link
+                                                        .contains("pdf")
+                                                    ? ImageConstants.pdf
+                                                    : ImageConstants
+                                                        .videoPlayer,
+                                              ),
                                             ),
                                             const SizedBox(height: 8),
                                             Text(
