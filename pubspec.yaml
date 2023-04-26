@@ -66,8 +66,7 @@ dependencies:
   geolocator: ^9.0.2
   simple_speed_dial: ^0.1.7
   webview_flutter: ^4.2.0
-  flutter_html: ^0.11.1
-  flutter_cached_pdfview: ^0.4.1
+  syncfusion_flutter_pdfviewer: ^21.1.41
 
 dev_dependencies:
   flutter_lints: ^2.0.1

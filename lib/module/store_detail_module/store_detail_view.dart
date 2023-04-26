@@ -85,13 +85,13 @@ class StoreDetailView extends StatelessWidget {
         leading: IconButton(
             onPressed: () => context.pop(),
             icon: const Icon(Icons.arrow_back_ios)),
-        actions: [
-          IconButton(
-              onPressed: () => context.pop(), icon: const Icon(Icons.share)),
-          IconButton(
-              onPressed: () => context.pop(),
-              icon: const Icon(Icons.more_vert)),
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: () => context.pop(), icon: const Icon(Icons.share)),
+        //   IconButton(
+        //       onPressed: () => context.pop(),
+        //       icon: const Icon(Icons.more_vert)),
+        // ],
       ),
       body: SingleChildScrollView(
         child: BlocConsumer<StoreDetailBloc, StoreDetailState>(

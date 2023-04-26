@@ -153,6 +153,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.4"
+  convert:
+    dependency: transitive
+    description:
+      name: convert
+      sha256: "0f08b14755d163f6e2134cb58222dd25ea2a2ee8a195e53983d57c075324d592"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   cross_file:
     dependency: transitive
     description:
@@ -169,14 +177,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
-  csslib:
-    dependency: transitive
-    description:
-      name: csslib
-      sha256: c5f80c0361d95655647094aad231fd6efe2ef0f1ee85db4e0d1d99db4d789229
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.16.2"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -286,22 +286,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
-  flutter_cached_pdfview:
-    dependency: "direct main"
-    description:
-      name: flutter_cached_pdfview
-      sha256: c872d09756b3e9b3daabb6ac861ba83300bc7a8d6ea912fb733fea86ccca4749
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.1"
-  flutter_html:
-    dependency: "direct main"
-    description:
-      name: flutter_html
-      sha256: "2f9b0cbe6064321fba32751a0466ed855d9be9b7e807eba55aec298b5b037a94"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.11.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -315,14 +299,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_pdfview:
-    dependency: transitive
-    description:
-      name: flutter_pdfview
-      sha256: "97c26f92d32fa09ed2302156bdc234befe78478353ba5541b88e538589bcbeab"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -453,14 +429,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  html:
-    dependency: transitive
-    description:
-      name: html
-      sha256: "49f0f00a6f85ecab782e641ad79377bfd4b4aea463178ac19cbf45ea8419c380"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.14.0+4"
   http:
     dependency: "direct main"
     description:
@@ -842,6 +810,62 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      sha256: "05b079cb1be26a8d5c1afe714172d2eed9178049f4a7dc773b2cbb8b053eff8d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.1.41"
+  syncfusion_flutter_pdf:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_pdf
+      sha256: "1cab71bdd661b816f8082ce922d58843d1ab323fef5ab1105830e9955c18b98a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.1.41"
+  syncfusion_flutter_pdfviewer:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_pdfviewer
+      sha256: "1112a849e1477971c8c125b32432ac3bd282c1e8cfb3c07be235fe0b30db51e9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.1.41"
+  syncfusion_pdfviewer_macos:
+    dependency: transitive
+    description:
+      name: syncfusion_pdfviewer_macos
+      sha256: "13f5ad9b688b8fdfd918263161612e520b2eed408f157b4aae0cbc74f345aa6c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.1.41"
+  syncfusion_pdfviewer_platform_interface:
+    dependency: transitive
+    description:
+      name: syncfusion_pdfviewer_platform_interface
+      sha256: "7d33c81f3ef314aede3f5eb1b03cde2b2c74589de721b6b9f6f2973643fe01d8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.1.41"
+  syncfusion_pdfviewer_web:
+    dependency: transitive
+    description:
+      name: syncfusion_pdfviewer_web
+      sha256: a118a7480f3e58a93486183f6342dc421671492a297bcabd8b3c740d64db117c
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.1.41"
+  syncfusion_pdfviewer_windows:
+    dependency: transitive
+    description:
+      name: syncfusion_pdfviewer_windows
+      sha256: "737eb13496b0bf06825e5e2f819b36d73f2babb3adba874ff5497c410e92ba51"
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.1.41"
   synchronized:
     dependency: transitive
     description:

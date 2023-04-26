@@ -344,6 +344,8 @@ class ApproveLeave extends StatelessWidget {
                         GoogleFonts.inter(fontSize: 11.sp, color: Colors.black),
                   )
                 ])),
+            Text(leaveListItem.dayType,
+                style: TextStyle(color: Theme.of(context).primaryColor)),
             if (leaveListItem.reason != null) Text(leaveListItem.reason!)
           ],
         ),

@@ -60,7 +60,8 @@ class AppliedLeaveModel {
       required this.toDate,
       this.userName,
       this.leaveRequestId,
-      this.reason});
+      this.reason,
+      required this.dayType});
 
   LeaveStatus leaveStatus;
   String? leaveType;
@@ -69,6 +70,7 @@ class AppliedLeaveModel {
   String? userName;
   int? leaveRequestId;
   String? reason;
+  String dayType;
 
   factory AppliedLeaveModel.fromRawJson(String str) =>
       AppliedLeaveModel.fromJson(json.decode(str));
@@ -83,7 +85,8 @@ class AppliedLeaveModel {
           toDate: DateTime.parse(json["toDate"]),
           userName: json["userName"],
           leaveRequestId: json['leaveRequestId'],
-          reason: json['reason']);
+          reason: json['reason'],
+          dayType: json['dayType'] ?? "");
 
   Map<String, dynamic> toJson() => {
         "leaveStatus": leaveStatus.toStr(),
@@ -92,7 +95,8 @@ class AppliedLeaveModel {
         "toDate": toDate.toStringFormat('yyyy-MM-dd'),
         "userName": userName,
         'leaveRequestId': leaveRequestId,
-        'reason': reason
+        'reason': reason,
+        'dayType': dayType
       };
 }
 
@@ -102,12 +106,14 @@ class LeaveBalanceModel {
     required this.leaveTypeBalance,
     required this.leaveTypeColor,
     this.leaveTypeIcon,
+    required this.dayType,
   });
 
   String leaveTypeName;
   double leaveTypeBalance;
   String leaveTypeColor;
   String? leaveTypeIcon;
+  String dayType;
 
   factory LeaveBalanceModel.fromRawJson(String str) =>
       LeaveBalanceModel.fromJson(json.decode(str));
@@ -121,6 +127,7 @@ class LeaveBalanceModel {
             double.tryParse(json["leaveTypeBalance"].toString()) ?? 0,
         leaveTypeColor: json["leaveTypeColor"] ?? "#FFFFFF",
         leaveTypeIcon: json["leaveTypeIcon"],
+        dayType: json["dayType"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
@@ -128,5 +135,6 @@ class LeaveBalanceModel {
         "leaveTypeBalance": leaveTypeBalance,
         "leaveTypeColor": leaveTypeColor,
         "leaveTypeIcon": leaveTypeIcon,
+        "dayType": dayType
       };
 }

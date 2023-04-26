@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class AppWebView extends StatelessWidget {
   final String link;
@@ -11,11 +11,14 @@ class AppWebView extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(),
         body: link.contains("pdf")
-            ? const PDF(pageSnap: false, autoSpacing: false).cachedFromUrl(
-                link,
-                placeholder: (progress) => Center(child: Text('$progress %')),
-                errorWidget: (error) => Center(child: Text(error.toString())),
-              )
+            ? SfPdfViewer.network(link,
+                canShowScrollHead: false, canShowScrollStatus: false)
+
+            //  PDF(pageSnap: false, autoSpacing: false).cachedFromUrl(
+            //     link,
+            //     placeholder: (progress) => Center(child: Text('$progress %')),
+            //     errorWidget: (error) => Center(child: Text(error.toString())),
+            //   )
             : WebViewWidget(controller: getController(link)));
   }
 
