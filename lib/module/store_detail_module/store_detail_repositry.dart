@@ -15,6 +15,9 @@ class StoreDetailRepository {
 
     if (response.statusCode == 200) {
       final dataJson = jsonDecode(response.body)['data'];
+      if (dataJson == null) {
+        throw 'No store found';
+      }
       return GetStoreDetailDataModel.fromJson(dataJson);
     } else {
       throw response.body.isEmpty

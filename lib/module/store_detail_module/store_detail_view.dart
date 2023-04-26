@@ -114,18 +114,23 @@ class StoreDetailView extends StatelessWidget {
             return Column(
               children: [
                 headerImage(context),
+
                 nameAddress(context),
-                blueCard(context,
-                    leadingSVGImage: ImageConstants.miniCalendar,
-                    subtitle: 'Scheduled visits & Calls',
-                    title: '28 Feb 2023',
-                    trailingSVGImage: ImageConstants.visitsCalls),
+                // blueCard(context,
+                //     leadingSVGImage: ImageConstants.miniCalendar,
+                //     subtitle: 'Scheduled visits & Calls',
+                //     title: '28 Feb 2023',
+                //     trailingSVGImage: ImageConstants.visitsCalls),
                 // blueCard(context,
                 //     leadingSVGImage: ImageConstants.creditCard,
                 //     subtitle: 'Available Credits',
                 //     title: '₹ 500.0',
                 //     trailingSVGImage: ImageConstants.credits),
-                recentNote(context),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: recentNote(context),
+                ),
+
                 Row(
                   children: [
                     Expanded(

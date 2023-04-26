@@ -180,6 +180,10 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     emit(PromoterStoreDetailLoadingState());
     await repo.getStoreDetails().then((value) {
       storeDetail = value;
+      if (value.latitude <= 0) {
+        emit(PromoterToastMessageState(
+            "Store coordinates not found.\nPlease contact admin."));
+      }
       AppStorage().markedInStoreId = value.markIn ? value.storeId : null;
       emit(PromoterStoreDetailLoadedState());
     }).catchError((err) {
