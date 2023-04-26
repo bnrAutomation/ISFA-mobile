@@ -5,6 +5,10 @@ abstract class StoreDetailState {}
 
 class StoreDetailInitial extends StoreDetailState {}
 
+class MarkingLoadingStoreDetailState extends StoreDetailState {}
+
+class MarkingLoadedStoreDetailState extends StoreDetailState {}
+
 class LoadedStoreDetailState extends StoreDetailState {}
 
 class StoreDetailToastMessageState extends StoreDetailState {

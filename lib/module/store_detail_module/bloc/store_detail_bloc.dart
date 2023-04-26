@@ -100,6 +100,14 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
 
   Future<void> _checkInStore(
       MarkInStoreDetailEvent event, Emitter<StoreDetailState> emit) async {
+    final now = DateTime.now();
+    if (beatPlanModel.pjpDate.isAfter(DateTime(now.year, now.month, now.day + 1)
+        .subtract(const Duration(minutes: 1)))) {
+      emit(
+          StoreDetailToastMessageState('You can not Mark In for future dates'));
+      return;
+    }
+
     if (!AppStorage().isDutyStarted) {
       emit(StoreDetailToastMessageState('Please start your Duty first'));
       return;
@@ -110,12 +118,13 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
           'You are already marked In for other store\nPlease mark Out first.'));
       return;
     }
+    emit(MarkingLoadingStoreDetailState());
     await _updateUserPosition().catchError((onError) {
       emit(StoreDetailToastMessageState(onError.toString()));
       return Future<void>.error(onError);
     });
 
-    if (distanceFromStore > 100) {
+    if (distanceFromStore > 250) {
       emit(StoreDetailToastMessageState('You are not in store range'));
       return;
     } else if (distanceFromStore < 0) {
@@ -151,7 +160,7 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       return Future<void>.error(onError);
     });
 
-    if (distanceFromStore > 100) {
+    if (distanceFromStore > 250) {
       emit(StoreDetailToastMessageState('You are not in store range'));
       return;
     } else if (distanceFromStore < 0) {

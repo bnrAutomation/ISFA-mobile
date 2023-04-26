@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/change_password_module/changePassword/change_password_bloc.dart';
@@ -39,9 +40,7 @@ class ChangePasswordView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
                       const Text(
                         "NOTE : Your new password must be different from your previously password",
                         textAlign: TextAlign.center,
@@ -57,6 +56,9 @@ class ChangePasswordView extends StatelessWidget {
                         height: 10,
                       ),
                       TextField(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(" ")
+                        ],
                         controller: oldPasswordController,
                         obscureText: bloc.isShowingOldPassword,
                         decoration: InputDecoration(
@@ -80,10 +82,11 @@ class ChangePasswordView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10)),
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
                       TextField(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(" ")
+                        ],
                         controller: newPasswordController,
                         obscureText: bloc.isShowingNewPassword,
                         decoration: InputDecoration(

@@ -49,7 +49,22 @@ class AssessmentListView extends StatelessWidget {
                 color: colr,
                 child: ListTile(
                   textColor: Colors.white,
-                  title: Text(item.name),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(item.name),
+                      if (DateTime.now().isAfter(DateTime.parse(item.endDate)))
+                        const Text(
+                          "Ended",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      if (item.userScored != null)
+                        const Text(
+                          "Filled",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
+                    ],
+                  ),
                   subtitle: Align(
                     alignment: Alignment.bottomRight,
                     child: Text(

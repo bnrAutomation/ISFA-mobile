@@ -111,114 +111,120 @@ class StoreDetailView extends StatelessWidget {
             }
           },
           builder: (context, state) {
-            return Column(
-              children: [
-                headerImage(context),
+            return state is MarkingLoadingStoreDetailState
+                ? const Center(child: CircularProgressIndicator())
+                : Column(
+                    children: [
+                      headerImage(context),
 
-                nameAddress(context),
-                // blueCard(context,
-                //     leadingSVGImage: ImageConstants.miniCalendar,
-                //     subtitle: 'Scheduled visits & Calls',
-                //     title: '28 Feb 2023',
-                //     trailingSVGImage: ImageConstants.visitsCalls),
-                // blueCard(context,
-                //     leadingSVGImage: ImageConstants.creditCard,
-                //     subtitle: 'Available Credits',
-                //     title: '₹ 500.0',
-                //     trailingSVGImage: ImageConstants.credits),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: recentNote(context),
-                ),
+                      nameAddress(context),
+                      // blueCard(context,
+                      //     leadingSVGImage: ImageConstants.miniCalendar,
+                      //     subtitle: 'Scheduled visits & Calls',
+                      //     title: '28 Feb 2023',
+                      //     trailingSVGImage: ImageConstants.visitsCalls),
+                      // blueCard(context,
+                      //     leadingSVGImage: ImageConstants.creditCard,
+                      //     subtitle: 'Available Credits',
+                      //     title: '₹ 500.0',
+                      //     trailingSVGImage: ImageConstants.credits),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: recentNote(context),
+                      ),
 
-                Row(
-                  children: [
-                    Expanded(
-                      child: StoreDetailCard(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SvgPicture.asset(ImageConstants.statistic),
-                            const SizedBox(width: 8),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Stage",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium),
-                                Text("Select Stage",
-                                    style: GoogleFonts.inter(
-                                        fontSize: 10.sp,
-                                        color: const Color(0xff278BBC))),
-                              ],
+                      Row(
+                        children: [
+                          Expanded(
+                            child: StoreDetailCard(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SvgPicture.asset(ImageConstants.statistic),
+                                  const SizedBox(width: 8),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Stage",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium),
+                                      Text("Select Stage",
+                                          style: GoogleFonts.inter(
+                                              fontSize: 10.sp,
+                                              color: const Color(0xff278BBC))),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: StoreDetailCard(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SvgPicture.asset(ImageConstants.stars),
-                            const SizedBox(width: 8),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Class",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium),
-                                Text(
-                                  "Select Class",
-                                  style: GoogleFonts.inter(
-                                      fontSize: 10.sp,
-                                      color: const Color(0xff278BBC)),
-                                )
-                              ],
+                          ),
+                          Expanded(
+                            child: StoreDetailCard(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SvgPicture.asset(ImageConstants.stars),
+                                  const SizedBox(width: 8),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Class",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium),
+                                      Text(
+                                        "Select Class",
+                                        style: GoogleFonts.inter(
+                                            fontSize: 10.sp,
+                                            color: const Color(0xff278BBC)),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                // StoreDetailCard(
-                //   child: ListTile(
-                //     title: Text("Sub Dealer History",
-                //         style: Theme.of(context)
-                //             .textTheme
-                //             .titleMedium
-                //             ?.copyWith(color: Theme.of(context).primaryColor)),
-                //     subtitle: Row(
-                //       children: [
-                //         Text("Last Activity:",
-                //             style: Theme.of(context).textTheme.titleSmall),
-                //         Text("Compaign, 28 Feb 2023",
-                //             style: Theme.of(context)
-                //                 .textTheme
-                //                 .titleSmall
-                //                 ?.copyWith(color: Colors.grey)),
-                //       ],
-                //     ),
-                //     trailing: Icon(Icons.arrow_forward_ios,
-                //         color: Theme.of(context).primaryColor),
-                //   ),
-                // ),
-                // StoreDetailCard(
-                //   child: ListTile(
-                //     title: Text("More",
-                //         style: Theme.of(context)
-                //             .textTheme
-                //             .titleMedium
-                //             ?.copyWith(color: Theme.of(context).primaryColor)),
-                //     trailing: Icon(Icons.arrow_forward_ios,
-                //         color: Theme.of(context).primaryColor),
-                //   ),
-                // ),
-                const SizedBox(height: 100)
-              ],
-            );
+                      // StoreDetailCard(
+                      //   child: ListTile(
+                      //     title: Text("Sub Dealer History",
+                      //         style: Theme.of(context)
+                      //             .textTheme
+                      //             .titleMedium
+                      //             ?.copyWith(color: Theme.of(context).primaryColor)),
+                      //     subtitle: Row(
+                      //       children: [
+                      //         Text("Last Activity:",
+                      //             style: Theme.of(context).textTheme.titleSmall),
+                      //         Text("Compaign, 28 Feb 2023",
+                      //             style: Theme.of(context)
+                      //                 .textTheme
+                      //                 .titleSmall
+                      //                 ?.copyWith(color: Colors.grey)),
+                      //       ],
+                      //     ),
+                      //     trailing: Icon(Icons.arrow_forward_ios,
+                      //         color: Theme.of(context).primaryColor),
+                      //   ),
+                      // ),
+                      // StoreDetailCard(
+                      //   child: ListTile(
+                      //     title: Text("More",
+                      //         style: Theme.of(context)
+                      //             .textTheme
+                      //             .titleMedium
+                      //             ?.copyWith(color: Theme.of(context).primaryColor)),
+                      //     trailing: Icon(Icons.arrow_forward_ios,
+                      //         color: Theme.of(context).primaryColor),
+                      //   ),
+                      // ),
+                      const SizedBox(height: 100)
+                    ],
+                  );
           },
         ),
       ),
