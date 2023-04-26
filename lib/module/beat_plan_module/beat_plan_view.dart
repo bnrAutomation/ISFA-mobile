@@ -109,7 +109,7 @@ class BeatPlanMI extends StatelessWidget {
         ),
         const Padding(
           padding: EdgeInsets.only(right: 20),
-          child: NoteClip(text: 'MARK IN'),
+          child: NoteClip(text: 'MARK IN', backColor: Color(0xff7B000C)),
         ),
       ],
     );

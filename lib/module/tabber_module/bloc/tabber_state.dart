@@ -10,6 +10,8 @@ class UpdateIndexState extends TabberState {
   UpdateIndexState(this.index);
 }
 
+class OnlineSwitchLoadingTabberState extends TabberState {}
+
 class OnlineStatusUpdateState extends TabberState {}
 
 class TabbarSnackBarMessageState extends TabberState {

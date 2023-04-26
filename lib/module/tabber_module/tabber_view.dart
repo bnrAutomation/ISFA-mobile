@@ -226,7 +226,11 @@ class AppSideMenu extends StatelessWidget {
           //   },
           // ),
           ListTile(
-            leading: const Icon(Icons.settings_outlined),
+            leading: const Icon(
+              Icons.settings_outlined,
+              color: Colors.black,
+              size: 30,
+            ),
             title: const Text('Settings'),
             onTap: () {
               closeDrawerAndPushView(context, AppPaths.setting);
@@ -241,7 +245,11 @@ class AppSideMenu extends StatelessWidget {
           //   },
           // ),
           ListTile(
-            leading: const Icon(Icons.logout),
+            leading: const Icon(
+              Icons.logout,
+              color: Colors.black,
+              size: 30,
+            ),
             title: const Text('Logout'),
             onTap: () {
               Scaffold.of(context).closeDrawer();
@@ -256,7 +264,8 @@ class AppSideMenu extends StatelessWidget {
 
   Widget dutyStatus() {
     return BlocBuilder<TabberBloc, TabberState>(
-      buildWhen: (previous, current) => (current is OnlineStatusUpdateState),
+      buildWhen: (previous, current) => (current is OnlineStatusUpdateState ||
+          current is OnlineSwitchLoadingTabberState),
       builder: (context, state) {
         final bloc = context.read<TabberBloc>();
         return FittedBox(
@@ -265,7 +274,9 @@ class AppSideMenu extends StatelessWidget {
             CupertinoSwitch(
                 value: AppStorage().isDutyStarted,
                 onChanged: (newVal) async {
-                  Scaffold.of(context).closeDrawer();
+                  if (state is OnlineSwitchLoadingTabberState) {
+                    return;
+                  }
                   final XFile? image =
                       await context.pushNamed(AppPaths.checkin);
                   if (newVal) {
@@ -273,9 +284,16 @@ class AppSideMenu extends StatelessWidget {
                   } else {
                     bloc.add(EndDutyStatusTabberEvent(image));
                   }
+                  if (context.mounted) {
+                    Scaffold.of(context).closeDrawer();
+                  }
                 }),
             Text(
-              AppStorage().isDutyStarted ? "On-Duty" : "Off-Duty",
+              state is OnlineSwitchLoadingTabberState
+                  ? "Loading.."
+                  : AppStorage().isDutyStarted
+                      ? "On-Duty"
+                      : "Off-Duty",
               style: const TextStyle(color: Colors.white),
             )
           ],

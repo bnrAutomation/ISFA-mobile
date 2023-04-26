@@ -180,8 +180,16 @@ class StoreCardView extends StatelessWidget {
         ),
         const Padding(
           padding: EdgeInsets.only(right: 20),
-          child: NoteClip(text: 'Semi-urban'),
+          child: NoteClip(text: 'Semi-urban', backColor: Color(0xff7B000C)),
         ),
+        if (beatPlan.markin)
+          const Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.only(left: 100),
+              child: NoteClip(text: 'Marked In', backColor: Colors.green),
+            ),
+          ),
         Positioned.fill(
           child: Align(
             alignment: Alignment.centerLeft,
@@ -205,9 +213,11 @@ class StoreCardView extends StatelessWidget {
 
 class NoteClip extends StatelessWidget {
   final String text;
+  final Color backColor;
   const NoteClip({
     super.key,
     required this.text,
+    required this.backColor,
   });
 
   @override
@@ -217,7 +227,7 @@ class NoteClip extends StatelessWidget {
       children: [
         CustomPaint(
           painter: TrianglePainter(
-            strokeColor: const Color(0xff7B000C),
+            strokeColor: backColor,
             strokeWidth: 10,
             paintingStyle: PaintingStyle.fill,
           ),
@@ -229,9 +239,10 @@ class NoteClip extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(right: 5),
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
-              color: Color(0xffC92434)),
+          decoration: BoxDecoration(
+              borderRadius:
+                  const BorderRadius.vertical(bottom: Radius.circular(5)),
+              color: backColor.withOpacity(0.9)),
           child: Text(
             text,
             style: GoogleFonts.inter(
