@@ -26,12 +26,13 @@ class InventoryDetailModel {
       InventoryDetailModel(
         numberOfProduct: json["numberOfProduct"],
         numberOfSelling: json["numberOfSelling"],
-        openingBalance: json['openingBalance'],
-        closingBalance: json['closingBalance'],
+        openingBalance: json['openingBalance'] ?? "0",
+        closingBalance: json['closingBalance'] ?? "0",
         lastReciveDate: DateTime.parse(json["lastReciveDate"]),
-        productList: List<InventoryProductDetailModel>.from(
-            json["productList"] ??
-                [].map((x) => InventoryProductDetailModel.fromJson(x))),
+        productList: json["productList"] == null
+            ? []
+            : List<InventoryProductDetailModel>.from(json["productList"]
+                .map((x) => InventoryProductDetailModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
