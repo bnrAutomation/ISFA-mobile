@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/utility/extensions.dart';
-import 'package:month_year_picker/month_year_picker.dart';
-
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'attendance_repository.dart';
 import 'bloc/attendance_bloc.dart';
 import 'model/attendance_model.dart';
@@ -77,12 +76,13 @@ class AttendanceView extends StatelessWidget {
                           IconButton(
                               onPressed: () async {
                                 final now = DateTime.now();
-                                final date = await showMonthYearPicker(
+                                final date = await showMonthPicker(
                                   context: context,
                                   initialDate: now,
                                   firstDate: DateTime(now.year),
                                   lastDate: DateTime(now.year + 1),
                                 );
+
                                 if (date != null && context.mounted) {
                                   context
                                       .read<AttendanceBloc>()

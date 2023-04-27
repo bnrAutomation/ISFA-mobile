@@ -132,16 +132,15 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                   subtitle: InkWell(
                     onTap: () async {
                       context.hideKeyboard();
-                      final DateTime date = await showDialog(
+                      final date = await showDatePicker(
                           context: context,
-                          builder: (c) {
-                            return DatePickerDialog(
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(1960),
-                                lastDate: DateTime(DateTime.now().year + 1));
-                          });
-                      question.answer = date.toStringFormat("dd/MM/yy");
-                      setState(() {});
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1960),
+                          lastDate: DateTime(DateTime.now().year + 1));
+                      if (date != null) {
+                        question.answer = date.toStringFormat("dd/MM/yy");
+                        setState(() {});
+                      }
                     },
                     child: InputDecorator(
                       decoration: InputDecoration(

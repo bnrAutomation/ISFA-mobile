@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_storage.dart';
-import 'package:month_year_picker/month_year_picker.dart';
 
 void main() async {
   await AppStorage.objectValue();
@@ -40,7 +39,6 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(builder: (context, child) {
       return MaterialApp.router(
         routerConfig: router,
-        localizationsDelegates: const [MonthYearPickerLocalizations.delegate],
         title: const String.fromEnvironment('APP_NAME'),
         debugShowCheckedModeBanner: false,
         theme: _lightTheme,
