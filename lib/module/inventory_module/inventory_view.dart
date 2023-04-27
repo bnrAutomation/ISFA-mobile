@@ -56,16 +56,16 @@ class InventoryView extends StatelessWidget {
         slivers: [
           SliverList(
             delegate: SliverChildListDelegate.fixed([
-              Align(
-                alignment: Alignment.topRight,
-                child: MaterialButton(
-                  onPressed: () {},
-                  color: Theme.of(context).colorScheme.primary,
-                  textColor: Colors.white,
-                  shape: const CircleBorder(),
-                  child: SvgPicture.asset(ImageConstants.filter),
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.topRight,
+              //   child: MaterialButton(
+              //     onPressed: () {},
+              //     color: Theme.of(context).colorScheme.primary,
+              //     textColor: Colors.white,
+              //     shape: const CircleBorder(),
+              //     child: SvgPicture.asset(ImageConstants.filter),
+              //   ),
+              // ),
               Card(
                 margin: EdgeInsets.symmetric(horizontal: 15.w),
                 color: Theme.of(context).colorScheme.primary,
