@@ -43,7 +43,7 @@ class LeaveRepository {
     };
     final response = await post(Uri.parse(URLConstants.applyLeave),
         body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
-    if (response.statusCode == 201) {
+    if (response.statusCode == 201 || response.statusCode == 200) {
       return true;
     } else {
       throw response.body.isEmpty
