@@ -29,8 +29,9 @@ class InventoryDetailModel {
         openingBalance: json['openingBalance'],
         closingBalance: json['closingBalance'],
         lastReciveDate: DateTime.parse(json["lastReciveDate"]),
-        productList: List<InventoryProductDetailModel>.from(json["productList"]
-            .map((x) => InventoryProductDetailModel.fromJson(x))),
+        productList: List<InventoryProductDetailModel>.from(
+            json["productList"] ??
+                [].map((x) => InventoryProductDetailModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

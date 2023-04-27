@@ -63,13 +63,13 @@ class StoreDetailView extends StatelessWidget {
                           extra: [bloc.beatPlanModel]);
                     },
                   ),
-                  SpeedDialChild(
-                    child: const Icon(Icons.history),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    label: 'History',
-                    onPressed: () {},
-                  ),
+                  // SpeedDialChild(
+                  //   child: const Icon(Icons.history),
+                  //   foregroundColor: Colors.white,
+                  //   backgroundColor: Theme.of(context).primaryColor,
+                  //   label: 'History',
+                  //   onPressed: () {},
+                  // ),
                 ],
               closedForegroundColor: Colors.white,
               closedBackgroundColor: Theme.of(context).primaryColor,
