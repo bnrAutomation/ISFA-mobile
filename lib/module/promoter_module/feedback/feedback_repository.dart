@@ -9,6 +9,7 @@ import 'feedback_model.dart';
 
 class FeedbackRepository {
   final userId = AppStorage().userDetail!.id;
+  final companyId = AppStorage().userDetail!.companyId;
   Future<List<FeedbackPorposeModel>> getFeedbackPurposes() async {
     final response = await get(Uri.parse(URLConstants.getFeedbackPurposes));
     if (response.statusCode == 200) {
@@ -41,7 +42,8 @@ class FeedbackRepository {
       'userId': userId.toString(),
       'reason': remark,
       'purposeId': purposeId.toString(),
-      "storeName": storeName
+      "storeName": storeName,
+      "companyId": companyId.toString(),
     });
 
     final response = await request.send();
