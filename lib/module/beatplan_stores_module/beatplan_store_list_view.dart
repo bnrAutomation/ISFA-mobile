@@ -190,6 +190,14 @@ class StoreCardView extends StatelessWidget {
               child: NoteClip(text: 'Marked In', backColor: Colors.green),
             ),
           ),
+        if (beatPlan.isAlreadyMarkin)
+          const Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.only(left: 100),
+              child: NoteClip(text: 'Visited', backColor: Colors.green),
+            ),
+          ),
         Positioned.fill(
           child: Align(
             alignment: Alignment.centerLeft,

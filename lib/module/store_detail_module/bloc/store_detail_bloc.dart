@@ -167,13 +167,11 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       emit(StoreDetailToastMessageState('Please enable location service'));
       return;
     }
-
     final img = await ImagePicker().pickImage(source: ImageSource.camera);
     if (img == null) {
       emit(StoreDetailToastMessageState('Please click image'));
       return;
     }
-
     final response = await repo
         .markInOutStore(
             file: img,
@@ -188,6 +186,7 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
     });
     beatPlanModel.markin = false;
     AppStorage().markedInStoreId = null;
+    beatPlanModel.isAlreadyMarkin = true;
     emit(StoreDetailToastMessageState(response));
   }
 

@@ -24,7 +24,7 @@ class ChangePasswordBloc
         emit(ChangePasswordErrorState("Feild should not be empty."));
       } else if (event.newPassword == event.oldPassword) {
         emit(ChangePasswordErrorState(
-            "New password is not match with old password."));
+            "New password should not match with old password."));
       } else {
         try {
           emit(ChangePasswordLoadingState());

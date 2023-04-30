@@ -105,7 +105,15 @@ class SelectedCampaignView extends StatelessWidget {
           )),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8.0),
-        child: BlocBuilder<CampaignBloc, CampaignState>(
+        child: BlocConsumer<CampaignBloc, CampaignState>(
+          listener: (context, state) => {
+            if (state is SnackbarMessageCampaignState)
+              {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(state.message),
+                ))
+              }
+          },
           builder: (context, state) {
             final CampaignBloc bloc = context.read();
             final selectedCamp = bloc.selectedCampaign;
@@ -156,70 +164,73 @@ class SelectedCampaignView extends StatelessWidget {
                                   fontSize: 14.sp, color: Colors.white)),
                         )),
                   ),
-                if (campaignData != null)
-                  Card(
-                    child: Padding(
-                      padding: EdgeInsets.all(12.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                campaignData != null
+                    ? Card(
+                        child: Padding(
+                          padding: EdgeInsets.all(12.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                campaignData.targetedStores.toString(),
-                                style: TextStyle(
-                                    color: theme.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.sp),
+                              Row(
+                                children: [
+                                  Text(
+                                    campaignData.targetedStores.toString(),
+                                    style: TextStyle(
+                                        color: theme.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20.sp),
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  const Text("Store Targeted"),
+                                ],
                               ),
-                              SizedBox(width: 10.w),
-                              const Text("Store Targeted"),
+                              SizedBox(height: 15.h),
+                              Row(
+                                children: [
+                                  Text(
+                                    campaignData.totalResponse.toString(),
+                                    style: TextStyle(
+                                        color: theme.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20.sp),
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  const Text("Total Responses"),
+                                ],
+                              ),
+                              SizedBox(height: 15.h),
+                              Row(
+                                children: [
+                                  Text(
+                                    campaignData.includedStores.toString(),
+                                    style: TextStyle(
+                                        color: theme.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20.sp),
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  const Text("Store Included in Responses"),
+                                ],
+                              ),
+                              SizedBox(height: 6.h),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20.w),
+                                child: LinearProgressIndicator(
+                                  backgroundColor: Colors.grey.shade400,
+                                  color: const Color(0xffDB4C5B),
+                                  minHeight: 40,
+                                  value: campaignData.includedStores /
+                                      campaignData.targetedStores,
+                                ),
+                              ),
+                              SizedBox(height: 6.h),
                             ],
                           ),
-                          SizedBox(height: 15.h),
-                          Row(
-                            children: [
-                              Text(
-                                campaignData.totalResponse.toString(),
-                                style: TextStyle(
-                                    color: theme.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.sp),
-                              ),
-                              SizedBox(width: 10.w),
-                              const Text("Total Responses"),
-                            ],
-                          ),
-                          SizedBox(height: 15.h),
-                          Row(
-                            children: [
-                              Text(
-                                campaignData.includedStores.toString(),
-                                style: TextStyle(
-                                    color: theme.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.sp),
-                              ),
-                              SizedBox(width: 10.w),
-                              const Text("Store Included in Responses"),
-                            ],
-                          ),
-                          SizedBox(height: 6.h),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20.w),
-                            child: LinearProgressIndicator(
-                              backgroundColor: Colors.grey.shade400,
-                              color: const Color(0xffDB4C5B),
-                              minHeight: 40,
-                              value: campaignData.includedStores /
-                                  campaignData.targetedStores,
-                            ),
-                          ),
-                          SizedBox(height: 6.h),
-                        ],
+                        ),
+                      )
+                    : const Center(
+                        child: Text("Response is not available."),
                       ),
-                    ),
-                  )
               ],
             );
           },

@@ -23,7 +23,6 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
         emit(UpdateIndexState(selectIndex));
       }
     });
-
     on((UpdateSideMenuDetailsEvent event, emit) async =>
         await _getSideMenuData(emit));
     on(_endDuty);

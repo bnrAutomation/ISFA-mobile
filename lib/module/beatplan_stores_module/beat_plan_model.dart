@@ -4,6 +4,7 @@ class BeatPlanModel {
   BeatPlanModel({
     required this.pjpId,
     required this.markin,
+    required this.isAlreadyMarkin,
     required this.storeId,
     required this.pjpDate,
     required this.storeName,
@@ -24,6 +25,7 @@ class BeatPlanModel {
   String storeCategory;
   String address;
   bool markin;
+  bool isAlreadyMarkin;
   double? latitude;
   double? longitude;
   bool activeStatus;
@@ -40,6 +42,7 @@ class BeatPlanModel {
         pjpId: json["pjpId"],
         storeId: json["storeId"],
         markin: json["markin"] ?? false,
+        isAlreadyMarkin: json["alreadyMarkout"] ?? false,
         pjpDate: DateTime.parse(json["pjpDate"]),
         storeName: json["storeName"],
         storeCategory: json["storeCategory"],
@@ -67,5 +70,6 @@ class BeatPlanModel {
         "storeImage1": storeImage1,
         "storecode": storecode,
         "mobileNumber": mobileNumber,
+        "alreadyMarkout": isAlreadyMarkin
       };
 }

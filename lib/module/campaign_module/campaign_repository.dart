@@ -69,8 +69,13 @@ class CampaignRepository {
 
     if (response.statusCode == 200) {
       final dataJson = jsonDecode(response.body)['data'];
-      if (dataJson == null) return null;
-      return SavedCampaignDataModel.fromJson(dataJson);
+      if (dataJson == null) {
+        throw response.body.isEmpty
+            ? "Something went wrong"
+            : jsonDecode(response.body)['message'] ?? "Something went wrong";
+      } else {
+        return SavedCampaignDataModel.fromJson(dataJson);
+      }
     } else {
       throw response.body.isEmpty
           ? "Something went wrong"

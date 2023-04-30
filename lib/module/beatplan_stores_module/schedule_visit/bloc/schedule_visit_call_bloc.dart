@@ -60,7 +60,7 @@ class ScheduleVisitCallBloc
         body: jsonEncode({
           "companyId": companyId,
           "pjpDate": selectedDate!.toStringFormat("yyyy-MM-dd"),
-          "pjpId": selectedStore.pjpId,
+          // "pjpId": selectedStore.pjpId,
           "remarks": remark,
           "storeId": selectedStore.storeId,
           "userId": userId

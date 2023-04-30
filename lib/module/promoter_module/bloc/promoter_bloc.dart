@@ -18,7 +18,7 @@ part 'promoter_state.dart';
 
 class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
   final PromoterRepository repo;
-
+  bool isAlreadyMarkin = true;
   InventoryDetailModel? inventoryDetail;
   PromoterStoreDetailModel? storeDetail;
   List<InventoryProductDetailModel> filteredList = [];
@@ -112,6 +112,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
 
     emit(PromoterToastMessageState(response));
     AppStorage().markedInStoreId = null;
+    isAlreadyMarkin = true;
     emit(PromoterStoreDetailLoadedState());
   }
 
@@ -180,6 +181,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
     emit(PromoterStoreDetailLoadingState());
     await repo.getStoreDetails().then((value) {
       storeDetail = value;
+      isAlreadyMarkin = storeDetail?.alreadyMarkout ?? true;
       if (value.latitude <= 0) {
         emit(PromoterToastMessageState(
             "Store coordinates not found.\nPlease contact admin."));

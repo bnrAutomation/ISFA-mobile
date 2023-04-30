@@ -12,6 +12,7 @@ class PromoterStoreDetailModel {
     required this.storeType,
     required this.activeStatus,
     required this.markIn,
+    required this.alreadyMarkout,
     required this.zipcode,
     required this.latitude,
     required this.longitude,
@@ -28,6 +29,7 @@ class PromoterStoreDetailModel {
   String storeType;
   bool activeStatus;
   bool markIn;
+  bool alreadyMarkout;
   int zipcode;
   double latitude;
   double longitude;
@@ -49,6 +51,7 @@ class PromoterStoreDetailModel {
         storeType: json["storeType"],
         activeStatus: json["activeStatus"],
         markIn: json["markIn"] ?? false,
+        alreadyMarkout: json["alreadyMarkout"] ?? false,
         zipcode: json["zipcode"],
         phoneNo: json['phoneNo'],
         latitude: double.tryParse(json['latitude'].toString()) ?? 0,
@@ -70,5 +73,6 @@ class PromoterStoreDetailModel {
         "latitude": latitude,
         "logitude": longitude,
         "phoneNo": phoneNo,
+        "alreadyMarkout": alreadyMarkout
       };
 }

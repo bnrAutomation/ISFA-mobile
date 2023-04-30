@@ -42,7 +42,7 @@ class ChangePasswordView extends StatelessWidget {
                     children: [
                       const SizedBox(height: 10),
                       const Text(
-                        "NOTE : Your new password must be different from your previously password",
+                        "NOTE : Your new password must be different from your previous password.",
                         textAlign: TextAlign.center,
                         style: TextStyle(),
                       ),
