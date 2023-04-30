@@ -22,220 +22,204 @@ class StoreDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<StoreDetailBloc>();
-    return BlocBuilder<StoreDetailBloc, StoreDetailState>(
-      builder: (context, state) {
-        return Scaffold(
-          floatingActionButton: !bloc.beatPlanModel.markin
-              ? null
-              : SpeedDial(
-                  speedDialChildren: [
-                      SpeedDialChild(
-                        child: const Icon(Icons.campaign),
-                        foregroundColor: Colors.white,
-                        backgroundColor: Theme.of(context).primaryColor,
-                        label: 'Campaign',
-                        onPressed: () => bloc.add(GotoCompaignEvent()),
-                        closeSpeedDialOnPressed: false,
+    return Scaffold(
+      floatingActionButton: BlocBuilder<StoreDetailBloc, StoreDetailState>(
+        builder: (context, state) {
+          final bloc = context.read<StoreDetailBloc>();
+          if (!bloc.beatPlanModel.markin) {
+            return const SizedBox();
+          } else {
+            return SpeedDial(
+                speedDialChildren: [
+                  SpeedDialChild(
+                    child: const Icon(Icons.campaign),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    label: 'Campaign',
+                    onPressed: () => bloc.add(GotoCompaignEvent()),
+                    closeSpeedDialOnPressed: false,
+                  ),
+                  SpeedDialChild(
+                    child: const Icon(Icons.feedback),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    label: 'Feedback',
+                    onPressed: () {
+                      final storeDetail = bloc.details;
+                      if (storeDetail != null) {
+                        AppPopup.showAppBottomSheet(
+                          context: context,
+                          child: FeedbackView(
+                              storeName:
+                                  "${storeDetail.name} ${storeDetail.storeBranch}"),
+                        );
+                      }
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: const Icon(Icons.schedule),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    label: 'Schedule',
+                    onPressed: () {
+                      context.pushNamed(AppPaths.scheduleVisit,
+                          extra: [bloc.beatPlanModel]);
+                    },
+                  ),
+                ],
+                closedForegroundColor: Colors.white,
+                closedBackgroundColor: Theme.of(context).primaryColor,
+                openForegroundColor: Theme.of(context).primaryColor,
+                openBackgroundColor: Colors.white,
+                child: Icon(
+                  Icons.add,
+                  size: 30.w,
+                ));
+          }
+        },
+      ),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        iconTheme: const IconThemeData(color: Colors.white),
+        leading: IconButton(
+            onPressed: () => context.pop(),
+            icon: const Icon(Icons.arrow_back_ios)),
+      ),
+      body: SingleChildScrollView(
+        child: BlocConsumer<StoreDetailBloc, StoreDetailState>(
+          listenWhen: (previous, current) =>
+              current is StoreDetailToastMessageState ||
+              current is CompaignsLoadedStoreDetailState,
+          listener: (context, state) {
+            if (state is StoreDetailToastMessageState) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.message),
+              ));
+            } else if (state is CompaignsLoadedStoreDetailState) {
+              final StoreDetailBloc bloc = context.read();
+              AppPopup.showAppBottomSheet(
+                  context: context,
+                  child: _openCampaignSheet(context, bloc.beatPlanModel));
+            }
+          },
+          builder: (context, state) {
+            return state is MarkingLoadingStoreDetailState
+                ? const Center(child: CircularProgressIndicator())
+                : Column(
+                    children: [
+                      headerImage(context),
+
+                      nameAddress(context),
+                      // blueCard(context,
+                      //     leadingSVGImage: ImageConstants.miniCalendar,
+                      //     subtitle: 'Scheduled visits & Calls',
+                      //     title: '28 Feb 2023',
+                      //     trailingSVGImage: ImageConstants.visitsCalls),
+                      // blueCard(context,
+                      //     leadingSVGImage: ImageConstants.creditCard,
+                      //     subtitle: 'Available Credits',
+                      //     title: '₹ 500.0',
+                      //     trailingSVGImage: ImageConstants.credits),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: recentNote(context),
                       ),
-                      SpeedDialChild(
-                        child: const Icon(Icons.feedback),
-                        foregroundColor: Colors.white,
-                        backgroundColor: Theme.of(context).primaryColor,
-                        label: 'Feedback',
-                        onPressed: () {
-                          final storeDetail = bloc.details;
-                          if (storeDetail != null) {
-                            AppPopup.showAppBottomSheet(
-                              context: context,
-                              child: FeedbackView(
-                                  storeName:
-                                      "${storeDetail.name} ${storeDetail.storeBranch}"),
-                            );
-                          }
-                        },
-                      ),
-                      SpeedDialChild(
-                        child: const Icon(Icons.schedule),
-                        foregroundColor: Colors.white,
-                        backgroundColor: Theme.of(context).primaryColor,
-                        label: 'Schedule',
-                        onPressed: () {
-                          context.pushNamed(AppPaths.scheduleVisit,
-                              extra: [bloc.beatPlanModel]);
-                        },
-                      ),
-                      // SpeedDialChild(
-                      //   child: const Icon(Icons.history),
-                      //   foregroundColor: Colors.white,
-                      //   backgroundColor: Theme.of(context).primaryColor,
-                      //   label: 'History',
-                      //   onPressed: () {},
-                      // ),
-                    ],
-                  closedForegroundColor: Colors.white,
-                  closedBackgroundColor: Theme.of(context).primaryColor,
-                  openForegroundColor: Theme.of(context).primaryColor,
-                  openBackgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.add,
-                    size: 30.w,
-                  )),
-          appBar: AppBar(
-            backgroundColor: Theme.of(context).primaryColor,
-            iconTheme: const IconThemeData(color: Colors.white),
-            leading: IconButton(
-                onPressed: () => context.pop(),
-                icon: const Icon(Icons.arrow_back_ios)),
-            // actions: [
-            //   IconButton(
-            //       onPressed: () => context.pop(), icon: const Icon(Icons.share)),
-            //   IconButton(
-            //       onPressed: () => context.pop(),
-            //       icon: const Icon(Icons.more_vert)),
-            // ],
-          ),
-          body: SingleChildScrollView(
-            child: BlocConsumer<StoreDetailBloc, StoreDetailState>(
-              listenWhen: (previous, current) =>
-                  current is StoreDetailToastMessageState ||
-                  current is CompaignsLoadedStoreDetailState,
-              listener: (context, state) {
-                if (state is StoreDetailToastMessageState) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(state.message),
-                  ));
-                } else if (state is CompaignsLoadedStoreDetailState) {
-                  final StoreDetailBloc bloc = context.read();
-                  AppPopup.showAppBottomSheet(
-                      context: context,
-                      child: _openCampaignSheet(context, bloc.beatPlanModel));
-                }
-              },
-              builder: (context, state) {
-                return state is MarkingLoadingStoreDetailState
-                    ? const Center(child: CircularProgressIndicator())
-                    : Column(
+
+                      Row(
                         children: [
-                          headerImage(context),
-
-                          nameAddress(context),
-                          // blueCard(context,
-                          //     leadingSVGImage: ImageConstants.miniCalendar,
-                          //     subtitle: 'Scheduled visits & Calls',
-                          //     title: '28 Feb 2023',
-                          //     trailingSVGImage: ImageConstants.visitsCalls),
-                          // blueCard(context,
-                          //     leadingSVGImage: ImageConstants.creditCard,
-                          //     subtitle: 'Available Credits',
-                          //     title: '₹ 500.0',
-                          //     trailingSVGImage: ImageConstants.credits),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: recentNote(context),
-                          ),
-
-                          Row(
-                            children: [
-                              Expanded(
-                                child: StoreDetailCard(
-                                  child: Row(
+                          Expanded(
+                            child: StoreDetailCard(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SvgPicture.asset(ImageConstants.statistic),
+                                  const SizedBox(width: 8),
+                                  Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      SvgPicture.asset(
-                                          ImageConstants.statistic),
-                                      const SizedBox(width: 8),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text("Stage",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium),
-                                          Text("Select Stage",
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 10.sp,
-                                                  color:
-                                                      const Color(0xff278BBC))),
-                                        ],
-                                      ),
+                                      Text("Stage",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium),
+                                      Text("Select Stage",
+                                          style: GoogleFonts.inter(
+                                              fontSize: 10.sp,
+                                              color: const Color(0xff278BBC))),
                                     ],
                                   ),
-                                ),
+                                ],
                               ),
-                              Expanded(
-                                child: StoreDetailCard(
-                                  child: Row(
+                            ),
+                          ),
+                          Expanded(
+                            child: StoreDetailCard(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SvgPicture.asset(ImageConstants.stars),
+                                  const SizedBox(width: 8),
+                                  Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      SvgPicture.asset(ImageConstants.stars),
-                                      const SizedBox(width: 8),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text("Class",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium),
-                                          Text(
-                                            "Select Class",
-                                            style: GoogleFonts.inter(
-                                                fontSize: 10.sp,
-                                                color: const Color(0xff278BBC)),
-                                          )
-                                        ],
-                                      ),
+                                      Text("Class",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium),
+                                      Text(
+                                        "Select Class",
+                                        style: GoogleFonts.inter(
+                                            fontSize: 10.sp,
+                                            color: const Color(0xff278BBC)),
+                                      )
                                     ],
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                          // StoreDetailCard(
-                          //   child: ListTile(
-                          //     title: Text("Sub Dealer History",
-                          //         style: Theme.of(context)
-                          //             .textTheme
-                          //             .titleMedium
-                          //             ?.copyWith(color: Theme.of(context).primaryColor)),
-                          //     subtitle: Row(
-                          //       children: [
-                          //         Text("Last Activity:",
-                          //             style: Theme.of(context).textTheme.titleSmall),
-                          //         Text("Compaign, 28 Feb 2023",
-                          //             style: Theme.of(context)
-                          //                 .textTheme
-                          //                 .titleSmall
-                          //                 ?.copyWith(color: Colors.grey)),
-                          //       ],
-                          //     ),
-                          //     trailing: Icon(Icons.arrow_forward_ios,
-                          //         color: Theme.of(context).primaryColor),
-                          //   ),
-                          // ),
-                          // StoreDetailCard(
-                          //   child: ListTile(
-                          //     title: Text("More",
-                          //         style: Theme.of(context)
-                          //             .textTheme
-                          //             .titleMedium
-                          //             ?.copyWith(color: Theme.of(context).primaryColor)),
-                          //     trailing: Icon(Icons.arrow_forward_ios,
-                          //         color: Theme.of(context).primaryColor),
-                          //   ),
-                          // ),
-                          const SizedBox(height: 100)
                         ],
-                      );
-              },
-            ),
-          ),
-        );
-      },
+                      ),
+                      // StoreDetailCard(
+                      //   child: ListTile(
+                      //     title: Text("Sub Dealer History",
+                      //         style: Theme.of(context)
+                      //             .textTheme
+                      //             .titleMedium
+                      //             ?.copyWith(color: Theme.of(context).primaryColor)),
+                      //     subtitle: Row(
+                      //       children: [
+                      //         Text("Last Activity:",
+                      //             style: Theme.of(context).textTheme.titleSmall),
+                      //         Text("Compaign, 28 Feb 2023",
+                      //             style: Theme.of(context)
+                      //                 .textTheme
+                      //                 .titleSmall
+                      //                 ?.copyWith(color: Colors.grey)),
+                      //       ],
+                      //     ),
+                      //     trailing: Icon(Icons.arrow_forward_ios,
+                      //         color: Theme.of(context).primaryColor),
+                      //   ),
+                      // ),
+                      // StoreDetailCard(
+                      //   child: ListTile(
+                      //     title: Text("More",
+                      //         style: Theme.of(context)
+                      //             .textTheme
+                      //             .titleMedium
+                      //             ?.copyWith(color: Theme.of(context).primaryColor)),
+                      //     trailing: Icon(Icons.arrow_forward_ios,
+                      //         color: Theme.of(context).primaryColor),
+                      //   ),
+                      // ),
+                      const SizedBox(height: 100)
+                    ],
+                  );
+          },
+        ),
+      ),
     );
   }
 
@@ -460,28 +444,25 @@ class StoreDetailView extends StatelessWidget {
             alignment: Alignment.bottomLeft,
             child: Padding(
               padding: const EdgeInsets.all(12),
-              child: bloc.beatPlanModel.isAlreadyMarkin
-                  ? TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6)),
-                      onPressed: () {},
-                      child: const Text("Visited"))
-                  : TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6)),
-                      onPressed: () {
-                        if (bloc.beatPlanModel.markin) {
-                          bloc.add(MarkOutStoreDetailEvent());
-                        } else {
-                          bloc.add(MarkInStoreDetailEvent());
-                        }
-                      },
-                      child: Text(
-                          bloc.beatPlanModel.markin ? "Mark Out" : "Mark In")),
+              child: TextButton(
+                  style: TextButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6)),
+                  onPressed: () {
+                    if (bloc.beatPlanModel.isAlreadyMarkin) {
+                      return;
+                    } else if (bloc.beatPlanModel.markin) {
+                      bloc.add(MarkOutStoreDetailEvent());
+                    } else {
+                      bloc.add(MarkInStoreDetailEvent());
+                    }
+                  },
+                  child: Text(bloc.beatPlanModel.isAlreadyMarkin
+                      ? "Visited"
+                      : bloc.beatPlanModel.markin
+                          ? "Mark Out"
+                          : "Mark In")),
             ),
           )),
           Padding(

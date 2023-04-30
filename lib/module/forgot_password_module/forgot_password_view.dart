@@ -55,34 +55,28 @@ class ForgotPasswordView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          const SizedBox(height: 10),
                           Image.asset(
                             ImageConstants.logo,
                             width: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
                             //  height: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          const SizedBox(height: 10),
                           const Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
-                              "Please enter your registered email to recieved Verification Code",
+                              "Please enter your registered email ID to receive Verification code",
                               textAlign: TextAlign.center,
                               style: TextStyle(),
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          const SizedBox(height: 10),
                           state is ForgotPasswordErrorState
                               ? Text(
                                   state.errorMessage,
                                   style: const TextStyle(color: Colors.red),
                                 )
-                              : Container(),
+                              : const SizedBox(),
                           const SizedBox(height: 10),
                           TextField(
                             inputFormatters: [
@@ -101,9 +95,7 @@ class ForgotPasswordView extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10)),
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          const SizedBox(height: 10),
                           BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
                             listener: (context, state) {
                               if (state is ForgotPasswordSuccesfullState) {
@@ -112,7 +104,8 @@ class ForgotPasswordView extends StatelessWidget {
                                   content: Text(state.message),
                                   duration: const Duration(seconds: 5),
                                 ));
-                                context.pushNamed(AppPaths.passVerification,
+                                context.pushReplacementNamed(
+                                    AppPaths.passVerification,
                                     params: {
                                       'email': usernameController.text,
                                       'msg': state.message
@@ -142,9 +135,7 @@ class ForgotPasswordView extends StatelessWidget {
                               );
                             },
                           ),
-                          const SizedBox(
-                            height: 10,
-                          )
+                          const SizedBox(height: 10)
                         ],
                       );
                     },

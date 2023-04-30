@@ -44,7 +44,7 @@ class VerificationView extends StatelessWidget {
                               const Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
-                                  "Pease enter the 4 digits code sent\nto your registed E-Mail.",
+                                  "Please enter the 4 digits code sent\nto your registered E-Mail.",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
@@ -57,13 +57,9 @@ class VerificationView extends StatelessWidget {
                                       state.errorMessage,
                                       style: const TextStyle(color: Colors.red),
                                     )
-                                  : Container(),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
+                                  : const SizedBox(),
+                              const SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               OTPTextField(
                                 length: 4,
                                 width: MediaQuery.of(context).size.width,
@@ -83,9 +79,7 @@ class VerificationView extends StatelessWidget {
                                       verificationCode, email));
                                 },
                               ),
-                              const SizedBox(
-                                height: 20,
-                              ),
+                              const SizedBox(height: 20),
                               BlocConsumer<VerificationBloc, VerificationState>(
                                 listener: (context, state) {
                                   if (state is VerificationCodeResend) {
@@ -114,21 +108,19 @@ class VerificationView extends StatelessWidget {
                                   );
                                 },
                               ),
-                              const SizedBox(
-                                height: 20,
-                              ),
+                              const SizedBox(height: 20),
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: BlocConsumer<VerificationBloc,
                                     VerificationState>(
                                   listener: (context, state) {
                                     if (state is VerificationSuccesfullState) {
-                                      context.pushNamed(AppPaths.resetPass,
+                                      context.pushReplacementNamed(
+                                          AppPaths.resetPass,
                                           params: {
                                             'email': state.email,
                                             'otp': state.otp
                                           });
-                                      // context.pushNamed(AppPaths.resetPass);
                                     }
                                   },
                                   builder: (context, state) {

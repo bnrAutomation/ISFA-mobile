@@ -57,17 +57,13 @@ class ResetPasswordView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            const SizedBox(height: 10),
                             Image.asset(
                               ImageConstants.logo,
                               width: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
                               // height: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            const SizedBox(height: 10),
                             const Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
@@ -76,18 +72,14 @@ class ResetPasswordView extends StatelessWidget {
                                 style: TextStyle(),
                               ),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            const SizedBox(height: 10),
                             state is ResetPasswordErrorState
                                 ? Text(
                                     state.errorMessage,
                                     style: const TextStyle(color: Colors.red),
                                   )
-                                : Container(),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                                : const SizedBox(),
+                            const SizedBox(height: 10),
                             TextField(
                               controller: newPasswordController,
                               onChanged: (value) => bloc.add(ChangePassword(

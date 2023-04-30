@@ -51,10 +51,8 @@ class ChangePasswordView extends StatelessWidget {
                               state.errorMessage,
                               style: const TextStyle(color: Colors.red),
                             )
-                          : Container(),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                          : const SizedBox(),
+                      const SizedBox(height: 10),
                       TextField(
                         inputFormatters: [
                           FilteringTextInputFormatter.deny(" ")
@@ -110,9 +108,7 @@ class ChangePasswordView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10)),
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
                       BlocConsumer<ChangePasswordBloc, ChangePasswordState>(
                         listener: (context, state) {
                           if (state is ChangePasswordSuccesfullState) {
@@ -142,9 +138,7 @@ class ChangePasswordView extends StatelessWidget {
                           );
                         },
                       ),
-                      const SizedBox(
-                        height: 10,
-                      )
+                      const SizedBox(height: 10)
                     ]),
               );
             },

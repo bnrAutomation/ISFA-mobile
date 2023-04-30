@@ -13,20 +13,15 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
       emit(VerificationErrorState(event.msg));
     });
     on<VerificationTextChangeEvent>((event, emit) {
-      if (event.otpValue.length != 4) {
-        varificationCode = event.otpValue;
-        emit(VerificationErrorState("Please Enter Valid OTP"));
-      } else {
-        varificationCode = event.otpValue;
-        emit(VerificationValidState());
-      }
+      varificationCode = event.otpValue;
+      emit(VerificationValidState());
     });
     on<ReSendPasswordEvent>((event, emit) {
       emit(VerificationCodeResend());
     });
 
     on<VerificationSubmitEvent>((event, emit) async {
-      if (varificationCode.isEmpty || varificationCode.length != 4) {
+      if (varificationCode.length < 4) {
         emit(VerificationErrorState("Please Enter Valid OTP"));
       } else {
         try {

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/leaves_module/leave_repository.dart';
 import 'package:i_densfa/module/leaves_module/model/leave_enums.dart';
 import 'package:i_densfa/module/leaves_module/model/leave_type_model.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 import '../../../utility/app_constants.dart';
 import '../model/leave_model.dart';
@@ -128,6 +129,10 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   }
 
   Future<void> _applyLeave(Emitter<LeaveState> emit) async {
+    if (selectLeaveType == null) {
+      emit(LeaveViewShowSnack('Please select leave type'));
+      return;
+    }
     if (fromDate == null) {
       emit(LeaveViewShowSnack('Please select start date'));
       return;
@@ -136,14 +141,20 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       emit(LeaveViewShowSnack('Please select end date'));
       return;
     }
-    if (selectLeaveType == null) {
-      emit(LeaveViewShowSnack('Please select leave type'));
+
+    final DateTime endDate = toDate ?? fromDate!;
+
+    if (fromDate!.weekday == DateTime.sunday) {
+      emit(LeaveViewShowSnack(
+          'Please select other weekday\nLeave ${fromDate!.isSameDate(endDate) ? "on" : "from"} sunday is not allowed'));
       return;
     }
+
     if (reason.isEmpty) {
       emit(LeaveViewShowSnack('Please enter reason'));
       return;
     }
+
     final leaveTypeId = leaveOptions
         .firstWhere((element) => element.leaveType == selectLeaveType)
         .leaveId;
@@ -152,9 +163,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
             leaveTypeId: leaveTypeId,
             dayId: selectedLeaveDayPart.getId,
             fromDate: fromDate!,
-            toDate: selectedLeaveDayPart == LeaveDayPart.full
-                ? toDate!
-                : fromDate!, // same date for half leaves
+            toDate: endDate,
             reason: reason)
         .catchError((e) {
       emit(LeaveViewShowSnack(e.toString()));

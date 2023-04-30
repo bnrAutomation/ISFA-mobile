@@ -37,14 +37,9 @@ class CampaignQuestionsView extends StatelessWidget {
             children: [
               BlocConsumer<CampaignBloc, CampaignState>(
                 listenWhen: (previous, current) =>
-                    current is SnackbarMessageCampaignState ||
                     current is ScoreCalculatedCampaignState,
                 listener: (context, state) {
-                  if (state is SnackbarMessageCampaignState) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.message)),
-                    );
-                  } else if (state is ScoreCalculatedCampaignState) {
+                  if (state is ScoreCalculatedCampaignState) {
                     Navigator.pop(context);
                   }
                 },

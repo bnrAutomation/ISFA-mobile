@@ -7,6 +7,10 @@ extension DateTimeHelper on DateTime {
   String toStringFormat(String format) {
     return DateFormat(format).format(this);
   }
+
+  bool isSameDate(DateTime other) {
+    return year == other.year && month == other.month && day == other.day;
+  }
 }
 
 extension ColorExtension on String {

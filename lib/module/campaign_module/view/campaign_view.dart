@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -213,16 +215,17 @@ class SelectedCampaignView extends StatelessWidget {
                                 ],
                               ),
                               SizedBox(height: 6.h),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20.w),
-                                child: LinearProgressIndicator(
-                                  backgroundColor: Colors.grey.shade400,
-                                  color: const Color(0xffDB4C5B),
-                                  minHeight: 40,
-                                  value: campaignData.includedStores /
-                                      campaignData.targetedStores,
+                              if (campaignData.includedStores > 0)
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.w),
+                                  child: LinearProgressIndicator(
+                                    backgroundColor: Colors.grey.shade400,
+                                    color: const Color(0xffDB4C5B),
+                                    minHeight: 40,
+                                    value: campaignData.includedStores /
+                                        max(1, campaignData.targetedStores),
+                                  ),
                                 ),
-                              ),
                               SizedBox(height: 6.h),
                             ],
                           ),

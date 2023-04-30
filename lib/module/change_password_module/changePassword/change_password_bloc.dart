@@ -21,7 +21,7 @@ class ChangePasswordBloc
     });
     on<SubmitChangePasswordEvent>((event, emit) async {
       if (event.newPassword.isEmpty || event.oldPassword.isEmpty) {
-        emit(ChangePasswordErrorState("Feild should not be empty."));
+        emit(ChangePasswordErrorState("The field should not be empty."));
       } else if (event.newPassword == event.oldPassword) {
         emit(ChangePasswordErrorState(
             "New password should not match with old password."));

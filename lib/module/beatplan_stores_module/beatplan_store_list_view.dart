@@ -178,26 +178,16 @@ class StoreCardView extends StatelessWidget {
             ],
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(right: 20),
-          child: NoteClip(text: 'Semi-urban', backColor: Color(0xff7B000C)),
-        ),
-        if (beatPlan.markin)
-          const Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: 100),
-              child: NoteClip(text: 'Marked In', backColor: Colors.green),
-            ),
-          ),
-        if (beatPlan.isAlreadyMarkin)
-          const Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: 100),
-              child: NoteClip(text: 'Visited', backColor: Colors.green),
-            ),
-          ),
+        Row(children: [
+          const SizedBox(width: 100),
+          if (beatPlan.markin)
+            const NoteClip(text: 'Marked In', backColor: Colors.green),
+          if (beatPlan.isAlreadyMarkin)
+            const NoteClip(text: 'Visited', backColor: Colors.green),
+          const Spacer(),
+          const NoteClip(text: 'Semi-urban', backColor: Color(0xff7B000C)),
+          const SizedBox(width: 20),
+        ]),
         Positioned.fill(
           child: Align(
             alignment: Alignment.centerLeft,

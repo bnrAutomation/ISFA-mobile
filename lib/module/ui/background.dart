@@ -77,7 +77,7 @@ class Background extends StatelessWidget {
                   ),
                 ),
               )
-            : Container()
+            : const SizedBox()
       ],
     );
   }
