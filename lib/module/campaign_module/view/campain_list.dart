@@ -28,20 +28,14 @@ class CampaignListItem extends StatelessWidget {
                       item.name,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: DateTime.now().isBefore(item.endDate)
-                              ? Colors.blue
-                              : Colors.grey),
+                          color: item.isNagative() ? Colors.grey : Colors.blue),
                     ),
                   ),
                   Text(
-                    DateTime.now().isBefore(item.endDate)
-                        ? "Active"
-                        : "De-Active",
+                    item.isNagative() ? "De-Active" : "Active",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: DateTime.now().isBefore(item.endDate)
-                            ? Colors.green
-                            : Colors.red),
+                        color: item.isNagative() ? Colors.red : Colors.green),
                   ),
                   const SizedBox(
                     width: 10,

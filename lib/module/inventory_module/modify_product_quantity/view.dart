@@ -134,31 +134,33 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 8.h),
-                    Text("Actual Price",
-                        style: Theme.of(context).textTheme.labelLarge),
+                    if (!context.read<ModifyQuantityBloc>().isSale)
+                      Text("Actual Price",
+                          style: Theme.of(context).textTheme.labelLarge),
                     const SizedBox(height: 5),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: TextField(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                              RegExp(r'^(\d+)?\.?\d{0,2}'))
-                        ],
-                        keyboardType: TextInputType.number,
-                        controller: TextEditingController(
-                            text: bloc.enteredPrice.toStringAsFixed(0)),
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                          hintText: 'Enter Price',
+                    if (!context.read<ModifyQuantityBloc>().isSale)
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                        onChanged: (value) =>
-                            bloc.add(AddPriceSaleProductEvent(value)),
+                        child: TextField(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^(\d+)?\.?\d{0,2}'))
+                          ],
+                          keyboardType: TextInputType.number,
+                          controller: TextEditingController(
+                              text: bloc.enteredPrice.toStringAsFixed(0)),
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                            hintText: 'Enter Price',
+                          ),
+                          onChanged: (value) =>
+                              bloc.add(AddPriceSaleProductEvent(value)),
+                        ),
                       ),
-                    ),
                   ],
                 ],
                 SizedBox(height: 12.h),

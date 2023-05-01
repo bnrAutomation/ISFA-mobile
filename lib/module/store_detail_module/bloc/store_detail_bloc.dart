@@ -8,6 +8,7 @@ import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_model.dart';
 
 import 'package:i_densfa/module/store_detail_module/store_detail_repositry.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -124,7 +125,7 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       return Future<void>.error(onError);
     });
 
-    if (distanceFromStore > 250) {
+    if (distanceFromStore > AppConstant.storeRange) {
       emit(StoreDetailToastMessageState('You are not in store range'));
       return;
     } else if (distanceFromStore < 0) {
@@ -160,7 +161,7 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       return Future<void>.error(onError);
     });
 
-    if (distanceFromStore > 250) {
+    if (distanceFromStore > AppConstant.storeRange) {
       emit(StoreDetailToastMessageState('You are not in store range'));
       return;
     } else if (distanceFromStore < 0) {

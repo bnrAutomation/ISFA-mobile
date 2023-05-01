@@ -68,6 +68,24 @@ class CampaignDetailModel {
 
   String toRawJson() => json.encode(toJson());
 
+  bool isNagative() {
+    DateTime endDate = DateTime(
+        this.endDate.year, this.endDate.month, this.endDate.day, 23, 59);
+    Duration diff = endDate.difference(DateTime.now());
+
+    if (diff.inDays > 0) {
+      return false;
+    }
+    if (diff.inHours > 0) {
+      return false;
+    }
+    if (diff.inMinutes > 0) {
+      return false;
+    }
+
+    return true;
+  }
+
   factory CampaignDetailModel.fromJson(Map<String, dynamic> json) {
     return CampaignDetailModel(
         campaignId: json["campaignId"],

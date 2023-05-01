@@ -28,8 +28,11 @@ class ImageConstants {
   static const statistic = "assets/icons/store/statistic.svg";
   static const telephone = "assets/icons/store/telephone.svg";
   static const visitsCalls = "assets/icons/store/visits-calls.svg";
-
   static const fileView = "assets/images/file_view.svg";
+}
+
+class AppConstant {
+  static const storeRange = 250;
 }
 
 class URLConstants {

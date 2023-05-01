@@ -8,6 +8,7 @@ import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/module/promoter_module/models/inventory_detail_model.dart';
 import 'package:i_densfa/module/promoter_module/models/promoter_store_detail_model.dart';
 import 'package:i_densfa/module/promoter_module/promoter_repository.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -91,7 +92,7 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
 
     final storeDistance = Geolocator.distanceBetween(storeDetail?.latitude ?? 0,
         storeDetail?.longitude ?? 0, loc.latitude, loc.longitude);
-    if (storeDistance > 250) {
+    if (storeDistance > AppConstant.storeRange) {
       emit(PromoterToastMessageState('You are not in store range'));
       return;
     }

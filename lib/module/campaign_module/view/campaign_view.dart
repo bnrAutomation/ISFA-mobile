@@ -145,7 +145,7 @@ class SelectedCampaignView extends StatelessWidget {
                     ),
                   ),
                 if (selectedCamp != null &&
-                    DateTime.now().isBefore(selectedCamp.endDate) &&
+                    selectedCamp.isNagative() == false &&
                     bloc.repo.storeId != -1)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
