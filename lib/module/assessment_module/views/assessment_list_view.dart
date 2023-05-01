@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/assessment_module/bloc/assessment_bloc.dart';
 import 'package:i_densfa/routes.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 class AssessmentListView extends StatelessWidget {
   const AssessmentListView({super.key});
@@ -53,7 +54,8 @@ class AssessmentListView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(item.name),
-                      if (DateTime.now().isAfter(DateTime.parse(item.endDate)))
+                      //if (DateTime.now().isAfter(DateTime.parse(item.endDate)))
+                      if (item.isNagative())
                         const Text(
                           "Ended",
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -68,7 +70,7 @@ class AssessmentListView extends StatelessWidget {
                   subtitle: Align(
                     alignment: Alignment.bottomRight,
                     child: Text(
-                      "${item.startDate} - ${item.endDate}",
+                      "${item.startDate.toStringFormat("dd-MM-yyyy")} - ${item.endDate.toStringFormat("dd-MM-yyyy")}",
                       style: TextStyle(fontSize: 10.sp),
                     ),
                   ),

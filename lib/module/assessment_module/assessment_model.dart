@@ -54,9 +54,9 @@ class AssessmentDetailModel {
   int assessmentId;
   String name;
   String description;
-  String startDate;
+  DateTime startDate;
   String startTime;
-  String endDate;
+  DateTime endDate;
   String endTime;
   String imageName;
   int duration;
@@ -68,15 +68,33 @@ class AssessmentDetailModel {
 
   String toRawJson() => json.encode(toJson());
 
+  bool isNagative() {
+    DateTime endDate = DateTime(
+        this.endDate.year, this.endDate.month, this.endDate.day, 23, 59);
+    Duration diff = endDate.difference(DateTime.now());
+
+    if (diff.inDays > 0) {
+      return false;
+    }
+    if (diff.inHours > 0) {
+      return false;
+    }
+    if (diff.inMinutes > 0) {
+      return false;
+    }
+
+    return true;
+  }
+
   factory AssessmentDetailModel.fromJson(Map<String, dynamic> json) {
     final assessJson = json["assessmentResponse"];
     return AssessmentDetailModel(
         assessmentId: assessJson["assessmentId"],
         name: assessJson["name"],
         description: assessJson["description"],
-        startDate: assessJson["startDate"],
+        startDate: DateTime.parse(assessJson["startDate"]),
         startTime: assessJson["startTime"],
-        endDate: assessJson["endDate"],
+        endDate: DateTime.parse(assessJson["endDate"]),
         endTime: assessJson["endTime"],
         imageName: assessJson["imageName"],
         duration: assessJson["duration"],

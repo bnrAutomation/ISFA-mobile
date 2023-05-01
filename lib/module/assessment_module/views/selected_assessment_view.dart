@@ -8,6 +8,7 @@ import 'package:i_densfa/module/assessment_module/assessment_model.dart';
 import 'package:i_densfa/module/assessment_module/bloc/assessment_bloc.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 class SelectedAssessmentView extends StatelessWidget {
   const SelectedAssessmentView({super.key});
@@ -47,12 +48,16 @@ class SelectedAssessmentView extends StatelessWidget {
                 ),
                 title: const Text("Change Date"),
                 subtitle: Text(
-                    "From: ${bloc.selectedAssessment!.startDate} To: ${bloc.selectedAssessment!.endDate}"),
+                    "From: ${bloc.selectedAssessment!.startDate.toStringFormat("dd-MM-yyyy")} To: ${bloc.selectedAssessment!.endDate.toStringFormat("dd-MM-yyyy")}"),
               ),
             ),
             if (bloc.selectedAssessment?.userScored == null &&
-                DateTime.now()
-                    .isBefore(DateTime.parse(bloc.selectedAssessment!.endDate)))
+                bloc.selectedAssessment?.isNagative() == false
+            // DateTime.now()
+            //     .isBefore(DateTime.parse(bloc.selectedAssessment!.endDate)
+            //     )
+
+            )
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: FilledButton(
