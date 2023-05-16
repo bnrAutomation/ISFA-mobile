@@ -117,7 +117,7 @@ class VerificationView extends StatelessWidget {
                                     if (state is VerificationSuccesfullState) {
                                       context.pushReplacementNamed(
                                           AppPaths.resetPass,
-                                          params: {
+                                          pathParameters: {
                                             'email': state.email,
                                             'otp': state.otp
                                           });

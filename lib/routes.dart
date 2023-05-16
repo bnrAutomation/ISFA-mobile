@@ -146,16 +146,16 @@ final router = GoRouter(
       path: "${AppPaths.passVerification}/:email/:msg",
       name: AppPaths.passVerification,
       builder: (context, state) => VerificationView(
-        email: state.params['email'] ?? "",
-        msg: state.params['msg'] ?? "",
+        email: state.pathParameters['email'] ?? "",
+        msg: state.pathParameters['msg'] ?? "",
       ),
     ),
     GoRoute(
       path: "${AppPaths.resetPass}/:email/:otp",
       name: AppPaths.resetPass,
       builder: (context, state) => ResetPasswordView(
-        email: state.params['email'] ?? "",
-        otp: state.params['otp'] ?? "",
+        email: state.pathParameters['email'] ?? "",
+        otp: state.pathParameters['otp'] ?? "",
       ),
     ),
     GoRoute(
@@ -201,7 +201,7 @@ final router = GoRouter(
       path: "${AppPaths.appwebview}/:link",
       name: AppPaths.appwebview,
       builder: (context, state) => AppWebView(
-        link: state.params['link'] ?? "",
+        link: state.pathParameters['link'] ?? "",
       ),
     ),
     GoRoute(
@@ -218,7 +218,7 @@ final router = GoRouter(
   errorBuilder: (context, state) {
     return Scaffold(
       body: Center(
-        child: Text(state.fullpath ??
+        child: Text(state.fullPath ??
             state.error?.toString() ??
             state.name ??
             "unknown error"),
@@ -228,29 +228,29 @@ final router = GoRouter(
 );
 
 class AppPaths {
-  static const initial = '/';
-  static const tabbar = '/tabbar';
-  static const store = '/store';
+  static const aboutUs = "/aboutus";
+  static const appwebview = '/appwebview';
   static const assessment = '/assessment';
   static const assessmentList = '/assessmentlist';
   static const assessmentQuestion = '/assessmentQuestion';
+  static const attendance = '/attendance';
   static const campaignQuestion = '/campaignQuestion';
+  static const changePass = '/changePass';
+  static const checkin = '/checkin';
+  static const forgotpass = '/forgotpass';
+  static const initial = '/';
+  static const inventory = '/inventory';
+  static const leave = '/leave';
+  static const login = '/login';
+  static const myActivity = "/myActivity";
+  static const passVerification = '/passVerification';
+  static const policy = "/policy";
+  static const promoter = '/promoter';
+  static const resetPass = '/resetpass';
+  static const scheduleVisit = '/scheduleVisit';
   static const selectedCampaignView = '/selectedCampaignView';
   static const selfie = '/selfie';
-  static const inventory = '/inventory';
-  static const scheduleVisit = '/scheduleVisit';
-  static const resetPass = '/resetpass';
-  static const login = '/login';
-  static const passVerification = '/passVerification';
-  static const forgotpass = '/forgotpass';
-  static const checkin = '/checkin';
-  static const attendance = '/attendance';
-  static const leave = '/leave';
-  static const promoter = '/promoter';
   static const setting = '/setting';
-  static const changePass = '/changePass';
-  static const appwebview = '/appwebview';
-  static const policy = "/policy";
-  static const myActivity = "/myActivity";
-  static const aboutUs = "/aboutus";
+  static const store = '/store';
+  static const tabbar = '/tabbar';
 }
