@@ -10,9 +10,15 @@ import 'package:i_densfa/utility/extensions.dart';
 import '../../utility/custom_paints.dart';
 import 'bloc/beatplan_stores_bloc.dart';
 
-class BeatPlanStoreListView extends StatelessWidget {
+class BeatPlanStoreListView extends StatefulWidget {
   const BeatPlanStoreListView({super.key});
 
+  @override
+  State<BeatPlanStoreListView> createState() => _BeatPlanStoreListViewState();
+}
+
+class _BeatPlanStoreListViewState extends State<BeatPlanStoreListView> {
+  final searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,16 +29,25 @@ class BeatPlanStoreListView extends StatelessWidget {
           Icons.pending_actions,
           color: Colors.white,
         ),
-        onPressed: () => context.pushNamed(AppPaths.scheduleVisit,
-            extra: context.read<BeatplanStoresBloc>().beatPlans),
+        onPressed: () {
+          final plans = context.read<BeatplanStoresBloc>().beatPlans;
+          if (plans.isEmpty) {
+          } else {
+            context.pushNamed(AppPaths.scheduleVisit, extra: plans);
+          }
+        },
       ),
       body: BlocConsumer<BeatplanStoresBloc, BeatplanStoresState>(
-        listenWhen: (previous, current) => current is BeatPlanSnackBarMessage,
+        listenWhen: (previous, current) =>
+            current is BeatPlanSnackBarMessage ||
+            current is EmptySearchTextBeatplanStoresState,
         listener: (context, state) {
           if (state is BeatPlanSnackBarMessage) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
+          } else if (state is EmptySearchTextBeatplanStoresState) {
+            searchController.clear();
           }
         },
         builder: (context, state) {
@@ -80,6 +95,24 @@ class BeatPlanStoreListView extends StatelessWidget {
                         foregroundColor: Theme.of(context).colorScheme.primary),
                     child:
                         Text(bloc.selectedDate.toStringFormat('dd MMM yyyy'))),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.h),
+                child: Row(
+                  children: [
+                    SizedBox(width: 10.w),
+                    Expanded(
+                        child: SearchBar(
+                      hintText: 'Search by name or Id',
+                      controller: searchController,
+                      onChanged: (value) =>
+                          bloc.add(SearchBeatplanStoresEvent(value)),
+                    )),
+                    IconButton(
+                        onPressed: () => bloc.add(SortBeatplanStoresEvent()),
+                        icon: const Icon(Icons.social_distance))
+                  ],
+                ),
               ),
               Expanded(
                 child: (state is BeatPlanStoresLoadingState)

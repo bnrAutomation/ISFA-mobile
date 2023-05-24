@@ -10,3 +10,11 @@ class BeatPlanStoresDateChangeEvent extends BeatplanStoresEvent {
 }
 
 class BeatPlanStoresUpdateData extends BeatplanStoresEvent {}
+
+class SearchBeatplanStoresEvent extends BeatplanStoresEvent {
+  final String searchText;
+
+  SearchBeatplanStoresEvent(this.searchText);
+}
+
+class SortBeatplanStoresEvent extends BeatplanStoresEvent {}

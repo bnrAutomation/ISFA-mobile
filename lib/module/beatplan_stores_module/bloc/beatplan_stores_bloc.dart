@@ -14,22 +14,42 @@ class BeatplanStoresBloc
 
   var selectedDate = DateTime.now();
   List<BeatPlanModel> beatPlans = [];
+  List<BeatPlanModel> allPlans = [];
   Position? userLocation;
 
   BeatplanStoresBloc(this.repo) : super(BeatPlanStoresLoadingState()) {
     on((BeatPlanStoresUpdateData event, emit) async {
       emit(BeatPlanStoresLoadingState());
       updateUserLocation();
-      beatPlans = await repo.getBeatPlans(selectedDate).catchError((onError) {
+      allPlans = await repo.getBeatPlans(selectedDate).catchError((onError) {
         emit(BeatPlanSnackBarMessage(onError.toString()));
         return <BeatPlanModel>[];
       });
+      beatPlans = allPlans;
+      emit(EmptySearchTextBeatplanStoresState());
       emit(BeatPlanStoreLoaded());
     });
 
     on((BeatPlanStoresDateChangeEvent event, emit) {
       selectedDate = event.date;
       add(BeatPlanStoresUpdateData());
+    });
+
+    on((SearchBeatplanStoresEvent event, emit) {
+      if (event.searchText.trim().isEmpty) beatPlans = allPlans;
+      beatPlans = allPlans
+          .where((element) =>
+              element.storeName
+                  .toLowerCase()
+                  .contains(event.searchText.toLowerCase()) ||
+              element.storeId.toString().contains(event.searchText))
+          .toList();
+    });
+
+    on((SortBeatplanStoresEvent event, emit) {
+      if (userLocation == null) return;
+      beatPlans
+          .sort((a, b) => distanceFromStore(a).compareTo(distanceFromStore(b)));
     });
   }
 

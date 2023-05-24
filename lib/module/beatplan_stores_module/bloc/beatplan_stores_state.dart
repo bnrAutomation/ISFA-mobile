@@ -12,3 +12,5 @@ class BeatPlanSnackBarMessage extends BeatplanStoresState {
 class BeatPlanStoreLoaded extends BeatplanStoresState {}
 
 class BeatPlanStoresLoadingState extends BeatplanStoresState {}
+
+class EmptySearchTextBeatplanStoresState extends BeatplanStoresState {}
