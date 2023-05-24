@@ -44,12 +44,14 @@ class BeatplanStoresBloc
                   .contains(event.searchText.toLowerCase()) ||
               element.storeId.toString().contains(event.searchText))
           .toList();
+      emit(BeatPlanStoreLoaded());
     });
 
     on((SortBeatplanStoresEvent event, emit) {
       if (userLocation == null) return;
       beatPlans
           .sort((a, b) => distanceFromStore(a).compareTo(distanceFromStore(b)));
+      emit(BeatPlanStoreLoaded());
     });
   }
 
