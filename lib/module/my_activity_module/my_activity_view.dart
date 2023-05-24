@@ -7,19 +7,15 @@ import 'package:i_densfa/module/my_activity_module/my_activity_repository.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 class MyActivityView extends StatefulWidget {
- const MyActivityView({super.key});
+  const MyActivityView({super.key});
 
-  
-
- 
   @override
   MyActivityViewState createState() => MyActivityViewState();
 }
 
 class MyActivityViewState extends State<MyActivityView> {
-
   final searchController = TextEditingController();
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -53,21 +49,24 @@ class MyActivityViewState extends State<MyActivityView> {
               var bloc = context.read<MyActivityBloc>();
               return Column(
                 children: [
-                   Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.h),
-                child: Padding(
-                  padding: const EdgeInsets.only(left:12.0,right: 12.0),
-                  child: SearchBar(
-                    leading: const Icon(Icons.search,color: Colors.black,),
-                        hintText: 'Search by store or activity...',
-                        side: MaterialStateProperty.all(const BorderSide(width: 1.0,color: Colors.black)),
-                        controller: searchController,
-                        elevation: MaterialStateProperty.all(0.0),
-                        backgroundColor: MaterialStateProperty.all(Colors.white),
-                        onChanged: (value)=> bloc.add(SearchActivityEvent(value))),
-                ),
-              ),
-                
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                      child: SearchBar(
+                          leading:
+                              const Icon(Icons.search, color: Colors.black),
+                          hintText: 'Search by store or activity...',
+                          side: MaterialStateProperty.all(const BorderSide(
+                              width: 1.0, color: Colors.black)),
+                          controller: searchController,
+                          elevation: MaterialStateProperty.all(0.0),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white),
+                          onChanged: (value) =>
+                              bloc.add(SearchActivityEvent(value))),
+                    ),
+                  ),
                   Container(
                       decoration: const BoxDecoration(
                         color: Colors.white,
@@ -111,30 +110,28 @@ class MyActivityViewState extends State<MyActivityView> {
                         ],
                       )),
                   Container(color: Colors.grey.shade300, height: 1),
-                  (searchController.text.toString().isNotEmpty&&bloc.activityList.isEmpty)?
-                  const Expanded(
-                    child: Center(
-                            child:  Text("No Data"),
-                          ),
-                  ):
-                  bloc.activityList.isEmpty
-                      ? Center(
-                          child: TextButton(
-                            child: const Text("Retry"),
-                            onPressed: () => bloc.add(GetMyAcivityEvent()),
-                          ),
-                        )
-                      : Expanded(
-                          child: ListView.separated(
-                              itemCount: bloc.activityList.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              separatorBuilder: (context, index) => Container(
-                                  color: Colors.grey[300]!, height: 1),
-                              itemBuilder: (context, index) =>
-                                  MyActiviyItemView(
-                                      index, bloc.activityList[index])),
-                        )
+                  (searchController.text.isNotEmpty &&
+                          bloc.activityList.isEmpty)
+                      ? const Expanded(child: Center(child: Text("No Data")))
+                      : bloc.activityList.isEmpty
+                          ? Center(
+                              child: TextButton(
+                                child: const Text("Retry"),
+                                onPressed: () => bloc.add(GetMyAcivityEvent()),
+                              ),
+                            )
+                          : Expanded(
+                              child: ListView.separated(
+                                  itemCount: bloc.activityList.length,
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  separatorBuilder: (context, index) =>
+                                      Container(
+                                          color: Colors.grey[300]!, height: 1),
+                                  itemBuilder: (context, index) =>
+                                      MyActiviyItemView(
+                                          index, bloc.activityList[index])),
+                            )
                 ],
               );
             },
@@ -143,7 +140,6 @@ class MyActivityViewState extends State<MyActivityView> {
       ),
     );
   }
-  
 }
 
 class MyActiviyItemView extends StatelessWidget {
