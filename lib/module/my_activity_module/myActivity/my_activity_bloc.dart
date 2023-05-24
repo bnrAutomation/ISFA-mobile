@@ -7,7 +7,8 @@ part 'my_activity_event.dart';
 part 'my_activity_state.dart';
 
 class MyActivityBloc extends Bloc<MyActivityEvent, MyActivityState> {
-  List<MyActivityDataList> dataList = [];
+  List<MyActivityDataList> activityList = []; 
+  List<MyActivityDataList> tempActivityList = []; 
   DateTime selected = DateTime.now();
   MyActivityRepository repo;
 
@@ -20,16 +21,31 @@ class MyActivityBloc extends Bloc<MyActivityEvent, MyActivityState> {
       emit(MyAcivityMonthChangeState());
       add(GetMyAcivityEvent());
     });
+
+     on((SearchActivityEvent event, emit) {
+     
+if (event.searchText.trim().isEmpty) activityList = tempActivityList;
+      activityList = tempActivityList
+          .where((element) =>
+              element.storeName
+                  .toLowerCase()
+                  .contains(event.searchText.toLowerCase()) ||
+              element.activityName.toLowerCase().toString().contains(event.searchText))
+          .toList();
+      emit(MyActivityWithData());
+    });
   }
 
   _getMyActivity(Emitter<MyActivityState> emit, DateTime selected) async {
     emit(MyActivityLoadingState());
 
-    dataList = await repo.getMyActivity(dateTime: selected).catchError((error) {
+    activityList = await repo.getMyActivity(dateTime: selected).catchError((error) {
       emit(MyActivityWithData());
       emit(MyActivityShowSnack(error.toString()));
       return <MyActivityDataList>[];
     });
+
+    tempActivityList=activityList;
 
     emit(MyActivityWithData());
   }

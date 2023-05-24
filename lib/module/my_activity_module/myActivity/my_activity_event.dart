@@ -9,3 +9,10 @@ class MyActivityChangeMonth extends MyActivityEvent {
 }
 
 class GetMyAcivityEvent extends MyActivityEvent {}
+
+
+class SearchActivityEvent extends MyActivityEvent {
+  final String searchText;
+
+  SearchActivityEvent(this.searchText);
+}

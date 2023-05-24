@@ -101,13 +101,17 @@ class _BeatPlanStoreListViewState extends State<BeatPlanStoreListView> {
                 child: Row(
                   children: [
                     SizedBox(width: 10.w),
+                    
                     Expanded(
-                        child: SearchBar(
-                      hintText: 'Search by name or Id',
-                      controller: searchController,
-                      onChanged: (value) =>
-                          bloc.add(SearchBeatplanStoresEvent(value)),
-                    )),
+                    child: SearchBar(
+                    leading: const Icon(Icons.search,color: Colors.black,),
+                        hintText: 'Search by name or ID...',
+                        side: MaterialStateProperty.all(const BorderSide(width: 1.0,color: Colors.black)),
+                        controller: searchController,
+                        elevation: MaterialStateProperty.all(0.0),
+                        backgroundColor: MaterialStateProperty.all(Colors.white),
+                        onChanged: (value)=> bloc.add(SearchBeatplanStoresEvent(value))),
+                    ),
                     IconButton(
                         onPressed: () => bloc.add(SortBeatplanStoresEvent()),
                         icon: const Icon(Icons.social_distance))
