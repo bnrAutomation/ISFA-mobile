@@ -111,6 +111,12 @@ class MyActivityViewState extends State<MyActivityView> {
                         ],
                       )),
                   Container(color: Colors.grey.shade300, height: 1),
+                  (searchController.text.toString().isNotEmpty&&bloc.activityList.isEmpty)?
+                  const Expanded(
+                    child: Center(
+                            child:  Text("No Data"),
+                          ),
+                  ):
                   bloc.activityList.isEmpty
                       ? Center(
                           child: TextButton(
