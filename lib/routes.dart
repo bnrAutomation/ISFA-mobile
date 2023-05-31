@@ -13,6 +13,7 @@ import 'module/checkin_module/check_in_view.dart';
 import 'module/inventory_module/inventory_view.dart';
 import 'module/leaves_module/leave_view.dart';
 import 'module/login_module/login_view.dart';
+import 'module/login_module/pin_setup_view.dart';
 import 'module/my_activity_module/my_activity_view.dart';
 import 'module/policy_module/policy_view.dart';
 import 'module/promoter_module/bloc/promoter_bloc.dart';
@@ -32,7 +33,6 @@ import 'module/beatplan_stores_module/schedule_visit/schedule_visit_view.dart';
 import 'module/forgot_password_module/forgot_password_view.dart';
 import 'module/promoter_module/promoter_repository.dart';
 import 'module/reset_password_module/reset_password_view.dart';
-import 'module/splash_module/splash_view.dart';
 import 'module/store_detail_module/bloc/store_detail_bloc.dart';
 import 'module/tabber_module/tabber_view.dart';
 import 'module/upload_selfie/bloc/upload_selfie_bloc.dart';
@@ -44,10 +44,10 @@ final router = GoRouter(
       AppStorage().isLoggedIn() ? AppPaths.tabbar : AppPaths.initial,
   routes: <RouteBase>[
     GoRoute(
-      path: AppPaths.initial,
-      name: AppPaths.initial,
-      builder: (context, state) => const SplashView(),
-    ),
+        path: AppPaths.initial,
+        name: AppPaths.initial,
+        builder: (context, state) => const PinSetupView() // const SplashView(),
+        ),
     GoRoute(
       path: AppPaths.tabbar,
       name: AppPaths.tabbar,

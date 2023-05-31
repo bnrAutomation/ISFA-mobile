@@ -31,6 +31,6 @@ extension Helper on String {
 
 extension BuildContextHelper on BuildContext {
   void hideKeyboard() {
-    FocusScope.of(this).requestFocus(FocusNode());
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 }
