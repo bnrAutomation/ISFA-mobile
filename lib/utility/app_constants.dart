@@ -47,6 +47,8 @@ class URLConstants {
   static const version = "v1";
 
   static const login = "$loginAuth/login";
+  static const setpin = "$loginAuth/set-pin";
+  static const loginwithpin = "$loginAuth/loginwithpin";
   static const forgotPassword = "$loginAuth/$version/forgot-password";
   static const verifyotp = "$loginAuth/$version/verify-otp";
   static const resetPassword = "$loginAuth/$version/reset-password";

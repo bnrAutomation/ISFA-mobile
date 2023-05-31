@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:i_densfa/module/login_module/bloc/login_bloc.dart';
+import 'package:i_densfa/module/splash_module/splash_view.dart';
+import 'package:i_densfa/module/verify_login_module/pin_login_view.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
 import 'module/assessment_module/assessment_repository.dart';
@@ -41,13 +44,13 @@ import 'module/verification_module/verification_view.dart';
 
 final router = GoRouter(
   initialLocation:
-      AppStorage().isLoggedIn() ? AppPaths.tabbar : AppPaths.initial,
+      AppStorage().isLoggedIn() ? AppPaths.pinLogin : AppPaths.initial,
   routes: <RouteBase>[
     GoRoute(
-        path: AppPaths.initial,
-        name: AppPaths.initial,
-        builder: (context, state) => const PinSetupView() // const SplashView(),
-        ),
+      path: AppPaths.initial,
+      name: AppPaths.initial,
+      builder: (context, state) => const SplashView(),
+    ),
     GoRoute(
       path: AppPaths.tabbar,
       name: AppPaths.tabbar,
@@ -136,6 +139,16 @@ final router = GoRouter(
       path: AppPaths.login,
       name: AppPaths.login,
       builder: (context, state) => LoginView(),
+    ),
+    GoRoute(
+        path: AppPaths.pinLogin,
+        name: AppPaths.pinLogin,
+        builder: (context, state) => const PinLoginView()),
+    GoRoute(
+      path: AppPaths.pinset,
+      name: AppPaths.pinset,
+      builder: (context, state) => BlocProvider.value(
+          value: state.extra! as LoginBloc, child: const PinSetupView()),
     ),
     GoRoute(
       path: AppPaths.forgotpass,
@@ -253,4 +266,6 @@ class AppPaths {
   static const setting = '/setting';
   static const store = '/store';
   static const tabbar = '/tabbar';
+  static const pinLogin = '/pinlogin';
+  static const pinset = '/pinset';
 }

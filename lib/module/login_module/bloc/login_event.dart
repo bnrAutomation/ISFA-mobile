@@ -16,3 +16,9 @@ class LoginSubmitEvent extends LoginEvent {
 }
 
 class LoginShowPasswordButtonEvent extends LoginEvent {}
+
+class SetPinEvent extends LoginEvent {
+  final String pin;
+  final String confirmPin;
+  SetPinEvent(this.pin, this.confirmPin);
+}

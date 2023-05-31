@@ -22,3 +22,5 @@ class LoginShowPasswordState extends LoginState {
 }
 
 class LoginedSuccesfullState extends LoginState {}
+
+class MoveToSetPinState extends LoginState {}
