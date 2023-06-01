@@ -20,18 +20,4 @@ class LoginRepository {
           : json.decode(response.body)['message'] ?? "Something went wrong";
     }
   }
-
-  Future<LoginModel> setPin(
-      {required String username, required String pin}) async {
-    final body = {"email": username, "pin": pin};
-    final response = await post(Uri.parse(URLConstants.setpin),
-        body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
-    if (response.statusCode == 200) {
-      return LoginModel.fromRawJson(response.body);
-    } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
-    }
-  }
 }

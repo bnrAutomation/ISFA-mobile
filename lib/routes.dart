@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:i_densfa/module/login_module/bloc/login_bloc.dart';
+import 'package:i_densfa/module/login_verify_module/pin_login_view.dart';
 import 'package:i_densfa/module/splash_module/splash_view.dart';
-import 'package:i_densfa/module/verify_login_module/pin_login_view.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
 import 'module/assessment_module/assessment_repository.dart';
@@ -16,7 +15,7 @@ import 'module/checkin_module/check_in_view.dart';
 import 'module/inventory_module/inventory_view.dart';
 import 'module/leaves_module/leave_view.dart';
 import 'module/login_module/login_view.dart';
-import 'module/login_module/pin_setup_view.dart';
+import 'module/login_set_pin_module/pin_setup_view.dart';
 import 'module/my_activity_module/my_activity_view.dart';
 import 'module/policy_module/policy_view.dart';
 import 'module/promoter_module/bloc/promoter_bloc.dart';
@@ -145,11 +144,9 @@ final router = GoRouter(
         name: AppPaths.pinLogin,
         builder: (context, state) => const PinLoginView()),
     GoRoute(
-      path: AppPaths.pinset,
-      name: AppPaths.pinset,
-      builder: (context, state) => BlocProvider.value(
-          value: state.extra! as LoginBloc, child: const PinSetupView()),
-    ),
+        path: AppPaths.pinset,
+        name: AppPaths.pinset,
+        builder: (context, state) => const PinSetupView()),
     GoRoute(
       path: AppPaths.forgotpass,
       name: AppPaths.forgotpass,

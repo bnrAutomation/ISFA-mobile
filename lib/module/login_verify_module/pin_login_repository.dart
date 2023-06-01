@@ -7,7 +7,7 @@ import 'package:i_densfa/utility/app_constants.dart';
 class PinLoginRepository {
   Future<LoginModel> verifyPin(
       {required String username, required String pin}) async {
-    final body = {"email": username, "pin": pin};
+    final body = {"username": username, "pin": pin};
     final response = await post(Uri.parse(URLConstants.loginwithpin),
         body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {

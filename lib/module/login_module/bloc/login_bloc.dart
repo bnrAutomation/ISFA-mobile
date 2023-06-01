@@ -47,29 +47,5 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         }
       }
     });
-
-    on<SetPinEvent>((event, emit) async {
-      if (event.pin.isEmpty) {
-        emit(LogInErrorState("Pin is empty"));
-      } else if (event.confirmPin.isEmpty) {
-        emit(LogInErrorState("Confirm pin is empty"));
-      } else if (event.pin != event.confirmPin) {
-        emit(LogInErrorState("Given Pin not matched."));
-      } else {
-        try {
-          final loginResponse = await repo.setPin(
-              username: AppStorage().userDetail?.id.toString() ?? "",
-              pin: event.pin);
-          if (loginResponse.logindata.userInfo.iRole == "user") {
-            AppStorage().userDetail = loginResponse.logindata.userInfo;
-            emit(LoginedSuccesfullState());
-          } else {
-            emit(LogInErrorState("User doesn't exist."));
-          }
-        } catch (err) {
-          emit(LogInErrorState(err.toString()));
-        }
-      }
-    });
   }
 }

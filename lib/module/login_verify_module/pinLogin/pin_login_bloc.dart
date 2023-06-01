@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:i_densfa/module/verify_login_module/pin_login_repository.dart';
+import 'package:i_densfa/module/login_verify_module/pin_login_repository.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
 part 'pin_login_event.dart';
@@ -16,7 +16,7 @@ class PinLoginBloc extends Bloc<PinLoginEvent, PinLoginState> {
       } else {
         try {
           final loginResponse = await repo.verifyPin(
-              username: AppStorage().userDetail?.id.toString() ?? "",
+              username: AppStorage().userDetail?.username.toString() ?? "",
               pin: event.pin);
           if (loginResponse.logindata.userInfo.iRole == "user") {
             AppStorage().userDetail = loginResponse.logindata.userInfo;
