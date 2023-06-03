@@ -11,7 +11,7 @@ part 'beatplan_stores_state.dart';
 class BeatplanStoresBloc
     extends Bloc<BeatplanStoresEvent, BeatplanStoresState> {
   final BeatPlanStoresRepository repo;
-
+  var isAccending = false;
   var selectedDate = DateTime.now();
   List<BeatPlanModel> beatPlans = [];
   List<BeatPlanModel> allPlans = [];
@@ -25,6 +25,7 @@ class BeatplanStoresBloc
         emit(BeatPlanSnackBarMessage(onError.toString()));
         return <BeatPlanModel>[];
       });
+      isAccending = false;
       beatPlans = allPlans;
       emit(EmptySearchTextBeatplanStoresState());
       emit(BeatPlanStoreLoaded());
@@ -49,8 +50,15 @@ class BeatplanStoresBloc
 
     on((SortBeatplanStoresEvent event, emit) {
       if (userLocation == null) return;
-      beatPlans
-          .sort((a, b) => distanceFromStore(a).compareTo(distanceFromStore(b)));
+      if (isAccending) {
+        isAccending = false;
+        beatPlans.sort(
+            (a, b) => distanceFromStore(a).compareTo(distanceFromStore(b)));
+      } else {
+        isAccending = true;
+        beatPlans.sort(
+            (a, b) => distanceFromStore(b).compareTo(distanceFromStore(a)));
+      }
       emit(BeatPlanStoreLoaded());
     });
   }

@@ -96,51 +96,65 @@ class _BeatPlanStoreListViewState extends State<BeatPlanStoreListView> {
                     child:
                         Text(bloc.selectedDate.toStringFormat('dd MMM yyyy'))),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.h),
-                child: Row(
-                  children: [
-                    SizedBox(width: 10.w),
-                    Expanded(
-                      child: SearchBar(
-                          leading:
-                              const Icon(Icons.search, color: Colors.black),
-                          hintText: 'Search by name or ID...',
-                          side: MaterialStateProperty.all(const BorderSide(
-                              width: 1.0, color: Colors.black)),
-                          controller: searchController,
-                          elevation: MaterialStateProperty.all(0.0),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white),
-                          onChanged: (value) =>
-                              bloc.add(SearchBeatplanStoresEvent(value))),
-                    ),
-                    IconButton(
-                        onPressed: () => bloc.add(SortBeatplanStoresEvent()),
-                        icon: const Icon(Icons.social_distance))
-                  ],
-                ),
-              ),
               Expanded(
-                child: (state is BeatPlanStoresLoadingState)
-                    ? const Center(child: CircularProgressIndicator())
-                    : bloc.beatPlans.isEmpty
-                        ? const Center(child: Text("No data"))
-                        : ListView.separated(
-                            padding: const EdgeInsets.all(10),
-                            itemCount: bloc.beatPlans.length,
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 10),
-                            itemBuilder: (context, index) {
-                              final store = bloc.beatPlans[index];
-                              final distance = bloc.distanceFromStore(store);
-                              return InkWell(
-                                  onTap: () => context.pushNamed(AppPaths.store,
-                                      extra: bloc.beatPlans[index]),
-                                  child: StoreCardView(store,
-                                      distanceInMeters: distance));
-                            },
-                          ),
+                child: RefreshIndicator(
+                  onRefresh: () async => bloc.add(BeatPlanStoresUpdateData()),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        child: Row(
+                          children: [
+                            SizedBox(width: 10.w),
+                            Expanded(
+                              child: SearchBar(
+                                  leading: const Icon(Icons.search,
+                                      color: Colors.black),
+                                  hintText: 'Search by name or ID...',
+                                  side: MaterialStateProperty.all(
+                                      const BorderSide(
+                                          width: 1.0, color: Colors.black)),
+                                  controller: searchController,
+                                  elevation: MaterialStateProperty.all(0.0),
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.white),
+                                  onChanged: (value) => bloc
+                                      .add(SearchBeatplanStoresEvent(value))),
+                            ),
+                            TextButton.icon(
+                                onPressed: () =>
+                                    bloc.add(SortBeatplanStoresEvent()),
+                                icon: const Icon(Icons.social_distance),
+                                label: const Text("Sort")),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: (state is BeatPlanStoresLoadingState)
+                            ? const Center(child: CircularProgressIndicator())
+                            : bloc.beatPlans.isEmpty
+                                ? const Center(child: Text("No data"))
+                                : ListView.separated(
+                                    padding: const EdgeInsets.all(10),
+                                    itemCount: bloc.beatPlans.length,
+                                    separatorBuilder: (context, index) =>
+                                        const SizedBox(height: 10),
+                                    itemBuilder: (context, index) {
+                                      final store = bloc.beatPlans[index];
+                                      final distance =
+                                          bloc.distanceFromStore(store);
+                                      return InkWell(
+                                          onTap: () => context.pushNamed(
+                                              AppPaths.store,
+                                              extra: bloc.beatPlans[index]),
+                                          child: StoreCardView(store,
+                                              distanceInMeters: distance));
+                                    },
+                                  ),
+                      )
+                    ],
+                  ),
+                ),
               )
             ],
           );
