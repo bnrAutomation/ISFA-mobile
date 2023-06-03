@@ -160,7 +160,7 @@ class _PinLoginViewState extends State<PinLoginView> {
           Align(
             alignment: Alignment.bottomCenter,
             child: TextButton(
-                onPressed: () {},
+                onPressed: () => context.pushReplacement(AppPaths.login),
                 child: Text(
                   "Login Instead?",
                   style: TextStyle(

@@ -153,8 +153,7 @@ class LoginView extends StatelessWidget {
                             listener: (context, state) {
                               if (state is LoginedSuccesfullState) {
                                 context.hideKeyboard();
-                                context.go(AppPaths.pinLogin);
-                                //context.go(AppPaths.tabbar);
+                                context.go(AppPaths.tabbar);
                               } else if (state is MoveToSetPinState) {
                                 context.push(AppPaths.pinset, extra: bloc);
                               }

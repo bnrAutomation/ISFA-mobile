@@ -42,8 +42,11 @@ import 'module/upload_selfie/upload_selfie.dart';
 import 'module/verification_module/verification_view.dart';
 
 final router = GoRouter(
-  initialLocation:
-      AppStorage().isLoggedIn() ? AppPaths.pinLogin : AppPaths.initial,
+  initialLocation: AppStorage().isLoggedIn() &&
+          int.tryParse(AppStorage().userDetail?.pin ?? "-1")?.isNegative ==
+              false
+      ? AppPaths.pinLogin
+      : AppPaths.initial,
   routes: <RouteBase>[
     GoRoute(
       path: AppPaths.initial,

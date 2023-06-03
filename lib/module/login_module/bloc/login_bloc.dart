@@ -34,7 +34,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           if (loginResponse.logindata.userInfo.iRole == "user") {
             debugPrint(loginResponse.toString());
             AppStorage().userDetail = loginResponse.logindata.userInfo;
-            if (loginResponse.logindata.userInfo.pin != "-1") {
+            if ((int.tryParse(loginResponse.logindata.userInfo.pin) ?? 0) > 0) {
               emit(LoginedSuccesfullState());
             } else {
               emit(MoveToSetPinState());

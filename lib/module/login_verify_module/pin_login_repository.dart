@@ -10,7 +10,9 @@ class PinLoginRepository {
     final body = {"username": username, "pin": pin};
     final response = await post(Uri.parse(URLConstants.loginwithpin),
         body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
-    if (response.statusCode == 200) {
+    if (response.statusCode == 401) {
+      throw "Incorrect Pin";
+    } else if (response.statusCode == 200) {
       return LoginModel.fromRawJson(response.body);
     } else {
       throw response.body.isEmpty
