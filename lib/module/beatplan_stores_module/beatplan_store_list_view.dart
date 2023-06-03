@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/extensions.dart';
+import 'package:simple_speed_dial/simple_speed_dial.dart';
 
 import '../../utility/custom_paints.dart';
 import 'bloc/beatplan_stores_bloc.dart';
@@ -22,21 +23,37 @@ class _BeatPlanStoreListViewState extends State<BeatPlanStoreListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-        child: const Icon(
-          Icons.pending_actions,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          final plans = context.read<BeatplanStoresBloc>().beatPlans;
-          if (plans.isEmpty) {
-          } else {
-            context.pushNamed(AppPaths.scheduleVisit, extra: plans);
-          }
-        },
-      ),
+      floatingActionButton: SpeedDial(
+          speedDialChildren: [
+            SpeedDialChild(
+              child: const Icon(Icons.store),
+              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(context).primaryColor,
+              label: 'Add beat plan',
+              onPressed: () {},
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.pending_actions),
+              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(context).primaryColor,
+              label: 'Schedule Visit',
+              onPressed: () {
+                final plans = context.read<BeatplanStoresBloc>().beatPlans;
+                if (plans.isEmpty) {
+                } else {
+                  context.pushNamed(AppPaths.scheduleVisit, extra: plans);
+                }
+              },
+            ),
+          ],
+          closedForegroundColor: Colors.white,
+          closedBackgroundColor: Theme.of(context).primaryColor,
+          openForegroundColor: Theme.of(context).primaryColor,
+          openBackgroundColor: Colors.white,
+          child: Icon(
+            Icons.add,
+            size: 30.w,
+          )),
       body: BlocConsumer<BeatplanStoresBloc, BeatplanStoresState>(
         listenWhen: (previous, current) =>
             current is BeatPlanSnackBarMessage ||
