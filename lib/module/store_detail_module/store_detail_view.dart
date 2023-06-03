@@ -115,11 +115,21 @@ class StoreDetailView extends StatelessWidget {
                       //     subtitle: 'Scheduled visits & Calls',
                       //     title: '28 Feb 2023',
                       //     trailingSVGImage: ImageConstants.visitsCalls),
-                      // blueCard(context,
-                      //     leadingSVGImage: ImageConstants.creditCard,
-                      //     subtitle: 'Available Credits',
-                      //     title: '₹ 500.0',
-                      //     trailingSVGImage: ImageConstants.credits),
+                      InkWell(
+                        onTap: () {
+                          AppPopup.showAppBottomSheet(
+                              context: context,
+                              child: BlocProvider.value(
+                                value: context.read<StoreDetailBloc>(),
+                                child: feebackListView(context),
+                              ));
+                        },
+                        child: blueCard(context,
+                            leadingSVGImage: ImageConstants.feedback,
+                            title: 'Feedback',
+                            subtitle: 'feedback',
+                            trailingSVGImage: ImageConstants.feedback),
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         child: recentNote(context),
@@ -284,6 +294,47 @@ class StoreDetailView extends StatelessWidget {
                 final notes = bloc.details?.userNote ?? [];
                 return notes.isEmpty
                     ? const Center(child: Text("No note added"))
+                    : ListView.separated(
+                        itemCount: notes.length,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 10),
+                        itemBuilder: (context, index) => ListTile(
+                          tileColor: Theme.of(context).secondaryHeaderColor,
+                          title: Text(notes[index].note),
+                          trailing: IconButton(
+                              onPressed: () => bloc.add(
+                                  DeleteNoteStoreDetailEvent(
+                                      notes[index].noteId)),
+                              icon: const Icon(Icons.delete)),
+                        ),
+                      );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding feebackListView(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(
+            "Feedbacks",
+            style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: BlocBuilder<StoreDetailBloc, StoreDetailState>(
+              builder: (context, state) {
+                final bloc = context.read<StoreDetailBloc>();
+                final notes = bloc.details?.userNote ?? [];
+                return notes.isEmpty
+                    ? const Center(child: Text("No Feedback added"))
                     : ListView.separated(
                         itemCount: notes.length,
                         separatorBuilder: (context, index) =>

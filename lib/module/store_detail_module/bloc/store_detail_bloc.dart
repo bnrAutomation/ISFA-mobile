@@ -64,7 +64,12 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
 
   String noteToAdd = "";
   Future<void> _addNote(SaveNoteStoreDetailEvent event, emit) async {
-    final resp = await repo.addNoteForStore(noteToAdd, beatPlanModel.storeId);
+    final resp = await repo
+        .addNoteForStore(noteToAdd, beatPlanModel.storeId)
+        .catchError((onError) {
+      debugPrint(onError.toString());
+      return false;
+    });
     if (resp) {
       emit(StoreDetailToastMessageState('Successfully added note'));
       add(GetStoreDetailsEvent());
