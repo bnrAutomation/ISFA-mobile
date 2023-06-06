@@ -41,6 +41,23 @@ class StoreDetailRepository {
     }
   }
 
+  Future<bool> getFeedback(String storeName) async {
+    final requestBody = {"id": userId, "storeName": storeName};
+
+    final response = await post(
+        Uri.parse(URLConstants.getFeedbackByUserIdAndStore),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(requestBody));
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      return true;
+    } else {
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : json.decode(response.body)['message'] ?? "Something went wrong";
+    }
+  }
+
   Future<bool> deleteNoteForStore(int noteId) async {
     final response =
         await delete(Uri.parse('${URLConstants.deleteNote}/$noteId'));

@@ -94,4 +94,6 @@ class URLConstants {
   static const savedCampaignResponse = '$apiBaseUrl/savedCampaignResponse';
   static const sheduleVisit = '$apiBaseUrl/beatPlanUpload';
   static const learnerContent = '$isfaBaseURL/server/learner-content';
+  static const getFeedbackByUserIdAndStore =
+      "$baseURLStart/isfaassessment/api/getFeedbackByUserIdAndStore";
 }
