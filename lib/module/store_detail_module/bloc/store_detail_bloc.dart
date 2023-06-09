@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
+import 'package:i_densfa/module/promoter_module/feedback/model/feedback_model.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_model.dart';
 
 import 'package:i_densfa/module/store_detail_module/store_detail_repositry.dart';
@@ -21,11 +22,13 @@ part 'store_detail_state.dart';
 class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
   BeatPlanModel beatPlanModel;
   List<CampaignDetailModel> compaigns = [];
+  List<FeedbackDataList> feedbackList = [];
   final StoreDetailRepository repo;
   GetStoreDetailDataModel? details;
   Position? userLocation;
   StoreDetailBloc(this.repo, this.beatPlanModel) : super(StoreDetailInitial()) {
     on(_getStoreDetails);
+    on(_getFeedback);
     on(gotoCompaignEvent);
     on(_markOutStore);
     on(_checkInStore);
@@ -48,6 +51,7 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
     });
     on(_deleteNote);
     add(GetStoreDetailsEvent());
+    add(GetFeedbackEvent());
   }
 
   double get distanceFromStore {
@@ -98,6 +102,15 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       return Future<GetStoreDetailDataModel>.error(onError);
     });
     emit(LoadedStoreDetailState());
+  }
+
+  Future<void> _getFeedback(GetFeedbackEvent event, emit) async {
+    feedbackList =
+        await repo.getFeedback(beatPlanModel.storeName).catchError((onError) {
+      emit(StoreDetailToastMessageState(onError.toString()));
+      return Future<List<FeedbackDataList>>.error(onError);
+    });
+    emit(LoadedFeedbackState());
   }
 
   void gotoCompaignEvent(GotoCompaignEvent event, emit) {

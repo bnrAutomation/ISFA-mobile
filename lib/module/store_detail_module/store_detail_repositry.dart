@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:i_densfa/module/promoter_module/feedback/model/feedback_model.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
@@ -41,8 +42,11 @@ class StoreDetailRepository {
     }
   }
 
-  Future<bool> getFeedback(String storeName) async {
-    final requestBody = {"id": userId, "storeName": storeName};
+  Future<List<FeedbackDataList>> getFeedback(String storeName) async {
+    final requestBody = {
+      "storeName": "vishal super mart Branch A",
+      "createdBy": AppStorage().userDetail!.username
+    };
 
     final response = await post(
         Uri.parse(URLConstants.getFeedbackByUserIdAndStore),
@@ -50,7 +54,7 @@ class StoreDetailRepository {
         body: json.encode(requestBody));
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-      return true;
+      return FeedbackModel.fromJson(jsonDecode(response.body)).dataList;
     } else {
       throw response.body.isEmpty
           ? "Something went wrong"

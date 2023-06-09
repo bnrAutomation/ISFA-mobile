@@ -185,6 +185,35 @@ class SettingView extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
+                      context.pushNamed(AppPaths.pinset);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).shadowColor,
+
+                            offset: const Offset(
+                                0, 0.1), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: const ListTile(
+                        title: Text("Change PIN",
+                            style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black,
+                                fontSize: 16)),
+                        trailing: Icon(Icons.arrow_forward_ios,
+                            size: 18, color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
                       context.pushNamed(AppPaths.policy);
                     },
                     child: Container(

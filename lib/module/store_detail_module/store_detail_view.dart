@@ -49,9 +49,7 @@ class StoreDetailView extends StatelessWidget {
                       if (storeDetail != null) {
                         AppPopup.showAppBottomSheet(
                           context: context,
-                          child: FeedbackView(
-                              storeName:
-                                  "${storeDetail.name} ${storeDetail.storeBranch}"),
+                          child: FeedbackView(storeName: storeDetail.name),
                         );
                       }
                     },
@@ -127,11 +125,12 @@ class StoreDetailView extends StatelessWidget {
                         child: blueCard(context,
                             leadingSVGImage: ImageConstants.feedback,
                             title: 'Feedback',
-                            subtitle: 'feedback',
+                            subtitle:
+                                'Feedback that you had given before to this store.',
                             trailingSVGImage: ImageConstants.feedback),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: recentNote(context),
                       ),
 
@@ -332,21 +331,21 @@ class StoreDetailView extends StatelessWidget {
             child: BlocBuilder<StoreDetailBloc, StoreDetailState>(
               builder: (context, state) {
                 final bloc = context.read<StoreDetailBloc>();
-                final notes = bloc.details?.userNote ?? [];
-                return notes.isEmpty
+                // final notes = bloc.feedbackList ;
+                return bloc.feedbackList.isEmpty
                     ? const Center(child: Text("No Feedback added"))
                     : ListView.separated(
-                        itemCount: notes.length,
+                        itemCount: bloc.feedbackList.length,
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 10),
                         itemBuilder: (context, index) => ListTile(
                           tileColor: Theme.of(context).secondaryHeaderColor,
-                          title: Text(notes[index].note),
-                          trailing: IconButton(
-                              onPressed: () => bloc.add(
-                                  DeleteNoteStoreDetailEvent(
-                                      notes[index].noteId)),
-                              icon: const Icon(Icons.delete)),
+                          title: Text(bloc.feedbackList[index].reason),
+                          // trailing: IconButton(
+                          //     // onPressed: () => bloc.add(
+                          //     //     DeleteNoteStoreDetailEvent(
+                          //     //         bloc.feedbackList[index].reason)),
+                          //     icon: const Icon(Icons.delete)),
                         ),
                       );
               },
@@ -468,7 +467,7 @@ class StoreDetailView extends StatelessWidget {
             SizedBox(width: 10.w),
             SvgPicture.asset(
               trailingSVGImage,
-              width: 65.w,
+              width: 60.w,
               height: 50.h,
             )
           ],

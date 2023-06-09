@@ -33,7 +33,6 @@ class FeedbackView extends StatelessWidget {
                   content: Text(state.errorMessage),
                 ));
               }
-
               if (state is FeedbackSuccessState) {
                 Navigator.pop(context);
               }

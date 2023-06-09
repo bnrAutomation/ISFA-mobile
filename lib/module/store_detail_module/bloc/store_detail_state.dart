@@ -17,3 +17,5 @@ class StoreDetailToastMessageState extends StoreDetailState {
 }
 
 class CompaignsLoadedStoreDetailState extends StoreDetailState {}
+
+class LoadedFeedbackState extends StoreDetailState {}

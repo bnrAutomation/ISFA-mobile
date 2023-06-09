@@ -120,9 +120,7 @@ class PromoterView extends StatelessWidget {
                         if (storeDetail != null) {
                           AppPopup.showAppBottomSheet(
                             context: context,
-                            child: FeedbackView(
-                                storeName:
-                                    "${storeDetail.name} ${storeDetail.storeBranch}"),
+                            child: FeedbackView(storeName: storeDetail.name),
                           );
                         }
                       },
