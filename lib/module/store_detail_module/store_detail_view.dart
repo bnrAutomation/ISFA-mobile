@@ -331,22 +331,22 @@ class StoreDetailView extends StatelessWidget {
             child: BlocBuilder<StoreDetailBloc, StoreDetailState>(
               builder: (context, state) {
                 final bloc = context.read<StoreDetailBloc>();
-                // final notes = bloc.feedbackList ;
                 return bloc.feedbackList.isEmpty
                     ? const Center(child: Text("No Feedback added"))
                     : ListView.separated(
                         itemCount: bloc.feedbackList.length,
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 10),
-                        itemBuilder: (context, index) => ListTile(
-                          tileColor: Theme.of(context).secondaryHeaderColor,
-                          title: Text(bloc.feedbackList[index].reason),
-                          // trailing: IconButton(
-                          //     // onPressed: () => bloc.add(
-                          //     //     DeleteNoteStoreDetailEvent(
-                          //     //         bloc.feedbackList[index].reason)),
-                          //     icon: const Icon(Icons.delete)),
-                        ),
+                        itemBuilder: (context, index) {
+                          final item = bloc.feedbackList[index];
+                          return ListTile(
+                            isThreeLine: true,
+                            tileColor: Theme.of(context).secondaryHeaderColor,
+                            leading: Image.network(item.imageUrl),
+                            title: Text(item.purposeName),
+                            subtitle: Text(item.reason),
+                          );
+                        },
                       );
               },
             ),

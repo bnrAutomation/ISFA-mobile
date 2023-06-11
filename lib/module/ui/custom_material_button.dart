@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomMaterialButton extends StatelessWidget {
   final String buttonText;
-  final Function() onPressed;
+  final void Function() onPressed;
   final Gradient gradient;
   const CustomMaterialButton({
     super.key,

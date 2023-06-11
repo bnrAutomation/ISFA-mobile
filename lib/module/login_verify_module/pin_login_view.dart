@@ -20,12 +20,20 @@ class _PinLoginViewState extends State<PinLoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
       body: Stack(
         children: [
+          Positioned.fill(
+              child: Opacity(
+                  opacity: 0.2,
+                  child: Image.asset(
+                    ImageConstants.pinBack,
+                    fit: BoxFit.cover,
+                  ))),
+          Positioned.fill(
+              child: ColoredBox(color: Colors.black.withOpacity(0.6))),
           Align(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.w),
+              padding: EdgeInsets.symmetric(horizontal: 30.w),
               child: RepositoryProvider(
                 create: (context) => PinLoginRepository(),
                 child: BlocProvider(
@@ -37,46 +45,39 @@ class _PinLoginViewState extends State<PinLoginView> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            ImageConstants.denSfa,
-                          ),
-                          SizedBox(height: 15.h),
-                          Text(
-                            AppStorage().userDetail?.username ?? "",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 32.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.h),
-                            child: Text(
-                              'Welcome to the portal! Please enter your login PIN to gain access and explore all the features.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                          state is PinLogInErrorState
-                              ? Text(
-                                  state.message,
-                                  style: const TextStyle(color: Colors.red),
-                                )
-                              : const SizedBox(),
+                          Image.asset(ImageConstants.denSfa),
+                          SizedBox(height: 30.h),
+                          Image.asset(ImageConstants.poweredBy),
+                          SizedBox(height: 60.h),
                           Text(
                             'Enter Login PIN',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 14.sp,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.w500),
                           ),
+                          SizedBox(height: 20.h),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              AppStorage().userDetail?.username ?? "",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          if (state is PinLogInErrorState)
+                            Text(
+                              state.message,
+                              style: const TextStyle(color: Colors.red),
+                            ),
                           Container(
-                            margin: EdgeInsets.only(top: 20.h, bottom: 15.h),
+                            margin: EdgeInsets.only(top: 5.h, bottom: 15.h),
                             decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(6.w)),
+                                border: Border.all(
+                                    width: 2, color: const Color(0xffFECF41)),
+                                borderRadius: BorderRadius.circular(30.w)),
                             padding: EdgeInsets.all(5.w),
                             child: Stack(
                               alignment: Alignment.center,
@@ -133,7 +134,7 @@ class _PinLoginViewState extends State<PinLoginView> {
                                 color: Colors.amber,
                                 padding: EdgeInsets.symmetric(vertical: 10.h),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(7.w)),
+                                    borderRadius: BorderRadius.circular(50.w)),
                                 onPressed: () {
                                   if (state is! PinLoginLoadingState) {
                                     bloc.add(VerifyPinEvent(
@@ -143,7 +144,7 @@ class _PinLoginViewState extends State<PinLoginView> {
                                 child: Text(
                                   state is PinLoginLoadingState
                                       ? "Loading..."
-                                      : 'Enter',
+                                      : 'ENTER',
                                   style: TextStyle(
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w400),
@@ -162,7 +163,7 @@ class _PinLoginViewState extends State<PinLoginView> {
             child: TextButton(
                 onPressed: () => context.pushReplacement(AppPaths.login),
                 child: Text(
-                  "Login Instead?",
+                  "Login instead?",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 14.sp,

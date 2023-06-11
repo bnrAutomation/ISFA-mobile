@@ -25,7 +25,7 @@ class PinLoginBloc extends Bloc<PinLoginEvent, PinLoginState> {
             emit(PinLogInErrorState("User doesn't exist."));
           }
         } catch (err) {
-          print(AppStorage().userDetail?.pin);
+          debugPrint("pin is:- ${AppStorage().userDetail?.pin}");
           emit(PinLogInErrorState(err.toString()));
         }
       }

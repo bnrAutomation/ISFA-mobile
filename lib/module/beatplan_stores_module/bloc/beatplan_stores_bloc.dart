@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beatplan_stores_repository.dart';
+import 'package:i_densfa/module/beatplan_stores_module/store_list_model.dart';
 import 'package:i_densfa/utility/device_helper.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 part 'beatplan_stores_event.dart';
 part 'beatplan_stores_state.dart';
@@ -16,6 +18,10 @@ class BeatplanStoresBloc
   List<BeatPlanModel> beatPlans = [];
   List<BeatPlanModel> allPlans = [];
   Position? userLocation;
+  List<StoreItemModel> storesList = [];
+  StoreItemModel? selectedStore;
+  String storeAddRemark = '';
+  DateTime? storeAddDate;
 
   BeatplanStoresBloc(this.repo) : super(BeatPlanStoresLoadingState()) {
     on((BeatPlanStoresUpdateData event, emit) async {
@@ -60,6 +66,47 @@ class BeatplanStoresBloc
             (a, b) => distanceFromStore(b).compareTo(distanceFromStore(a)));
       }
       emit(BeatPlanStoreLoaded());
+    });
+
+    on((GetAllStoresListEvent event, emit) async {
+      storesList = await repo.getStores().catchError((onError) {
+        emit(BeatPlanSnackBarMessage(onError.toString()));
+        return <StoreItemModel>[];
+      });
+      emit(StoreListLoadedState());
+    });
+
+    on((AddBeatPlanDateSelected event, emit) {
+      storeAddDate = event.date;
+      emit(StoreListLoadedState());
+    });
+
+    on((BeatPlanAddEvent event, emit) async {
+      if (selectedStore == null) {
+        emit(BeatPlanSnackBarMessage('Please select store'));
+      } else if (storeAddDate == null) {
+        emit(BeatPlanSnackBarMessage('Please provide date'));
+      } else if (storeAddRemark.trim().isEmpty) {
+        emit(BeatPlanSnackBarMessage('Please provide reason'));
+      } else {
+        emit(BeatPlanUploadLoadingState());
+        final success = await repo
+            .beatPlanUpload(
+                storeAddDate!, storeAddRemark, selectedStore!.storeId)
+            .catchError((onError) {
+          emit(BeatPlanSnackBarMessage(onError.toString()));
+          return false;
+        });
+        if (success) {
+          if (selectedDate.isSameDate(storeAddDate!)) {
+            add(BeatPlanStoresUpdateData());
+          }
+          selectedStore = null;
+          storeAddDate = null;
+          emit(BeatPlanSnackBarMessage('Successfully added beat plan'));
+          emit(BeatPlanUploadSuccess());
+        }
+      }
     });
   }
 

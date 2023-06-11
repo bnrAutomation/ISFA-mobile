@@ -18,3 +18,13 @@ class SearchBeatplanStoresEvent extends BeatplanStoresEvent {
 }
 
 class SortBeatplanStoresEvent extends BeatplanStoresEvent {}
+
+class AddBeatPlanDateSelected extends BeatPlanAddEvent {
+  final DateTime date;
+
+  AddBeatPlanDateSelected(this.date);
+}
+
+class GetAllStoresListEvent extends BeatplanStoresEvent {}
+
+class BeatPlanAddEvent extends BeatplanStoresEvent {}

@@ -1,12 +1,14 @@
 class ImageConstants {
   static const logo = "assets/images/logo.png";
   static const denSfa = "assets/images/denSFA.png";
+  static const poweredBy = "assets/images/poweredBy.png";
   static const videoPlayer = "assets/images/videoPlayer.png";
   static const pdf = "assets/images/pdf.png";
   static const triangle = "assets/images/triangle.svg";
   static const leavemask = "assets/images/leavemask.svg";
   static const inventoryMask = "assets/images/inventoryMask.svg";
   static const product = "assets/images/product.svg";
+  static const pinBack = "assets/images/pinback.jpeg";
 
   static const filter = "assets/icons/filter.svg";
   static const doorOut = "assets/icons/doorOut.svg";
@@ -77,6 +79,8 @@ class URLConstants {
   static const endDuty = '$apiBaseUrl/EndDuty';
 
   static const beatPlans = '$apiBaseUrl/V2/beatPlan';
+  static const getStores = '$apiBaseUrl/getStoreList';
+  static const beatPlanUpload = '$apiBaseUrl/beatPlanUpload';
   static const attendence = '$apiBaseUrl/attendance';
   static const activities = '$isfaBaseURL/activities';
 

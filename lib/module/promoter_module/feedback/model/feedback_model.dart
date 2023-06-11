@@ -18,9 +18,11 @@ class FeedbackModel {
   FeedbackModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     status = json['status'];
-    dataList = List.from(json['dataList'])
-        .map((e) => FeedbackDataList.fromJson(e))
-        .toList();
+    dataList = json['dataList'] is List
+        ? List.from(json['dataList'])
+            .map((e) => FeedbackDataList.fromJson(e))
+            .toList()
+        : [];
   }
 
   Map<String, dynamic> toJson() {

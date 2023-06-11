@@ -14,3 +14,9 @@ class BeatPlanStoreLoaded extends BeatplanStoresState {}
 class BeatPlanStoresLoadingState extends BeatplanStoresState {}
 
 class EmptySearchTextBeatplanStoresState extends BeatplanStoresState {}
+
+class StoreListLoadedState extends BeatplanStoresState {}
+
+class BeatPlanUploadLoadingState extends BeatplanStoresState {}
+
+class BeatPlanUploadSuccess extends BeatplanStoresState {}

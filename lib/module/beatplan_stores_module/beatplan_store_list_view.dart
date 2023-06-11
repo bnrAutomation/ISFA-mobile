@@ -4,6 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
+import 'package:i_densfa/module/ui/app_pop_view.dart';
+import 'package:i_densfa/module/ui/button_views.dart';
+import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/extensions.dart';
 import 'package:simple_speed_dial/simple_speed_dial.dart';
@@ -30,7 +33,16 @@ class _BeatPlanStoreListViewState extends State<BeatPlanStoreListView> {
               foregroundColor: Colors.white,
               backgroundColor: Theme.of(context).primaryColor,
               label: 'Add beat plan',
-              onPressed: () {},
+              onPressed: () {
+                AppPopup.showAppBottomSheet(
+                  context: context,
+                  child: BlocProvider.value(
+                    value: context.read<BeatplanStoresBloc>()
+                      ..add(GetAllStoresListEvent()),
+                    child: const AddBeatPlanView(),
+                  ),
+                );
+              },
             ),
             SpeedDialChild(
               child: const Icon(Icons.pending_actions),
@@ -178,6 +190,126 @@ class _BeatPlanStoreListViewState extends State<BeatPlanStoreListView> {
         },
       ),
     );
+  }
+}
+
+class AddBeatPlanView extends StatelessWidget {
+  const AddBeatPlanView({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: BlocConsumer<BeatplanStoresBloc, BeatplanStoresState>(
+          listener: (context, state) {
+            if (state is BeatPlanUploadSuccess) {
+              Navigator.of(context).pop();
+            }
+          },
+          builder: (context, state) {
+            final BeatplanStoresBloc bloc = context.read();
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Select Store",
+                    style: Theme.of(context).textTheme.labelLarge),
+                const SizedBox(height: 5),
+                DropDownWithOptions(
+                  options: bloc.storesList.map((e) => e.name).toList(),
+                  hint: "Please select store",
+                  selectedVal: context.select(
+                      (BeatplanStoresBloc value) => value.selectedStore?.name),
+                  valChanged: (value) {
+                    if (value != null) {
+                      bloc.selectedStore = bloc.storesList
+                          .firstWhere((element) => element.name == value);
+                    }
+                  },
+                ),
+                Text("Show on date",
+                    style: Theme.of(context).textTheme.labelLarge),
+                const SizedBox(height: 5),
+                Container(
+                  width: 1.sw,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextFormField(
+                    controller: TextEditingController(
+                        text: bloc.storeAddDate?.toStringFormat('dd/MM/yyyy')),
+                    decoration: const InputDecoration(
+                        suffixIcon: Icon(Icons.calendar_month_outlined),
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.only(
+                            left: 8, bottom: 11, top: 11, right: 8),
+                        hintText: "DD/MM/YYYY"),
+                    readOnly: true,
+                    onTap: () => _selectDate(context),
+                  ),
+                ),
+                Text("Reason", style: Theme.of(context).textTheme.labelLarge),
+                const SizedBox(height: 5),
+                Container(
+                  width: 1.sw,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.only(
+                            left: 8, bottom: 8, top: 8, right: 8),
+                        hintText: "Type your reason here..."),
+                    minLines: 3,
+                    maxLines: 6,
+                    keyboardType: TextInputType.multiline,
+                    onChanged: (value) {
+                      bloc.storeAddRemark = value;
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                CustomMaterialButton(
+                    buttonText: state is BeatPlanUploadLoadingState
+                        ? "Loading..."
+                        : "Submit",
+                    onPressed: () {
+                      if (state is! BeatPlanUploadLoadingState) {
+                        bloc.add(BeatPlanAddEvent());
+                      }
+                    }),
+                const SizedBox(height: 10),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  void _selectDate(BuildContext context) async {
+    final now = DateTime.now();
+    final date = await showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: now,
+        lastDate: DateTime(now.year, 12, 31));
+    if (date != null && context.mounted) {
+      context.read<BeatplanStoresBloc>().add(AddBeatPlanDateSelected(date));
+    }
   }
 }
 
