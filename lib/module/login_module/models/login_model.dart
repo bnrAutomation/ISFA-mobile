@@ -59,6 +59,7 @@ class UserInfo {
     this.mobile = "",
     required this.pin,
     required this.roles,
+    required this.photoUrl,
   });
   late final int id;
   late final String username;
@@ -70,6 +71,7 @@ class UserInfo {
   late final String iRole;
   late final String mobile;
   late final String pin;
+  late String photoUrl;
   late final List<Roles> roles;
   factory UserInfo.fromRawJson(String str) =>
       UserInfo.fromJson(json.decode(str));
@@ -77,6 +79,7 @@ class UserInfo {
   String toRawJson() => json.encode(toJson());
 
   UserInfo.fromJson(Map<String, dynamic> json) {
+    photoUrl = json['photoUrl'];
     id = json['id'];
     username = json['username'];
     companyName = json['companyName'] ?? "";
@@ -102,6 +105,7 @@ class UserInfo {
     data['pin'] = pin;
     data['iRole'] = iRole;
     data['mobile'] = mobile;
+    data['photoUrl'] = photoUrl;
     data['roles'] = roles.map((e) => e.toJson()).toList();
     return data;
   }

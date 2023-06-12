@@ -9,14 +9,4 @@ class ChangeImageSettingsEvent extends SettingsEvent {
   ChangeImageSettingsEvent(this.imageFile);
 }
 
-class ChangeEmailSettingsEvent extends SettingsEvent {
-  final String email;
-
-  ChangeEmailSettingsEvent(this.email);
-}
-
-class ChangePhoneSettingsEvent extends SettingsEvent {
-  final String phone;
-
-  ChangePhoneSettingsEvent(this.phone);
-}
+class ChangeEmailPhoneSettingsEvent extends SettingsEvent {}

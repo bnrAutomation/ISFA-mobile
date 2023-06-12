@@ -12,3 +12,5 @@ class SnackBarMessageSettingsState extends SettingsState {
 
   SnackBarMessageSettingsState(this.message);
 }
+
+class EmailPhoneUpdatedSettingsState extends SettingsState {}

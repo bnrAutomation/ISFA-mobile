@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +14,6 @@ class SettingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userdetails = AppStorage().userDetail!;
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: BlocProvider(
@@ -27,7 +25,8 @@ class SettingView extends StatelessWidget {
               }
             },
             builder: (context, state) {
-              var bloc = context.read<SettingsBloc>();
+              final bloc = context.read<SettingsBloc>();
+              final userdetails = AppStorage().userDetail!;
               return CustomScrollView(
                 slivers: [
                   SliverAppBar(
@@ -49,77 +48,78 @@ class SettingView extends StatelessWidget {
                                 color: Theme.of(context).colorScheme.primary),
                           )),
                           Positioned.fill(
-                              child: Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(height: 100),
-                                InkWell(
-                                  onTap: () {
-                                    AppImagePicker(context, (imageFile) {
-                                      bloc.add(
-                                          ChangeImageSettingsEvent(imageFile));
-                                    });
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 55.0,
-                                        backgroundImage:
-                                            NetworkImage(bloc.userImageLink),
-                                        backgroundColor:
-                                            Colors.grey.withOpacity(0.2),
-                                      ),
-                                      Positioned(
-                                          bottom: 1,
-                                          right: 1,
-                                          child: Container(
-                                            width: 30,
-                                            height: 30,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.amber,
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child:
-                                                const Icon(Icons.edit_outlined),
-                                          ))
-                                    ],
-                                  ),
+                              child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 100),
+                              InkWell(
+                                onTap: () {
+                                  AppImagePicker(context, (imageFile) {
+                                    bloc.add(
+                                        ChangeImageSettingsEvent(imageFile));
+                                  });
+                                },
+                                child: Stack(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 55.0,
+                                      backgroundImage: NetworkImage(
+                                          userdetails.photoUrl.contains('http')
+                                              ? userdetails.photoUrl
+                                              : bloc.dpPlaceholderLink),
+                                      backgroundColor:
+                                          Colors.grey.withOpacity(0.2),
+                                    ),
+                                    Positioned(
+                                        bottom: 1,
+                                        right: 1,
+                                        child: Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.amber,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child:
+                                              const Icon(Icons.edit_outlined),
+                                        ))
+                                  ],
                                 ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  "${userdetails.username}(${userdetails.designation})",
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                "${userdetails.username}(${userdetails.designation})",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 10),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(25.0),
+                                    ),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
+                                child: Text(
+                                  'Company : ${userdetails.companyName}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleLarge
                                       ?.copyWith(
+                                          fontSize: 14.sp,
                                           color: Colors.black,
-                                          fontWeight: FontWeight.bold),
+                                          fontWeight: FontWeight.normal),
                                 ),
-                                const SizedBox(height: 10),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
-                                  decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(25.0),
-                                      ),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary),
-                                  child: Text(
-                                    'Company : ${userdetails.companyName}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.copyWith(
-                                            fontSize: 14.sp,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.normal),
-                                  ),
-                                )
-                              ],
-                            ),
+                              )
+                            ],
                           ))
                         ],
                       ),
@@ -148,11 +148,10 @@ class SettingView extends StatelessWidget {
                             ),
                           ),
                           InkWell(
-                            onTap: () => {
-                              context.pushNamed(AppPaths.changeEmailPhone,
-                                  pathParameters: {
-                                    'changeEmail': "true",
-                                  })
+                            onTap: () async {
+                              await context.pushNamed(AppPaths.changeEmailPhone,
+                                  pathParameters: {'changeEmail': "true"});
+                              bloc.add(ChangeEmailPhoneSettingsEvent());
                             },
                             child: ListTile(
                               leading: const Icon(
@@ -180,11 +179,10 @@ class SettingView extends StatelessWidget {
                             ),
                           ),
                           InkWell(
-                            onTap: () => {
-                              context.pushNamed(AppPaths.changeEmailPhone,
-                                  pathParameters: {
-                                    'changeEmail': "false",
-                                  })
+                            onTap: () async {
+                              await context.pushNamed(AppPaths.changeEmailPhone,
+                                  pathParameters: {'changeEmail': "false"});
+                              bloc.add(ChangeEmailPhoneSettingsEvent());
                             },
                             child: ListTile(
                               leading: const Icon(
@@ -359,226 +357,5 @@ class SettingView extends StatelessWidget {
             },
           ),
         ));
-  }
-}
-
-class SettingProfileView extends StatelessWidget {
-  final SettingsBloc bloc;
-  const SettingProfileView({super.key, required this.bloc});
-
-  @override
-  Widget build(BuildContext context) {
-    final userdetails = AppStorage().userDetail!;
-    return Container(
-        padding: const EdgeInsets.all(10),
-        width: 1.sw,
-        child: Row(
-          children: [
-            InkWell(
-              onTap: () {
-                AppImagePicker(context, (imageFile) {
-                  bloc.add(ChangeImageSettingsEvent(imageFile));
-                });
-              },
-              child: CircleAvatar(
-                radius: 35.0,
-                backgroundImage: NetworkImage(bloc.userImageLink),
-                backgroundColor: Colors.grey.withOpacity(0.2),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${userdetails.username}(${userdetails.designation})",
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            const Icon(
-                              CupertinoIcons.mail,
-                              color: Colors.black,
-                              size: 14,
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              userdetails.email,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(
-                                      fontSize: 14.sp,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal),
-                            ),
-                          ],
-                        ),
-                      ),
-                      TextEditButton(
-                        onTap: () => _emailPopUp(context),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            const Icon(
-                              CupertinoIcons.phone_circle,
-                              color: Colors.black,
-                              size: 14,
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              userdetails.mobile,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(
-                                      fontSize: 14.sp,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal),
-                            ),
-                          ],
-                        ),
-                      ),
-                      TextEditButton(
-                        onTap: () => _numberPopUp(context),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        CupertinoIcons.line_horizontal_3_decrease_circle,
-                        color: Colors.black,
-                        size: 14,
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        'Company : ${userdetails.companyName}',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontSize: 14.sp,
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            )
-          ],
-        ));
-  }
-
-  void _emailPopUp(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => EditDialog(
-        title: 'Enter email',
-        placeHolder: 'Please enter email...',
-        keyboardType: TextInputType.emailAddress,
-        onSave: (email) => bloc.add(ChangeEmailSettingsEvent(email)),
-      ),
-    );
-  }
-
-  void _numberPopUp(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => EditDialog(
-        title: 'Enter Mobile',
-        placeHolder: 'Please enter number...',
-        keyboardType: TextInputType.phone,
-        onSave: (phone) => bloc.add(ChangePhoneSettingsEvent(phone)),
-      ),
-    );
-  }
-}
-
-class EditDialog extends StatelessWidget {
-  final String title;
-  final String placeHolder;
-  final void Function(String) onSave;
-  final TextInputType? keyboardType;
-  final textController = TextEditingController();
-  EditDialog({
-    super.key,
-    required this.title,
-    required this.placeHolder,
-    required this.onSave,
-    this.keyboardType,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency,
-      child: CupertinoAlertDialog(
-        title: Text(title),
-        content: TextField(
-          controller: textController,
-          keyboardType: keyboardType,
-          decoration: InputDecoration(
-              hintText: placeHolder, border: const OutlineInputBorder()),
-        ),
-        actions: [
-          CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: const Text("Save"),
-              onPressed: () {
-                onSave(textController.text);
-                Navigator.pop(context);
-              }),
-          CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                "Cancel",
-                style: TextStyle(color: Colors.red),
-              ))
-        ],
-      ),
-    );
-  }
-}
-
-class TextEditButton extends StatelessWidget {
-  final void Function() onTap;
-  const TextEditButton({
-    super.key,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        height: 20.h,
-        child: InkWell(
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: Text(
-                'Edit',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor),
-              ),
-            )));
   }
 }
