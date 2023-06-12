@@ -160,7 +160,15 @@ class _BeatPlanStoreListViewState extends State<BeatPlanStoreListView> {
                         child: (state is BeatPlanStoresLoadingState)
                             ? const Center(child: CircularProgressIndicator())
                             : bloc.beatPlans.isEmpty
-                                ? const Center(child: Text("No data"))
+                                ? SingleChildScrollView(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    child: SizedBox(
+                                      height: 0.5.sh,
+                                      child:
+                                          const Center(child: Text("No data")),
+                                    ),
+                                  )
                                 : ListView.separated(
                                     padding: const EdgeInsets.all(10),
                                     itemCount: bloc.beatPlans.length,
