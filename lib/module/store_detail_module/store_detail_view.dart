@@ -334,6 +334,7 @@ class StoreDetailView extends StatelessWidget {
                 return bloc.feedbackList.isEmpty
                     ? const Center(child: Text("No Feedback added"))
                     : ListView.separated(
+                        shrinkWrap: true,
                         itemCount: bloc.feedbackList.length,
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 10),
@@ -342,7 +343,7 @@ class StoreDetailView extends StatelessWidget {
                           return ListTile(
                             isThreeLine: true,
                             tileColor: Theme.of(context).secondaryHeaderColor,
-                            leading: Image.network(item.imageUrl),
+                            //leading: Image.network(item.imageUrl),
                             title: Text(item.purposeName),
                             subtitle: Text(item.reason),
                           );

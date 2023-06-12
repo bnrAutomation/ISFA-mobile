@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:i_densfa/module/change_email_phone_module/change_email_phone_view.dart';
 import 'package:i_densfa/module/login_verify_module/pin_login_view.dart';
 import 'package:i_densfa/module/splash_module/splash_view.dart';
 import 'package:i_densfa/utility/app_storage.dart';
@@ -227,6 +228,13 @@ final router = GoRouter(
       name: AppPaths.aboutUs,
       builder: (context, state) => const AboutUsView(),
     ),
+    GoRoute(
+      path: "${AppPaths.changeEmailPhone}/:changeEmail",
+      name: AppPaths.changeEmailPhone,
+      builder: (context, state) => ChangeEmailPhoneView(
+          changeEmail:
+              (state.pathParameters['changeEmail'] ?? "true") == "true"),
+    ),
   ],
   errorBuilder: (context, state) {
     return Scaffold(
@@ -268,4 +276,5 @@ class AppPaths {
   static const tabbar = '/tabbar';
   static const pinLogin = '/pinlogin';
   static const pinset = '/pinset';
+  static const changeEmailPhone = "/changeEmailPhone";
 }
