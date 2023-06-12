@@ -15,6 +15,7 @@ import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/extensions.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../utility/network_helper.dart';
@@ -68,9 +69,7 @@ class TabberView extends StatelessWidget {
                       current is TabbarSnackBarMessageState,
                   listener: (context, state) {
                     if (state is TabbarSnackBarMessageState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message)),
-                      );
+                      context.showSnackBarMessage(state.message);
                     }
                   },
                   child: Builder(builder: (context) {

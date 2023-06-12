@@ -41,9 +41,7 @@ class LeaveView extends StatelessWidget {
             listenWhen: (previous, current) => current is LeaveViewShowSnack,
             listener: (context, state) {
               if (state is LeaveViewShowSnack) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(state.message),
-                ));
+                context.showSnackBarMessage(state.message);
               }
             },
             buildWhen: (previous, current) => current is! LeaveViewShowSnack,

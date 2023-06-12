@@ -108,13 +108,10 @@ class SelectedCampaignView extends StatelessWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8.0),
         child: BlocConsumer<CampaignBloc, CampaignState>(
-          listener: (context, state) => {
-            if (state is SnackbarMessageCampaignState)
-              {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(state.message),
-                ))
-              }
+          listener: (context, state) {
+            if (state is SnackbarMessageCampaignState) {
+              context.showSnackBarMessage(state.message);
+            }
           },
           builder: (context, state) {
             final CampaignBloc bloc = context.read();

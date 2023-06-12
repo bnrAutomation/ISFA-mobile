@@ -39,9 +39,7 @@ class MyActivityViewState extends State<MyActivityView> {
             listenWhen: (previous, current) => current is MyActivityShowSnack,
             listener: (context, state) {
               if (state is MyActivityShowSnack) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(state.message),
-                ));
+                context.showSnackBarMessage(state.message);
               }
             },
             buildWhen: (previous, current) => current is! MyActivityShowSnack,

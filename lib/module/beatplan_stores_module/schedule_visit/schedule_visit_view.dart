@@ -27,8 +27,7 @@ class ScheduleVisitView extends StatelessWidget {
               current is ScheduleVisitCallSuccessState,
           listener: (context, state) {
             if (state is ScheduleVisitCallSnackBar) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
+              context.showSnackBarMessage(state.message);
             } else if (state is ScheduleVisitCallSuccessState) {
               Navigator.pop(context);
             }

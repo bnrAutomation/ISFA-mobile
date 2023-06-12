@@ -99,11 +99,7 @@ class ForgotPasswordView extends StatelessWidget {
                           BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
                             listener: (context, state) {
                               if (state is ForgotPasswordSuccesfullState) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text(state.message),
-                                  duration: const Duration(seconds: 5),
-                                ));
+                                context.showSnackBarMessage(state.message);
                                 context.pushReplacementNamed(
                                     AppPaths.passVerification,
                                     pathParameters: {

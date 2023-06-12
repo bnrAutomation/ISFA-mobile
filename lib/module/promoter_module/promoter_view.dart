@@ -17,6 +17,7 @@ import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';
+import 'package:i_densfa/utility/extensions.dart';
 import '../inventory_module/modify_product_quantity/view.dart';
 import 'bloc/promoter_bloc.dart';
 
@@ -143,9 +144,7 @@ class PromoterView extends StatelessWidget {
           current is CompaignsLoadedPromoterState,
       listener: (context, state) {
         if (state is PromoterToastMessageState) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(state.message),
-          ));
+          context.showSnackBarMessage(state.message);
         } else if (state is CompaignsLoadedPromoterState) {
           final PromoterBloc bloc = context.read();
           AppPopup.showAppBottomSheet(

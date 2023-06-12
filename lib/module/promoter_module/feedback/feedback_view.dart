@@ -29,9 +29,7 @@ class FeedbackView extends StatelessWidget {
                 current is FeedbackSuccessState,
             listener: (context, state) {
               if (state is FeedbackErrorState) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(state.errorMessage),
-                ));
+                context.showSnackBarMessage(state.errorMessage);
               }
               if (state is FeedbackSuccessState) {
                 Navigator.pop(context);

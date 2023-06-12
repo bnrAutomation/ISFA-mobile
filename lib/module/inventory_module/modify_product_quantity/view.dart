@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/module/ui/button_views.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 import 'bloc/modify_quantity_bloc.dart';
 
@@ -24,16 +25,13 @@ class ModifyProductQuantityPopup extends StatelessWidget {
             current is ToastMessageState || current is SuccessQtyChange,
         listener: (context, state) {
           if (state is ToastMessageState) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(state.message),
-            ));
+            context.showSnackBarMessage(state.message);
           }
           if (state is SuccessQtyChange) {
             final text = context.read<ModifyQuantityBloc>().isSale
                 ? "Successfully Sale added"
                 : "Successfully Inventory added";
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(text)));
+            context.showSnackBarMessage(text);
             Navigator.pop(context);
             onPop();
           }

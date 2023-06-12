@@ -34,9 +34,7 @@ class AttendanceView extends StatelessWidget {
             listenWhen: (previous, current) => current is AttendanceShowSnack,
             listener: (context, state) {
               if (state is AttendanceShowSnack) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(state.message),
-                ));
+                context.showSnackBarMessage(state.message);
               }
             },
             buildWhen: (previous, current) => current is! AttendanceShowSnack,

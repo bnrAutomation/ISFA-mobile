@@ -33,4 +33,8 @@ extension BuildContextHelper on BuildContext {
   void hideKeyboard() {
     FocusManager.instance.primaryFocus?.unfocus();
   }
+
+  void showSnackBarMessage(String message) {
+    ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(message)));
+  }
 }

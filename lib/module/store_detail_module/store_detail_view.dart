@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:i_densfa/module/promoter_module/feedback/feedback_view.dart';
 import 'package:i_densfa/routes.dart';
+import 'package:i_densfa/utility/extensions.dart';
 import 'package:simple_speed_dial/simple_speed_dial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -90,9 +91,7 @@ class StoreDetailView extends StatelessWidget {
               current is CompaignsLoadedStoreDetailState,
           listener: (context, state) {
             if (state is StoreDetailToastMessageState) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(state.message),
-              ));
+              context.showSnackBarMessage(state.message);
             } else if (state is CompaignsLoadedStoreDetailState) {
               final StoreDetailBloc bloc = context.read();
               AppPopup.showAppBottomSheet(
