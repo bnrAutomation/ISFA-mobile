@@ -344,7 +344,8 @@ class StoreDetailView extends StatelessWidget {
                             tileColor: Theme.of(context).secondaryHeaderColor,
                             //leading: Image.network(item.imageUrl),
                             title: Text(item.purposeName),
-                            subtitle: Text(item.reason),
+                            subtitle: Text(
+                                '${item.reason}\n${item.createdDate!.toStringFormat('dd-MMM-yyyy')}'),
                           );
                         },
                       );

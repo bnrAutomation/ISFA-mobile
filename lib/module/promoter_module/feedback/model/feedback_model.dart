@@ -8,6 +8,7 @@ class FeedbackModel {
   });
   late final String message;
   late final String status;
+
   late final List<FeedbackDataList> dataList;
 
   factory FeedbackModel.fromRawJson(String str) =>
@@ -35,24 +36,28 @@ class FeedbackModel {
 }
 
 class FeedbackDataList {
-  FeedbackDataList({
-    required this.id,
-    required this.purposeId,
-    required this.reason,
-    required this.imageUrl,
-    required this.purposeName,
-  });
+  FeedbackDataList(
+      {required this.id,
+      required this.purposeId,
+      required this.reason,
+      required this.imageUrl,
+      required this.purposeName,
+      this.createdDate});
   late final int id;
   late final int purposeId;
   late final String reason;
   late final String imageUrl;
   late final String purposeName;
+  DateTime? createdDate;
 
   FeedbackDataList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     purposeId = json['purposeId'];
     reason = json['reason'];
     imageUrl = json['imageUrl'];
+    createdDate = json["createdDate"] == null
+        ? DateTime.now()
+        : DateTime.parse(json["createdDate"]);
     purposeName = json['purposeName'];
   }
 
@@ -63,6 +68,7 @@ class FeedbackDataList {
     data['reason'] = reason;
     data['imageUrl'] = imageUrl;
     data['purposeName'] = purposeName;
+    data['createdDate'] = createdDate?.toIso8601String();
     return data;
   }
 }
