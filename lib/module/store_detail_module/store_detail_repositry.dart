@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:i_densfa/module/promoter_module/feedback/model/feedback_model.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_model.dart';
@@ -54,6 +55,7 @@ class StoreDetailRepository {
         body: json.encode(requestBody));
 
     if (response.statusCode == 201 || response.statusCode == 200) {
+      debugPrint(response.body);
       return FeedbackModel.fromJson(jsonDecode(response.body)).dataList;
     } else {
       throw response.body.isEmpty
