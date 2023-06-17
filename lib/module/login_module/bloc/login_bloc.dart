@@ -29,8 +29,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else {
         try {
           emit(LogInLoadingState());
-          final loginResponse = await repo.login(
-              username: event.username.trim(), password: event.password.trim());
+          final loginResponse = await repo
+              .login(
+                  username: event.username.trim(),
+                  password: event.password.trim())
+              .catchError((onError) {
+            throw onError.toString();
+          });
           if (loginResponse.logindata.userInfo.iRole == "user") {
             debugPrint(loginResponse.toString());
             AppStorage().userDetail = loginResponse.logindata.userInfo;

@@ -13,6 +13,8 @@ class SetPinBloc extends Bloc<SetPinEvent, SetPinState> {
     on<MoveSetPinEvent>((event, emit) async {
       if (event.pin.isEmpty) {
         emit(SetPinErrorState("Pin is empty"));
+      } else if (event.pin.length != 4) {
+        emit(SetPinErrorState("Pin length should be 4 characters"));
       } else if (event.confirmPin.isEmpty) {
         emit(SetPinErrorState("Confirm pin is empty"));
       } else if (event.pin != event.confirmPin) {

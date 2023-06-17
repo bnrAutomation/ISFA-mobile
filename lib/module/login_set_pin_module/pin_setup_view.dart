@@ -7,6 +7,7 @@ import 'package:i_densfa/module/login_set_pin_module/set_pin_repository.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 class PinSetupView extends StatefulWidget {
   const PinSetupView({super.key});
@@ -41,6 +42,7 @@ class _PinSetupViewState extends State<PinSetupView> {
                 child: BlocConsumer<SetPinBloc, SetPinState>(
                   listener: (context, state) {
                     if (state is SetPinedSuccesfullState) {
+                      context.showSnackBarMessage('Successfully set login pin');
                       context.go(AppPaths.tabbar);
                     }
                   },
@@ -149,7 +151,7 @@ class _PinSetupViewState extends State<PinSetupView> {
                                   confirmPinController.text));
                             },
                             child: Text(
-                              'Submit',
+                              'SUBMIT',
                               style: TextStyle(
                                   fontSize: 16.sp, fontWeight: FontWeight.w400),
                             )),
