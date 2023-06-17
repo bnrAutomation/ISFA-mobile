@@ -39,7 +39,11 @@ class _PinSetupViewState extends State<PinSetupView> {
               child: BlocProvider(
                 create: (context) => SetPinBloc(context.read()),
                 child: BlocConsumer<SetPinBloc, SetPinState>(
-                  listener: (context, state) => {},
+                  listener: (context, state) {
+                    if (state is SetPinedSuccesfullState) {
+                      context.go(AppPaths.tabbar);
+                    }
+                  },
                   builder: (context, state) {
                     var bloc = context.read<SetPinBloc>();
                     return Column(
@@ -134,29 +138,21 @@ class _PinSetupViewState extends State<PinSetupView> {
                           ),
                         ),
                         SizedBox(height: 20.h),
-                        BlocListener<SetPinBloc, SetPinState>(
-                          listener: (context, state) {
-                            if (state is SetPinedSuccesfullState) {
-                              context.go(AppPaths.tabbar);
-                            }
-                          },
-                          child: MaterialButton(
-                              minWidth: double.maxFinite,
-                              color: const Color(0xffFECF41),
-                              padding: EdgeInsets.symmetric(vertical: 10.h),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50.w)),
-                              onPressed: () {
-                                bloc.add(MoveSetPinEvent(pinController.text,
-                                    confirmPinController.text));
-                              },
-                              child: Text(
-                                'Submit',
-                                style: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w400),
-                              )),
-                        ),
+                        MaterialButton(
+                            minWidth: double.maxFinite,
+                            color: const Color(0xffFECF41),
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.w)),
+                            onPressed: () {
+                              bloc.add(MoveSetPinEvent(pinController.text,
+                                  confirmPinController.text));
+                            },
+                            child: Text(
+                              'Submit',
+                              style: TextStyle(
+                                  fontSize: 16.sp, fontWeight: FontWeight.w400),
+                            )),
                       ],
                     );
                   },

@@ -5,11 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/login_module/bloc/login_bloc.dart';
-import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/extensions.dart';
-import '../ui/background.dart';
 import 'login_repository.dart';
 
 class LoginView extends StatelessWidget {
@@ -21,175 +19,166 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(
         children: [
-          const Background(false),
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(15.0),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 1.0, // soften the shadow
-                      spreadRadius: 1.0, //extend the shadow
-                      offset: Offset(
-                        1.0, // Move to right 5  horizontally
-                        1.0, // Move to bottom 5 Vertically
-                      ))
-                ],
-              ),
-              width: 0.9.sw >= 0.9.sh ? 0.9.sh : 0.9.sw,
-              // height: 0.7.sw >= 0.7.sh ? 0.7.sh:0.7.sw,
-              padding: const EdgeInsets.all(6),
-              child: RepositoryProvider(
-                create: (context) => LoginRepository(),
-                child: BlocProvider(
-                  create: (context) => LoginBloc(context.read()),
-                  child: BlocBuilder<LoginBloc, LoginState>(
-                    builder: (context, state) {
-                      var bloc = context.read<LoginBloc>();
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const SizedBox(height: 10),
-                          Image.asset(
-                            ImageConstants.logo,
-                            width: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
-                            // height: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
+          Positioned.fill(
+              child: Opacity(
+                  opacity: 0.2,
+                  child: Image.asset(
+                    ImageConstants.pinBack,
+                    fit: BoxFit.cover,
+                  ))),
+          Positioned.fill(
+              child: ColoredBox(color: Colors.black.withOpacity(0.6))),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: RepositoryProvider(
+              create: (context) => LoginRepository(),
+              child: BlocProvider(
+                create: (context) => LoginBloc(context.read()),
+                child: BlocConsumer<LoginBloc, LoginState>(
+                  listener: (context, state) {
+                    if (state is LoginedSuccesfullState) {
+                      context.hideKeyboard();
+                      context.go(AppPaths.tabbar);
+                    } else if (state is MoveToSetPinState) {
+                      context.push(AppPaths.pinset,
+                          extra: context.read<LoginBloc>());
+                    }
+                  },
+                  builder: (context, state) {
+                    var bloc = context.read<LoginBloc>();
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(ImageConstants.denSfa),
+                        SizedBox(height: 30.h),
+                        Image.asset(ImageConstants.poweredBy),
+                        SizedBox(height: 60.h),
+                        const SizedBox(height: 10),
+                        if (state is LogInErrorState)
+                          Text(
+                            state.errorMessage,
+                            style: const TextStyle(color: Colors.red),
                           ),
-                          const SizedBox(height: 10),
-                          state is LogInErrorState
-                              ? Text(
-                                  state.errorMessage,
-                                  style: const TextStyle(color: Colors.red),
-                                )
-                              : const SizedBox(),
-                          const SizedBox(height: 10),
-                          TextField(
-                            controller: usernameController,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.deny(" ")
-                            ],
-                            onChanged: (change) {
-                              BlocProvider.of<LoginBloc>(context).add(
-                                  LoginTextChangeEvent(usernameController.text,
-                                      passwordController.text));
-                            },
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor:
-                                  const Color.fromARGB(74, 158, 158, 158),
-                              hintText: "Email Id",
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(10)),
-                            ),
+                        const SizedBox(height: 10),
+                        TextField(
+                          controller: usernameController,
+                          style: const TextStyle(color: Colors.white),
+                          keyboardType: TextInputType.emailAddress,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(" ")
+                          ],
+                          onChanged: (change) {
+                            BlocProvider.of<LoginBloc>(context).add(
+                                LoginTextChangeEvent(usernameController.text,
+                                    passwordController.text));
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Email Id",
+                            hintStyle: const TextStyle(color: Colors.white),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50.w),
+                                borderSide:
+                                    const BorderSide(color: Color(0xffFECF41))),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50.w),
+                                borderSide:
+                                    const BorderSide(color: Colors.white54)),
+                            counterText: '',
                           ),
-                          const SizedBox(height: 10),
-                          TextField(
-                            controller: passwordController,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.deny(" ")
-                            ],
-                            onChanged: (change) {
-                              bloc.add(LoginTextChangeEvent(
-                                  usernameController.text,
-                                  passwordController.text));
-                            },
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText:
-                                context.read<LoginBloc>().isShowingPassword,
-                            decoration: InputDecoration(
-                              suffixIcon: GestureDetector(
-                                onTap: () =>
-                                    bloc.add(LoginShowPasswordButtonEvent()),
-                                child: Container(
-                                  color: Colors.transparent,
-                                  child: Icon(
-                                    state is LoginShowPasswordState
-                                        ? state.visible
-                                            ? Icons.visibility
-                                            : Icons.visibility_off
-                                        : Icons.visibility_off,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                              filled: true,
-                              fillColor:
-                                  const Color.fromARGB(74, 158, 158, 158),
-                              hintText: "Password",
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(10)),
-                            ),
-                          ),
-                          const SizedBox(height: 8.0),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: InkWell(
-                              onTap: () {
-                                context.hideKeyboard();
-                                context.pushNamed(AppPaths.forgotpass);
-                              },
-                              child: Text(
-                                "Forgot Password?",
-                                textAlign: TextAlign.right,
-                                style: GoogleFonts.metrophobic(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                ),
+                        ),
+                        const SizedBox(height: 10),
+                        TextField(
+                          controller: passwordController,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(" ")
+                          ],
+                          onChanged: (change) {
+                            bloc.add(LoginTextChangeEvent(
+                                usernameController.text,
+                                passwordController.text));
+                          },
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText:
+                              context.read<LoginBloc>().isShowingPassword,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            hintText: "Password",
+                            hintStyle: const TextStyle(color: Colors.white),
+                            suffixIcon: IconButton(
+                              onPressed: () =>
+                                  bloc.add(LoginShowPasswordButtonEvent()),
+                              icon: Icon(
+                                state is LoginShowPasswordState
+                                    ? state.visible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off
+                                    : Icons.visibility_off,
+                                color: Colors.grey,
                               ),
                             ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50.w),
+                                borderSide:
+                                    const BorderSide(color: Color(0xffFECF41))),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50.w),
+                                borderSide:
+                                    const BorderSide(color: Colors.white54)),
+                            counterText: '',
                           ),
-                          SizedBox(height: 20.h),
-                          BlocConsumer<LoginBloc, LoginState>(
-                            listener: (context, state) {
-                              if (state is LoginedSuccesfullState) {
+                        ),
+                        const SizedBox(height: 8.0),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: InkWell(
+                            onTap: () {
+                              context.hideKeyboard();
+                              context.pushNamed(AppPaths.forgotpass);
+                            },
+                            child: Text(
+                              "Forgot Password?",
+                              textAlign: TextAlign.right,
+                              style: GoogleFonts.metrophobic(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12.sp,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
+                        MaterialButton(
+                            minWidth: double.maxFinite,
+                            color: const Color(0xffFECF41),
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.w)),
+                            onPressed: () {
+                              if (state is! LogInLoadingState) {
                                 context.hideKeyboard();
-                                context.go(AppPaths.tabbar);
-                              } else if (state is MoveToSetPinState) {
-                                context.push(AppPaths.pinset, extra: bloc);
+                                bloc.add(LoginSubmitEvent(
+                                    usernameController.text,
+                                    passwordController.text));
                               }
                             },
-                            builder: (context, state) {
-                              return SizedBox(
-                                width: 1.sw,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: CustomMaterialButton(
-                                    onPressed: () {
-                                      if (state is! LogInLoadingState) {
-                                        context.hideKeyboard();
-                                        bloc.add(LoginSubmitEvent(
-                                            usernameController.text,
-                                            passwordController.text));
-                                      }
-                                    },
-                                    buttonText: state is LogInLoadingState
-                                        ? "Loading..."
-                                        : 'Login',
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 10)
-                        ],
-                      );
-                    },
-                  ),
+                            child: Text(
+                              state is LogInLoadingState
+                                  ? "Loading..."
+                                  : 'LOGIN',
+                              style: TextStyle(
+                                  fontSize: 16.sp, fontWeight: FontWeight.w400),
+                            )),
+                        const SizedBox(height: 10)
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
