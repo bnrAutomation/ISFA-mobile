@@ -21,6 +21,7 @@ import 'module/my_activity_module/my_activity_view.dart';
 import 'module/policy_module/policy_view.dart';
 import 'module/promoter_module/bloc/promoter_bloc.dart';
 import 'module/promoter_module/promoter_view.dart';
+import 'module/setting_module/profile_info_view.dart';
 import 'module/setting_module/setting_view.dart';
 import 'module/store_detail_module/store_detail_repositry.dart';
 import 'module/store_detail_module/store_detail_view.dart';
@@ -235,6 +236,11 @@ final router = GoRouter(
           changeEmail:
               (state.pathParameters['changeEmail'] ?? "true") == "true"),
     ),
+    GoRoute(
+      path: AppPaths.profileInfo,
+      name: AppPaths.profileInfo,
+      builder: (context, state) => const ProfileInfoview(),
+    ),
   ],
   errorBuilder: (context, state) {
     return Scaffold(
@@ -277,4 +283,5 @@ class AppPaths {
   static const pinLogin = '/pinlogin';
   static const pinset = '/pinset';
   static const changeEmailPhone = "/changeEmailPhone";
+  static const profileInfo = "/profileInfo";
 }

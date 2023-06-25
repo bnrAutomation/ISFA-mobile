@@ -35,6 +35,14 @@ class SettingView extends StatelessWidget {
                     expandedHeight: 380,
                     floating: true,
                     pinned: true,
+                    actions: [
+                      TextButton(
+                          style: TextButton.styleFrom(
+                              foregroundColor: Colors.white),
+                          onPressed: () =>
+                              context.pushNamed(AppPaths.profileInfo),
+                          child: const Text('Info'))
+                    ],
                     flexibleSpace: FlexibleSpaceBar(
                       background: Stack(
                         children: [
