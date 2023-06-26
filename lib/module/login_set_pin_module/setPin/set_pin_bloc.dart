@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_densfa/module/login_module/models/login_model.dart';
 import 'package:i_densfa/module/login_set_pin_module/set_pin_repository.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
@@ -25,6 +26,9 @@ class SetPinBloc extends Bloc<SetPinEvent, SetPinState> {
               username: AppStorage().userDetail?.email.toString() ?? "",
               pin: event.pin);
           if (setPinResponse && AppStorage().userDetail?.iRole == "user") {
+            UserInfo userdetail = AppStorage().userDetail!;
+            userdetail.pin = event.pin;
+            AppStorage().userDetail = userdetail;
             emit(SetPinedSuccesfullState());
           } else {
             emit(SetPinErrorState("User doesn't exist."));

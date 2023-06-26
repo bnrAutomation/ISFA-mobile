@@ -19,5 +19,6 @@ class ForgotPasswordSubmitState extends ForgotPasswordState {}
 
 class ForgotPasswordSuccesfullState extends ForgotPasswordState {
   final String message;
-  ForgotPasswordSuccesfullState(this.message);
+  final String email;
+  ForgotPasswordSuccesfullState(this.email, this.message);
 }

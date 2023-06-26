@@ -103,7 +103,7 @@ class ForgotPasswordView extends StatelessWidget {
                                 context.pushReplacementNamed(
                                     AppPaths.passVerification,
                                     pathParameters: {
-                                      'email': usernameController.text,
+                                      'email': state.email,
                                       'msg': state.message
                                     });
                               }

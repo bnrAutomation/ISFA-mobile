@@ -13,6 +13,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   SettingsBloc() : super(SettingsInitial()) {
     on((ChangeImageSettingsEvent event, emit) async {
+      emit(ImageLoadingState());
       final response =
           await repo.updateProfilePic(event.imageFile).catchError((onError) {
         return onError.toString();

@@ -78,6 +78,11 @@ class SettingView extends StatelessWidget {
                                               : bloc.dpPlaceholderLink),
                                       backgroundColor:
                                           Colors.grey.withOpacity(0.2),
+                                      child: state is ImageLoadingState
+                                          ? const CircularProgressIndicator(
+                                              color: Colors.amber,
+                                            )
+                                          : null,
                                     ),
                                     Positioned(
                                         bottom: 1,

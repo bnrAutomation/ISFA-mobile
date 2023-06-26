@@ -142,7 +142,7 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.login,
       name: AppPaths.login,
-      builder: (context, state) => LoginView(),
+      builder: (context, state) => const LoginView(),
     ),
     GoRoute(
         path: AppPaths.pinLogin,

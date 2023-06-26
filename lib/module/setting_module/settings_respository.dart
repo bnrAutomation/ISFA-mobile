@@ -26,8 +26,11 @@ class SettingsRespository {
     String body = await response.stream.transform(utf8.decoder).join();
 
     if (response.statusCode == 200) {
-      await PinLoginRepository()
+      // = LoginModel.fromRawJson(body).logindata.userInfo;
+      var loginModel = await PinLoginRepository()
           .verifyPin(username: userDetails.username, pin: userDetails.pin);
+
+      AppStorage().userDetail = loginModel.logindata.userInfo;
       return json.decode(body)['message'] ?? "";
     } else {
       throw body.isEmpty

@@ -10,9 +10,14 @@ import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/extensions.dart';
 import 'login_repository.dart';
 
-class LoginView extends StatelessWidget {
-  LoginView({super.key});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
 
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
   final passwordController = TextEditingController();
   final usernameController = TextEditingController();
 

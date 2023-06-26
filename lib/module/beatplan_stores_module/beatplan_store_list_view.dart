@@ -34,6 +34,10 @@ class _BeatPlanStoreListViewState extends State<BeatPlanStoreListView> {
               backgroundColor: Theme.of(context).primaryColor,
               label: 'Add beat plan',
               onPressed: () {
+                var bloc = context.read<BeatplanStoresBloc>();
+                bloc.selectedStore = null;
+                bloc.storeAddRemark = "";
+                bloc.storeAddDate = null;
                 AppPopup.showAppBottomSheet(
                   context: context,
                   child: BlocProvider.value(
@@ -357,7 +361,7 @@ class StoreCardView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Beat Plan',
+                      Text('Beat Plan Id:${beatPlan.pjpId}',
                           style: GoogleFonts.inter(
                               fontSize: 10.sp, fontWeight: FontWeight.w500)),
                       const SizedBox(width: 8),

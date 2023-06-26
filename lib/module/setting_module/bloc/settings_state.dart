@@ -14,3 +14,5 @@ class SnackBarMessageSettingsState extends SettingsState {
 }
 
 class EmailPhoneUpdatedSettingsState extends SettingsState {}
+
+class ImageLoadingState extends SettingsState {}

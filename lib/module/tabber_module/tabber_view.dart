@@ -176,7 +176,16 @@ class AppSideMenu extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-              currentAccountPicture: const CircleAvatar(),
+              currentAccountPicture: CircleAvatar(
+                radius: 55.0,
+                backgroundImage: NetworkImage(AppStorage()
+                        .userDetail!
+                        .photoUrl
+                        .contains('http')
+                    ? AppStorage().userDetail!.photoUrl
+                    : "https://tastevibe.web.app/assets/images/placeholder-user.png"),
+                backgroundColor: Colors.grey.withOpacity(0.2),
+              ),
               otherAccountsPictures: [dutyStatus()],
               accountName: Text(
                   "${data.userInfo.userName} (${data.userInfo.designation})"),

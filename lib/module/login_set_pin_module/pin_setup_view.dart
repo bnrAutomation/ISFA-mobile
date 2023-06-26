@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -90,6 +91,9 @@ class _PinSetupViewState extends State<PinSetupView> {
                         TextField(
                           maxLength: 4,
                           controller: pinController,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           autofocus: true,
                           enableInteractiveSelection: false,
                           textAlign: TextAlign.center,
@@ -123,6 +127,9 @@ class _PinSetupViewState extends State<PinSetupView> {
                           maxLength: 4,
                           controller: confirmPinController,
                           enableInteractiveSelection: false,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
                           showCursor: false,

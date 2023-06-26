@@ -70,7 +70,7 @@ class UserInfo {
   late final String designation;
   late final String iRole;
   late final String mobile;
-  late final String pin;
+  late String pin;
   late String photoUrl;
   late final List<Roles> roles;
   factory UserInfo.fromRawJson(String str) =>
@@ -79,7 +79,7 @@ class UserInfo {
   String toRawJson() => json.encode(toJson());
 
   UserInfo.fromJson(Map<String, dynamic> json) {
-    photoUrl = json['photoUrl'];
+    photoUrl = json['photoUrl'] ?? "";
     id = json['id'];
     username = json['username'];
     companyName = json['companyName'] ?? "";
