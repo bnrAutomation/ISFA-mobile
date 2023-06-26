@@ -286,9 +286,7 @@ class AddBeatPlanView extends StatelessWidget {
                     minLines: 3,
                     maxLines: 6,
                     keyboardType: TextInputType.multiline,
-                    onChanged: (value) {
-                      bloc.storeAddRemark = value;
-                    },
+                    onChanged: (value) => bloc.storeAddRemark = value,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -361,7 +359,7 @@ class StoreCardView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Beat Plan Id:${beatPlan.pjpId}',
+                      Text('Store Id:${beatPlan.storeId}',
                           style: GoogleFonts.inter(
                               fontSize: 10.sp, fontWeight: FontWeight.w500)),
                       const SizedBox(width: 8),
@@ -398,7 +396,8 @@ class StoreCardView extends StatelessWidget {
           if (beatPlan.isAlreadyMarkin)
             const NoteClip(text: 'Visited', backColor: Colors.green),
           const Spacer(),
-          const NoteClip(text: 'Semi-urban', backColor: Color(0xff7B000C)),
+          // NoteClip(
+          //     text: beatPlan.storecode, backColor: const Color(0xff7B000C)),
           const SizedBox(width: 20),
         ]),
         Positioned.fill(

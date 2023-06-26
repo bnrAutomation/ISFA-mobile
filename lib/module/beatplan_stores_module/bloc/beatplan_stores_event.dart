@@ -19,7 +19,7 @@ class SearchBeatplanStoresEvent extends BeatplanStoresEvent {
 
 class SortBeatplanStoresEvent extends BeatplanStoresEvent {}
 
-class AddBeatPlanDateSelected extends BeatPlanAddEvent {
+class AddBeatPlanDateSelected extends BeatplanStoresEvent {
   final DateTime date;
 
   AddBeatPlanDateSelected(this.date);
