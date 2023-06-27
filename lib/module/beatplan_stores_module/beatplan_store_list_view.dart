@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';
 import 'package:i_densfa/module/ui/button_views.dart';
-import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/extensions.dart';
 import 'package:simple_speed_dial/simple_speed_dial.dart';
@@ -290,15 +289,22 @@ class AddBeatPlanView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                CustomMaterialButton(
-                    buttonText: state is BeatPlanUploadLoadingState
+                MaterialButton(
+                  onPressed: () => {
+                    // if (state is! BeatPlanUploadLoadingState)
+                    //   {
+
+                    //     }
+
+                    bloc.add(BeatPlanAddEvent())
+                  },
+                  color: Colors.amber,
+                  child: Text(
+                    state is BeatPlanUploadLoadingState
                         ? "Loading..."
                         : "Submit",
-                    onPressed: () {
-                      if (state is! BeatPlanUploadLoadingState) {
-                        bloc.add(BeatPlanAddEvent());
-                      }
-                    }),
+                  ),
+                ),
                 const SizedBox(height: 10),
               ],
             );

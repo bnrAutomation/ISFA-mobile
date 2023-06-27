@@ -46,10 +46,14 @@ class BeatplanStoresBloc
       if (event.searchText.trim().isEmpty) beatPlans = allPlans;
       beatPlans = allPlans
           .where((element) =>
+              element.storeId.toString().contains(event.searchText) ||
               element.storeName
                   .toLowerCase()
                   .contains(event.searchText.toLowerCase()) ||
-              element.storeId.toString().contains(event.searchText))
+              element.pjpId
+                  .toString()
+                  .toLowerCase()
+                  .contains(event.searchText.toLowerCase()))
           .toList();
       emit(BeatPlanStoreLoaded());
     });
@@ -78,7 +82,7 @@ class BeatplanStoresBloc
 
     on((AddBeatPlanDateSelected event, emit) {
       storeAddDate = event.date;
-      emit(StoreListLoadedState());
+      emit(AddBeatPlanDateSelectedState());
     });
 
     on((BeatPlanAddEvent event, emit) async {

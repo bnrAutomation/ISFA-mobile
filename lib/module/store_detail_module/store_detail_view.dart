@@ -117,7 +117,8 @@ class StoreDetailView extends StatelessWidget {
                           AppPopup.showAppBottomSheet(
                               context: context,
                               child: BlocProvider.value(
-                                value: context.read<StoreDetailBloc>(),
+                                value: context.read<StoreDetailBloc>()
+                                  ..add(GetFeedbackEvent()),
                                 child: feebackListView(context),
                               ));
                         },
@@ -330,6 +331,7 @@ class StoreDetailView extends StatelessWidget {
             child: BlocBuilder<StoreDetailBloc, StoreDetailState>(
               builder: (context, state) {
                 final bloc = context.read<StoreDetailBloc>();
+
                 return bloc.feedbackList.isEmpty
                     ? const Center(child: Text("No Feedback added"))
                     : ListView.separated(

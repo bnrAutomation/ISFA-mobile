@@ -20,3 +20,5 @@ class StoreListLoadedState extends BeatplanStoresState {}
 class BeatPlanUploadLoadingState extends BeatplanStoresState {}
 
 class BeatPlanUploadSuccess extends BeatplanStoresState {}
+
+class AddBeatPlanDateSelectedState extends BeatplanStoresState {}
