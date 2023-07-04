@@ -7,20 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:950410544983:android:c072bd40c4c7452507e012",
+        "mobilesdk_app_id": "1:950410544983:android:89ddddccad4df53107e012",
         "android_client_info": {
-          "package_name": "com.example.isfa"
+          "package_name": "com.denave.isfa"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "950410544983-kkvvq8n3q6d6eu4mq711ucc2jtoq5c94.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.isfa",
-            "certificate_hash": "03bd05607adb7d49e8d97b411067e428c98808bc"
-          }
-        },
         {
           "client_id": "950410544983-pfl2nb9bo5bumpapal7vr4i8lvn5140r.apps.googleusercontent.com",
           "client_type": 3
