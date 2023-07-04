@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "950410544983",
+    "project_id": "isfa-d6459",
+    "storage_bucket": "isfa-d6459.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950410544983:android:c072bd40c4c7452507e012",
+        "android_client_info": {
+          "package_name": "com.example.isfa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "950410544983-kkvvq8n3q6d6eu4mq711ucc2jtoq5c94.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.isfa",
+            "certificate_hash": "03bd05607adb7d49e8d97b411067e428c98808bc"
+          }
+        },
+        {
+          "client_id": "950410544983-pfl2nb9bo5bumpapal7vr4i8lvn5140r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM3b1L_M942QCMkniCTTXBwlPfieJves8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950410544983-pfl2nb9bo5bumpapal7vr4i8lvn5140r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

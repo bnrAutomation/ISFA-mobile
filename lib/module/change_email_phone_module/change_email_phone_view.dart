@@ -156,7 +156,7 @@ class _ChangeEmailPhoneViewState extends State<ChangeEmailPhoneView> {
       context.showSnackBarMessage("Please enter number");
     } else if (double.tryParse(phone) == null) {
       context.showSnackBarMessage("Please enter valid number");
-    } else if (phone.length < 10) {
+    } else if (phone.length != 10) {
       context.showSnackBarMessage("Please enter valid number");
     } else {
       final response = await updateProfile(phone: phone).catchError((onError) {

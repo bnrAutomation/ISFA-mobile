@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/utility/extensions.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:mat_month_picker_dialog/mat_month_picker_dialog.dart';
 import 'attendance_repository.dart';
 import 'bloc/attendance_bloc.dart';
 import 'model/attendance_model.dart';

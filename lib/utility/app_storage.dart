@@ -24,6 +24,13 @@ class AppStorage {
     return await AppStorage()._init();
   }
 
+  set token(String? token) => _box.put("token", token);
+
+  String? get token {
+    final token = _box.get("token");
+    return token;
+  }
+
   UserInfo? get userDetail {
     final userRawJson = _box.get("user_detail");
     if (userRawJson is String) {

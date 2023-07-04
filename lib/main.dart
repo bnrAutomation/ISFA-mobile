@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/push_notification_manager.dart';
 
 void main() async {
   await AppStorage.objectValue();
+  PushNotificationsManager().init();
   runApp(MyApp());
 }
 

@@ -36,6 +36,7 @@ class ImageConstants {
 
 class AppConstant {
   static const storeRange = 250;
+  static String updateToken = "udapte_token";
 }
 
 class URLConstants {
@@ -48,6 +49,7 @@ class URLConstants {
   static const sidemenuDetails = '$apiBaseUrl/user/home';
   static const version = "v1";
 
+  static const updatefcmtoken = "$loginAuth/updatefcmtoken";
   static const login = "$loginAuth/login";
   static const setpin = "$loginAuth/set-pin";
   static const loginwithpin = "$loginAuth/loginwithpin";
@@ -101,5 +103,6 @@ class URLConstants {
   static const sheduleVisit = '$apiBaseUrl/beatPlanUpload';
   static const learnerContent = '$isfaBaseURL/server/learner-content';
   static const getFeedbackByUserIdAndStore =
-      "$baseURLStart/isfaassessment/api/getFeedbackByUserIdAndStore";
+      "$isfaBaseURL/api/getFeedbackByUserIdAndStore";
+  //"$baseURLStart/isfaassessment/api/getFeedbackByUserIdAndStore";
 }
