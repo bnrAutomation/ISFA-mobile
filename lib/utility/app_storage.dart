@@ -58,4 +58,6 @@ class AppStorage {
   set isDutyStarted(bool newVal) => _box.put("isDutyStarted", newVal);
   int? get markedInStoreId => _box.get("markedInStoreId");
   set markedInStoreId(int? newVal) => _box.put("markedInStoreId", newVal);
+  int get reminderCount => _box.get("reminderCount") ?? 0;
+  set reminderCount(int newVal) => _box.put("reminderCount", newVal);
 }

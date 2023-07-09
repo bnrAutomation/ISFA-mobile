@@ -141,28 +141,28 @@ class SelectedCampaignView extends StatelessWidget {
                           "From ${selectedCamp.startDate.toStringFormat('dd MMM yy')} To ${selectedCamp.endDate.toStringFormat('dd MMM yy')}"),
                     ),
                   ),
-                if (selectedCamp != null &&
-                    selectedCamp.isNagative() == false &&
-                    bloc.repo.storeId != -1)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: FilledButton(
-                        onPressed: () {
-                          context.pushNamed(AppPaths.campaignQuestion,
-                              extra: bloc);
-                        },
-                        style: TextButton.styleFrom(
-                          elevation: 2,
-                          alignment: Alignment.center,
-                          backgroundColor: theme.primaryColor,
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 40.w),
-                          child: Text('Enter Questionnaire',
-                              style: GoogleFonts.inter(
-                                  fontSize: 14.sp, color: Colors.white)),
-                        )),
-                  ),
+                // if (selectedCamp != null &&
+                //     selectedCamp.isNagative() == false &&
+                //     bloc.repo.storeId != -1)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: FilledButton(
+                      onPressed: () {
+                        context.pushNamed(AppPaths.campaignQuestion,
+                            extra: bloc);
+                      },
+                      style: TextButton.styleFrom(
+                        elevation: 2,
+                        alignment: Alignment.center,
+                        backgroundColor: theme.primaryColor,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 40.w),
+                        child: Text('Enter Questionnaire',
+                            style: GoogleFonts.inter(
+                                fontSize: 14.sp, color: Colors.white)),
+                      )),
+                ),
                 campaignData != null
                     ? Card(
                         child: Padding(

@@ -26,9 +26,10 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       final response = await repo
           .savedCampaignResponse(event.campaignId)
           // ignore: invalid_return_type_for_catch_error
-          .catchError((onError) => {
-                emit(SnackbarMessageCampaignState(onError.toString())),
-              });
+          .catchError((onError) {
+        emit(SnackbarMessageCampaignState(onError.toString()));
+        throw onError;
+      });
       if (response != null) {
         selectedCampaign?.campaignData = response;
         emit(CampaignQuestionsLoadedState());
