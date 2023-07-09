@@ -24,9 +24,25 @@ class CampaignRepository {
     }
   }
 
-  Future<List<CampQuestionModel>> getQuestions(int id) async {
+  Future<List<CampQuestionModel>> getSections(
+      {required String campaignUuid}) async {
     final response = await get(
-        Uri.parse("${URLConstants.getCampaignQuestions}/$compId/$id"));
+        Uri.parse("${URLConstants.getCampaignQuestions}/$campaignUuid"));
+
+    if (response.statusCode == 200) {
+      final body = CampaignQuestionsModel.fromRawJson(response.body);
+      return body.data?.questionData ?? [];
+    } else {
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : jsonDecode(response.body)['message'] ?? "Something went wrong";
+    }
+  }
+
+  Future<List<CampQuestionModel>> getQuestions(
+      {required String campaignUuid, required String sectionUuid}) async {
+    final response = await get(Uri.parse(
+        "${URLConstants.getCampaignQuestions}/$campaignUuid/section/$sectionUuid/question"));
 
     if (response.statusCode == 200) {
       final body = CampaignQuestionsModel.fromRawJson(response.body);

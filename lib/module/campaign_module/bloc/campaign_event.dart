@@ -4,10 +4,17 @@ abstract class CampaignEvent {}
 
 class GetStoreCampaignsEvent extends CampaignEvent {}
 
-class GetQuestionsForCampaign extends CampaignEvent {
-  final int id;
+class GetCampaignSections extends CampaignEvent {
+  final String campUuId;
 
-  GetQuestionsForCampaign(this.id);
+  GetCampaignSections(this.campUuId);
+}
+
+class GetQuestionsForSection extends CampaignEvent {
+  final String campUuId;
+  final String sectionUuId;
+
+  GetQuestionsForSection({required this.campUuId, required this.sectionUuId});
 }
 
 class SaveCampaignAnswersEvent extends CampaignEvent {

@@ -237,22 +237,27 @@ enum QuestionInputType {
   boolean,
   singleLineText,
   multiLineText,
-  ddMMyy
+  ddMMyy,
+  multiAnswers
 }
 
 extension Helper on QuestionInputType {
   QuestionInputType fromString(String type) {
     switch (type) {
-      case "QUESTION_WITH_OPTIONS_DROP_DOWN":
+      case "MULTI_SELECT_CHECKBOX":
+        return QuestionInputType.multiAnswers;
+      case "SINGLE_SELECT_DROPDOWN":
         return QuestionInputType.dropdown;
-      case "QUESTION_WITH_OPTIONS_CHECK_BOX":
+      case "SINGLE_SELECT_RADIO":
         return QuestionInputType.radio;
-      case "QUESTION_WITH_TRUE_FALSE":
+      case "BOOLEAN":
         return QuestionInputType.boolean;
-      case "QUESTION_WITH_NUMERIC_ANSWER":
+      case "NUMBER":
         return QuestionInputType.number;
-      case "QUESTION_WITH_CORRECT_ANSWER":
+      case "TEXT":
         return QuestionInputType.singleLineText;
+      case "IMAGE":
+        return QuestionInputType.image;
 
       default:
         return QuestionInputType.singleLineText;
@@ -262,22 +267,24 @@ extension Helper on QuestionInputType {
   String toStringName() {
     switch (this) {
       case QuestionInputType.dropdown:
-        return "QUESTION_WITH_OPTIONS_DROP_DOWN";
+        return "SINGLE_SELECT_DROPDOWN";
       case QuestionInputType.number:
-        return "QUESTION_WITH_NUMERIC_ANSWER";
+        return "NUMBER";
       case QuestionInputType.radio:
-        return "QUESTION_WITH_OPTIONS_CHECK_BOX";
+        return "SINGLE_SELECT_RADIO";
       case QuestionInputType.boolean:
         return "QUESTION_WITH_TRUE_FALSE";
       case QuestionInputType.singleLineText:
-        return "QUESTION_WITH_CORRECT_ANSWER";
+        return "TEXT";
+      case QuestionInputType.multiAnswers:
+        return "MULTI_SELECT_CHECKBOX";
+      case QuestionInputType.image:
+        return "IMAGE";
       case QuestionInputType.multiLineText:
         return "";
       case QuestionInputType.ddMMyy:
         return "";
       case QuestionInputType.amount:
-        return "";
-      case QuestionInputType.image:
         return "";
     }
   }

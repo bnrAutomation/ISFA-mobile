@@ -31,8 +31,6 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                   fontSize: 12.sp,
                   color: Colors.black))),
       child: ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
         itemCount: widget.questions.length,
         itemBuilder: (context, index) {
           final question = widget.questions[index];
@@ -156,7 +154,10 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
               var q = question;
               q.options = ["True", "False"];
               return inputRadioTile(q, context);
+            case QuestionInputType.multiAnswers:
+              return const Text('Multi Checkbox Options');
           }
+          return null;
         },
       ),
     );

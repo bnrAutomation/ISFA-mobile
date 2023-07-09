@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/change_email_phone_module/change_email_phone_view.dart';
-import 'package:i_densfa/module/login_verify_module/pin_login_view.dart';
 import 'package:i_densfa/module/splash_module/splash_view.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
@@ -147,7 +146,7 @@ final router = GoRouter(
     GoRoute(
         path: AppPaths.pinLogin,
         name: AppPaths.pinLogin,
-        builder: (context, state) => const PinLoginView()),
+        builder: (context, state) => const CampaignView(storeID: -1)),
     GoRoute(
         path: AppPaths.pinset,
         name: AppPaths.pinset,

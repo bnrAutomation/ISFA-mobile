@@ -44,8 +44,10 @@ class CampaignView extends StatelessWidget {
                 separatorBuilder: (context, index) => const SizedBox(height: 5),
                 itemBuilder: (context, index) => InkWell(
                     onTap: () {
-                      bloc.add(GetQuestionsForCampaign(
-                          bloc.storeCampaigns[index].campaignId));
+                      final campaign = bloc.storeCampaigns[index];
+                      bloc.selectedCampaign = campaign;
+                      bloc.add(
+                          GetCampaignSections(campaign.campaignId.toString()));
                       context.push(AppPaths.selectedCampaignView, extra: bloc);
                     },
                     child: CampaignListItem(item: bloc.storeCampaigns[index])));

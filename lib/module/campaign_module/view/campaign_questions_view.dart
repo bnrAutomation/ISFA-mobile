@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/campaign_module/bloc/campaign_bloc.dart';
 import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions_view.dart';
+import 'package:i_densfa/utility/custom_tab_view.dart';
 
 class CampaignQuestionsView extends StatelessWidget {
   const CampaignQuestionsView({super.key});
@@ -23,19 +24,17 @@ class CampaignQuestionsView extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: const Color(0XFFfdc82d),
           title: Text(
-            "Campaign",
-            style: textTheme.titleMedium?.copyWith(color: Colors.white),
+            bloc.selectedCampaign?.name ?? "Campaign",
+            style: textTheme.titleMedium,
           ),
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BlocConsumer<CampaignBloc, CampaignState>(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: BlocConsumer<CampaignBloc, CampaignState>(
                 listenWhen: (previous, current) =>
                     current is ScoreCalculatedCampaignState,
                 listener: (context, state) {
@@ -45,30 +44,50 @@ class CampaignQuestionsView extends StatelessWidget {
                 },
                 buildWhen: (previous, current) =>
                     current is CampaignQuestionsLoadedState,
-                builder: (context, state) {
-                  return DynamicQuestionsView(questions: bloc.questionAnswers);
-                },
-              ),
-              Align(
-                  child: FilledButton(
-                      style: TextButton.styleFrom(
-                        elevation: 2,
-                        alignment: Alignment.center,
-                        backgroundColor: Theme.of(context).primaryColor,
+                builder: (context, state) => CustomTabView(
+                  itemCount: 5,
+                  tabBuilder: (context, index) => DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 0.5,
                       ),
-                      onPressed: bloc.state is SavingAnswersLoadingState
-                          ? null
-                          : () => bloc.add(SaveCampaignAnswersEvent(true)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "SUBMIT",
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 16.sp),
-                        ),
-                      )))
-            ],
-          ),
+                    ),
+                    child: Tab(
+                        child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 4),
+                      child: Text("Category $index"),
+                    )),
+                  ),
+                  pageBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 8),
+                    child:
+                        DynamicQuestionsView(questions: bloc.questionAnswers),
+                  ),
+                ),
+              ),
+            ),
+            Align(
+                child: InkWell(
+              onTap: bloc.state is SavingAnswersLoadingState
+                  ? null
+                  : () => bloc.add(SaveCampaignAnswersEvent(true)),
+              child: Container(
+                  width: 1.sw,
+                  height: 50.h,
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(color: Color(0xff333333)),
+                  child: Text(
+                    "SUBMIT",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold),
+                  )),
+            ))
+          ],
         ),
       ),
     );

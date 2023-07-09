@@ -36,11 +36,19 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       }
     });
 
-    on((GetQuestionsForCampaign event, emit) async {
-      selectedCampaign = storeCampaigns
-          .firstWhere((element) => element.campaignId == event.id);
-      add(GetSavedCampaignResponseEvent(event.id));
-      selectedAssessQuestions = await repo.getQuestions(event.id);
+    on((GetCampaignSections event, emit) async {
+      // add(GetSavedCampaignResponseEvent(event.id));
+      final sections = await repo.getSections(campaignUuid: event.campUuId);
+      if (sections.isNotEmpty) {
+        add(GetQuestionsForSection(
+            campUuId: event.campUuId,
+            sectionUuId: sections.first.id.toString()));
+      }
+    });
+
+    on((GetQuestionsForSection event, emit) async {
+      selectedAssessQuestions = await repo.getQuestions(
+          campaignUuid: event.campUuId, sectionUuid: event.sectionUuId);
       questionAnswers =
           selectedAssessQuestions.map((e) => e.toViewQuestionModel()).toList();
       emit(CampaignQuestionsLoadedState());

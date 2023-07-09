@@ -33,13 +33,9 @@ class _BeatPlanStoreListViewState extends State<BeatPlanStoreListView> {
               backgroundColor: Theme.of(context).primaryColor,
               label: 'Add Reminder',
               onPressed: () {
-                final bloc = context.read<BeatplanStoresBloc>();
                 AppPopup.showAppBottomSheet(
                   context: context,
-                  child: BlocProvider.value(
-                    value: bloc..add(GetAllStoresListEvent()),
-                    child: const AddReminderView(),
-                  ),
+                  child: const AddReminderView(),
                 );
               },
             ),
