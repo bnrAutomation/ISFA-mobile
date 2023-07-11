@@ -2,21 +2,23 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
+import 'package:i_densfa/module/campaign_module/new_models/campaign.dart';
+import 'package:i_densfa/module/campaign_module/new_models/question.dart';
+import 'package:i_densfa/module/campaign_module/new_models/question_section.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
 class CampaignRepository {
   final userId = AppStorage().userDetail!.id;
   final compId = AppStorage().homeInfo!.userInfo.companyId;
-  final int storeId;
 
-  CampaignRepository(this.storeId);
-  Future<List<CampaignDetailModel>> getCampaignsForStore() async {
-    final response =
-        await get(Uri.parse("${URLConstants.getCampaignListByUserId}/$userId"));
+  Future<List<AllCampaignModel>> getCampaignsForStore() async {
+    final response = await get(Uri.parse(URLConstants.getAllCampaigns));
 
     if (response.statusCode == 200) {
-      return UserCampaignsModel.fromRawJson(response.body).dataList ?? [];
+      return (json.decode(response.body) as List)
+          .map((e) => AllCampaignModel.fromJson(e))
+          .toList();
     } else {
       throw response.body.isEmpty
           ? "Something went wrong"
@@ -24,14 +26,15 @@ class CampaignRepository {
     }
   }
 
-  Future<List<CampQuestionModel>> getSections(
+  Future<List<CampaignQuestionSectionModel>> getSections(
       {required String campaignUuid}) async {
-    final response = await get(
-        Uri.parse("${URLConstants.getCampaignQuestions}/$campaignUuid"));
+    final response = await get(Uri.parse(
+        "${URLConstants.getCampaignQuestions}/$campaignUuid/section"));
 
     if (response.statusCode == 200) {
-      final body = CampaignQuestionsModel.fromRawJson(response.body);
-      return body.data?.questionData ?? [];
+      return (json.decode(response.body) as List)
+          .map((e) => CampaignQuestionSectionModel.fromJson(e))
+          .toList();
     } else {
       throw response.body.isEmpty
           ? "Something went wrong"
@@ -39,14 +42,15 @@ class CampaignRepository {
     }
   }
 
-  Future<List<CampQuestionModel>> getQuestions(
+  Future<List<CampaignQuestionModel>> getQuestions(
       {required String campaignUuid, required String sectionUuid}) async {
     final response = await get(Uri.parse(
         "${URLConstants.getCampaignQuestions}/$campaignUuid/section/$sectionUuid/question"));
 
     if (response.statusCode == 200) {
-      final body = CampaignQuestionsModel.fromRawJson(response.body);
-      return body.data?.questionData ?? [];
+      return (json.decode(response.body) as List)
+          .map((e) => CampaignQuestionModel.fromJson(e))
+          .toList();
     } else {
       throw response.body.isEmpty
           ? "Something went wrong"
@@ -62,7 +66,7 @@ class CampaignRepository {
     final bodyMap = {
       "answerData": answers,
       "campaignId": answers.first['campaignId'],
-      "storeId": storeId
+      // "storeId": storeId
     };
     final response = await post(
       Uri.parse("${URLConstants.saveCampaignAnswers}/$userId"),
@@ -79,7 +83,8 @@ class CampaignRepository {
     }
   }
 
-  Future<SavedCampaignDataModel?> savedCampaignResponse(int campaignId) async {
+  Future<SavedCampaignDataModel?> savedCampaignResponse(
+      String campaignId) async {
     final response = await get(
         Uri.parse('${URLConstants.savedCampaignResponse}/$userId/$campaignId'));
 

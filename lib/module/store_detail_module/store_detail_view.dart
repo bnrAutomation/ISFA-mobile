@@ -574,9 +574,7 @@ class StoreDetailView extends StatelessWidget {
             style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          Expanded(
-            child: CampaignView(storeID: beatPlanModel.storeId),
-          ),
+          const Expanded(child: CampaignView()),
         ],
       ),
     );

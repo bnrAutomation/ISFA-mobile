@@ -1,17 +1,21 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/module/campaign_module/campaign_repository.dart';
+import 'package:i_densfa/module/campaign_module/new_models/campaign.dart';
+import 'package:i_densfa/module/campaign_module/new_models/question_section.dart';
 import 'package:i_densfa/module/dynamic_questions_module/model.dart';
-
+import 'package:collection/collection.dart';
 part 'campaign_event.dart';
 part 'campaign_state.dart';
 
 class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
   final CampaignRepository repo;
-  List<CampaignDetailModel> storeCampaigns = [];
-  CampaignDetailModel? selectedCampaign;
-  List<CampQuestionModel> selectedAssessQuestions = [];
+  List<AllCampaignModel> storeCampaigns = [];
+  List<CampaignQuestionSectionModel> selectedCampSections = [];
+  AllCampaignModel? selectedCampaign;
+  SavedCampaignDataModel? savedCampaignDetails;
   var selectedPieChartPortionId = -1;
+  var lastSelectedSectionUuid = '';
 
   List<QuestionModel> questionAnswers = [];
 
@@ -31,26 +35,50 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
         throw onError;
       });
       if (response != null) {
-        selectedCampaign?.campaignData = response;
+        savedCampaignDetails = response;
         emit(CampaignQuestionsLoadedState());
       }
     });
 
     on((GetCampaignSections event, emit) async {
       // add(GetSavedCampaignResponseEvent(event.id));
-      final sections = await repo.getSections(campaignUuid: event.campUuId);
-      if (sections.isNotEmpty) {
+      selectedCampSections =
+          await repo.getSections(campaignUuid: event.campUuId);
+      if (selectedCampSections.isNotEmpty) {
         add(GetQuestionsForSection(
-            campUuId: event.campUuId,
-            sectionUuId: sections.first.id.toString()));
+            sectionUuId: selectedCampSections.first.uuid));
       }
     });
 
     on((GetQuestionsForSection event, emit) async {
-      selectedAssessQuestions = await repo.getQuestions(
-          campaignUuid: event.campUuId, sectionUuid: event.sectionUuId);
-      questionAnswers =
-          selectedAssessQuestions.map((e) => e.toViewQuestionModel()).toList();
+      var lastSelectedQuestions = selectedCampSections
+          .firstWhereOrNull(
+              (element) => element.uuid == lastSelectedSectionUuid)
+          ?.selectedSectionQuestions;
+
+      for (final q in questionAnswers) {
+        lastSelectedQuestions
+            ?.firstWhereOrNull((element) => element.question == q.question)
+            ?.answer = q.answer;
+      }
+
+      lastSelectedSectionUuid = event.sectionUuId;
+
+      var questions = selectedCampSections
+          .firstWhere((element) => element.uuid == event.sectionUuId)
+          .selectedSectionQuestions;
+
+      questionAnswers.clear();
+      emit(CampaignQuestionsLoadedState());
+      if (questions.isEmpty) {
+        questions = await repo.getQuestions(
+            campaignUuid: selectedCampaign!.uuid,
+            sectionUuid: event.sectionUuId);
+        selectedCampSections
+            .firstWhere((element) => element.uuid == event.sectionUuId)
+            .selectedSectionQuestions = questions;
+      }
+      questionAnswers = questions.map((e) => e.toViewQuestionModel()).toList();
       emit(CampaignQuestionsLoadedState());
     });
 
@@ -77,7 +105,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
         emit(ScoreCalculatedCampaignState());
         if (score) {
           add(GetSavedCampaignResponseEvent(
-              questionAnswers.first.campQuestionModel!.campaignId));
+              questionAnswers.first.campQuestionModel!.uuid));
           emit(SnackbarMessageCampaignState("Saved Successfully"));
         }
       }

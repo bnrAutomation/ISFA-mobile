@@ -40,9 +40,8 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                 contentPadding: const EdgeInsets.all(0),
                 title: Text(question.question),
                 subtitle: TextField(
-                    onChanged: (value) {
-                      question.answer = value.trim().capitalizeFirst();
-                    },
+                    onChanged: (value) => question.answer = value.trim(),
+                    controller: TextEditingController(text: question.answer),
                     decoration: InputDecoration(
                         hintText: "Enter your answer..",
                         border: OutlineInputBorder(
@@ -53,9 +52,8 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 title: Text(question.question),
                 subtitle: TextField(
-                    onChanged: (value) {
-                      question.answer = value;
-                    },
+                    onChanged: (value) => question.answer = value,
+                    controller: TextEditingController(text: question.answer),
                     minLines: 3,
                     maxLines: 3,
                     decoration: InputDecoration(
@@ -69,9 +67,8 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                 contentPadding: const EdgeInsets.all(0),
                 title: Text(question.question),
                 subtitle: TextField(
-                  onChanged: (value) {
-                    question.answer = value;
-                  },
+                  onChanged: (value) => question.answer = value,
+                  controller: TextEditingController(text: question.answer),
                   decoration: InputDecoration(
                       hintText: "Enter your answer..",
                       suffixIcon: const Icon(Icons.currency_rupee_sharp),
@@ -90,9 +87,8 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
-                  onChanged: (value) {
-                    question.answer = value;
-                  },
+                  onChanged: (value) => question.answer = value,
+                  controller: TextEditingController(text: question.answer),
                   decoration: InputDecoration(
                       hintText: "Enter your answer..",
                       border: OutlineInputBorder(
@@ -155,9 +151,8 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
               q.options = ["True", "False"];
               return inputRadioTile(q, context);
             case QuestionInputType.multiAnswers:
-              return const Text('Multi Checkbox Options');
+              return checkBoxTile(question, context);
           }
-          return null;
         },
       ),
     );
@@ -170,7 +165,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
       children: [
         Text(
           question.question,
-          style: textTheme.titleMedium,
+          style: textTheme.bodyLarge,
         ),
         GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
@@ -190,6 +185,51 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                     onChanged: (val) {
                       context.hideKeyboard();
                       question.answer = val;
+                      setState(() {});
+                    }),
+                Text(option)
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget checkBoxTile(QuestionModel question, BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          question.question,
+          style: textTheme.bodyLarge,
+        ),
+        GridView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: question.options.length,
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              childAspectRatio: 4 / 1,
+              mainAxisSpacing: 4,
+              maxCrossAxisExtent: 1.sw / 2),
+          itemBuilder: (context, index) {
+            final option = question.options[index];
+            return Row(
+              children: [
+                Checkbox(
+                    value:
+                        question.answer?.split(',').contains(option) ?? false,
+                    onChanged: (newval) {
+                      final val = newval == true;
+                      context.hideKeyboard();
+                      final ans = question.answer?.split(',') ?? [];
+                      if (val) {
+                        ans.add(option);
+                      } else {
+                        ans.remove(option);
+                      }
+                      question.answer = ans.join(',');
                       setState(() {});
                     }),
                 Text(option)

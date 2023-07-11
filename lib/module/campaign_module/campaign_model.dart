@@ -211,12 +211,12 @@ class CampQuestionModel {
       };
 
   QuestionModel toViewQuestionModel() => QuestionModel(
-      isRequired: true,
-      options: options,
-      question: questionText,
-      questionType: questionType,
-      placholder: questionText,
-      campQuestionModel: this);
+        isRequired: true,
+        options: options,
+        question: questionText,
+        questionType: questionType,
+        placholder: questionText,
+      );
 }
 
 class SavedCampaignDataModel {

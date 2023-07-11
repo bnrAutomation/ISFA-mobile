@@ -158,7 +158,7 @@ class TabberView extends StatelessWidget {
       case TabbarItemCase.learner:
         return const LearnerView();
       case TabbarItemCase.campaign:
-        return const CampaignView(storeID: -1);
+        return const CampaignView();
       case TabbarItemCase.analytics:
         return const AnalyticsView();
     }

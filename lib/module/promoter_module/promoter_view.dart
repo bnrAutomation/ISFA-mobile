@@ -260,11 +260,7 @@ class PromoterView extends StatelessWidget {
           ),
           const SizedBox(height: 10),
 
-          Expanded(
-            child: CampaignView(
-              storeID: storeDetail.storeId,
-            ),
-          ),
+          const Expanded(child: CampaignView()),
           // Expanded(
           //   child: ListView.separated(
           //       itemCount: items.length,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:i_densfa/module/campaign_module/campaign_model.dart';
+import 'package:i_densfa/module/campaign_module/new_models/campaign.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 class CampaignListItem extends StatelessWidget {
-  final CampaignDetailModel item;
+  final AllCampaignModel item;
   const CampaignListItem({super.key, required this.item});
 
   @override
@@ -16,10 +16,7 @@ class CampaignListItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 1.sw,
-                height: 5,
-              ),
+              SizedBox(width: 1.sw, height: 5),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -37,18 +34,14 @@ class CampaignListItem extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         color: item.isNagative() ? Colors.red : Colors.green),
                   ),
-                  const SizedBox(
-                    width: 10,
-                  )
+                  const SizedBox(width: 10)
                 ],
               ),
               Text(
-                "Description : ${item.companyId}",
+                "Description : ${item.description}",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -65,9 +58,7 @@ class CampaignListItem extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
-                  const SizedBox(
-                    width: 10,
-                  ),
+                  const SizedBox(width: 10),
                   Text(
                     "To : ",
                     textAlign: TextAlign.center,
@@ -81,9 +72,7 @@ class CampaignListItem extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ),
+                  const SizedBox(width: 5),
                 ],
               ),
             ],

@@ -45,7 +45,9 @@ class CampaignQuestionsView extends StatelessWidget {
                 buildWhen: (previous, current) =>
                     current is CampaignQuestionsLoadedState,
                 builder: (context, state) => CustomTabView(
-                  itemCount: 5,
+                  itemCount: bloc.selectedCampSections.length,
+                  onPositionChange: (value) => bloc.add(GetQuestionsForSection(
+                      sectionUuId: bloc.selectedCampSections[value].uuid)),
                   tabBuilder: (context, index) => DecoratedBox(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
@@ -58,13 +60,15 @@ class CampaignQuestionsView extends StatelessWidget {
                         child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 4),
-                      child: Text("Category $index"),
+                      child: Text(bloc.selectedCampSections[index].name),
                     )),
                   ),
                   pageBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.only(left: 16, right: 8),
-                    child:
-                        DynamicQuestionsView(questions: bloc.questionAnswers),
+                    child: bloc.selectedCampSections[index].uuid ==
+                            bloc.lastSelectedSectionUuid
+                        ? DynamicQuestionsView(questions: bloc.questionAnswers)
+                        : const SizedBox(),
                   ),
                 ),
               ),

@@ -11,10 +11,9 @@ class GetCampaignSections extends CampaignEvent {
 }
 
 class GetQuestionsForSection extends CampaignEvent {
-  final String campUuId;
   final String sectionUuId;
 
-  GetQuestionsForSection({required this.campUuId, required this.sectionUuId});
+  GetQuestionsForSection({required this.sectionUuId});
 }
 
 class SaveCampaignAnswersEvent extends CampaignEvent {
@@ -24,7 +23,7 @@ class SaveCampaignAnswersEvent extends CampaignEvent {
 }
 
 class GetSavedCampaignResponseEvent extends CampaignEvent {
-  final int campaignId;
+  final String campaignId;
 
   GetSavedCampaignResponseEvent(this.campaignId);
 }

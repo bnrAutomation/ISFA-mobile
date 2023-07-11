@@ -93,7 +93,8 @@ class URLConstants {
   static const getAssessmentQuestions = '$apiBaseUrl/getAssessmentDetails';
   static const saveAssessmentAnswers = '$apiBaseUrl/saveAssessmentAnswers';
 
-  static const getCampaignListByUserId = '$apiBaseUrl/getCampaignListByUserId';
+  static const getAllCampaigns =
+      '$baseURLStart/campaign-service/iSFA/api/v1/campaign';
   static const getCampaignQuestions =
       '$baseURLStart/campaign-service/iSFA/api/v1/campaign';
   static const saveCampaignAnswers = '$apiBaseUrl/saveCampaignAnswers';
