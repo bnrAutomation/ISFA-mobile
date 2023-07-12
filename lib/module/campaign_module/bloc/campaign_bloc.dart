@@ -2,8 +2,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/module/campaign_module/campaign_repository.dart';
 import 'package:i_densfa/module/campaign_module/new_models/campaign.dart';
+import 'package:i_densfa/module/campaign_module/new_models/question.dart';
 import 'package:i_densfa/module/campaign_module/new_models/question_section.dart';
 import 'package:i_densfa/module/dynamic_questions_module/model.dart';
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 part 'campaign_event.dart';
 part 'campaign_state.dart';
@@ -45,22 +47,12 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       selectedCampSections =
           await repo.getSections(campaignUuid: event.campUuId);
       if (selectedCampSections.isNotEmpty) {
-        add(GetQuestionsForSection(
-            sectionUuId: selectedCampSections.first.uuid));
+        add(GetQuestionsForSection(sectionUuId: selectedCampSections[0].uuid));
       }
     });
 
     on((GetQuestionsForSection event, emit) async {
-      var lastSelectedQuestions = selectedCampSections
-          .firstWhereOrNull(
-              (element) => element.uuid == lastSelectedSectionUuid)
-          ?.selectedSectionQuestions;
-
-      for (final q in questionAnswers) {
-        lastSelectedQuestions
-            ?.firstWhereOrNull((element) => element.question == q.question)
-            ?.answer = q.answer;
-      }
+      saveAnswersForSelectedSection();
 
       lastSelectedSectionUuid = event.sectionUuId;
 
@@ -83,19 +75,33 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
     });
 
     on((SaveCampaignAnswersEvent event, emit) async {
+      saveAnswersForSelectedSection();
       final notAnsweredQuestions = event.checkLeftAnswer
-          ? questionAnswers
-              .where((element) => element.isRequired && element.answer == null)
-              .toList()
-          : [];
+          ? _totalNotAnsweredQuestions()
+          : <CampaignQuestionModel>[];
       if (notAnsweredQuestions.isNotEmpty) {
         emit(SnackbarMessageCampaignState(
             "Please answer for ${notAnsweredQuestions.first.question}"));
       } else {
-        final answers = questionAnswers
-            .where((element) => element.answer?.isNotEmpty ?? false)
-            .map((e) => e.toCampaignRequest())
-            .toList();
+        final answers = {
+          "campaignUuid": selectedCampaign!.uuid,
+          "campaignResponse": selectedCampSections
+              .map((section) => {
+                    "sectionName": section.name,
+                    "sectionUuid": section.uuid,
+                    "questions": section.selectedSectionQuestions
+                        .where((question) =>
+                            question.answer?.trim().isNotEmpty ?? false)
+                        .map((question) => {
+                              "questionName": question.question,
+                              "questionUuid": question.uuid,
+                              "questionDataType": question.questionInputType,
+                              "answer": question.answer
+                            })
+                        .toList(),
+                  })
+              .toList()
+        };
         emit(SavingAnswersLoadingState());
         final score =
             await repo.saveCampaignAnswers(answers).catchError((error) {
@@ -110,5 +116,27 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
         }
       }
     });
+  }
+
+  void saveAnswersForSelectedSection() {
+    var lastSelectedQuestions = selectedCampSections
+        .firstWhereOrNull((element) => element.uuid == lastSelectedSectionUuid)
+        ?.selectedSectionQuestions;
+
+    for (final q in questionAnswers) {
+      lastSelectedQuestions
+          ?.firstWhereOrNull((element) => element.question == q.question)
+          ?.answer = q.answer;
+    }
+  }
+
+  List<CampaignQuestionModel> _totalNotAnsweredQuestions() {
+    return selectedCampSections
+        .map((e) => e.selectedSectionQuestions)
+        .expand((element) => element)
+        .where((element) =>
+            element.isInputMandatory &&
+            (element.answer?.trim().isEmpty ?? true))
+        .toList();
   }
 }

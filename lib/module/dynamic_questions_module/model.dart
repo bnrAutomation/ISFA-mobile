@@ -36,15 +36,4 @@ class QuestionModel {
       "sequence": assessmentQuestionDetails?.sequence,
     };
   }
-
-  Map<String, dynamic> toCampaignRequest() {
-    return {
-      "options": options,
-      "questionText": question,
-      "questionType": questionType.toStringName(),
-      "userAnswer": answer ?? "",
-      "campaignId": campQuestionModel?.uuid,
-      "id": campQuestionModel?.uuid,
-    };
-  }
 }

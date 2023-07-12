@@ -58,18 +58,10 @@ class CampaignRepository {
     }
   }
 
-  Future<bool> saveCampaignAnswers(List<Map<String, dynamic>> answers) async {
-    if (answers.isEmpty) {
-      return false;
-    }
-
-    final bodyMap = {
-      "answerData": answers,
-      "campaignId": answers.first['campaignId'],
-      // "storeId": storeId
-    };
+  Future<bool> saveCampaignAnswers(Map<String, dynamic> bodyMap) async {
     final response = await post(
-      Uri.parse("${URLConstants.saveCampaignAnswers}/$userId"),
+      Uri.parse(
+          "${URLConstants.baseURLStart}/campaign-service/iSFA/api/v1/client/campaign/${bodyMap['campaignUuid']}/response"),
       body: jsonEncode(bodyMap),
       headers: {'Content-Type': 'application/json'},
     );
