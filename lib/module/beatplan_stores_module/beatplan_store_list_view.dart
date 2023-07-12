@@ -66,6 +66,8 @@ class _BeatPlanStoreListViewState extends State<BeatPlanStoreListView> {
               onPressed: () {
                 final plans = context.read<BeatplanStoresBloc>().beatPlans;
                 if (plans.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Don't have store to schedule visit.")));
                 } else {
                   context.pushNamed(AppPaths.scheduleVisit, extra: plans);
                 }
