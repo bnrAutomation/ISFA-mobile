@@ -36,7 +36,6 @@ class PushNotificationsManager {
               await submitToken(value ?? "", AppStorage().userDetail?.id ?? -1);
             }
           });
-
           FirebaseMessaging.onMessage.listen((RemoteMessage message) {
             notify(message);
           });

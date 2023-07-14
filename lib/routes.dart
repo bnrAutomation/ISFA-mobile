@@ -17,7 +17,6 @@ import 'module/inventory_module/inventory_view.dart';
 import 'module/leaves_module/leave_view.dart';
 import 'module/login_module/login_view.dart';
 import 'module/login_set_pin_module/pin_setup_view.dart';
-import 'module/login_verify_module/pin_login_view.dart';
 import 'module/my_activity_module/my_activity_view.dart';
 import 'module/policy_module/policy_view.dart';
 import 'module/promoter_module/bloc/promoter_bloc.dart';

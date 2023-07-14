@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,6 +31,7 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
         await _getSideMenuData(emit));
     on(_endDuty);
     on(_startDuty);
+    on<SubmitToken>((event, emit) => submitToken());
   }
 
   Future<void> _getSideMenuData(Emitter<TabberState> emit) async {
@@ -99,5 +104,23 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
     AppStorage().isDutyStarted = false;
     emit(TabbarSnackBarMessageState(response));
     emit(OnlineStatusUpdateState());
+  }
+
+  Future<bool> submitToken() async {
+    final body = {"fcm": AppStorage().token};
+
+    final response = await put(
+        Uri.parse(
+            "${URLConstants.updatefcmtoken}/${AppStorage().userDetail?.id}"),
+        body: jsonEncode(body),
+        headers: {'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : json.decode(response.body)['message'] ?? "Something went wrong";
+    }
   }
 }
