@@ -66,9 +66,8 @@ class AssessmentQuestionsView extends StatelessWidget {
                 },
                 buildWhen: (previous, current) =>
                     current is AssessmentQuestionsLoadedState,
-                builder: (context, state) {
-                  return DynamicQuestionsView(questions: bloc.questionAnswers);
-                },
+                builder: (context, state) =>
+                    DynamicQuestionsView(questions: bloc.questionAnswers),
               ),
               Align(
                   child: FilledButton(

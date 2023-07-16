@@ -220,9 +220,7 @@ class SelectedCampaignView extends StatelessWidget {
                           ),
                         ),
                       )
-                    : const Center(
-                        child: Text("Response is not available."),
-                      ),
+                    : const Center(child: Text("Response is not available.")),
               ],
             );
           },

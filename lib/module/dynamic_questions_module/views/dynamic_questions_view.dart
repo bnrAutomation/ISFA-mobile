@@ -38,19 +38,31 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.singleLineText:
               return ListTile(
                 contentPadding: const EdgeInsets.all(0),
-                title: Text(question.question),
+                title: Row(
+                  children: [
+                    Text(question.question),
+                    if (question.isRequired)
+                      const Text('*', style: TextStyle(color: Colors.red))
+                  ],
+                ),
                 subtitle: TextField(
                     onChanged: (value) => question.answer = value.trim(),
                     controller: TextEditingController(text: question.answer),
                     decoration: InputDecoration(
-                        hintText: "Enter your answer..",
+                        hintText: question.question,
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8)))),
               );
             case QuestionInputType.multiLineText:
               return ListTile(
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                title: Text(question.question),
+                title: Row(
+                  children: [
+                    Text(question.question),
+                    if (question.isRequired)
+                      const Text('*', style: TextStyle(color: Colors.red))
+                  ],
+                ),
                 subtitle: TextField(
                     onChanged: (value) => question.answer = value,
                     controller: TextEditingController(text: question.answer),
@@ -65,7 +77,13 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.amount:
               return ListTile(
                 contentPadding: const EdgeInsets.all(0),
-                title: Text(question.question),
+                title: Row(
+                  children: [
+                    Text(question.question),
+                    if (question.isRequired)
+                      const Text('*', style: TextStyle(color: Colors.red))
+                  ],
+                ),
                 subtitle: TextField(
                   onChanged: (value) => question.answer = value,
                   controller: TextEditingController(text: question.answer),
@@ -82,7 +100,13 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.number:
               return ListTile(
                 contentPadding: const EdgeInsets.all(0),
-                title: Text(question.question),
+                title: Row(
+                  children: [
+                    Text(question.question),
+                    if (question.isRequired)
+                      const Text('*', style: TextStyle(color: Colors.red))
+                  ],
+                ),
                 subtitle: TextField(
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -100,7 +124,13 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.dropdown:
               return ListTile(
                 contentPadding: const EdgeInsets.all(0),
-                title: Text(question.question),
+                title: Row(
+                  children: [
+                    Text(question.question),
+                    if (question.isRequired)
+                      const Text('*', style: TextStyle(color: Colors.red))
+                  ],
+                ),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 6, bottom: 10),
                   child: AppPopup.dropDownMenu(
@@ -122,7 +152,13 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.ddMMyy:
               return ListTile(
                   contentPadding: const EdgeInsets.all(0),
-                  title: Text(question.question),
+                  title: Row(
+                    children: [
+                      Text(question.question),
+                      if (question.isRequired)
+                        const Text('*', style: TextStyle(color: Colors.red))
+                    ],
+                  ),
                   subtitle: InkWell(
                     onTap: () async {
                       context.hideKeyboard();
@@ -163,9 +199,15 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          question.question,
-          style: textTheme.bodyLarge,
+        Row(
+          children: [
+            Text(
+              question.question,
+              style: textTheme.bodyLarge,
+            ),
+            if (question.isRequired)
+              const Text('*', style: TextStyle(color: Colors.red))
+          ],
         ),
         GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
@@ -201,9 +243,15 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          question.question,
-          style: textTheme.bodyLarge,
+        Row(
+          children: [
+            Text(
+              question.question,
+              style: textTheme.bodyLarge,
+            ),
+            if (question.isRequired)
+              const Text('*', style: TextStyle(color: Colors.red))
+          ],
         ),
         GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
@@ -246,9 +294,15 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          question.question,
-          style: textTheme.titleMedium,
+        Row(
+          children: [
+            Text(
+              question.question,
+              style: textTheme.titleMedium,
+            ),
+            if (question.isRequired)
+              const Text('*', style: TextStyle(color: Colors.red))
+          ],
         ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 8),
