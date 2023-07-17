@@ -27,3 +27,5 @@ class GetSavedCampaignResponseEvent extends CampaignEvent {
 
   GetSavedCampaignResponseEvent(this.campaignId);
 }
+
+class AnswerUpdatedCampaignEvent extends CampaignEvent {}

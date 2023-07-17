@@ -22,6 +22,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
   List<QuestionModel> questionAnswers = [];
 
   CampaignBloc(this.repo) : super(CampaignInitial()) {
+    on(_answerUpdatedEvent);
     on((GetStoreCampaignsEvent event, emit) async {
       emit(CampaignListLoadingState());
       storeCampaigns = await repo.getCampaignsForStore();
@@ -66,11 +67,17 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
         questions = await repo.getQuestions(
             campaignUuid: selectedCampaign!.uuid,
             sectionUuid: event.sectionUuId);
+        for (final q in questions) {
+          if (q.rules.isNotEmpty) {
+            final rule = q.rules.first;
+            print("----${rule.question}/${rule.answer}");
+          }
+        }
         selectedCampSections
             .firstWhere((element) => element.uuid == event.sectionUuId)
             .selectedSectionQuestions = questions;
       }
-      questionAnswers = questions.map((e) => e.toViewQuestionModel()).toList();
+      _updateQuestionModelWithRule();
       emit(CampaignQuestionsLoadedState());
     });
 
@@ -79,43 +86,73 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       final notAnsweredQuestions = event.checkLeftAnswer
           ? _totalNotAnsweredQuestions()
           : <CampaignQuestionModel>[];
+
       if (notAnsweredQuestions.isNotEmpty) {
         emit(SnackbarMessageCampaignState(
             "Please answer for ${notAnsweredQuestions.first.question}"));
-      } else {
-        final answers = {
-          "campaignUuid": selectedCampaign!.uuid,
-          "campaignResponse": selectedCampSections
-              .map((section) => {
-                    "sectionName": section.name,
-                    "sectionUuid": section.uuid,
-                    "questions": section.selectedSectionQuestions
-                        .where((question) =>
-                            question.answer?.trim().isNotEmpty ?? false)
-                        .map((question) => {
-                              "questionName": question.question,
-                              "questionUuid": question.uuid,
-                              "questionDataType": question.questionInputType,
-                              "answer": question.answer
-                            })
-                        .toList(),
-                  })
-              .toList()
-        };
-        emit(SavingAnswersLoadingState());
-        final score =
-            await repo.saveCampaignAnswers(answers).catchError((error) {
-          emit(ScoreCalculatedCampaignState());
-          return false;
-        });
+        return;
+      }
+      if (!_checkValidations(emit)) return;
+      final answers = _getSubmitRequestBody();
+      emit(SavingAnswersLoadingState());
+      final score = await repo.saveCampaignAnswers(answers).catchError((error) {
+        print(error);
         emit(ScoreCalculatedCampaignState());
-        if (score) {
-          add(GetSavedCampaignResponseEvent(
-              questionAnswers.first.campQuestionModel!.uuid));
-          emit(SnackbarMessageCampaignState("Saved Successfully"));
-        }
+        return false;
+      });
+      if (score) {
+        // add(GetSavedCampaignResponseEvent(selectedCampaign!.uuid));
+        emit(SnackbarMessageCampaignState("Saved Successfully"));
+        emit(ScoreCalculatedCampaignState());
       }
     });
+  }
+
+  Map<String, Object> _getSubmitRequestBody() {
+    return {
+      "campaignUuid": selectedCampaign!.uuid,
+      "campaignResponse": selectedCampSections
+          .map((section) => {
+                "sectionName": section.name,
+                "sectionUuid": section.uuid,
+                "questions": section.selectedSectionQuestions
+                    .where((question) =>
+                        question.answer?.trim().isNotEmpty ?? false)
+                    .map((question) => {
+                          "questionName": question.question,
+                          "questionUuid": question.uuid,
+                          "questionDataType": question.questionInputType.name,
+                          "answer": question.answer
+                        })
+                    .toList(),
+              })
+          .toList()
+    };
+  }
+
+  bool _checkValidations(Emitter<CampaignState> emit) {
+    for (final q in _allQuestions()) {
+      if (q.inputTypeValidation == 'email') {
+        final bool emailValid = RegExp(
+                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            .hasMatch(q.answer ?? '');
+        if (!emailValid) {
+          emit(SnackbarMessageCampaignState(
+              "Please enter valid email for ${q.question}"));
+          return false;
+        }
+      } else if (q.inputTypeValidation == 'url') {
+        const regex =
+            r"^(?:http|https):\/\/[\w\-_]+(?:\.[\w\-_]+)+[\w\-.,@?^=%&:/~\\+#]*$";
+        final bool validURl = RegExp(regex).hasMatch(q.answer ?? '');
+        if (!validURl) {
+          emit(SnackbarMessageCampaignState(
+              "Please enter valid URL for ${q.question}"));
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   void saveAnswersForSelectedSection() {
@@ -130,13 +167,63 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
     }
   }
 
-  List<CampaignQuestionModel> _totalNotAnsweredQuestions() {
+  List<CampaignQuestionModel> _allQuestions() {
     return selectedCampSections
         .map((e) => e.selectedSectionQuestions)
         .expand((element) => element)
+        .toList();
+  }
+
+  List<CampaignQuestionModel> _totalNotAnsweredQuestions() {
+    var lastSelectedQuestions = _allQuestions();
+    List<CampaignQuestionModel> newquestionsList = [];
+    for (var question in lastSelectedQuestions) {
+      if (question.rules.isEmpty) {
+        newquestionsList.add(question);
+      } else {
+        final rule = question.rules.first;
+        final compareQuestion = lastSelectedQuestions
+            .firstWhereOrNull((q) => q.uuid == rule.questionUuid);
+        if (compareQuestion?.answer?.toLowerCase() ==
+            rule.answer.toLowerCase()) {
+          newquestionsList.add(question);
+        }
+      }
+    }
+
+    return newquestionsList
         .where((element) =>
             element.isInputMandatory &&
             (element.answer?.trim().isEmpty ?? true))
         .toList();
+  }
+
+  void _answerUpdatedEvent(AnswerUpdatedCampaignEvent event, emit) {
+    saveAnswersForSelectedSection();
+    _updateQuestionModelWithRule();
+    emit(CampaignQuestionsLoadedState());
+  }
+
+  void _updateQuestionModelWithRule() {
+    var lastSelectedQuestions = selectedCampSections
+        .firstWhereOrNull((element) => element.uuid == lastSelectedSectionUuid)
+        ?.selectedSectionQuestions;
+    if (lastSelectedQuestions == null) return;
+    List<QuestionModel> newquestionsList = [];
+    for (var question in lastSelectedQuestions) {
+      print("keyboard is:${question.inputTypeValidation}");
+      if (question.rules.isEmpty) {
+        newquestionsList.add(question.toViewQuestionModel());
+      } else {
+        final rule = question.rules.first;
+        final compareQuestion = lastSelectedQuestions
+            .firstWhereOrNull((q) => q.uuid == rule.questionUuid);
+        if (compareQuestion?.answer?.toLowerCase() ==
+            rule.answer.toLowerCase()) {
+          newquestionsList.add(question.toViewQuestionModel());
+        }
+      }
+      questionAnswers = newquestionsList;
+    }
   }
 }

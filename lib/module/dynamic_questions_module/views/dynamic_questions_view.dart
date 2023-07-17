@@ -12,17 +12,24 @@ import 'package:i_densfa/utility/extensions.dart';
 import '../model.dart';
 
 class DynamicQuestionsView extends StatefulWidget {
-  const DynamicQuestionsView({super.key, required this.questions});
-
+  final void Function()? onAnswerUpdate;
   final List<QuestionModel> questions;
+  const DynamicQuestionsView(
+      {super.key, required this.questions, this.onAnswerUpdate});
 
   @override
   State<DynamicQuestionsView> createState() => _DynamicQuestionsViewState();
 }
 
 class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
+  List<TextEditingController> controllers = [];
   @override
   Widget build(BuildContext context) {
+    if (controllers.length != widget.questions.length) {
+      controllers = widget.questions
+          .map((e) => TextEditingController(text: e.answer ?? ''))
+          .toList();
+    }
     return Theme(
       data: Theme.of(context).copyWith(
           textTheme: Theme.of(context).textTheme.copyWith(
@@ -34,6 +41,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
         itemCount: widget.questions.length,
         itemBuilder: (context, index) {
           final question = widget.questions[index];
+          final textControler = controllers[index];
           switch (question.questionType) {
             case QuestionInputType.singleLineText:
               return ListTile(
@@ -46,8 +54,9 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                   ],
                 ),
                 subtitle: TextField(
-                    onChanged: (value) => question.answer = value.trim(),
-                    controller: TextEditingController(text: question.answer),
+                    keyboardType: question.keyboardPref,
+                    onChanged: (value) => updateAnswer(question, value.trim()),
+                    controller: textControler,
                     decoration: InputDecoration(
                         hintText: question.question,
                         border: OutlineInputBorder(
@@ -64,8 +73,8 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                   ],
                 ),
                 subtitle: TextField(
-                    onChanged: (value) => question.answer = value,
-                    controller: TextEditingController(text: question.answer),
+                    onChanged: (value) => updateAnswer(question, value),
+                    controller: textControler,
                     minLines: 3,
                     maxLines: 3,
                     decoration: InputDecoration(
@@ -85,8 +94,8 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                   ],
                 ),
                 subtitle: TextField(
-                  onChanged: (value) => question.answer = value,
-                  controller: TextEditingController(text: question.answer),
+                  onChanged: (value) => updateAnswer(question, value),
+                  controller: textControler,
                   decoration: InputDecoration(
                       hintText: "Enter your answer..",
                       suffixIcon: const Icon(Icons.currency_rupee_sharp),
@@ -111,8 +120,8 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
-                  onChanged: (value) => question.answer = value,
-                  controller: TextEditingController(text: question.answer),
+                  onChanged: (value) => updateAnswer(question, value),
+                  controller: textControler,
                   decoration: InputDecoration(
                       hintText: "Enter your answer..",
                       border: OutlineInputBorder(
@@ -139,7 +148,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                     placeholder: "Choose your answer",
                     onChanged: (p0) {
                       context.hideKeyboard();
-                      question.answer = p0;
+                      updateAnswer(question, p0 ?? '');
                       setState(() {});
                     },
                   ),
@@ -168,7 +177,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                           firstDate: DateTime(1960),
                           lastDate: DateTime(DateTime.now().year + 1));
                       if (date != null) {
-                        question.answer = date.toStringFormat("dd/MM/yy");
+                        updateAnswer(question, date.toStringFormat("dd/MM/yy"));
                         setState(() {});
                       }
                     },
@@ -226,7 +235,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                     groupValue: question.answer,
                     onChanged: (val) {
                       context.hideKeyboard();
-                      question.answer = val;
+                      updateAnswer(question, val ?? '');
                       setState(() {});
                     }),
                 Text(option)
@@ -277,7 +286,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                       } else {
                         ans.remove(option);
                       }
-                      question.answer = ans.join(',');
+                      updateAnswer(question, ans.join(','));
                       setState(() {});
                     }),
                 Text(option)
@@ -313,7 +322,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
           child: InkWell(
             onTap: () {
               AppImagePicker(context, (p0) {
-                question.answer = p0.path;
+                updateAnswer(question, p0.path);
                 setState(() {});
               });
             },
@@ -337,5 +346,10 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
         )
       ],
     );
+  }
+
+  void updateAnswer(QuestionModel question, String newAnswer) {
+    question.answer = newAnswer;
+    widget.onAnswerUpdate?.call();
   }
 }

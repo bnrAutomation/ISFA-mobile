@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:i_densfa/module/assessment_module/assessment_model.dart';
 import 'dart:convert';
 
@@ -57,13 +58,19 @@ class CampaignQuestionModel {
       };
 
   QuestionModel toViewQuestionModel() => QuestionModel(
-      isRequired: isInputMandatory,
-      options: options.split(','),
-      question: question,
-      questionType: questionInputType,
-      placholder: description,
-      answer: answer,
-      campQuestionModel: this);
+        isRequired: isInputMandatory,
+        options: options.split(','),
+        question: question,
+        questionType: questionInputType,
+        placholder: description,
+        answer: answer,
+        campQuestionModel: this,
+        keyboardPref: inputTypeValidation == 'email'
+            ? TextInputType.emailAddress
+            : inputTypeValidation == 'url'
+                ? TextInputType.url
+                : null,
+      );
 }
 
 class Rule {

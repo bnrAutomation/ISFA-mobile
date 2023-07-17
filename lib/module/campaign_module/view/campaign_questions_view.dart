@@ -35,15 +35,16 @@ class CampaignQuestionsView extends StatelessWidget {
           children: [
             Expanded(
               child: BlocConsumer<CampaignBloc, CampaignState>(
-                listenWhen: (previous, current) =>
-                    current is ScoreCalculatedCampaignState,
                 listener: (context, state) {
                   if (state is ScoreCalculatedCampaignState) {
+                    bloc.questionAnswers.clear();
+                    Navigator.pop(context);
                     Navigator.pop(context);
                   }
                 },
                 buildWhen: (previous, current) =>
-                    current is CampaignQuestionsLoadedState,
+                    current is CampaignQuestionsLoadedState ||
+                    current is SavingAnswersLoadingState,
                 builder: (context, state) => CustomTabView(
                   itemCount: bloc.selectedCampSections.length,
                   onPositionChange: (value) => bloc.add(GetQuestionsForSection(
@@ -51,10 +52,7 @@ class CampaignQuestionsView extends StatelessWidget {
                   tabBuilder: (context, index) => DecoratedBox(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 0.5,
-                      ),
+                      border: Border.all(color: Colors.grey, width: 0.5),
                     ),
                     child: Tab(
                         child: Padding(
@@ -67,7 +65,12 @@ class CampaignQuestionsView extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 16, right: 8),
                     child: bloc.selectedCampSections[index].uuid ==
                             bloc.lastSelectedSectionUuid
-                        ? DynamicQuestionsView(questions: bloc.questionAnswers)
+                        ? DynamicQuestionsView(
+                            questions: bloc.questionAnswers,
+                            onAnswerUpdate: () {
+                              bloc.add(AnswerUpdatedCampaignEvent());
+                            },
+                          )
                         : const SizedBox(),
                   ),
                 ),
@@ -84,7 +87,10 @@ class CampaignQuestionsView extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: const BoxDecoration(color: Color(0xff333333)),
                   child: Text(
-                    "SUBMIT",
+                    context.select((CampaignBloc bloc) =>
+                        bloc.state is SavingAnswersLoadingState
+                            ? "Loading.."
+                            : "SUBMIT"),
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16.sp,

@@ -80,17 +80,19 @@ class UserInfo {
 
   UserInfo.fromJson(Map<String, dynamic> json) {
     photoUrl = json['photoUrl'] ?? "";
-    id = json['id'];
+    id = json['id'] ?? json['userId'];
     username = json['username'];
     companyName = json['companyName'] ?? "";
     email = json['email'];
     supervisor = json['supervisor'];
     companyId = json['companyId'];
     designation = json['designation'] ?? "";
-    iRole = json['iRole'] ?? "";
+    iRole = json['iRole'] ?? json['role'] ?? "";
     mobile = json['mobile'] ?? "";
     pin = json['pin'] ?? "-1";
-    roles = List.from(json['roles']).map((e) => Roles.fromJson(e)).toList();
+    roles = json['roles'] is List
+        ? List.from(json['roles']).map((e) => Roles.fromJson(e)).toList()
+        : [];
   }
 
   Map<String, dynamic> toJson() {
