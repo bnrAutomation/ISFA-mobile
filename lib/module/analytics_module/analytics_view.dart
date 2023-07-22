@@ -10,6 +10,158 @@ class AnalyticsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            AppBar(
+              backgroundColor: Colors.grey,
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.replay_circle_filled_outlined),
+                )
+              ],
+              title: const Text('Analytics'),
+              leading: const Icon(Icons.keyboard_backspace),
+              centerTitle: true,
+              flexibleSpace: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 50),
+                  const Align(
+                    alignment: Alignment.topCenter,
+                    child: Icon(Icons.analytics),
+                  ),
+                  borderedBox(
+                    child: const SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: ColoredBox(color: Colors.red),
+                    ),
+                  ),
+                  const Text('Abhay Gupta'),
+                  const Text('TSI| Self & Team'),
+                ],
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12),
+              child: shadowBox(
+                child: borderedBox(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 20),
+                    width: 1.sw,
+                    decoration: const BoxDecoration(color: Colors.white),
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Change Date",
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 5,
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: borderedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              "Coverage",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            Text(
+                              "Target",
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            Text(
+                              "1,00,000",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            Text(
+                              "Target",
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            Text(
+                              "1,00,000",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: CircularProgressIndicator(
+                                value: 75.5 / 100,
+                                backgroundColor: Colors.brown.shade50,
+                                strokeWidth: 12,
+                                color: Colors.yellow,
+                              ),
+                            ),
+                            const Text("75.5%")
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget borderedBox({required Widget child}) {
+    return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.yellow)),
+        child: ClipRRect(borderRadius: BorderRadius.circular(8), child: child));
+  }
+
+  Widget shadowBox({required Widget child}) {
+    return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: const [
+              BoxShadow(color: Colors.yellow, blurRadius: 2, spreadRadius: 2)
+            ]),
+        child: child);
+  }
+}
+
+class Analytics1View extends StatelessWidget {
+  const Analytics1View({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       body: BlocProvider(
         create: (context) => AnalyticsBloc(),
         child: BlocConsumer<AnalyticsBloc, AnalyticsState>(
