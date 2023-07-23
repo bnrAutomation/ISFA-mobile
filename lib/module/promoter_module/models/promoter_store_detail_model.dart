@@ -41,7 +41,7 @@ class PromoterStoreDetailModel {
 
   factory PromoterStoreDetailModel.fromJson(Map<String, dynamic> json) =>
       PromoterStoreDetailModel(
-        clusterId: json["clusterId"],
+        clusterId: json["clusterId"] ?? -1,
         storeId: json["storeId"],
         storeCode: json["storeCode"],
         name: json["name"],

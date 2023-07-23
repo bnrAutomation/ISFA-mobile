@@ -41,7 +41,6 @@ class AppConstant {
 
 class URLConstants {
   URLConstants._();
-
   static const baseURLStart = String.fromEnvironment('BASE_URL');
   static const isfaBaseURL = '$baseURLStart/iSFA';
   static const apiBaseUrl = "$isfaBaseURL/api";
@@ -71,12 +70,10 @@ class URLConstants {
 
   static const promoterStoreDetail = '$apiBaseUrl/getPromoterDetail';
   static const getInventory = '$apiBaseUrl/getInventory';
-
   static const getCompaingns = '$apiBaseUrl/getCampaignListByStoreId';
 
   static const getFeedbackPurposes = '$apiBaseUrl/getFeedbackPurposes';
   static const createFeedback = '$apiBaseUrl/createFeedback';
-
   static const markin = '$apiBaseUrl/MarkIn';
   static const markOut = '$apiBaseUrl/MarkOut';
   static const startDuty = '$apiBaseUrl/StartDuty';

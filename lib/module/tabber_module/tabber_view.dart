@@ -31,7 +31,8 @@ class TabberView extends StatelessWidget {
       providers: [
         BlocProvider(
             create: (context) => TabberBloc(TabbarRepository())
-              ..add(UpdateSideMenuDetailsEvent())),
+              ..add(UpdateSideMenuDetailsEvent())
+              ..add(SubmitToken())),
         BlocProvider(
           create: (context) => NetworkBloc()..add(NetworkObserve()),
         ),

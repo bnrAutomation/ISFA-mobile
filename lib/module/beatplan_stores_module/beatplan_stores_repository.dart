@@ -71,7 +71,7 @@ class BeatPlanStoresRepository {
           "remarks": reason,
           "storeId": storeId,
           "userId": userId,
-          "createdBy": AppStorage().userDetail!.iRole,
+          "createdBy": AppStorage().userDetail!.roles,
           "active": "true"
         }));
     if (response.statusCode != 200) {

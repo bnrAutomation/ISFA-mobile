@@ -8,8 +8,6 @@ import 'model/attendance_model.dart';
 class AttendanceRepository {
   final userId = AppStorage().userDetail!.id;
   final compId = AppStorage().homeInfo!.userInfo.companyId;
-
-  ///1684/2021-08'
   Future<List<AttendanceData>> getMyActivity({
     required DateTime dateTime,
   }) async {

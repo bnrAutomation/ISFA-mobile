@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/module/campaign_module/campaign_repository.dart';
@@ -70,7 +71,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
         for (final q in questions) {
           if (q.rules.isNotEmpty) {
             final rule = q.rules.first;
-            print("----${rule.question}/${rule.answer}");
+            debugPrint("----${rule.question}/${rule.answer}");
           }
         }
         selectedCampSections
@@ -96,7 +97,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       final answers = _getSubmitRequestBody();
       emit(SavingAnswersLoadingState());
       final score = await repo.saveCampaignAnswers(answers).catchError((error) {
-        print(error);
+        debugPrint(error);
         emit(ScoreCalculatedCampaignState());
         return false;
       });
@@ -211,7 +212,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
     if (lastSelectedQuestions == null) return;
     List<QuestionModel> newquestionsList = [];
     for (var question in lastSelectedQuestions) {
-      print("keyboard is:${question.inputTypeValidation}");
+      debugPrint("keyboard is:${question.inputTypeValidation}");
       if (question.rules.isEmpty) {
         newquestionsList.add(question.toViewQuestionModel());
       } else {

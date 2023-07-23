@@ -138,7 +138,7 @@ class _ChangeEmailPhoneViewState extends State<ChangeEmailPhoneView> {
         context.showSnackBarMessage(onError.toString());
         throw onError;
       });
-      if (response.logindata.userInfo.iRole == "user") {
+      if (response.logindata.userInfo.roles == "user") {
         AppStorage().userDetail = response.logindata.userInfo;
         if (context.mounted) {
           context.showSnackBarMessage('Success');
@@ -163,7 +163,7 @@ class _ChangeEmailPhoneViewState extends State<ChangeEmailPhoneView> {
         context.showSnackBarMessage(onError.toString());
         throw onError;
       });
-      if (response.logindata.userInfo.iRole == "user") {
+      if (response.logindata.userInfo.roles == "user") {
         AppStorage().userDetail = response.logindata.userInfo;
         if (context.mounted) {
           context.showSnackBarMessage('Success');

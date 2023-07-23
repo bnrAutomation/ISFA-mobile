@@ -5,7 +5,7 @@ import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 class MyActivityRepository {
-  final userId = AppStorage().userDetail!.id;
+  final userId = AppStorage().userDetail?.id;
 
   Future<List<MyActivityDataList>> getMyActivity({
     required DateTime dateTime,
