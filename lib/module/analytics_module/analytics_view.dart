@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/analytics_module/analytics/analytics_bloc.dart';
+import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 class AnalyticsView extends StatelessWidget {
@@ -9,125 +10,141 @@ class AnalyticsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            AppBar(
-              backgroundColor: Colors.grey,
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.replay_circle_filled_outlined),
-                )
-              ],
-              title: const Text('Analytics'),
-              leading: const Icon(Icons.keyboard_backspace),
-              centerTitle: true,
-              flexibleSpace: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [Color(0xff959595), Color(0xff636363)])),
+              alignment: Alignment.center,
+              child: Stack(
+                alignment: Alignment.topRight,
                 children: [
-                  const SizedBox(height: 50),
-                  const Align(
-                    alignment: Alignment.topCenter,
-                    child: Icon(Icons.analytics),
-                  ),
-                  borderedBox(
-                    child: const SizedBox(
-                      width: 80,
-                      height: 80,
-                      child: ColoredBox(color: Colors.red),
-                    ),
-                  ),
-                  const Text('Abhay Gupta'),
-                  const Text('TSI| Self & Team'),
-                ],
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12),
-              child: shadowBox(
-                child: borderedBox(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 20),
-                    width: 1.sw,
-                    decoration: const BoxDecoration(color: Colors.white),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Change Date",
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 5,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: borderedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Align(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              "Coverage",
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            Text(
-                              "Target",
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                            Text(
-                              "1,00,000",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          ],
+                        borderedBox(
+                          child: const SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: ColoredBox(color: Colors.red),
+                          ),
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              "",
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            Text(
-                              "Target",
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                            Text(
-                              "1,00,000",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          ],
-                        ),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            SizedBox(
-                              width: 60,
-                              height: 60,
-                              child: CircularProgressIndicator(
-                                value: 75.5 / 100,
-                                backgroundColor: Colors.brown.shade50,
-                                strokeWidth: 12,
-                                color: Colors.yellow,
-                              ),
-                            ),
-                            const Text("75.5%")
-                          ],
-                        )
+                        Text('Abhay Gupta',
+                            style: textTheme.bodyLarge
+                                ?.copyWith(color: Colors.white)),
+                        Text('TSI| Self & Team',
+                            style: textTheme.bodySmall
+                                ?.copyWith(color: Colors.white)),
                       ],
                     ),
                   ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      onPressed: () {},
+                      color: Colors.white,
+                      iconSize: 30,
+                      icon: const Icon(Icons.replay_circle_filled_rounded),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(12),
+              height: 70,
+              child: CustomMaterialButton(
+                buttonText: "Change Date",
+                onPressed: () {
+                  final selectedDate = showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime.now().add(const Duration(days: 365)),
+                  );
+                  debugPrint(selectedDate.toString());
+                },
+              ),
+            ),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 5,
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
+              itemBuilder: (context, index) => Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
+                    border: Border.all(color: const Color(0xffffcd38)),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0xffffcd38),
+                        blurRadius: 1,
+                        spreadRadius: 0.5,
+                      )
+                    ]),
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          "Coverage",
+                          style: textTheme.titleLarge,
+                        ),
+                        Text(
+                          "Target",
+                          style: textTheme.titleSmall,
+                        ),
+                        Text(
+                          "1,00,000",
+                          style: textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Text(
+                          "Target",
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        Text(
+                          "1,00,000",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                    const Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: CircularProgressIndicator(
+                            value: 75.5 / 100,
+                            backgroundColor: Color(0xffededee),
+                            strokeWidth: 12,
+                            color: Color(0xffffcd38),
+                          ),
+                        ),
+                        Text("75.5%")
+                      ],
+                    )
+                  ],
                 ),
               ),
             )
@@ -139,10 +156,12 @@ class AnalyticsView extends StatelessWidget {
 
   Widget borderedBox({required Widget child}) {
     return Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.yellow)),
-        child: ClipRRect(borderRadius: BorderRadius.circular(8), child: child));
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xffffcd38)),
+      ),
+      child: ClipRRect(borderRadius: BorderRadius.circular(8), child: child),
+    );
   }
 
   Widget shadowBox({required Widget child}) {
@@ -150,7 +169,8 @@ class AnalyticsView extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             boxShadow: const [
-              BoxShadow(color: Colors.yellow, blurRadius: 2, spreadRadius: 2)
+              BoxShadow(
+                  color: Color(0xffffcd38), blurRadius: 2, spreadRadius: 2)
             ]),
         child: child);
   }
