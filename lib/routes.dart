@@ -18,6 +18,8 @@ import 'module/leaves_module/leave_view.dart';
 import 'module/login_module/login_view.dart';
 import 'module/login_set_pin_module/pin_setup_view.dart';
 import 'module/my_activity_module/my_activity_view.dart';
+import 'module/notification/bloc/notification_bloc.dart';
+import 'module/notification/notification_view.dart';
 import 'module/policy_module/policy_view.dart';
 import 'module/promoter_module/bloc/promoter_bloc.dart';
 import 'module/promoter_module/promoter_view.dart';
@@ -246,6 +248,14 @@ final router = GoRouter(
       name: AppPaths.profileInfo,
       builder: (context, state) => const ProfileInfoview(),
     ),
+    GoRoute(
+      path: AppPaths.notification,
+      name: AppPaths.notification,
+      builder: (context, state) => BlocProvider(
+        create: (context) => NotificationBloc(),
+        child: const NotificationsView(),
+      ),
+    ),
   ],
   errorBuilder: (context, state) {
     return Scaffold(
@@ -290,4 +300,5 @@ class AppPaths {
   static const pinset = '/pinset';
   static const changeEmailPhone = "/changeEmailPhone";
   static const profileInfo = "/profileInfo";
+  static const notification = '/notification';
 }

@@ -84,6 +84,11 @@ class TabberView extends StatelessWidget {
                             ));
                   }),
                 ),
+                actions: [
+                  IconButton(
+                      onPressed: () => context.push(AppPaths.notification),
+                      icon: const Icon(Icons.notifications))
+                ],
               ),
               body: Center(child: atSelectedIndex(bloc)),
               bottomNavigationBar: Container(
@@ -227,14 +232,14 @@ class AppSideMenu extends StatelessWidget {
               );
             },
           ).toList(),
-          ListTile(
-            leading: const Icon(Icons.campaign),
-            title: const Text('Campaign'),
-            onTap: () {
-              Scaffold.of(context).closeDrawer();
-              context.push(AppPaths.campaignList);
-            },
-          ),
+          if (data.userInfo.designation != 'fwp')
+            ListTile(
+              leading: const Icon(Icons.group),
+              title: const Text('Team'),
+              onTap: () {
+                Scaffold.of(context).closeDrawer();
+              },
+            ),
           ListTile(
             leading: const Icon(
               Icons.settings_outlined,

@@ -103,5 +103,6 @@ class URLConstants {
   static const learnerContent = '$isfaBaseURL/server/learner-content';
   static const getFeedbackByUserIdAndStore =
       "$isfaBaseURL/api/getFeedbackByUserIdAndStore";
-  //"$baseURLStart/isfaassessment/api/getFeedbackByUserIdAndStore";
+  static const getNotifications =
+      "$apiBaseUrl/notification/userspecificnotifications";
 }
