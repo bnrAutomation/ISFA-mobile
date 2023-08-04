@@ -6,6 +6,7 @@ import 'package:i_densfa/module/leaves_module/model/leave_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
+import 'package:i_densfa/utility/handler.dart';
 
 import 'model/leave_type_model.dart';
 
@@ -19,9 +20,7 @@ class LeaveRepository {
     if (response.statusCode == 200) {
       return EmpLeaveDetailsModel.fromRawJson(response.body);
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -46,9 +45,7 @@ class LeaveRepository {
     if (response.statusCode == 201 || response.statusCode == 200) {
       return true;
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -65,9 +62,7 @@ class LeaveRepository {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/handler.dart';
 
 class ChangePasswordRepository {
   final email = AppStorage().userDetail?.email;
@@ -18,9 +19,7 @@ class ChangePasswordRepository {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 }

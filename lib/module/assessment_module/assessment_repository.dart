@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/handler.dart';
 
 import 'assessment_model.dart';
 
@@ -16,9 +17,7 @@ class AssessmentRepository {
     if (response.statusCode == 200) {
       return UserAssessmentsModel.fromRawJson(response.body).dataList ?? [];
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : jsonDecode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -30,9 +29,7 @@ class AssessmentRepository {
       final body = AssessmentQuestionsModel.fromRawJson(response.body);
       return body.data?.questionData ?? [];
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : jsonDecode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -56,9 +53,7 @@ class AssessmentRepository {
         throw jsonBody['message'];
       }
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : jsonBody['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 }

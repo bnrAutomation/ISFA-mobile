@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/handler.dart';
 
 import '../forgot_password_module/model/forgot_password_model.dart';
 
@@ -14,9 +15,7 @@ class VerificationRepository {
     if (response.statusCode == 200) {
       return ForgotPasswordModel.fromRawJson(response.body);
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 }

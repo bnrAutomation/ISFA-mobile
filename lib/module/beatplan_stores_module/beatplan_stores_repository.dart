@@ -5,6 +5,7 @@ import 'package:i_densfa/module/beatplan_stores_module/store_list_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
+import 'package:i_densfa/utility/handler.dart';
 
 import 'beat_plan_model.dart';
 
@@ -30,14 +31,10 @@ class BeatPlanStoresRepository {
       if (plans.isNotEmpty) {
         return plans.map((e) => BeatPlanModel.fromJson(e)).toList();
       } else {
-        throw response.body.isEmpty
-            ? "Something went wrong"
-            : json.decode(response.body)['message'] ?? "Something went wrong";
+        throw getErrorMessage(response.body);
       }
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -51,14 +48,10 @@ class BeatPlanStoresRepository {
       if (stores.isNotEmpty) {
         return stores.map((x) => StoreItemModel.fromJson(x)).toList();
       } else {
-        throw response.body.isEmpty
-            ? "Something went wrong"
-            : json.decode(response.body)['message'] ?? "Something went wrong";
+        throw getErrorMessage(response.body);
       }
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -75,9 +68,7 @@ class BeatPlanStoresRepository {
           "active": "true"
         }));
     if (response.statusCode != 200) {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     } else {
       return true;
     }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:i_densfa/module/login_module/models/login_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/handler.dart';
 
 class LoginRepository {
   Future<LoginModel> login(
@@ -15,9 +16,7 @@ class LoginRepository {
     } else if (response.statusCode == 401) {
       throw "Incorrect Username or Password";
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 }

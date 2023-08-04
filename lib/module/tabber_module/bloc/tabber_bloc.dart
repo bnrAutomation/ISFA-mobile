@@ -10,6 +10,7 @@ import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:image_picker/image_picker.dart';
 
 part 'tabber_event.dart';
@@ -118,9 +119,7 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 }

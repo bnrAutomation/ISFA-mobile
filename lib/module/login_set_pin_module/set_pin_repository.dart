@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/handler.dart';
 
 class SetPinRepository {
   Future<bool> setPin({required String username, required String pin}) async {
@@ -11,9 +12,7 @@ class SetPinRepository {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 }

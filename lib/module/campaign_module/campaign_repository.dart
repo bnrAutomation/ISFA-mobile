@@ -7,6 +7,7 @@ import 'package:i_densfa/module/campaign_module/new_models/question.dart';
 import 'package:i_densfa/module/campaign_module/new_models/question_section.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/handler.dart';
 
 class CampaignRepository {
   final userId = AppStorage().userDetail!.id;
@@ -20,9 +21,7 @@ class CampaignRepository {
           .map((e) => AllCampaignModel.fromJson(e))
           .toList();
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : jsonDecode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -36,9 +35,7 @@ class CampaignRepository {
           .map((e) => CampaignQuestionSectionModel.fromJson(e))
           .toList();
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : jsonDecode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -52,9 +49,7 @@ class CampaignRepository {
           .map((e) => CampaignQuestionModel.fromJson(e))
           .toList();
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : jsonDecode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -65,13 +60,10 @@ class CampaignRepository {
       body: jsonEncode(bodyMap),
       headers: {'Content-Type': 'application/json'},
     );
-    final jsonBody = jsonDecode(response.body);
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : jsonBody['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -83,16 +75,12 @@ class CampaignRepository {
     if (response.statusCode == 200) {
       final dataJson = jsonDecode(response.body)['data'];
       if (dataJson == null) {
-        throw response.body.isEmpty
-            ? "Something went wrong"
-            : jsonDecode(response.body)['message'] ?? "Something went wrong";
+        throw getErrorMessage(response.body);
       } else {
         return SavedCampaignDataModel.fromJson(dataJson);
       }
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : jsonDecode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 }

@@ -12,6 +12,7 @@ import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
+import 'package:i_densfa/utility/handler.dart';
 
 class ChangeEmailPhoneView extends StatefulWidget {
   final bool changeEmail;
@@ -186,13 +187,10 @@ class _ChangeEmailPhoneViewState extends State<ChangeEmailPhoneView> {
       headers: {'Content-Type': 'application/json'},
     );
 
-    final jsonBody = jsonDecode(response.body);
     if (response.statusCode == 200) {
       return LoginModel.fromRawJson(response.body);
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : jsonBody['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 }

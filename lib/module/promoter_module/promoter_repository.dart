@@ -6,8 +6,8 @@ import 'package:i_densfa/module/promoter_module/models/inventory_detail_model.da
 import 'package:i_densfa/module/promoter_module/models/promoter_store_detail_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 
 class PromoterRepository {
   final userId = AppStorage().userDetail!.id;
@@ -38,18 +38,7 @@ class PromoterRepository {
       int storeId, bool isIn) async {
     final url = Uri.parse(isIn ? URLConstants.markin : URLConstants.markOut);
     final request = MultipartRequest('POST', url);
-
-    final fileStream = ByteStream(file.openRead());
-    final fileLength = await file.length();
-
-    final multipartFile = MultipartFile(
-      'file',
-      fileStream,
-      fileLength,
-      filename: basename(file.path),
-    );
-
-    request.files.add(multipartFile);
+    request.files.add(await MultipartFile.fromPath('file', file.path));
     request.fields.addAll({
       "userId": userId.toString(),
       "storeId": storeId.toString(),
@@ -89,9 +78,7 @@ class PromoterRepository {
     if (response.statusCode == 200) {
       return UserCampaignsModel.fromRawJson(response.body).dataList ?? [];
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : jsonDecode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 }

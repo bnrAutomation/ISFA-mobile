@@ -7,6 +7,7 @@ import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
+import 'package:i_densfa/utility/handler.dart';
 
 part 'schedule_visit_call_event.dart';
 part 'schedule_visit_call_state.dart';
@@ -72,9 +73,7 @@ class ScheduleVisitCallBloc
         emit(ScheduleVisitCallSnackBar('Schedule added successfully'));
         emit(ScheduleVisitCallSuccessState());
       } else {
-        final mess = response.body.isEmpty
-            ? "Something went wrong"
-            : jsonDecode(response.body)['message'] ?? "Something went wrong";
+        final mess = getErrorMessage(response.body);
         emit(ScheduleVisitCallSnackBar(mess));
       }
     });

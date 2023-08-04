@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 import 'feedback_model.dart';
 
 class FeedbackRepository {
@@ -16,9 +16,7 @@ class FeedbackRepository {
       final List list = json.decode(response.body)['dataList'];
       return List.from(list.map((x) => FeedbackPorposeModel.fromJson(x)));
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -26,17 +24,7 @@ class FeedbackRepository {
       XFile file, int purposeId, String remark, String storeName) async {
     final url = Uri.parse("${URLConstants.createFeedback}/$userId");
     final request = MultipartRequest('POST', url);
-
-    final fileStream = ByteStream(file.openRead());
-    final fileLength = await file.length();
-
-    final multipartFile = MultipartFile(
-      'image',
-      fileStream,
-      fileLength,
-      filename: basename(file.path),
-    );
-
+    final multipartFile = await MultipartFile.fromPath('image', file.path);
     request.files.add(multipartFile);
     request.fields.addAll({
       'userId': userId.toString(),

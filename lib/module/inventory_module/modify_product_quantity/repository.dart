@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:i_densfa/module/inventory_module/modify_product_quantity/product_category_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/handler.dart';
 
 class ModifyProductsRepository {
   final userId = AppStorage().userDetail!.id;
@@ -19,9 +20,7 @@ class ModifyProductsRepository {
     if (response.statusCode == 200) {
       return categoryListfromRowJson(response.body);
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -45,9 +44,7 @@ class ModifyProductsRepository {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -72,9 +69,7 @@ class ModifyProductsRepository {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 }

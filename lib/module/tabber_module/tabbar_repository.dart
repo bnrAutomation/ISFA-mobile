@@ -4,8 +4,8 @@ import 'package:http/http.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 
 class TabbarRepository {
   final userId = AppStorage().userDetail!.id;
@@ -17,9 +17,7 @@ class TabbarRepository {
     if (response.statusCode == 200) {
       return SideMenuModel.fromJson(jsonRec['data']);
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
 
     // final r = jsonEncode({
@@ -60,15 +58,7 @@ class TabbarRepository {
         Uri.parse(isStart ? URLConstants.startDuty : URLConstants.endDuty);
     final request = MultipartRequest('POST', url);
 
-    final fileStream = ByteStream(file.openRead());
-    final fileLength = await file.length();
-
-    final multipartFile = MultipartFile(
-      'file',
-      fileStream,
-      fileLength,
-      filename: basename(file.path),
-    );
+    final multipartFile = await MultipartFile.fromPath('file', file.path);
 
     request.files.add(multipartFile);
     request.fields.addAll({

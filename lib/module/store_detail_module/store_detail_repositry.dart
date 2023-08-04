@@ -6,8 +6,8 @@ import 'package:i_densfa/module/promoter_module/feedback/model/feedback_model.da
 import 'package:i_densfa/module/store_detail_module/store_detail_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 
 class StoreDetailRepository {
   final userId = AppStorage().userDetail!.id;
@@ -22,9 +22,7 @@ class StoreDetailRepository {
       }
       return GetStoreDetailDataModel.fromJson(dataJson);
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : jsonDecode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -37,9 +35,7 @@ class StoreDetailRepository {
     if (response.statusCode == 201 || response.statusCode == 200) {
       return true;
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -58,9 +54,7 @@ class StoreDetailRepository {
       debugPrint(response.body);
       return FeedbackModel.fromJson(jsonDecode(response.body)).dataList;
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -70,9 +64,7 @@ class StoreDetailRepository {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw response.body.isEmpty
-          ? "Something went wrong"
-          : json.decode(response.body)['message'] ?? "Something went wrong";
+      throw getErrorMessage(response.body);
     }
   }
 
@@ -86,15 +78,7 @@ class StoreDetailRepository {
     final url = Uri.parse(isIn ? URLConstants.markin : URLConstants.markOut);
     final request = MultipartRequest('POST', url);
 
-    final fileStream = ByteStream(file.openRead());
-    final fileLength = await file.length();
-
-    final multipartFile = MultipartFile(
-      'file',
-      fileStream,
-      fileLength,
-      filename: basename(file.path),
-    );
+    final multipartFile = await MultipartFile.fromPath('file', file.path);
 
     request.files.add(multipartFile);
     final userId = AppStorage().userDetail!.id;

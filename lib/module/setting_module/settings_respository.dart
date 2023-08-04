@@ -5,7 +5,6 @@ import 'package:i_densfa/module/login_verify_module/pin_login_repository.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 
 class SettingsRespository {
   final userDetails = AppStorage().userDetail!;
@@ -13,12 +12,8 @@ class SettingsRespository {
     final url = Uri.parse('${URLConstants.updateProfilePic}/${userDetails.id}');
     final request = MultipartRequest('POST', url);
 
-    final multipartFile = MultipartFile(
-      'image',
-      ByteStream(profilePic.openRead()),
-      await profilePic.length(),
-      filename: basename(profilePic.path),
-    );
+    final multipartFile =
+        await MultipartFile.fromPath('image', profilePic.path);
 
     request.files.add(multipartFile);
 
