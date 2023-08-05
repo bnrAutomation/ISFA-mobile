@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/ui/button_views.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 import 'bloc/beatplan_stores_bloc.dart';
@@ -97,7 +98,7 @@ class AddBeatPlanView extends StatelessWidget {
                 Align(
                   child: MaterialButton(
                     onPressed: () => bloc.add(BeatPlanAddEvent()),
-                    color: Colors.amber,
+                    color: ColorConstants.amber,
                     child: Text(
                       state is BeatPlanUploadLoadingState
                           ? "Loading..."
@@ -286,7 +287,7 @@ class _AddReminderViewState extends State<AddReminderView> {
                     context.pop();
                   }
                 },
-                color: Colors.amber,
+                color: ColorConstants.amber,
                 child: const Text("Submit"),
               ),
             ),

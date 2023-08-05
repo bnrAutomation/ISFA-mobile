@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -85,7 +86,7 @@ class VerificationView extends StatelessWidget {
                                   if (state is VerificationCodeResend) {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(const SnackBar(
-                                      backgroundColor: Colors.amber,
+                                      backgroundColor: ColorConstants.amber,
                                       content: Text(
                                         'Your Verification code has re-sent your registerd e-mail.',
                                         style: TextStyle(color: Colors.black),

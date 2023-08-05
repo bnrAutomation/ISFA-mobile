@@ -85,8 +85,8 @@ class _LoginViewState extends State<LoginView> {
                             hintStyle: const TextStyle(color: Colors.white),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50.w),
-                                borderSide:
-                                    const BorderSide(color: Color(0xffFECF41))),
+                                borderSide: const BorderSide(
+                                    color: ColorConstants.amber)),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50.w),
                                 borderSide:
@@ -126,8 +126,8 @@ class _LoginViewState extends State<LoginView> {
                             ),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50.w),
-                                borderSide:
-                                    const BorderSide(color: Color(0xffFECF41))),
+                                borderSide: const BorderSide(
+                                    color: ColorConstants.amber)),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50.w),
                                 borderSide:
@@ -157,7 +157,7 @@ class _LoginViewState extends State<LoginView> {
                         SizedBox(height: 20.h),
                         MaterialButton(
                             minWidth: double.maxFinite,
-                            color: const Color(0xffFECF41),
+                            color: ColorConstants.amber,
                             padding: EdgeInsets.symmetric(vertical: 10.h),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50.w)),

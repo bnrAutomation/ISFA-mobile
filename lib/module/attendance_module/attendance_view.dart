@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/extensions.dart';
 import 'package:mat_month_picker_dialog/mat_month_picker_dialog.dart';
 import 'attendance_repository.dart';
@@ -68,7 +69,7 @@ class AttendanceView extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
-                              color: Colors.amber,
+                              color: ColorConstants.amber,
                             ),
                           ),
                           IconButton(
@@ -89,7 +90,7 @@ class AttendanceView extends StatelessWidget {
                               },
                               icon: const Icon(
                                 Icons.calendar_month,
-                                color: Colors.amber,
+                                color: ColorConstants.amber,
                               )),
                         ],
                       )),
@@ -100,7 +101,7 @@ class AttendanceView extends StatelessWidget {
                         const RowCellAttendance(
                             text: 'Date',
                             isBold: true,
-                            textColor: Colors.amber),
+                            textColor: ColorConstants.amber),
                         RowCellAttendance(
                           isBold: true,
                           textColor: Theme.of(context).primaryColor,
@@ -112,7 +113,9 @@ class AttendanceView extends StatelessWidget {
                           text: "End\nDuty",
                         ),
                         const RowCellAttendance(
-                            isBold: true, textColor: Colors.amber, text: "In"),
+                            isBold: true,
+                            textColor: ColorConstants.amber,
+                            text: "In"),
                         const RowCellAttendance(
                           isBold: true,
                           textColor: Colors.red,

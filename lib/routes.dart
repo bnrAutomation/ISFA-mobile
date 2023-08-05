@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/change_email_phone_module/change_email_phone_view.dart';
 import 'package:i_densfa/module/login_verify_module/pin_login_view.dart';
 import 'package:i_densfa/module/splash_module/splash_view.dart';
+import 'package:i_densfa/module/team_module/views/teams_main_view.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
 import 'module/assessment_module/assessment_repository.dart';
@@ -49,7 +50,7 @@ final router = GoRouter(
   initialLocation: AppStorage().isLoggedIn() &&
           int.tryParse(AppStorage().userDetail?.pin ?? "-1")?.isNegative ==
               false
-      ? AppPaths.pinLogin
+      ? AppPaths.team //  ? AppPaths.pinLogin //TODO: remove team
       : AppPaths.initial,
   routes: <RouteBase>[
     GoRoute(
@@ -155,6 +156,10 @@ final router = GoRouter(
         path: AppPaths.pinLogin,
         name: AppPaths.pinLogin,
         builder: (context, state) => const PinLoginView()),
+    GoRoute(
+        path: AppPaths.team,
+        name: AppPaths.team,
+        builder: (context, state) => const TeamMainView()),
     GoRoute(
         path: AppPaths.pinset,
         name: AppPaths.pinset,
@@ -301,4 +306,5 @@ class AppPaths {
   static const changeEmailPhone = "/changeEmailPhone";
   static const profileInfo = "/profileInfo";
   static const notification = '/notification';
+  static const team = '/team';
 }

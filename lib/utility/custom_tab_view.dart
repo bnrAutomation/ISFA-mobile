@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 
 class CustomTabView extends StatefulWidget {
   const CustomTabView({
@@ -109,7 +110,7 @@ class CustomTabsState extends State<CustomTabView>
           indicator: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
-              color: const Color(0XFFfdc82d),
+              color: ColorConstants.amber,
               width: 2,
             ),
           ),

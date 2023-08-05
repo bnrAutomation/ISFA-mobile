@@ -32,7 +32,7 @@ class SplashView extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: MaterialButton(
                       minWidth: double.maxFinite,
-                      color: const Color(0xffFECF41),
+                      color: ColorConstants.amber,
                       padding: EdgeInsets.symmetric(vertical: 10.h),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50.w)),
@@ -54,7 +54,7 @@ class SplashView extends StatelessWidget {
                 const Text(
                   "Sales Force Automation",
                   style: TextStyle(
-                      fontStyle: FontStyle.italic, color: Colors.amber),
+                      fontStyle: FontStyle.italic, color: ColorConstants.amber),
                 ),
               ],
             ),

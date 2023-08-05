@@ -77,7 +77,7 @@ class _PinLoginViewState extends State<PinLoginView> {
                             margin: EdgeInsets.only(top: 5.h, bottom: 15.h),
                             decoration: BoxDecoration(
                                 border: Border.all(
-                                    width: 2, color: const Color(0xffFECF41)),
+                                    width: 2, color: ColorConstants.amber),
                                 borderRadius: BorderRadius.circular(30.w)),
                             padding: EdgeInsets.all(5.w),
                             child: Stack(
@@ -135,7 +135,7 @@ class _PinLoginViewState extends State<PinLoginView> {
                             },
                             child: MaterialButton(
                                 minWidth: double.maxFinite,
-                                color: Colors.amber,
+                                color: ColorConstants.amber,
                                 padding: EdgeInsets.symmetric(vertical: 10.h),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(50.w)),

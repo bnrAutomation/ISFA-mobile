@@ -233,7 +233,7 @@ class LeaveView extends StatelessWidget {
     //     : index == 1
     //         ? const Color(0XFFC92434)
     //         : index == 2
-    //             ? Colors.amber
+    //             ? ColorConstants.amber
     //             : Colors.black;
     final bloc = context.read<LeaveBloc>();
     return Card(
@@ -295,7 +295,7 @@ class ApproveLeave extends StatelessWidget {
                             ? Colors.green
                             : leaveListItem.leaveStatus == LeaveStatus.rejected
                                 ? Colors.red
-                                : Colors.amber),
+                                : ColorConstants.amber),
                 onPressed: leaveListItem.leaveStatus == LeaveStatus.pending
                     ? () => _showResponseOptions(context, context.read())
                     : null,
@@ -315,7 +315,7 @@ class ApproveLeave extends StatelessWidget {
                             ? Colors.green
                             : leaveListItem.leaveStatus == LeaveStatus.rejected
                                 ? Colors.red
-                                : Colors.amber,
+                                : ColorConstants.amber,
                         fontWeight: FontWeight.bold,
                         fontSize: 14)),
               ),

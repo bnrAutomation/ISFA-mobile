@@ -52,7 +52,7 @@ class Background extends StatelessWidget {
               width: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
               height: 0.4.sw >= 0.4.sh ? 0.4.sh : 0.4.sw,
               decoration: BoxDecoration(
-                color: const Color(0XFFFFBF00),
+                color: ColorConstants.amber,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(1.sw >= 1.sh ? 1.sh : 1.sw),
                     bottomLeft: Radius.circular(1.sw >= 1.sh ? 1.sh : 1.sw)),

@@ -108,7 +108,7 @@ class _PinSetupViewState extends State<PinSetupView> {
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50.w),
                                     borderSide: const BorderSide(
-                                        color: Color(0xffFECF41))),
+                                        color: ColorConstants.amber)),
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50.w),
                                     borderSide: const BorderSide(
@@ -142,7 +142,7 @@ class _PinSetupViewState extends State<PinSetupView> {
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50.w),
                                     borderSide: const BorderSide(
-                                        color: Color(0xffFECF41))),
+                                        color: ColorConstants.amber)),
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50.w),
                                     borderSide: const BorderSide(
@@ -153,7 +153,7 @@ class _PinSetupViewState extends State<PinSetupView> {
                             SizedBox(height: 20.h),
                             MaterialButton(
                                 minWidth: double.maxFinite,
-                                color: const Color(0xffFECF41),
+                                color: ColorConstants.amber,
                                 padding: EdgeInsets.symmetric(vertical: 10.h),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(50.w)),

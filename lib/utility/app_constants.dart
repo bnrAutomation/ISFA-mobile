@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class ImageConstants {
   static const logo = "assets/images/logo.png";
   static const denSfa = "assets/images/denSFA.png";
@@ -36,7 +38,6 @@ class ImageConstants {
 
 class AppConstant {
   static const storeRange = 250;
-  static String updateToken = "udapte_token";
 }
 
 class URLConstants {
@@ -105,4 +106,13 @@ class URLConstants {
       "$isfaBaseURL/api/getFeedbackByUserIdAndStore";
   static const getNotifications =
       "$apiBaseUrl/notification/userspecificnotifications";
+  static const getTeamMembers = "$apiBaseUrl/teams/list-view";
+  static const getTeamData = "$apiBaseUrl/teams/kpi";
+}
+
+class ColorConstants {
+  static const amber = Color(0xffffbe00);
+  static const amberFade = Color(0xffffda6a);
+  static const grey = Color(0xff363636);
+  static const greyFade = Color(0xff5b5b5b);
 }

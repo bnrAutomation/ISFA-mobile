@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/campaign_module/bloc/campaign_bloc.dart';
 import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions_view.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/custom_tab_view.dart';
 
 class CampaignQuestionsView extends StatelessWidget {
@@ -24,7 +25,7 @@ class CampaignQuestionsView extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0XFFfdc82d),
+          backgroundColor: ColorConstants.amber,
           title: Text(
             bloc.selectedCampaign?.name ?? "Campaign",
             style: textTheme.titleMedium,

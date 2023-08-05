@@ -12,11 +12,11 @@ class CustomImageButton extends StatelessWidget {
     required this.image,
     this.gradient = const LinearGradient(
       colors: <Color>[
-        // Color(0XFFFFBF00),
+        // ColorConstants.amber,
         // Color(0XFFC92434),
         Color(0XFF003D5B),
         Color(0XFF278BBC),
-        // Color(0XFFFFBF00),
+        // ColorConstants.amber,
       ],
     ),
   });

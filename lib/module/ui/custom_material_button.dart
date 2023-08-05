@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 
 class CustomMaterialButton extends StatelessWidget {
   final String buttonText;
@@ -10,12 +11,12 @@ class CustomMaterialButton extends StatelessWidget {
     required this.onPressed,
     this.gradient = const LinearGradient(
       colors: <Color>[
-        Color(0XFFFFBF00),
+        ColorConstants.amber,
         Color(0XFFC92434),
         Color(0XFF003D5B),
-        Color(0XFFFFBF00),
+        ColorConstants.amber,
 
-        // Colors.amber, Colors.black
+        // ColorConstants.amber, Colors.black
       ],
     ),
   });

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:i_densfa/routes.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
@@ -80,7 +81,7 @@ class SettingView extends StatelessWidget {
                                           Colors.grey.withOpacity(0.2),
                                       child: state is ImageLoadingState
                                           ? const CircularProgressIndicator(
-                                              color: Colors.amber,
+                                              color: ColorConstants.amber,
                                             )
                                           : null,
                                     ),
@@ -91,7 +92,7 @@ class SettingView extends StatelessWidget {
                                           width: 30,
                                           height: 30,
                                           decoration: const BoxDecoration(
-                                            color: Colors.amber,
+                                            color: ColorConstants.amber,
                                             shape: BoxShape.circle,
                                           ),
                                           child:

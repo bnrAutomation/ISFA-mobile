@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 
 class AnalyticsView extends StatelessWidget {
   const AnalyticsView({super.key});
@@ -79,10 +80,10 @@ class AnalyticsView extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.white,
-                    border: Border.all(color: const Color(0xffffcd38)),
+                    border: Border.all(color: ColorConstants.amber),
                     boxShadow: const [
                       BoxShadow(
-                        color: Color(0xffffcd38),
+                        color: ColorConstants.amber,
                         blurRadius: 1,
                         spreadRadius: 0.5,
                       )
@@ -134,7 +135,7 @@ class AnalyticsView extends StatelessWidget {
                             value: 75.5 / 100,
                             backgroundColor: Color(0xffededee),
                             strokeWidth: 12,
-                            color: Color(0xffffcd38),
+                            color: ColorConstants.amber,
                           ),
                         ),
                         Text("75.5%")
@@ -154,7 +155,7 @@ class AnalyticsView extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xffffcd38)),
+        border: Border.all(color: ColorConstants.amber),
       ),
       child: ClipRRect(borderRadius: BorderRadius.circular(8), child: child),
     );
@@ -166,7 +167,7 @@ class AnalyticsView extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             boxShadow: const [
               BoxShadow(
-                  color: Color(0xffffcd38), blurRadius: 2, spreadRadius: 2)
+                  color: ColorConstants.amber, blurRadius: 2, spreadRadius: 2)
             ]),
         child: child);
   }

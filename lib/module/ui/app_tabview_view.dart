@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 
 class AppTabViewController extends StatelessWidget {
   final List<String> titles;
@@ -13,7 +14,7 @@ class AppTabViewController extends StatelessWidget {
       {super.key,
       required this.titles,
       required this.children,
-      this.backgroundColor = const Color(0xffFFBF00),
+      this.backgroundColor = ColorConstants.amber,
       this.textColor = Colors.black,
       this.indicatorColors = Colors.black,
       this.initialIndex = 0,

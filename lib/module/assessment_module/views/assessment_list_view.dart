@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/assessment_module/bloc/assessment_bloc.dart';
 import 'package:i_densfa/routes.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 class AssessmentListView extends StatelessWidget {
@@ -40,7 +41,7 @@ class AssessmentListView extends StatelessWidget {
               final colors = [
                 Theme.of(context).primaryColor,
                 const Color(0xffDB4C5B),
-                const Color(0xffEABB55),
+                ColorConstants.amber,
                 const Color(0xff464646),
               ];
               final colr = index < colors.length
