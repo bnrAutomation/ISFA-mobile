@@ -10,7 +10,7 @@ part 'team_state.dart';
 class TeamBloc extends Bloc<TeamEvent, TeamState> {
   bool isHierarchyView = true;
   final repo = TeamRepository();
-  List<TeamMemberModel> selectedTeamMembers = [];
+  TeamListResponse? selectedTeam;
   List<TeamMemberModel> myTeamMembers = [];
   List<TeamMemberModel> myTeamMembersFiltered = [];
   List<int> subTeamNavIds = [];
@@ -23,10 +23,11 @@ class TeamBloc extends Bloc<TeamEvent, TeamState> {
 
     on((GetTeamMembersEvent event, emit) async {
       try {
-        selectedTeamMembers = await repo.getTeamMembers(event.userId);
+        final team = await repo.getTeamMembers(event.userId);
+        selectedTeam = team;
         if (event.userId == null) {
-          myTeamMembers = selectedTeamMembers;
-          myTeamMembersFiltered = selectedTeamMembers;
+          myTeamMembers = team.dataList;
+          myTeamMembersFiltered = team.dataList;
         } else {
           if (!subTeamNavIds.contains(event.userId!)) {
             subTeamNavIds.add(event.userId!);

@@ -12,24 +12,15 @@ class TeamHierarchyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ids = context.read<TeamBloc>().subTeamNavIds;
+    final selectedTeam = context.select((TeamBloc value) => value.selectedTeam);
     final treeController = TreeController<TeamNode>(
       roots: [
-        TeamNode(
-            teamLead: TeamMemberModel.fromJson({
-              "userId": ids.isEmpty ? AppStorage().userDetail!.id : ids.last,
-              "email": "ayooshkr@gmail.com",
-              "username": "ayooshkr@gmail.com",
-              "designation": "fwp",
-              "role": "user",
-              "mobile": "9988776676",
-              "uuid": "MjhmZmJiMGMtNzQyMi00OTNlLTlhOTUtYTQ2ZTgwNWFmZmFl",
-              "doj": "2022-07-30"
-            }),
-            team: context
-                .select((TeamBloc value) => value.selectedTeamMembers)
-                .map((e) => TeamNode(teamLead: e))
-                .toList()),
+        if (selectedTeam != null)
+          TeamNode(
+              teamLead: selectedTeam.supervisiorDetails,
+              team: selectedTeam.dataList
+                  .map((e) => TeamNode(teamLead: e))
+                  .toList()),
       ],
       childrenProvider: (TeamNode node) => node.team,
     );
@@ -37,7 +28,7 @@ class TeamHierarchyView extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TreeView<TeamNode>(
-        treeController: treeController,
+        treeController: treeController..expandAll(),
         nodeBuilder: (BuildContext context, TreeEntry<TeamNode> entry) {
           return MyTreeTile(
             key: ValueKey(entry.node),
@@ -99,33 +90,36 @@ class MyTreeTile extends StatelessWidget {
                             icon: const Icon(Icons.keyboard_backspace)),
                       const CircleAvatar(radius: 35),
                       SizedBox(width: 5.w),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            memberDetail.username,
-                            style: TextStyle(
-                                fontSize: 18.sp, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            'Designation:${memberDetail.designation}',
-                            style: TextStyle(
-                                fontSize: 12.sp, fontWeight: FontWeight.normal),
-                          ),
-                          Text(
-                            'Role:${memberDetail.role}',
-                            style: TextStyle(
-                                fontSize: 11.sp, fontWeight: FontWeight.w300),
-                          ),
-                          ColoredBox(
-                              color: ColorConstants.amberFade,
-                              child: Text(
-                                memberDetail.mobile,
-                                style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.normal),
-                              )),
-                        ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              memberDetail.username,
+                              style: TextStyle(
+                                  fontSize: 18.sp, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              'Designation:${memberDetail.designation}',
+                              style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            Text(
+                              'Role:${memberDetail.role}',
+                              style: TextStyle(
+                                  fontSize: 11.sp, fontWeight: FontWeight.w300),
+                            ),
+                            ColoredBox(
+                                color: ColorConstants.amberFade,
+                                child: Text(
+                                  memberDetail.mobile,
+                                  style: TextStyle(
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.normal),
+                                )),
+                          ],
+                        ),
                       )
                     ],
                   ),

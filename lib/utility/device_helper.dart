@@ -14,7 +14,7 @@ class Device {
 
     if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.utsname.machine ?? 'iOS';
+      return iosInfo.utsname.machine;
     }
     return '';
   }
@@ -46,7 +46,7 @@ class Device {
     if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
 
-      return iosInfo.systemVersion ?? '';
+      return iosInfo.systemVersion;
     }
     return '';
   }

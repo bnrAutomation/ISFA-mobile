@@ -50,7 +50,7 @@ final router = GoRouter(
   initialLocation: AppStorage().isLoggedIn() &&
           int.tryParse(AppStorage().userDetail?.pin ?? "-1")?.isNegative ==
               false
-      ? AppPaths.team //  ? AppPaths.pinLogin //TODO: remove team
+      ? AppPaths.pinLogin
       : AppPaths.initial,
   routes: <RouteBase>[
     GoRoute(

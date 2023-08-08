@@ -11,16 +11,15 @@ import 'models/team_list_model.dart';
 
 class TeamRepository {
   final userId = AppStorage().userDetail!.id;
-  Future<List<TeamMemberModel>> getTeamMembers(int? forUserId) async {
+  Future<TeamListResponse> getTeamMembers(int? forUserId) async {
     final id = forUserId ?? userId;
     final response = await get(Uri.parse('${URLConstants.getTeamMembers}/$id'));
     if (response.statusCode == 200) {
       final responseBody = TeamListResponse.fromRawJson(response.body);
-      final list = responseBody.dataList;
-      if (list.isEmpty) {
+      if (responseBody.dataList.isEmpty) {
         throw responseBody.message;
       } else {
-        return list;
+        return responseBody;
       }
     } else {
       throw getErrorMessage(response.body);
