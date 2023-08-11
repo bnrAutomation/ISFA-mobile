@@ -41,7 +41,7 @@ import 'module/forgot_password_module/forgot_password_view.dart';
 import 'module/promoter_module/promoter_repository.dart';
 import 'module/reset_password_module/reset_password_view.dart';
 import 'module/store_detail_module/bloc/store_detail_bloc.dart';
-import 'module/tabber_module/tabber_view.dart';
+import 'module/tabber_module/tabbar_view.dart';
 import 'module/upload_selfie/bloc/upload_selfie_bloc.dart';
 import 'module/upload_selfie/upload_selfie.dart';
 import 'module/verification_module/verification_view.dart';
@@ -61,7 +61,7 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.tabbar,
       name: AppPaths.tabbar,
-      builder: (context, state) => const TabberView(),
+      builder: (context, state) => const TabbarView(),
     ),
     GoRoute(
       path: AppPaths.store,

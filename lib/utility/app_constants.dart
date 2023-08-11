@@ -108,6 +108,7 @@ class URLConstants {
       "$apiBaseUrl/notification/userspecificnotifications";
   static const getTeamMembers = "$apiBaseUrl/teams/list-view";
   static const getTeamData = "$apiBaseUrl/teams/kpi";
+  static const teamNotification = "$apiBaseUrl/teams/notification";
 }
 
 class ColorConstants {

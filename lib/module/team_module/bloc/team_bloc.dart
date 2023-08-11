@@ -70,12 +70,21 @@ class TeamBloc extends Bloc<TeamEvent, TeamState> {
       }
     });
 
-    on((SendNotificationTeamEvent event, emit) {
+    on((SendNotificationTeamEvent event, emit) async {
       if (event.message.trim().isEmpty) {
         emit(SnackbarMessageTeamState('Please add message to send'));
-      } else {
-        emit(SnackbarMessageTeamState('Message sent successfully'));
-        emit(NotificationSentSuccessTeamState());
+      } else if (selectedTeam != null) {
+        try {
+          final message = await repo.sendNotification(
+              title: "",
+              message: event.message.trim(),
+              userIds: selectedTeam!.dataList.map((e) => e.userId).toList(),
+              leadUserId: selectedTeam!.supervisiorDetails.userId);
+          emit(SnackbarMessageTeamState(message));
+          emit(NotificationSentSuccessTeamState());
+        } catch (e) {
+          emit(SnackbarMessageTeamState(e.toString()));
+        }
       }
     });
   }

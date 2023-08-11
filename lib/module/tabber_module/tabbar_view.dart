@@ -1,8 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:i_densfa/module/analytics_module/analytics_view.dart';
@@ -12,17 +9,16 @@ import 'package:i_densfa/module/beatplan_stores_module/bloc/beatplan_stores_bloc
 import 'package:i_densfa/module/campaign_module/view/campaign_view.dart';
 import 'package:i_densfa/module/learner_module/learner_view.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
+import 'package:i_densfa/module/tabber_module/side_menu_view.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
 import 'package:i_densfa/routes.dart';
-import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../utility/network_helper.dart';
 import 'bloc/tabber_bloc.dart';
 
-class TabberView extends StatelessWidget {
-  const TabberView({super.key});
+class TabbarView extends StatelessWidget {
+  const TabbarView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -168,157 +164,5 @@ class TabberView extends StatelessWidget {
       case TabbarItemCase.analytics:
         return const AnalyticsView();
     }
-  }
-}
-
-class AppSideMenu extends StatelessWidget {
-  final SideMenuModel data;
-  const AppSideMenu({super.key, required this.data});
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        children: [
-          UserAccountsDrawerHeader(
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-              currentAccountPicture: CircleAvatar(
-                radius: 55.0,
-                backgroundImage: NetworkImage(AppStorage()
-                        .userDetail!
-                        .photoUrl
-                        .contains('http')
-                    ? AppStorage().userDetail!.photoUrl
-                    : "https://tastevibe.web.app/assets/images/placeholder-user.png"),
-                backgroundColor: Colors.grey.withOpacity(0.2),
-              ),
-              otherAccountsPictures: [dutyStatus()],
-              accountName: Text(
-                  "${data.userInfo.userName} (${data.userInfo.designation})"),
-              accountEmail: Text(data.userInfo.companyName)),
-          ...data.menu.where((element) => element.isActive).map(
-            (e) {
-              return ListTile(
-                leading: CachedNetworkImage(
-                  fit: BoxFit.contain,
-                  imageUrl: e.icon,
-                  width: 25.w,
-                  height: 25.w,
-                  errorWidget: (context, url, error) =>
-                      const ColoredBox(color: Colors.red),
-                ),
-                title: Text(e.name),
-                onTap: () {
-                  switch (e.key.toLowerCase()) {
-                    case 'promoter':
-                      closeDrawerAndPushView(context, AppPaths.promoter);
-                      break;
-                    case 'leave':
-                      closeDrawerAndPushView(context, AppPaths.leave);
-                      break;
-                    case 'attendance':
-                      closeDrawerAndPushView(context, AppPaths.attendance);
-                      break;
-                    case 'my activity':
-                      closeDrawerAndPushView(context, AppPaths.myActivity);
-                      break;
-                    case 'assessment':
-                      closeDrawerAndPushView(context, AppPaths.assessmentList);
-                      break;
-                    default:
-                      Navigator.pop(context);
-                  }
-                },
-              );
-            },
-          ).toList(),
-          if (data.userInfo.designation != 'fwp')
-            ListTile(
-              leading: const Icon(Icons.group),
-              title: const Text('Team'),
-              onTap: () {
-                Scaffold.of(context).closeDrawer();
-              },
-            ),
-          ListTile(
-            leading: const Icon(
-              Icons.settings_outlined,
-              color: Colors.black,
-              size: 30,
-            ),
-            title: const Text('Settings'),
-            onTap: () {
-              closeDrawerAndPushView(context, AppPaths.setting);
-              //  Scaffold.of(context).closeDrawer();
-            },
-          ),
-          // ListTile(
-          //   leading: const Icon(Icons.help_outline),
-          //   title: const Text('Help'),
-          //   onTap: () {
-          //     Scaffold.of(context).closeDrawer();
-          //   },
-          // ),
-          ListTile(
-            leading: const Icon(
-              Icons.logout,
-              color: Colors.black,
-              size: 30,
-            ),
-            title: const Text('Logout'),
-            onTap: () {
-              Scaffold.of(context).closeDrawer();
-              AppStorage().userDetail = null;
-              context.go(AppPaths.login);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget dutyStatus() {
-    return BlocBuilder<TabberBloc, TabberState>(
-      buildWhen: (previous, current) => (current is OnlineStatusUpdateState ||
-          current is OnlineSwitchLoadingTabberState),
-      builder: (context, state) {
-        final bloc = context.read<TabberBloc>();
-        return FittedBox(
-            child: Column(
-          children: [
-            CupertinoSwitch(
-                value: AppStorage().isDutyStarted,
-                onChanged: (newVal) async {
-                  if (state is OnlineSwitchLoadingTabberState) {
-                    return;
-                  }
-                  final XFile? image =
-                      await context.pushNamed(AppPaths.checkin);
-                  if (newVal) {
-                    bloc.add(StartDutyStatusTabberEvent(image));
-                  } else {
-                    bloc.add(EndDutyStatusTabberEvent(image));
-                  }
-                  if (context.mounted) {
-                    Scaffold.of(context).closeDrawer();
-                  }
-                }),
-            Text(
-              state is OnlineSwitchLoadingTabberState
-                  ? "Loading.."
-                  : AppStorage().isDutyStarted
-                      ? "On-Duty"
-                      : "Off-Duty",
-              style: const TextStyle(color: Colors.white),
-            )
-          ],
-        ));
-      },
-    );
-  }
-
-  void closeDrawerAndPushView(BuildContext context, String path) {
-    Scaffold.of(context).closeDrawer();
-    context.pushNamed(path);
   }
 }

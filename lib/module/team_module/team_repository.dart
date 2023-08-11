@@ -41,4 +41,27 @@ class TeamRepository {
       throw getErrorMessage(response.body);
     }
   }
+
+  Future<String> sendNotification(
+      {required title,
+      required String message,
+      required List<int> userIds,
+      required int leadUserId}) async {
+    final headers = {
+      'accept': 'application/json',
+      'Content-Type': 'application/json'
+    };
+
+    final data =
+        jsonEncode({"message": message, "title": title, "userIds": userIds});
+
+    final url = Uri.parse('${URLConstants.teamNotification}/$leadUserId');
+
+    final res = await post(url, headers: headers, body: data);
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body)['message'];
+    } else {
+      throw getErrorMessage(res.body);
+    }
+  }
 }
