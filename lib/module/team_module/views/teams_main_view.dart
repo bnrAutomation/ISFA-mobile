@@ -14,6 +14,7 @@ class TeamMainView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          foregroundColor: Colors.white,
           title: const Text('Team'),
           titleTextStyle: TextStyle(
               color: Colors.white,

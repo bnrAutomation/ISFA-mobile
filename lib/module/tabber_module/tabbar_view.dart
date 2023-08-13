@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +37,7 @@ class TabbarView extends StatelessWidget {
       ],
       child: BlocListener<NetworkBloc, NetworkState>(
         listener: (c, state) {
-          if (state is NetworkFailure) {
+          if (state is NetworkFailure && Platform.isAndroid) {
             showDialog(
                 context: context,
                 barrierDismissible: false,

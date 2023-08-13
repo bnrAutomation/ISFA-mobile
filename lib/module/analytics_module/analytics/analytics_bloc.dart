@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_densfa/module/analytics_module/analytics_repository.dart';
 import 'package:i_densfa/module/analytics_module/model/analytics_model.dart';
 
 part 'analytics_event.dart';
 part 'analytics_state.dart';
 
 class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
+  final repo = AnalyticsRepository();
   var selectedDate = DateTime.now();
   List<AnalyticsModel> analyticdata = [
     AnalyticsModel(name: "", target: "TARGET", actual: "ACTUAL"),

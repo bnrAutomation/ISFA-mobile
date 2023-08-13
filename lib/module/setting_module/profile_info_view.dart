@@ -112,7 +112,11 @@ class ProfileInfoDetailTitle extends StatelessWidget {
             title,
             style: Theme.of(context).textTheme.titleMedium,
           ),
-          Text(info)
+          Expanded(
+              child: Text(
+            info,
+            textAlign: TextAlign.right,
+          ))
         ],
       ),
     );

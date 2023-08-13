@@ -19,7 +19,6 @@ import 'module/leaves_module/leave_view.dart';
 import 'module/login_module/login_view.dart';
 import 'module/login_set_pin_module/pin_setup_view.dart';
 import 'module/my_activity_module/my_activity_view.dart';
-import 'module/notification/bloc/notification_bloc.dart';
 import 'module/notification/notification_view.dart';
 import 'module/policy_module/policy_view.dart';
 import 'module/promoter_module/bloc/promoter_bloc.dart';
@@ -28,6 +27,8 @@ import 'module/setting_module/profile_info_view.dart';
 import 'module/setting_module/setting_view.dart';
 import 'module/store_detail_module/store_detail_repositry.dart';
 import 'module/store_detail_module/store_detail_view.dart';
+import 'module/team_module/models/team_list_model.dart';
+import 'module/team_module/views/team_profile_view.dart';
 import 'module/web_module/web_view.dart';
 import 'module/aboutus_module/aboutus_view.dart';
 import 'module/assessment_module/bloc/assessment_bloc.dart';
@@ -256,11 +257,14 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.notification,
       name: AppPaths.notification,
-      builder: (context, state) => BlocProvider(
-        create: (context) => NotificationBloc(),
-        child: const NotificationsView(),
-      ),
+      builder: (context, state) => const NotificationsView(),
     ),
+    GoRoute(
+      path: AppPaths.teamProfile,
+      name: AppPaths.teamProfile,
+      builder: (context, state) =>
+          TeamProfileView(memberDetail: state.extra as TeamMemberModel),
+    )
   ],
   errorBuilder: (context, state) {
     return Scaffold(
@@ -307,4 +311,5 @@ class AppPaths {
   static const profileInfo = "/profileInfo";
   static const notification = '/notification';
   static const team = '/team';
+  static const teamProfile = '/teamProfile';
 }

@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fancy_tree_view/flutter_fancy_tree_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/team_module/bloc/team_bloc.dart';
 import 'package:i_densfa/module/team_module/models/team_list_model.dart';
+import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
@@ -27,116 +30,69 @@ class TeamHierarchyView extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: TreeView<TeamNode>(
-        treeController: treeController..expandAll(),
-        nodeBuilder: (BuildContext context, TreeEntry<TeamNode> entry) {
-          return MyTreeTile(
-            key: ValueKey(entry.node),
-            entry: entry,
-            onTap: () {
-              if (entry.level == 0) {
-                treeController.toggleExpansion(entry.node);
-              } else {
-                final TeamBloc bloc = context.read();
-                bloc.add(
-                    GetTeamMembersEvent(userId: entry.node.teamLead.userId));
-              }
-            },
-          );
-        },
-      ),
-    );
-  }
-}
-
-class MyTreeTile extends StatelessWidget {
-  const MyTreeTile({
-    super.key,
-    required this.entry,
-    required this.onTap,
-  });
-
-  final TreeEntry<TeamNode> entry;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final memberDetail = entry.node.teamLead;
-    return InkWell(
-      onTap: onTap,
-      child: TreeIndentation(
-        entry: entry,
-        guide:
-            const IndentGuide.connectingLines(color: ColorConstants.amberFade),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Card(
-                color: Colors.white,
-                elevation: 4,
-                shadowColor: ColorConstants.amberFade,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      if (entry.level == 0 &&
-                          entry.node.teamLead.userId !=
-                              AppStorage().userDetail?.id)
-                        IconButton.filled(
-                            onPressed: () => context
-                                .read<TeamBloc>()
-                                .add(GoUpperLevelTeamEvent()),
-                            icon: const Icon(Icons.keyboard_backspace)),
-                      const CircleAvatar(radius: 35),
-                      SizedBox(width: 5.w),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              memberDetail.username,
-                              style: TextStyle(
-                                  fontSize: 18.sp, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              'Designation:${memberDetail.designation}',
-                              style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              'Role:${memberDetail.role}',
-                              style: TextStyle(
-                                  fontSize: 11.sp, fontWeight: FontWeight.w300),
-                            ),
-                            ColoredBox(
-                                color: ColorConstants.amberFade,
-                                child: Text(
-                                  memberDetail.mobile,
-                                  style: TextStyle(
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.normal),
-                                )),
-                          ],
-                        ),
-                      )
-                    ],
+      child: Column(
+        children: [
+          if (selectedTeam != null)
+            Row(
+              children: [
+                if (selectedTeam.supervisiorDetails.userId !=
+                    AppStorage().userDetail?.id)
+                  Ink(
+                    decoration: const ShapeDecoration(
+                      color: ColorConstants.amber,
+                      shape: CircleBorder(),
+                    ),
+                    child: IconButton(
+                        color: Colors.white,
+                        onPressed: () => context
+                            .read<TeamBloc>()
+                            .add(GoUpperLevelTeamEvent()),
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          size: 30,
+                        )),
                   ),
-                ),
-              ),
+                const Spacer(),
+                Ink(
+                  decoration: const ShapeDecoration(
+                    color: ColorConstants.amber,
+                    shape: CircleBorder(),
+                  ),
+                  child: IconButton(
+                    color: Colors.white,
+                    focusColor: Colors.red,
+                    icon: const Icon(Icons.notification_add),
+                    onPressed: () {
+                      notificationDialogView(
+                          context,
+                          selectedTeam.supervisiorDetails.userId,
+                          context.read());
+                    },
+                  ),
+                )
+              ],
             ),
-            if (entry.level == 0)
-              IconButton(
-                color: ColorConstants.amber,
-                icon: const Icon(Icons.notification_add),
-                onPressed: () {
-                  notificationDialogView(
-                      context, entry.node.teamLead.userId, context.read());
-                },
-              )
-          ],
-        ),
+          Expanded(
+            child: TreeView<TeamNode>(
+              treeController: treeController..expandAll(),
+              nodeBuilder: (BuildContext context, TreeEntry<TeamNode> entry) {
+                return MyTreeTile(
+                  key: ValueKey(entry.node),
+                  entry: entry,
+                  onTap: () {
+                    if (entry.level == 0) {
+                      treeController.toggleExpansion(entry.node);
+                    } else {
+                      final TeamBloc bloc = context.read();
+                      bloc.add(GetTeamMembersEvent(
+                          userId: entry.node.teamLead.userId));
+                    }
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -211,6 +167,88 @@ class MyTreeTile extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class MyTreeTile extends StatelessWidget {
+  const MyTreeTile({
+    super.key,
+    required this.entry,
+    required this.onTap,
+  });
+
+  final TreeEntry<TeamNode> entry;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final memberDetail = entry.node.teamLead;
+    return InkWell(
+      onTap: onTap,
+      child: TreeIndentation(
+        entry: entry,
+        guide:
+            const IndentGuide.connectingLines(color: ColorConstants.amberFade),
+        child: Card(
+          color: Colors.white,
+          elevation: 4,
+          shadowColor: ColorConstants.amberFade,
+          child: Stack(
+            alignment: Alignment.topRight,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(8, 8, 38.w, 8),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                        radius: 35,
+                        backgroundImage: CachedNetworkImageProvider(
+                            memberDetail.photoUrl ?? '')),
+                    SizedBox(width: 5.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            memberDetail.username,
+                            style: TextStyle(
+                                fontSize: 18.sp, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Designation:${memberDetail.designation}',
+                            style: TextStyle(
+                                fontSize: 12.sp, fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            'Role:${memberDetail.role}',
+                            style: TextStyle(
+                                fontSize: 11.sp, fontWeight: FontWeight.w300),
+                          ),
+                          ColoredBox(
+                              color: ColorConstants.amberFade,
+                              child: Text(
+                                memberDetail.mobile,
+                                style: TextStyle(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.normal),
+                              )),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              IconButton(
+                  color: ColorConstants.amber,
+                  iconSize: 30.w,
+                  onPressed: () =>
+                      context.push(AppPaths.teamProfile, extra: memberDetail),
+                  icon: const Icon(Icons.info))
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
