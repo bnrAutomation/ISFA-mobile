@@ -3,12 +3,14 @@ import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 
 class AnalyticsView extends StatelessWidget {
-  const AnalyticsView({super.key});
+  final int? forUserId;
+  const AnalyticsView({super.key, this.forUserId});
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      appBar: forUserId != null ? AppBar(title: const Text('Analytics')) : null,
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -6,9 +6,12 @@ import 'package:i_densfa/utility/extensions.dart';
 import 'model/attendance_model.dart';
 
 class AttendanceRepository {
-  final userId = AppStorage().userDetail!.id;
-  final compId = AppStorage().homeInfo!.userInfo.companyId;
-  Future<List<AttendanceData>> getMyActivity({
+  final int userId;
+
+  AttendanceRepository(int? forUserId)
+      : userId = forUserId ?? AppStorage().userDetail!.id;
+
+  Future<List<AttendanceData>> getUserAttendance({
     required DateTime dateTime,
   }) async {
     final response = await get(Uri.parse(

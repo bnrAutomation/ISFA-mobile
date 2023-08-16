@@ -9,7 +9,8 @@ import 'bloc/attendance_bloc.dart';
 import 'model/attendance_model.dart';
 
 class AttendanceView extends StatelessWidget {
-  const AttendanceView({super.key});
+  final int? forUserId;
+  const AttendanceView({super.key, this.forUserId});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class AttendanceView extends StatelessWidget {
         ),
       ),
       body: RepositoryProvider(
-        create: (context) => AttendanceRepository(),
+        create: (context) => AttendanceRepository(forUserId),
         child: BlocProvider(
           create: (context) =>
               AttendanceBloc(context.read())..add(GetAttendanceEvent()),

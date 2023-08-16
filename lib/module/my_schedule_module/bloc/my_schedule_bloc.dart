@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
-import 'package:i_densfa/module/beatplan_stores_module/beatplan_stores_repository.dart';
-import 'package:i_densfa/module/beatplan_stores_module/store_list_model.dart';
+import 'package:i_densfa/module/my_schedule_module/beat_plan_model.dart';
+import 'package:i_densfa/module/my_schedule_module/my_schedule_repository.dart';
+import 'package:i_densfa/module/my_schedule_module/store_list_model.dart';
 import 'package:i_densfa/utility/device_helper.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
-part 'beatplan_stores_event.dart';
-part 'beatplan_stores_state.dart';
+part 'my_schedule_event.dart';
+part 'my_schedule_state.dart';
 
-class BeatplanStoresBloc
-    extends Bloc<BeatplanStoresEvent, BeatplanStoresState> {
-  final BeatPlanStoresRepository repo;
+class MyScheduleBloc extends Bloc<MyScheduleEvent, MyScheduleState> {
+  final MyScheduleRepository repo;
   var isAccending = false;
   var selectedDate = DateTime.now();
   List<BeatPlanModel> beatPlans = [];
@@ -23,26 +22,26 @@ class BeatplanStoresBloc
   String storeAddRemark = '';
   DateTime? storeAddDate;
 
-  BeatplanStoresBloc(this.repo) : super(BeatPlanStoresLoadingState()) {
-    on((BeatPlanStoresUpdateData event, emit) async {
-      emit(BeatPlanStoresLoadingState());
+  MyScheduleBloc(this.repo) : super(MyScheduleLoadingState()) {
+    on((MyScheduleUpdateData event, emit) async {
+      emit(MyScheduleLoadingState());
       updateUserLocation();
       allPlans = await repo.getBeatPlans(selectedDate).catchError((onError) {
-        emit(BeatPlanSnackBarMessage(onError.toString()));
+        emit(MyScheduleSnackBarMessage(onError.toString()));
         return <BeatPlanModel>[];
       });
       isAccending = false;
       beatPlans = allPlans;
-      emit(EmptySearchTextBeatplanStoresState());
+      emit(EmptySearchTextMyScheduleState());
       emit(BeatPlanStoreLoaded());
     });
 
-    on((BeatPlanStoresDateChangeEvent event, emit) {
+    on((MyScheduleDateChangeEvent event, emit) {
       selectedDate = event.date;
-      add(BeatPlanStoresUpdateData());
+      add(MyScheduleUpdateData());
     });
 
-    on((SearchBeatplanStoresEvent event, emit) {
+    on((SearchMyScheduleEvent event, emit) {
       if (event.searchText.trim().isEmpty) beatPlans = allPlans;
       beatPlans = allPlans
           .where((element) =>
@@ -58,7 +57,7 @@ class BeatplanStoresBloc
       emit(BeatPlanStoreLoaded());
     });
 
-    on((SortBeatplanStoresEvent event, emit) {
+    on((SortMyScheduleEvent event, emit) {
       if (userLocation == null) return;
       if (isAccending) {
         isAccending = false;
@@ -74,7 +73,7 @@ class BeatplanStoresBloc
 
     on((GetAllStoresListEvent event, emit) async {
       storesList = await repo.getStores().catchError((onError) {
-        emit(BeatPlanSnackBarMessage(onError.toString()));
+        emit(MyScheduleSnackBarMessage(onError.toString()));
         return <StoreItemModel>[];
       });
       emit(StoreListLoadedState());
@@ -87,27 +86,27 @@ class BeatplanStoresBloc
 
     on((BeatPlanAddEvent event, emit) async {
       if (selectedStore == null) {
-        emit(BeatPlanSnackBarMessage('Please select store'));
+        emit(MyScheduleSnackBarMessage('Please select store'));
       } else if (storeAddDate == null) {
-        emit(BeatPlanSnackBarMessage('Please provide date'));
+        emit(MyScheduleSnackBarMessage('Please provide date'));
       } else if (storeAddRemark.trim().isEmpty) {
-        emit(BeatPlanSnackBarMessage('Please provide reason'));
+        emit(MyScheduleSnackBarMessage('Please provide reason'));
       } else {
         emit(BeatPlanUploadLoadingState());
         final success = await repo
             .beatPlanUpload(
                 storeAddDate!, storeAddRemark, selectedStore!.storeId)
             .catchError((onError) {
-          emit(BeatPlanSnackBarMessage(onError.toString()));
+          emit(MyScheduleSnackBarMessage(onError.toString()));
           return false;
         });
         if (success) {
           if (selectedDate.isSameDate(storeAddDate!)) {
-            add(BeatPlanStoresUpdateData());
+            add(MyScheduleUpdateData());
           }
           selectedStore = null;
           storeAddDate = null;
-          emit(BeatPlanSnackBarMessage('Successfully added beat plan'));
+          emit(MyScheduleSnackBarMessage('Successfully added beat plan'));
           emit(BeatPlanUploadSuccess());
         }
       }
@@ -136,11 +135,11 @@ class BeatplanStoresBloc
 
   void onNextDateSelect() {
     final newDate = selectedDate.add(const Duration(days: 1));
-    add(BeatPlanStoresDateChangeEvent(newDate));
+    add(MyScheduleDateChangeEvent(newDate));
   }
 
   void onPreviousDateSelect() {
     final newDate = selectedDate.subtract(const Duration(days: 1));
-    add(BeatPlanStoresDateChangeEvent(newDate));
+    add(MyScheduleDateChangeEvent(newDate));
   }
 }

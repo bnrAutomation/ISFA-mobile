@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:i_densfa/module/beatplan_stores_module/store_list_model.dart';
+import 'package:i_densfa/module/my_schedule_module/store_list_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
@@ -9,11 +9,12 @@ import 'package:i_densfa/utility/handler.dart';
 
 import 'beat_plan_model.dart';
 
-class BeatPlanStoresRepository {
-  final int companyId;
-  final userId = AppStorage().userDetail!.id;
+class MyScheduleRepository {
+  final int companyId = AppStorage().homeInfo!.userInfo.companyId;
+  final int userId;
 
-  BeatPlanStoresRepository(this.companyId);
+  MyScheduleRepository(int? forUserId)
+      : userId = forUserId ?? AppStorage().userDetail!.id;
 
   Future<List<BeatPlanModel>> getBeatPlans(DateTime date) async {
     // {"date":"2023-04-09","userId":1,"companyId":33}

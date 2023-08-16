@@ -5,11 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:i_densfa/module/analytics_module/analytics_view.dart';
-import 'package:i_densfa/module/beatplan_stores_module/beatplan_store_list_view.dart';
-import 'package:i_densfa/module/beatplan_stores_module/beatplan_stores_repository.dart';
-import 'package:i_densfa/module/beatplan_stores_module/bloc/beatplan_stores_bloc.dart';
 import 'package:i_densfa/module/campaign_module/view/campaign_view.dart';
 import 'package:i_densfa/module/learner_module/learner_view.dart';
+import 'package:i_densfa/module/my_schedule_module/my_schedule_view.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/module/tabber_module/side_menu_view.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
@@ -17,7 +15,7 @@ import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 import '../../utility/network_helper.dart';
-import 'bloc/tabber_bloc.dart';
+import 'bloc/tabbar_bloc.dart';
 
 class TabbarView extends StatelessWidget {
   const TabbarView({super.key});
@@ -28,7 +26,7 @@ class TabbarView extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => TabberBloc(TabbarRepository())
+            create: (context) => TabbarBloc(TabbarRepository())
               ..add(UpdateSideMenuDetailsEvent())
               ..add(SubmitToken())),
         BlocProvider(
@@ -53,9 +51,9 @@ class TabbarView extends StatelessWidget {
             }
           }
         },
-        child: BlocBuilder<TabberBloc, TabberState>(
+        child: BlocBuilder<TabbarBloc, TabberState>(
           builder: (context, state) {
-            final bloc = context.read<TabberBloc>();
+            final bloc = context.read<TabbarBloc>();
 
             return Scaffold(
               drawer: bloc.sideMenuData == null
@@ -63,7 +61,7 @@ class TabbarView extends StatelessWidget {
                   : AppSideMenu(data: bloc.sideMenuData!),
               appBar: AppBar(
                 title: Text(bloc.tabberItems[bloc.selectIndex].navTitle()),
-                leading: BlocListener<TabberBloc, TabberState>(
+                leading: BlocListener<TabbarBloc, TabberState>(
                   listenWhen: (previous, current) =>
                       current is TabbarSnackBarMessageState,
                   listener: (context, state) {
@@ -120,7 +118,7 @@ class TabbarView extends StatelessWidget {
                         .toList(),
                     selectedIndex: bloc.selectIndex,
                     onTabChange: (index) {
-                      BlocProvider.of<TabberBloc>(context)
+                      BlocProvider.of<TabbarBloc>(context)
                           .add(ChangeTabEvent(index));
                     },
                   ),
@@ -146,19 +144,13 @@ class TabbarView extends StatelessWidget {
     }
   }
 
-  Widget atSelectedIndex(TabberBloc bloc) {
+  Widget atSelectedIndex(TabbarBloc bloc) {
     final tab = bloc.tabberItems[bloc.selectIndex];
     switch (tab) {
       case TabbarItemCase.schedule:
         return (bloc.sideMenuData == null)
             ? const CircularProgressIndicator()
-            : BlocProvider(
-                create: (context) => BeatplanStoresBloc(
-                    BeatPlanStoresRepository(
-                        bloc.sideMenuData!.userInfo.companyId))
-                  ..add(BeatPlanStoresUpdateData()),
-                child: const BeatPlanStoreListView(),
-              );
+            : const MyScheduleView();
       case TabbarItemCase.learner:
         return const LearnerView();
       case TabbarItemCase.campaign:

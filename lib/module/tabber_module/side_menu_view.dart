@@ -8,7 +8,7 @@ import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'bloc/tabber_bloc.dart';
+import 'bloc/tabbar_bloc.dart';
 import 'models/side_menu_model.dart';
 
 class AppSideMenu extends StatelessWidget {
@@ -118,11 +118,11 @@ class AppSideMenu extends StatelessWidget {
   }
 
   Widget dutyStatus() {
-    return BlocBuilder<TabberBloc, TabberState>(
+    return BlocBuilder<TabbarBloc, TabberState>(
       buildWhen: (previous, current) => (current is OnlineStatusUpdateState ||
           current is OnlineSwitchLoadingTabberState),
       builder: (context, state) {
-        final bloc = context.read<TabberBloc>();
+        final bloc = context.read<TabbarBloc>();
         return FittedBox(
             child: Column(
           children: [

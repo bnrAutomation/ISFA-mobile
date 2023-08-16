@@ -7,7 +7,8 @@ import 'package:i_densfa/module/my_activity_module/my_activity_repository.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 class MyActivityView extends StatefulWidget {
-  const MyActivityView({super.key});
+  final int? forUserId;
+  const MyActivityView({super.key, this.forUserId});
 
   @override
   MyActivityViewState createState() => MyActivityViewState();
@@ -23,7 +24,7 @@ class MyActivityViewState extends State<MyActivityView> {
         backgroundColor: Theme.of(context).primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
-          "My Activity",
+          widget.forUserId == null ? "My Activity" : "Activity",
           style: Theme.of(context)
               .textTheme
               .titleSmall
@@ -31,7 +32,7 @@ class MyActivityViewState extends State<MyActivityView> {
         ),
       ),
       body: RepositoryProvider(
-        create: (context) => MyActivityRepository(),
+        create: (context) => MyActivityRepository(widget.forUserId),
         child: BlocProvider(
           create: (context) =>
               MyActivityBloc(context.read())..add(GetMyAcivityEvent()),

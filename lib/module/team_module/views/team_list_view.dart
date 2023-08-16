@@ -96,11 +96,11 @@ class _TeamListViewState extends State<TeamListView> {
   }
 
   Widget _teamDataCardView(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    final TeamBloc teamBloc = context.read();
-    if (teamBloc.teamData == null) {
+    final data = context.read<TeamBloc>().teamData;
+    if (data == null) {
       return const SizedBox();
     }
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -112,7 +112,7 @@ class _TeamListViewState extends State<TeamListView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                teamBloc.teamData!.activeToday.toString(),
+                data.activeToday.toString(),
                 style: TextStyle(
                     color: theme.primaryColor,
                     fontWeight: FontWeight.bold,
@@ -123,15 +123,15 @@ class _TeamListViewState extends State<TeamListView> {
               SizedBox(height: 6.h),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20.w),
-                child: const LinearProgressIndicator(
-                    backgroundColor: Color(0xfffff3cd),
+                child: LinearProgressIndicator(
+                    backgroundColor: const Color(0xfffff3cd),
                     color: ColorConstants.amber,
                     minHeight: 40,
-                    value: 0.5),
+                    value: data.activeToday / data.totalMembersAdded),
               ),
               SizedBox(height: 15.h),
               Text(
-                teamBloc.teamData!.totalMembersAdded.toString(),
+                data.totalMembersAdded.toString(),
                 style: TextStyle(
                     color: theme.primaryColor,
                     fontWeight: FontWeight.bold,
@@ -146,11 +146,11 @@ class _TeamListViewState extends State<TeamListView> {
                     backgroundColor: Color(0xfffff3cd),
                     color: ColorConstants.amber,
                     minHeight: 40,
-                    value: 0.5),
+                    value: 1),
               ),
               SizedBox(height: 15.h),
               Text(
-                teamBloc.teamData!.noRecentLogin.toString(),
+                data.noRecentLogin.toString(),
                 style: TextStyle(
                     color: theme.primaryColor,
                     fontWeight: FontWeight.bold,
@@ -161,11 +161,11 @@ class _TeamListViewState extends State<TeamListView> {
               SizedBox(height: 6.h),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20.w),
-                child: const LinearProgressIndicator(
-                    backgroundColor: Color(0xfffff3cd),
+                child: LinearProgressIndicator(
+                    backgroundColor: const Color(0xfffff3cd),
                     color: ColorConstants.amber,
                     minHeight: 40,
-                    value: 0.5),
+                    value: data.noRecentLogin / data.totalMembersAdded),
               ),
               SizedBox(height: 6.h),
             ],

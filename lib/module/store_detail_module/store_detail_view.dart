@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:i_densfa/module/my_schedule_module/beat_plan_model.dart';
 import 'package:i_densfa/module/promoter_module/feedback/feedback_view.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/extensions.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 
 import 'package:i_densfa/module/campaign_module/view/campaign_view.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';

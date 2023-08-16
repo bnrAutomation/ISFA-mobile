@@ -1,7 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:i_densfa/module/analytics_module/analytics_view.dart';
+import 'package:i_densfa/module/my_schedule_module/my_schedule_view.dart';
 import 'package:i_densfa/module/team_module/models/team_list_model.dart';
+import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -12,9 +16,28 @@ class TeamProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bottomCardItems = <BottomCardItemModel>[
-      BottomCardItemModel('Activity History', const Icon(Icons.score), () {}),
-      BottomCardItemModel('Attendance', const Icon(Icons.person_4), () {}),
-      BottomCardItemModel('Schedule', const Icon(Icons.schedule), () {}),
+      BottomCardItemModel('Scorecard', const Icon(Icons.analytics), () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (c) {
+            return AnalyticsView(forUserId: memberDetail.userId);
+          }),
+        );
+      }),
+      BottomCardItemModel('Activity History', const Icon(Icons.score), () {
+        context.push(AppPaths.myActivity, extra: memberDetail.userId);
+      }),
+      BottomCardItemModel('Attendance', const Icon(Icons.person_4), () {
+        context.push(AppPaths.attendance, extra: memberDetail.userId);
+      }),
+      BottomCardItemModel('Schedule', const Icon(Icons.schedule), () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (c) {
+            return MyScheduleView(forUserId: memberDetail.userId);
+          }),
+        );
+      }),
     ];
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +93,17 @@ class TeamProfileView extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 12.sp, fontWeight: FontWeight.normal),
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: 6.h),
+                    Row(
+                      children: [
+                        const Icon(Icons.check, color: Colors.green),
+                        Text(
+                          'Active Today',
+                          style: TextStyle(fontSize: 10.sp),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 6.h),
                     Row(
                       children: [
                         RoundedBorderedIconButton(
@@ -83,7 +116,7 @@ class TeamProfileView extends StatelessWidget {
                         RoundedBorderedIconButton(
                           icon: Icons.mail,
                           onPressed: () {
-                            launchUrlString('mail://${memberDetail.email}');
+                            launchUrlString('mailto:${memberDetail.email}');
                           },
                         ),
                       ],

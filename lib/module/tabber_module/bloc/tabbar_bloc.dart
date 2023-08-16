@@ -13,15 +13,15 @@ import 'package:i_densfa/utility/device_helper.dart';
 import 'package:i_densfa/utility/handler.dart';
 import 'package:image_picker/image_picker.dart';
 
-part 'tabber_event.dart';
-part 'tabber_state.dart';
+part 'tabbar_event.dart';
+part 'tabbar_state.dart';
 
-class TabberBloc extends Bloc<TabberEvent, TabberState> {
+class TabbarBloc extends Bloc<TabberEvent, TabberState> {
   final TabbarRepository repo;
   int selectIndex = 0;
   SideMenuModel? sideMenuData;
   var tabberItems = TabbarItemCase.values.toList();
-  TabberBloc(this.repo) : super(TabberInitial()) {
+  TabbarBloc(this.repo) : super(TabberInitial()) {
     on<TabberEvent>((event, emit) {
       if (event is ChangeTabEvent) {
         selectIndex = event.selectIndex;

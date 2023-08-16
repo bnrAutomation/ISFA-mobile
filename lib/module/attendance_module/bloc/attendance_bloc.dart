@@ -28,7 +28,7 @@ class AttendanceBloc extends Bloc<MyActivityEvent, AttendanceState> {
       Emitter<AttendanceState> emit, DateTime dateTime) async {
     emit(AttendanceLoadingState());
     attandenceData =
-        await repo.getMyActivity(dateTime: dateTime).catchError((error) {
+        await repo.getUserAttendance(dateTime: dateTime).catchError((error) {
       emit(MyActivityWithData());
       emit(AttendanceShowSnack(error.toString()));
       return <AttendanceData>[];

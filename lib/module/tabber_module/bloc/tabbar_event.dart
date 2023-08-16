@@ -1,4 +1,4 @@
-part of 'tabber_bloc.dart';
+part of 'tabbar_bloc.dart';
 
 @immutable
 abstract class TabberEvent {}

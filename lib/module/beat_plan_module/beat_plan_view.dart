@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:i_densfa/module/beatplan_stores_module/beatplan_store_list_view.dart';
+import 'package:i_densfa/module/my_schedule_module/my_schedule_view.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 
 class BeatPlanView extends StatelessWidget {

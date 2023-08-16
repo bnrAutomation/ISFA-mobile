@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:i_densfa/module/beatplan_stores_module/beat_plan_model.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
+import 'package:i_densfa/module/my_schedule_module/beat_plan_model.dart';
 import 'package:i_densfa/module/promoter_module/feedback/model/feedback_model.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_model.dart';
 

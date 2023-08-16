@@ -8,7 +8,6 @@ import 'package:i_densfa/module/team_module/views/teams_main_view.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
 import 'module/assessment_module/assessment_repository.dart';
-import 'module/beatplan_stores_module/beat_plan_model.dart';
 import 'module/campaign_module/bloc/campaign_bloc.dart';
 import 'module/campaign_module/view/campaign_questions_view.dart';
 import 'module/campaign_module/view/campaign_view.dart';
@@ -19,6 +18,9 @@ import 'module/leaves_module/leave_view.dart';
 import 'module/login_module/login_view.dart';
 import 'module/login_set_pin_module/pin_setup_view.dart';
 import 'module/my_activity_module/my_activity_view.dart';
+import 'module/my_schedule_module/beat_plan_model.dart';
+import 'module/my_schedule_module/schedule_visit/bloc/schedule_visit_call_bloc.dart';
+import 'module/my_schedule_module/schedule_visit/schedule_visit_view.dart';
 import 'module/notification/notification_view.dart';
 import 'module/policy_module/policy_view.dart';
 import 'module/promoter_module/bloc/promoter_bloc.dart';
@@ -36,8 +38,6 @@ import 'module/assessment_module/views/assessment_list_view.dart';
 import 'module/assessment_module/views/assessment_questions_view.dart';
 import 'module/assessment_module/views/selected_assessment_view.dart';
 import 'module/attendance_module/attendance_view.dart';
-import 'module/beatplan_stores_module/schedule_visit/bloc/schedule_visit_call_bloc.dart';
-import 'module/beatplan_stores_module/schedule_visit/schedule_visit_view.dart';
 import 'module/forgot_password_module/forgot_password_view.dart';
 import 'module/promoter_module/promoter_repository.dart';
 import 'module/reset_password_module/reset_password_view.dart';
@@ -194,12 +194,14 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.attendance,
       name: AppPaths.attendance,
-      builder: (context, state) => const AttendanceView(),
+      builder: (context, state) =>
+          AttendanceView(forUserId: state.extra as int?),
     ),
     GoRoute(
       path: AppPaths.myActivity,
       name: AppPaths.myActivity,
-      builder: (context, state) => const MyActivityView(),
+      builder: (context, state) =>
+          MyActivityView(forUserId: state.extra as int?),
     ),
     GoRoute(
       path: AppPaths.promoter,

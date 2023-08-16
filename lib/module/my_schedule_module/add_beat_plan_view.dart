@@ -8,7 +8,7 @@ import 'package:i_densfa/module/ui/button_views.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
-import 'bloc/beatplan_stores_bloc.dart';
+import 'bloc/my_schedule_bloc.dart';
 
 class AddBeatPlanView extends StatelessWidget {
   const AddBeatPlanView({super.key});
@@ -18,14 +18,14 @@ class AddBeatPlanView extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: BlocConsumer<BeatplanStoresBloc, BeatplanStoresState>(
+        child: BlocConsumer<MyScheduleBloc, MyScheduleState>(
           listener: (context, state) {
             if (state is BeatPlanUploadSuccess) {
               Navigator.of(context).pop();
             }
           },
           builder: (context, state) {
-            final BeatplanStoresBloc bloc = context.read();
+            final MyScheduleBloc bloc = context.read();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -36,7 +36,7 @@ class AddBeatPlanView extends StatelessWidget {
                   options: bloc.storesList.map((e) => e.name).toList(),
                   hint: "Please select store",
                   selectedVal: context.select(
-                      (BeatplanStoresBloc value) => value.selectedStore?.name),
+                      (MyScheduleBloc value) => value.selectedStore?.name),
                   valChanged: (value) {
                     if (value != null) {
                       bloc.selectedStore = bloc.storesList
@@ -123,7 +123,7 @@ class AddBeatPlanView extends StatelessWidget {
         firstDate: now,
         lastDate: DateTime(now.year, 12, 31));
     if (date != null && context.mounted) {
-      context.read<BeatplanStoresBloc>().add(AddBeatPlanDateSelected(date));
+      context.read<MyScheduleBloc>().add(AddBeatPlanDateSelected(date));
     }
   }
 }
