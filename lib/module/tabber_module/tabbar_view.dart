@@ -83,7 +83,7 @@ class TabbarView extends StatelessWidget {
                 actions: [
                   IconButton(
                       onPressed: () => context.push(AppPaths.notification),
-                      icon: const Icon(Icons.notifications))
+                      icon: const Icon(Icons.notifications_outlined))
                 ],
               ),
               body: Center(child: atSelectedIndex(bloc)),

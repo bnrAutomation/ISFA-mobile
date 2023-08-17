@@ -36,7 +36,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               .catchError((onError) {
             throw onError.toString();
           });
-          if (loginResponse.logindata.userInfo.roles == "user") {
+          if (loginResponse.logindata.userInfo.roles != "admin") {
             debugPrint(loginResponse.toString());
             AppStorage().userDetail = loginResponse.logindata.userInfo;
             if ((int.tryParse(loginResponse.logindata.userInfo.pin) ?? 0) > 0) {
