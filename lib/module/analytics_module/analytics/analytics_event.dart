@@ -3,9 +3,9 @@ part of 'analytics_bloc.dart';
 @immutable
 abstract class AnalyticsEvent {}
 
-class AnalyticsUpdateDataEvent extends AnalyticsEvent {}
-
-class AnalyticsDateChangeEvent extends AnalyticsEvent {
-  final DateTime date;
-  AnalyticsDateChangeEvent(this.date);
+class AnalyticsDaysChangeEvent extends AnalyticsEvent {
+  final int days;
+  AnalyticsDaysChangeEvent(this.days);
 }
+
+class GetAnalyticsEvent extends AnalyticsEvent {}

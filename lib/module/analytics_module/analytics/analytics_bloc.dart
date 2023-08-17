@@ -2,38 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/analytics_module/analytics_repository.dart';
 import 'package:i_densfa/module/analytics_module/model/analytics_model.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 
 part 'analytics_event.dart';
 part 'analytics_state.dart';
 
 class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
-  final repo = AnalyticsRepository();
-  var selectedDate = DateTime.now();
-  List<AnalyticsModel> analyticdata = [
-    AnalyticsModel(name: "", target: "TARGET", actual: "ACTUAL"),
-    AnalyticsModel(name: "Retailer Coverage", target: "5", actual: "3"),
-    AnalyticsModel(name: "Mechanics Engaged", target: "10", actual: "8"),
-    AnalyticsModel(name: "Trials Generated", target: "7", actual: "2"),
-    AnalyticsModel(name: "Mechanics Leads", target: "5", actual: "3"),
-    AnalyticsModel(name: "Number of oil changes", target: "10", actual: "4"),
-    AnalyticsModel(
-        name: "Number of consumers engaged", target: "10", actual: "4"),
-  ];
-  AnalyticsBloc() : super(AnalyticsInitial()) {
-    on<AnalyticsEvent>((event, emit) {});
-    on((AnalyticsDateChangeEvent event, emit) {
-      selectedDate = event.date;
-      emit(AnalyticsUpdateData());
+  final userDetails = AppStorage().userDetail!;
+
+  final AnalyticsRepository repo;
+  int selectedDays = 30;
+
+  List<int> daysFilterOptions = [45, 30, 15, 7];
+
+  List<AnalyticsModel> analyticsList = [];
+  AnalyticsBloc(this.repo) : super(AnalyticsInitial()) {
+    on((AnalyticsDaysChangeEvent event, emit) {
+      selectedDays = event.days;
+      add(GetAnalyticsEvent());
     });
-  }
 
-  void onNextDateSelect() {
-    final newDate = selectedDate.add(const Duration(days: 1));
-    add(AnalyticsDateChangeEvent(newDate));
-  }
-
-  void onPreviousDateSelect() {
-    final newDate = selectedDate.subtract(const Duration(days: 1));
-    add(AnalyticsDateChangeEvent(newDate));
+    on((GetAnalyticsEvent event, emit) async {
+      try {
+        final details = await repo.getDetails(days: selectedDays);
+        analyticsList = details;
+        emit(AnalyticsUpdateData());
+      } catch (e) {
+        emit(AnalyticsSnackBarMessage(e.toString()));
+      }
+    });
   }
 }

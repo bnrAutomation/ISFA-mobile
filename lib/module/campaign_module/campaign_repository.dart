@@ -27,8 +27,8 @@ class CampaignRepository {
 
   Future<List<CampaignQuestionSectionModel>> getSections(
       {required String campaignUuid}) async {
-    final response = await get(Uri.parse(
-        "${URLConstants.getCampaignQuestions}/$campaignUuid/section"));
+    final response = await get(
+        Uri.parse("${URLConstants.getAllCampaigns}/$campaignUuid/section"));
 
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)
@@ -42,7 +42,7 @@ class CampaignRepository {
   Future<List<CampaignQuestionModel>> getQuestions(
       {required String campaignUuid, required String sectionUuid}) async {
     final response = await get(Uri.parse(
-        "${URLConstants.getCampaignQuestions}/$campaignUuid/section/$sectionUuid/question"));
+        "${URLConstants.getAllCampaigns}/$campaignUuid/section/$sectionUuid/question"));
 
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)

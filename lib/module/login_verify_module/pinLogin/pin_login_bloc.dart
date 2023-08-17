@@ -18,12 +18,8 @@ class PinLoginBloc extends Bloc<PinLoginEvent, PinLoginState> {
           final loginResponse = await repo.verifyPin(
               username: AppStorage().userDetail?.username.toString() ?? "",
               pin: event.pin);
-          if (loginResponse.logindata.userInfo.roles == "user") {
-            AppStorage().userDetail = loginResponse.logindata.userInfo;
-            emit(LoginedSuccesfullState());
-          } else {
-            emit(PinLogInErrorState("User doesn't exist."));
-          }
+          AppStorage().userDetail = loginResponse.logindata.userInfo;
+          emit(LoginedSuccesfullState());
         } catch (err) {
           debugPrint("pin is:- ${AppStorage().userDetail?.pin}");
           emit(PinLogInErrorState(err.toString()));

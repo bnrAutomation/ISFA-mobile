@@ -1,24 +1,34 @@
+import 'dart:convert';
+
 class AnalyticsModel {
+  final int target;
+  final int achieved;
+  final double percentage;
+  final String kpiName;
+
   AnalyticsModel({
-    required this.name,
     required this.target,
-    required this.actual,
+    required this.achieved,
+    required this.percentage,
+    required this.kpiName,
   });
-  late final String name;
-  late final String target;
-  late final String actual;
 
-  AnalyticsModel.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    target = json['target'];
-    actual = json['actual'];
-  }
+  factory AnalyticsModel.fromRawJson(String str) =>
+      AnalyticsModel.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['name'] = name;
-    data['target'] = target;
-    data['actual'] = actual;
-    return data;
-  }
+  String toRawJson() => json.encode(toJson());
+
+  factory AnalyticsModel.fromJson(Map<String, dynamic> json) => AnalyticsModel(
+        target: json["target"],
+        achieved: json["achieved"],
+        percentage: json["percentage"],
+        kpiName: json["kpiName"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "target": target,
+        "achieved": achieved,
+        "percentage": percentage,
+        "kpiName": kpiName,
+      };
 }
