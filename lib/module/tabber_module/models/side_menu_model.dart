@@ -58,18 +58,18 @@ class Menu {
 }
 
 class HomeUserInfo {
-  HomeUserInfo({
-    required this.mobile,
-    required this.userName,
-    required this.email,
-    required this.companyId,
-    required this.storeId,
-    required this.companyName,
-    required this.supervisor,
-    required this.designation,
-    required this.markInStoreId,
-    required this.startDuty,
-  });
+  HomeUserInfo(
+      {required this.mobile,
+      required this.userName,
+      required this.email,
+      required this.companyId,
+      required this.storeId,
+      required this.companyName,
+      required this.supervisor,
+      required this.designation,
+      required this.markInStoreId,
+      required this.startDuty,
+      required this.iRole});
 
   String mobile;
   String userName;
@@ -81,6 +81,7 @@ class HomeUserInfo {
   String designation;
   bool startDuty;
   int? markInStoreId;
+  String iRole;
 
   factory HomeUserInfo.fromRawJson(String str) =>
       HomeUserInfo.fromJson(json.decode(str));
@@ -88,18 +89,18 @@ class HomeUserInfo {
   String toRawJson() => json.encode(toJson());
 
   factory HomeUserInfo.fromJson(Map<String, dynamic> json) => HomeUserInfo(
-        mobile: json["mobile"] ?? "",
-        userName: json["username"] ?? "N/A",
-        email: json["email"],
-        companyId: json["companyId"],
-        storeId: (json["storeId"] ?? -1) > 0 ? json["storeId"] : null,
-        companyName: // json["companyName"] ??
-            "N/A",
-        designation: json['designation'] ?? "",
-        supervisor: json["supervisor"] ?? "",
-        markInStoreId: json["markInStoreId"],
-        startDuty: json["startDuty"],
-      );
+      mobile: json["mobile"] ?? "",
+      userName: json["username"] ?? "N/A",
+      email: json["email"],
+      companyId: json["companyId"],
+      storeId: (json["storeId"] ?? -1) > 0 ? json["storeId"] : null,
+      companyName: // json["companyName"] ??
+          "N/A",
+      designation: json['designation'] ?? "",
+      supervisor: json["supervisor"] ?? "",
+      markInStoreId: json["markInStoreId"],
+      startDuty: json["startDuty"],
+      iRole: json['iRole']);
 
   Map<String, dynamic> toJson() => {
         "mobile": mobile,
@@ -111,6 +112,7 @@ class HomeUserInfo {
         "startDuty": startDuty,
         "markInStoreId": markInStoreId,
         "designation": designation,
+        "iRole": iRole
       };
 }
 

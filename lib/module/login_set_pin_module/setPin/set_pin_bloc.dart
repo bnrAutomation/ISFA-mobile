@@ -25,7 +25,7 @@ class SetPinBloc extends Bloc<SetPinEvent, SetPinState> {
           final setPinResponse = await repo.setPin(
               username: AppStorage().userDetail?.email.toString() ?? "",
               pin: event.pin);
-          if (setPinResponse && AppStorage().userDetail?.roles == "user") {
+          if (setPinResponse && AppStorage().userDetail?.roles != "admin") {
             UserInfo userdetail = AppStorage().userDetail!;
             userdetail.pin = event.pin;
             AppStorage().userDetail = userdetail;

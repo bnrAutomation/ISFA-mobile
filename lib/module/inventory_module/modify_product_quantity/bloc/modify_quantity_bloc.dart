@@ -95,7 +95,7 @@ class ModifyQuantityBloc
               catId: selectedCategory!.categoryId,
               productId: selectedProduct!.productId,
               qty: selectedQuantity!,
-              price: enteredPrice)
+              price: selectedProduct?.price ?? 0.0)
           .catchError((onError) {
         emit(ToastMessageState(onError.toString()));
         return false;

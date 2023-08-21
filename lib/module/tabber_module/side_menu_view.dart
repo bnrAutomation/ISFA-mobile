@@ -33,8 +33,8 @@ class AppSideMenu extends StatelessWidget {
                 backgroundColor: Colors.grey.withOpacity(0.2),
               ),
               otherAccountsPictures: [dutyStatus()],
-              accountName: Text(
-                  "${data.userInfo.userName} (${data.userInfo.designation})"),
+              accountName:
+                  Text("${data.userInfo.userName} (${data.userInfo.iRole})"),
               accountEmail: Text(data.userInfo.companyName)),
           ...data.menu.where((element) => element.isActive).map(
             (e) {
@@ -72,7 +72,7 @@ class AppSideMenu extends StatelessWidget {
               );
             },
           ).toList(),
-          if (data.userInfo.designation != 'fwp')
+          if (data.userInfo.iRole.toLowerCase() != 'fwp')
             ListTile(
               leading: const Icon(Icons.group),
               title: const Text('Team'),

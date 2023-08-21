@@ -47,7 +47,9 @@ class AnalyticsView extends StatelessWidget {
                             children: [
                               borderedBox(
                                 child: CachedNetworkImage(
-                                  imageUrl: bloc.userDetails.photoUrl,
+                                  imageUrl: bloc.userDetails.photoUrl.isNotEmpty
+                                      ? bloc.userDetails.photoUrl
+                                      : 'https://tastevibe.web.app/assets/images/placeholder-user.png',
                                   width: 80,
                                   height: 80,
                                 ),

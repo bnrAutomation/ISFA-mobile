@@ -19,37 +19,6 @@ class TabbarRepository {
     } else {
       throw getErrorMessage(response.body);
     }
-
-    // final r = jsonEncode({
-    //   "user_info": {
-    //     "phone_no": null,
-    //     "role": null,
-    //     "user_name": "shubhamj@denave.com",
-    //     "email": "shubhamj@denave.com"
-    //   },
-    //   "menu": [
-    //     {
-    //       "name": "Attendance",
-    //       "icon": "https://example.com/icon_image/attendance.png",
-    //       "isActive": true,
-    //       "key": "attendance"
-    //     },
-    //     {
-    //       "name": "Leave",
-    //       "icon": "https://example.com/icon_image/leave.png",
-    //       "isActive": true,
-    //       "key": "leave"
-    //     },
-    //     {
-    //       "name": "Promoter",
-    //       "icon": "https://example.com/icon_image/promoter.png",
-    //       "isActive": true,
-    //       "key": "promoter"
-    //     }
-    //   ]
-    // });
-
-    // return SideMenuModel.fromRawJson(r);
   }
 
   Future<String> startEndDuty(
