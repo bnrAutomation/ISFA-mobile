@@ -34,6 +34,8 @@ class ImageConstants {
   static const telephone = "assets/icons/store/telephone.svg";
   static const visitsCalls = "assets/icons/store/visits-calls.svg";
   static const fileView = "assets/images/file_view.svg";
+  static const placeholderUserUrl =
+      'https://tastevibe.web.app/assets/images/placeholder-user.png';
 }
 
 class AppConstant {

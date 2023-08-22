@@ -44,7 +44,8 @@ class TabbarBloc extends Bloc<TabberEvent, TabberState> {
     if (data.userInfo.iRole.toLowerCase() != 'promoter') {
       data.menu
           .removeWhere((element) => element.key.toLowerCase() == 'promoter');
-    } else {
+    }
+    if (data.userInfo.iRole.toLowerCase() != 'fwp') {
       tabberItems.removeWhere((element) => element == TabbarItemCase.schedule);
     }
     sideMenuData = data;

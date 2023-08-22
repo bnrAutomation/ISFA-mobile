@@ -47,11 +47,13 @@ class AnalyticsView extends StatelessWidget {
                             children: [
                               borderedBox(
                                 child: CachedNetworkImage(
-                                  imageUrl: bloc.userDetails.photoUrl.isNotEmpty
-                                      ? bloc.userDetails.photoUrl
-                                      : 'https://tastevibe.web.app/assets/images/placeholder-user.png',
+                                  imageUrl: bloc.userDetails.photoUrl,
                                   width: 80,
                                   height: 80,
+                                  errorWidget: (context, url, error) =>
+                                      CachedNetworkImage(
+                                          imageUrl: ImageConstants
+                                              .placeholderUserUrl),
                                 ),
                               ),
                               Text(bloc.userDetails.username,

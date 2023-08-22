@@ -8,8 +8,6 @@ part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final repo = SettingsRespository();
-  final dpPlaceholderLink =
-      'https://tastevibe.web.app/assets/images/placeholder-user.png';
 
   SettingsBloc() : super(SettingsInitial()) {
     on((ChangeImageSettingsEvent event, emit) async {

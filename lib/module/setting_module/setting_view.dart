@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -73,17 +74,21 @@ class SettingView extends StatelessWidget {
                                   children: [
                                     CircleAvatar(
                                       radius: 55.0,
-                                      backgroundImage: NetworkImage(
-                                          userdetails.photoUrl.contains('http')
-                                              ? userdetails.photoUrl
-                                              : bloc.dpPlaceholderLink),
                                       backgroundColor:
                                           Colors.grey.withOpacity(0.2),
                                       child: state is ImageLoadingState
                                           ? const CircularProgressIndicator(
                                               color: ColorConstants.amber,
                                             )
-                                          : null,
+                                          : CachedNetworkImage(
+                                              imageUrl: userdetails.photoUrl,
+                                              fit: BoxFit.cover,
+                                              errorWidget: (context, url,
+                                                      error) =>
+                                                  CachedNetworkImage(
+                                                      imageUrl: ImageConstants
+                                                          .placeholderUserUrl),
+                                            ),
                                     ),
                                     Positioned(
                                         bottom: 1,
