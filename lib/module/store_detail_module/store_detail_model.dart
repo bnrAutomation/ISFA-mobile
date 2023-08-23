@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class GetStoreDetailDataModel {
   GetStoreDetailDataModel({
-    required this.clusterId,
+    // required this.clusterId,
     required this.storeId,
     required this.storeCode,
     required this.name,
@@ -18,7 +18,7 @@ class GetStoreDetailDataModel {
     required this.phoneNo,
   });
 
-  int clusterId;
+  // int clusterId;
   int storeId;
   String storeCode;
   String name;
@@ -40,7 +40,7 @@ class GetStoreDetailDataModel {
 
   factory GetStoreDetailDataModel.fromJson(Map<String, dynamic> json) =>
       GetStoreDetailDataModel(
-        clusterId: json["clusterId"],
+        // clusterId: json["clusterId"],
         storeId: json["storeId"],
         storeCode: json["storeCode"],
         name: json["name"],
@@ -61,7 +61,7 @@ class GetStoreDetailDataModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "clusterId": clusterId,
+        // "clusterId": clusterId,
         "storeId": storeId,
         "storeCode": storeCode,
         "name": name,

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:i_densfa/routes.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -24,13 +25,16 @@ class AppSideMenu extends StatelessWidget {
               decoration: BoxDecoration(color: Theme.of(context).primaryColor),
               currentAccountPicture: CircleAvatar(
                 radius: 55.0,
-                backgroundImage: NetworkImage(AppStorage()
-                        .userDetail!
-                        .photoUrl
-                        .contains('http')
-                    ? AppStorage().userDetail!.photoUrl
-                    : "https://tastevibe.web.app/assets/images/placeholder-user.png"),
                 backgroundColor: Colors.grey.withOpacity(0.2),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(110),
+                  child: CachedNetworkImage(
+                    imageUrl: AppStorage().userDetail!.photoUrl,
+                    fit: BoxFit.cover,
+                    errorWidget: (context, url, error) => CachedNetworkImage(
+                        imageUrl: ImageConstants.placeholderUserUrl),
+                  ),
+                ),
               ),
               otherAccountsPictures: [dutyStatus()],
               accountName:

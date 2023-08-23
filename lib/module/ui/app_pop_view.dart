@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppPopup {
   static Future<T?> showAppBottomSheet<T>(
       {required BuildContext context, required Widget child}) {
     return showModalBottomSheet(
       isScrollControlled: true,
+      useSafeArea: true,
       context: context,
-      constraints:
-          BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 20),
+      constraints: BoxConstraints(maxHeight: 1.sh - 20),
       builder: (context) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(16),

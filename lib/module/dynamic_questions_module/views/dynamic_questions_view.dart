@@ -38,7 +38,9 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                   fontSize: 12.sp,
                   color: Colors.black))),
       child: ListView.builder(
+        shrinkWrap: true,
         itemCount: widget.questions.length,
+        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           final question = widget.questions[index];
           final textControler = controllers[index];

@@ -68,12 +68,14 @@ class TabbarBloc extends Bloc<TabberEvent, TabberState> {
 
     if (event.file == null) {
       emit(TabbarSnackBarMessageState("Please add image"));
+      return;
     }
     emit(OnlineSwitchLoadingTabberState());
     final response = await repo
         .startEndDuty(event.file!, loc.latitude, loc.longitude, true)
         .catchError((onError) {
       emit(TabbarSnackBarMessageState(onError.toString()));
+      emit(OnlineStatusUpdateState());
       return Future<String>.error(onError);
     });
 
@@ -94,12 +96,14 @@ class TabbarBloc extends Bloc<TabberEvent, TabberState> {
 
     if (event.file == null) {
       emit(TabbarSnackBarMessageState("Please add image"));
+      return;
     }
     emit(OnlineSwitchLoadingTabberState());
     final response = await repo
         .startEndDuty(event.file!, loc.latitude, loc.longitude, false)
         .catchError((onError) {
       emit(TabbarSnackBarMessageState(onError.toString()));
+      emit(OnlineStatusUpdateState());
       return Future<String>.error(onError);
     });
 

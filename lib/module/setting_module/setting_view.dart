@@ -37,14 +37,6 @@ class SettingView extends StatelessWidget {
                     expandedHeight: 380,
                     floating: true,
                     pinned: true,
-                    actions: [
-                      TextButton(
-                          style: TextButton.styleFrom(
-                              foregroundColor: Colors.white),
-                          onPressed: () =>
-                              context.pushNamed(AppPaths.profileInfo),
-                          child: const Text('Info'))
-                    ],
                     flexibleSpace: FlexibleSpaceBar(
                       background: Stack(
                         children: [
@@ -78,16 +70,19 @@ class SettingView extends StatelessWidget {
                                           Colors.grey.withOpacity(0.2),
                                       child: state is ImageLoadingState
                                           ? const CircularProgressIndicator(
-                                              color: ColorConstants.amber,
-                                            )
-                                          : CachedNetworkImage(
-                                              imageUrl: userdetails.photoUrl,
-                                              fit: BoxFit.cover,
-                                              errorWidget: (context, url,
-                                                      error) =>
-                                                  CachedNetworkImage(
-                                                      imageUrl: ImageConstants
-                                                          .placeholderUserUrl),
+                                              color: ColorConstants.amber)
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(110),
+                                              child: CachedNetworkImage(
+                                                imageUrl: userdetails.photoUrl,
+                                                fit: BoxFit.cover,
+                                                errorWidget: (context, url,
+                                                        error) =>
+                                                    CachedNetworkImage(
+                                                        imageUrl: ImageConstants
+                                                            .placeholderUserUrl),
+                                              ),
                                             ),
                                     ),
                                     Positioned(
@@ -146,7 +141,7 @@ class SettingView extends StatelessWidget {
                   ),
                   SliverList(
                       delegate: SliverChildListDelegate([
-                    Container(
+                    Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,72 +161,37 @@ class SettingView extends StatelessWidget {
                                       fontWeight: FontWeight.bold),
                             ),
                           ),
-                          InkWell(
+                          SettingListTile(
+                            leadingIcon: Icons.info_outline,
+                            title: 'Info',
+                            subTitle: 'Click to check account info',
+                            onTap: () =>
+                                context.pushNamed(AppPaths.profileInfo),
+                          ),
+                          SettingListTile(
+                            leadingIcon: Icons.email_outlined,
+                            title: "Email",
+                            subTitle: userdetails.email,
                             onTap: () async {
                               await context.pushNamed(AppPaths.changeEmailPhone,
                                   pathParameters: {'changeEmail': "true"});
                               bloc.add(ChangeEmailPhoneSettingsEvent());
                             },
-                            child: ListTile(
-                              leading: const Icon(
-                                Icons.email_outlined,
-                                size: 28,
-                                color: Colors.black,
-                              ),
-                              title: Text(
-                                "Email",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary),
-                              ),
-                              subtitle: Text(
-                                userdetails.email,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              trailing: const Icon(Icons.arrow_forward_ios,
-                                  size: 18, color: Colors.grey),
-                            ),
                           ),
-                          InkWell(
+                          SettingListTile(
+                            leadingIcon: Icons.call_outlined,
+                            title: "Phone Number",
+                            subTitle: userdetails.mobile,
                             onTap: () async {
                               await context.pushNamed(AppPaths.changeEmailPhone,
                                   pathParameters: {'changeEmail': "false"});
                               bloc.add(ChangeEmailPhoneSettingsEvent());
                             },
-                            child: ListTile(
-                              leading: const Icon(
-                                Icons.call_outlined,
-                                size: 28,
-                                color: Colors.black,
-                              ),
-                              title: Text(
-                                "Phone Number",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary),
-                              ),
-                              subtitle: Text(
-                                userdetails.mobile,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              trailing: const Icon(Icons.arrow_forward_ios,
-                                  size: 18, color: Colors.grey),
-                            ),
                           ),
                         ],
                       ),
                     ),
-                    Container(
+                    Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,121 +211,30 @@ class SettingView extends StatelessWidget {
                                         fontWeight: FontWeight.bold),
                               ),
                             ),
-                            InkWell(
-                              onTap: () {
-                                context.pushNamed(AppPaths.changePass);
-                              },
-                              child: ListTile(
-                                leading: const Icon(
-                                  Icons.lock_outline,
-                                  size: 28,
-                                  color: Colors.black,
-                                ),
-                                title: Text(
-                                  "Change Password",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary),
-                                ),
-                                subtitle: Text(
-                                  "Click to change Password",
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                                trailing: const Icon(Icons.arrow_forward_ios,
-                                    size: 18, color: Colors.grey),
-                              ),
+                            SettingListTile(
+                              leadingIcon: Icons.lock_outline,
+                              title: "Change Password",
+                              subTitle: "Click to change Password",
+                              onTap: () =>
+                                  context.pushNamed(AppPaths.changePass),
                             ),
-                            InkWell(
-                              onTap: () {
-                                context.pushNamed(AppPaths.pinset);
-                              },
-                              child: ListTile(
-                                leading: const Icon(
-                                  Icons.pin_outlined,
-                                  size: 28,
-                                  color: Colors.black,
-                                ),
-                                title: Text(
-                                  "Change PIN",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary),
-                                ),
-                                subtitle: Text(
-                                  "Click to change PIN",
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                                trailing: const Icon(Icons.arrow_forward_ios,
-                                    size: 18, color: Colors.grey),
-                              ),
+                            SettingListTile(
+                              leadingIcon: Icons.pin_outlined,
+                              title: "Change PIN",
+                              subTitle: "Click to change PIN",
+                              onTap: () => context.pushNamed(AppPaths.pinset),
                             ),
-                            InkWell(
-                              onTap: () {
-                                context.pushNamed(AppPaths.policy);
-                              },
-                              child: ListTile(
-                                leading: const Icon(
-                                  Icons.policy_outlined,
-                                  size: 28,
-                                  color: Colors.black,
-                                ),
-                                title: Text(
-                                  "Policy",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary),
-                                ),
-                                subtitle: Text(
-                                  "Click to check policy",
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                                trailing: const Icon(Icons.arrow_forward_ios,
-                                    size: 18, color: Colors.grey),
-                              ),
+                            SettingListTile(
+                              leadingIcon: Icons.policy_outlined,
+                              title: "Policy",
+                              subTitle: "Click to check policy",
+                              onTap: () => context.pushNamed(AppPaths.policy),
                             ),
-                            InkWell(
-                              onTap: () {
-                                context.pushNamed(AppPaths.aboutUs);
-                              },
-                              child: ListTile(
-                                leading: const Icon(
-                                  Icons.info_outline,
-                                  size: 28,
-                                  color: Colors.black,
-                                ),
-                                title: Text(
-                                  "About Us",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary),
-                                ),
-                                subtitle: Text(
-                                  "Click to know about us",
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                                trailing: const Icon(Icons.arrow_forward_ios,
-                                    size: 18, color: Colors.grey),
-                              ),
+                            SettingListTile(
+                              leadingIcon: Icons.info_outline,
+                              title: "About Us",
+                              subTitle: "Click to know about us",
+                              onTap: () => context.pushNamed(AppPaths.aboutUs),
                             ),
                           ]),
                     ),
@@ -376,5 +245,46 @@ class SettingView extends StatelessWidget {
             },
           ),
         ));
+  }
+}
+
+class SettingListTile extends StatelessWidget {
+  final String title;
+  final String subTitle;
+  final IconData leadingIcon;
+  final void Function()? onTap;
+
+  const SettingListTile({
+    super.key,
+    required this.leadingIcon,
+    required this.title,
+    required this.subTitle,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: ListTile(
+        leading: Icon(
+          leadingIcon,
+          size: 28,
+          color: Colors.black,
+        ),
+        title: Text(
+          title,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onPrimary),
+        ),
+        subtitle: Text(
+          subTitle,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        trailing:
+            const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
+      ),
+    );
   }
 }

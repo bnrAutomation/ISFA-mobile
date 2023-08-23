@@ -47,7 +47,7 @@ class SelectedAssessmentView extends StatelessWidget {
                   Icons.calendar_month_outlined,
                   color: theme.primaryColor,
                 ),
-                title: const Text("Change Date"),
+                title: Text(bloc.selectedAssessment!.name),
                 subtitle: Text(
                     "From: ${bloc.selectedAssessment!.startDate.toStringFormat("dd-MM-yyyy")} To: ${bloc.selectedAssessment!.endDate.toStringFormat("dd-MM-yyyy")}"),
               ),
