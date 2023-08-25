@@ -210,21 +210,21 @@ class _MyScheduleViewState extends State<MyScheduleView> {
               );
             },
           ),
-          SpeedDialChild(
-            child: const Icon(Icons.pending_actions),
-            foregroundColor: Colors.white,
-            backgroundColor: Theme.of(context).primaryColor,
-            label: 'Schedule Visit',
-            onPressed: () {
-              final plans = context.read<MyScheduleBloc>().beatPlans;
-              if (plans.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Don't have store to schedule visit.")));
-              } else {
-                context.pushNamed(AppPaths.scheduleVisit, extra: plans);
-              }
-            },
-          ),
+          // SpeedDialChild(
+          //   child: const Icon(Icons.pending_actions),
+          //   foregroundColor: Colors.white,
+          //   backgroundColor: Theme.of(context).primaryColor,
+          //   label: 'Schedule Visit',
+          //   onPressed: () {
+          //     final plans = context.read<MyScheduleBloc>().beatPlans;
+          //     if (plans.isEmpty) {
+          //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          //           content: Text("Don't have store to schedule visit.")));
+          //     } else {
+          //       context.pushNamed(AppPaths.scheduleVisit, extra: plans);
+          //     }
+          //   },
+          // ),
         ],
         closedForegroundColor: Colors.white,
         closedBackgroundColor: Theme.of(context).primaryColor,

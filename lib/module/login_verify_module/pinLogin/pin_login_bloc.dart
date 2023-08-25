@@ -15,12 +15,14 @@ class PinLoginBloc extends Bloc<PinLoginEvent, PinLoginState> {
         emit(PinLogInErrorState("Pin is empty"));
       } else {
         try {
+          emit(PinLoginLoadingState());
           final loginResponse = await repo.verifyPin(
               username: AppStorage().userDetail?.username.toString() ?? "",
               pin: event.pin);
           AppStorage().userDetail = loginResponse.logindata.userInfo;
           emit(LoginedSuccesfullState());
         } catch (err) {
+          debugPrint(err.toString());
           debugPrint("pin is:- ${AppStorage().userDetail?.pin}");
           emit(PinLogInErrorState(err.toString()));
         }

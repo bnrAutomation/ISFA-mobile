@@ -45,7 +45,7 @@ class BeatPlanModel {
         isAlreadyMarkin: json["alreadyMarkout"] ?? false,
         pjpDate: DateTime.parse(json["pjpDate"]),
         storeName: json["storeName"],
-        storeCategory: json["storeCategory"],
+        storeCategory: json["storeCategory"] ?? '',
         address: json["address"],
         latitude: double.tryParse(json["latitude"].toString()),
         longitude: double.tryParse(json["longitude"].toString()),

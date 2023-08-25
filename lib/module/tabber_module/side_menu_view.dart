@@ -76,14 +76,14 @@ class AppSideMenu extends StatelessWidget {
               );
             },
           ).toList(),
-          if (data.userInfo.iRole.toLowerCase() != 'fwp')
-            ListTile(
-              leading: const Icon(Icons.group),
-              title: const Text('Team'),
-              onTap: () {
-                closeDrawerAndPushView(context, AppPaths.team);
-              },
-            ),
+          // if (data.userInfo.iRole.toLowerCase() != 'fwp')
+          //   ListTile(
+          //     leading: const Icon(Icons.group),
+          //     title: const Text('Team'),
+          //     onTap: () {
+          //       closeDrawerAndPushView(context, AppPaths.team);
+          //     },
+          //   ),
           ListTile(
             leading: const Icon(
               Icons.settings_outlined,
