@@ -41,17 +41,7 @@ class InventoryView extends StatelessWidget {
           ),
         );
       }),
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          "Inventory",
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: Colors.white),
-        ),
-      ),
+      appBar: AppBar(title: const Text("Inventory")),
       body: CustomScrollView(
         slivers: [
           SliverList(

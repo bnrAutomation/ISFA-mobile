@@ -16,13 +16,7 @@ class AssessmentListView extends StatelessWidget {
       appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
           iconTheme: const IconThemeData(color: Colors.white),
-          title: Text(
-            "Assessment",
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(color: Colors.white),
-          )),
+          title: const Text("Assessment")),
       body: BlocBuilder<AssessmentBloc, AssessmentState>(
         builder: (context, state) {
           final bloc = context.read<AssessmentBloc>();
@@ -39,7 +33,7 @@ class AssessmentListView extends StatelessWidget {
             itemBuilder: (context, index) {
               final item = list[index];
               final colors = [
-                Theme.of(context).primaryColor,
+                const Color(0XFF003D5B),
                 const Color(0xffDB4C5B),
                 ColorConstants.amber,
                 const Color(0xff464646),

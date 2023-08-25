@@ -8,34 +8,11 @@ import 'package:i_densfa/utility/push_notification_manager.dart';
 void main() async {
   await AppStorage.objectValue();
   PushNotificationsManager().init();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  final ThemeData _darkTheme = ThemeData.light(useMaterial3: true).copyWith(
-      colorScheme: ThemeData.light(useMaterial3: true).colorScheme.copyWith(
-          primary: const Color(0XFF003D5B),
-          onPrimary: ColorConstants.amber,
-          onBackground: const Color(0xFF232323)),
-      primaryColor: const Color(0XFF003D5B),
-      buttonTheme: const ButtonThemeData(
-        buttonColor: ColorConstants.amber,
-        disabledColor: Colors.white,
-      ));
-
-  final ThemeData _lightTheme = ThemeData.light(useMaterial3: true).copyWith(
-      colorScheme: ThemeData.light(useMaterial3: true).colorScheme.copyWith(
-            primary: const Color(0XFF003D5B),
-            onPrimary: ColorConstants.amber,
-            background: const Color(0xFFF8F8F8),
-          ),
-      primaryColor: const Color(0XFF003D5B),
-      buttonTheme: const ButtonThemeData(
-        buttonColor: ColorConstants.amber,
-        disabledColor: Colors.white,
-      ));
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +21,23 @@ class MyApp extends StatelessWidget {
         routerConfig: router,
         title: const String.fromEnvironment('APP_NAME'),
         debugShowCheckedModeBanner: false,
-        theme: _lightTheme,
-        darkTheme: _darkTheme,
-        themeMode: ThemeMode.light,
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: ColorConstants.amber,
+            primary: ColorConstants.amber,
+            secondary: ColorConstants.amberFade,
+          ),
+          appBarTheme: const AppBarTheme(
+              color: ColorConstants.amber,
+              centerTitle: true,
+              elevation: 2,
+              foregroundColor: Colors.white,
+              titleTextStyle: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w400,
+              )),
+        ),
       );
     });
   }

@@ -15,17 +15,7 @@ class ChangePasswordView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          "Change Password",
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: Colors.white),
-        ),
-      ),
+      appBar: AppBar(title: const Text("Change Password")),
       body: RepositoryProvider(
         create: (context) => ChangePasswordRepository(),
         child: BlocProvider(

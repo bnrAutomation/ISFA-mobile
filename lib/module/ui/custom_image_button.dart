@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 
 class CustomImageButton extends StatelessWidget {
   final String buttonText;
@@ -11,14 +12,7 @@ class CustomImageButton extends StatelessWidget {
     required this.onPressed,
     required this.image,
     this.gradient = const LinearGradient(
-      colors: <Color>[
-        // ColorConstants.amber,
-        // Color(0XFFC92434),
-        Color(0XFF003D5B),
-        Color(0XFF278BBC),
-        // ColorConstants.amber,
-      ],
-    ),
+        colors: <Color>[ColorConstants.amber, ColorConstants.amberFade]),
   });
   @override
   Widget build(BuildContext context) {

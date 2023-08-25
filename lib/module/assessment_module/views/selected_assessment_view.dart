@@ -21,13 +21,7 @@ class SelectedAssessmentView extends StatelessWidget {
     final AssessmentBloc bloc = context.read();
     return Scaffold(
       backgroundColor: const Color(0xffBFD1DF),
-      appBar: AppBar(
-          backgroundColor: theme.primaryColor,
-          iconTheme: const IconThemeData(color: Colors.white),
-          title: Text(
-            "Assessment",
-            style: textTheme.titleMedium?.copyWith(color: Colors.white),
-          )),
+      appBar: AppBar(title: const Text("Assessment")),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8.0),
         child: Column(

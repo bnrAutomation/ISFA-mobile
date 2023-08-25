@@ -25,38 +25,17 @@ class PolicyView extends StatelessWidget {
       );
   }
 
-  // _loadHtmlFromAssets(WebViewController controller) async {
-  //   String fileText = await rootBundle.loadString('assets/privacy.html');
-  //   controller.loadHtmlString(fileText);
-  //   // controller.loadUrl( Uri.dataFromString(
-  //   //     fileText,
-  //   //     mimeType: 'text/html',
-  //   //     encoding: Encoding.getByName('utf-8')
-  //   // ).toString());
-  // }
-
   @override
   Widget build(BuildContext context) {
     WebViewController webViewController = getController();
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          "Policy",
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: Colors.white),
-        ),
-      ),
+      appBar: AppBar(title: const Text("Policy")),
       body: BlocProvider(
         create: (context) => PolicyBloc(webViewController)..add(GetFile()),
         child: BlocBuilder<PolicyBloc, PolicyState>(
-          builder: (context, state) {
-            return WebViewWidget(controller: webViewController);
-          },
+          builder: (context, state) =>
+              WebViewWidget(controller: webViewController),
         ),
       ),
     );

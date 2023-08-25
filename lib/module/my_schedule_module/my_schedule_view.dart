@@ -295,11 +295,7 @@ class StoreCardView extends StatelessWidget {
                         alignment: Alignment.center,
                         backgroundColor: Theme.of(context).primaryColor,
                       ),
-                      child: Center(
-                        child: Text('View Store',
-                            style: GoogleFonts.inter(
-                                fontSize: 10, color: Colors.white)),
-                      ))
+                      child: const Center(child: Text('View Store')))
                 ],
               )
             ],

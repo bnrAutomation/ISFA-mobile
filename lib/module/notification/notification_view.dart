@@ -10,9 +10,7 @@ class NotificationsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notification'),
-      ),
+      appBar: AppBar(title: const Text('Notification')),
       body: BlocProvider(
         lazy: false,
         create: (context) => NotificationBloc(),

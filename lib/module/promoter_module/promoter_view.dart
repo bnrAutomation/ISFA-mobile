@@ -27,17 +27,7 @@ class PromoterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0XFF003D5B),
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          "Promoter",
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: Colors.white),
-        ),
-      ),
+      appBar: AppBar(title: const Text("Promoter")),
       body: Column(children: [
         const SizedBox(height: 5),
         Card(
@@ -210,7 +200,7 @@ class PromoterView extends StatelessWidget {
               else if (bloc.isMarkedIn)
                 CustomMaterialButton(
                     gradient: const LinearGradient(
-                      colors: <Color>[Color(0XFFC92434), Color(0XFF003D5B)],
+                      colors: <Color>[Color(0XFFC92434), ColorConstants.amber],
                     ),
                     buttonText: state is PromoterStoreDetailLoadingState ||
                             bloc.storeDetail == null
@@ -230,8 +220,8 @@ class PromoterView extends StatelessWidget {
                             ? "No Store"
                             : "Check-In Store",
                     gradient: const LinearGradient(colors: <Color>[
-                      Color(0XFF003D5B),
-                      Color(0XFF278BBC),
+                      ColorConstants.amber,
+                      ColorConstants.amberFade,
                     ]),
                     onPressed: () {
                       if (state is! PromoterStoreDetailLoadingState ||

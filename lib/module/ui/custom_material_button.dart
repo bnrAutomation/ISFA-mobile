@@ -15,8 +15,6 @@ class CustomMaterialButton extends StatelessWidget {
         Color(0XFFC92434),
         Color(0XFF003D5B),
         ColorConstants.amber,
-
-        // ColorConstants.amber, Colors.black
       ],
     ),
   });

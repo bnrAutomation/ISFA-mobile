@@ -78,8 +78,6 @@ class StoreDetailView extends StatelessWidget {
         },
       ),
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        iconTheme: const IconThemeData(color: Colors.white),
         leading: IconButton(
             onPressed: () => context.pop(),
             icon: const Icon(Icons.arrow_back_ios)),

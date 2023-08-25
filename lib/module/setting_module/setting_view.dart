@@ -32,7 +32,6 @@ class SettingView extends StatelessWidget {
               return CustomScrollView(
                 slivers: [
                   SliverAppBar(
-                    iconTheme: const IconThemeData(color: Colors.white),
                     backgroundColor: const Color(0XFFBFD1DF),
                     expandedHeight: 380,
                     floating: true,

@@ -41,10 +41,7 @@ class TeamProfileView extends StatelessWidget {
     ];
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.white,
         title: const Text('Team'),
-        titleTextStyle: TextStyle(
-            color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold),
         backgroundColor: Colors.grey.shade800,
       ),
       body: SingleChildScrollView(

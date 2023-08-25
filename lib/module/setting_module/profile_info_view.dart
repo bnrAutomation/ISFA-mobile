@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
 
@@ -12,10 +11,7 @@ class ProfileInfoview extends StatelessWidget {
     final profileDetail = AppStorage().userDetail!;
     final deviceInfo = Device();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Your Information'),
-        backgroundColor: ColorConstants.amber,
-      ),
+      appBar: AppBar(title: const Text('Your Information')),
       body: SingleChildScrollView(
         child: Column(
           children: [

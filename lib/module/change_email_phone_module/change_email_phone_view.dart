@@ -34,15 +34,8 @@ class _ChangeEmailPhoneViewState extends State<ChangeEmailPhoneView> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          widget.changeEmail ? "Change Email" : "Change Phone number",
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: Colors.white),
-        ),
+        title:
+            Text(widget.changeEmail ? "Change Email" : "Change Phone number"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),

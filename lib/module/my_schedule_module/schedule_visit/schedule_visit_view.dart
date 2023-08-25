@@ -14,11 +14,7 @@ class ScheduleVisitView extends StatelessWidget {
     final bloc = context.read<ScheduleVisitCallBloc>();
     final type = bloc.schedulingFor;
     return Scaffold(
-      appBar: AppBar(
-          title: Text(
-        'Schedule Visit', // or Call',
-        style: Theme.of(context).textTheme.titleSmall,
-      )),
+      appBar: AppBar(title: const Text('Schedule Visit')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocListener<ScheduleVisitCallBloc, ScheduleVisitCallState>(

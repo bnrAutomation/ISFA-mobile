@@ -25,12 +25,7 @@ class AssessmentQuestionsView extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          iconTheme: const IconThemeData(color: Colors.white),
-          title: Text(
-            "Assessment",
-            style: textTheme.titleMedium?.copyWith(color: Colors.white),
-          ),
+          title: const Text("Assessment"),
           actions: [
             BlocBuilder<AssessmentBloc, AssessmentState>(
               buildWhen: (previous, current) =>

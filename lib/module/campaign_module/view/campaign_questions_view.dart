@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/campaign_module/bloc/campaign_bloc.dart';
 import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions_view.dart';
-import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/custom_tab_view.dart';
 
 class CampaignQuestionsView extends StatelessWidget {
@@ -12,7 +11,6 @@ class CampaignQuestionsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final CampaignBloc bloc = context.read();
 
     return WillPopScope(
@@ -24,13 +22,7 @@ class CampaignQuestionsView extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: ColorConstants.amber,
-          title: Text(
-            bloc.selectedCampaign?.name ?? "Campaign",
-            style: textTheme.titleMedium,
-          ),
-        ),
+        appBar: AppBar(title: Text(bloc.selectedCampaign?.name ?? "Campaign")),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

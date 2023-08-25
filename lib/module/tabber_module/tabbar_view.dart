@@ -74,10 +74,7 @@ class TabbarView extends StatelessWidget {
                         ? const SizedBox()
                         : IconButton(
                             onPressed: () => Scaffold.of(context).openDrawer(),
-                            icon: const Icon(
-                              Icons.blur_on_sharp,
-                              color: Colors.black,
-                            ));
+                            icon: const Icon(Icons.blur_on_sharp));
                   }),
                 ),
                 actions: [

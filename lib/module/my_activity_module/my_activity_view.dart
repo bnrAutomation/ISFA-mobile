@@ -21,16 +21,7 @@ class MyActivityViewState extends State<MyActivityView> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          widget.forUserId == null ? "My Activity" : "Activity",
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: Colors.white),
-        ),
-      ),
+          title: Text(widget.forUserId == null ? "My Activity" : "Activity")),
       body: RepositoryProvider(
         create: (context) => MyActivityRepository(widget.forUserId),
         child: BlocProvider(

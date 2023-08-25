@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/team_module/bloc/team_bloc.dart';
 import 'package:i_densfa/module/team_module/views/team_hierarchy_view.dart';
 import 'package:i_densfa/module/team_module/views/team_list_view.dart';
@@ -14,12 +13,7 @@ class TeamMainView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          foregroundColor: Colors.white,
           title: const Text('Team'),
-          titleTextStyle: TextStyle(
-              color: Colors.white,
-              fontSize: 20.sp,
-              fontWeight: FontWeight.bold),
           backgroundColor: Colors.grey.shade800,
         ),
         body: BlocProvider(

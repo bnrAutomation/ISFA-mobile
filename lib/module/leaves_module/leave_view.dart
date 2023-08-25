@@ -24,14 +24,7 @@ class LeaveView extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          "My Leave",
-          style: textTheme.titleSmall?.copyWith(color: Colors.white),
-        ),
-      ),
+      appBar: AppBar(title: const Text("My Leave")),
       body: RepositoryProvider(
         create: (context) => LeaveRepository(),
         child: BlocProvider(
