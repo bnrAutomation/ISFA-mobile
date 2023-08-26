@@ -46,7 +46,7 @@ class SettingView extends StatelessWidget {
                                 borderRadius: const BorderRadius.only(
                                     bottomRight: Radius.circular(25.0),
                                     bottomLeft: Radius.circular(25.0)),
-                                color: Theme.of(context).colorScheme.primary),
+                                color: Theme.of(context).primaryColor),
                           )),
                           Positioned.fill(
                               child: Column(

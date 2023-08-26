@@ -36,8 +36,7 @@ class CheckInView extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   border: Border.all(
-                      width: 0.5.sp,
-                      color: Theme.of(context).colorScheme.primary)),
+                      width: 0.5.sp, color: Theme.of(context).primaryColor)),
               width: 1.sw,
               height: 0.5.sw,
               child: Center(
@@ -48,7 +47,7 @@ class CheckInView extends StatelessWidget {
                       Text(
                 'Include the surroundings and avoid glare.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                style: TextStyle(color: Theme.of(context).primaryColor),
               )
                   // : Image.file(File(
                   //     .filePath.value)),

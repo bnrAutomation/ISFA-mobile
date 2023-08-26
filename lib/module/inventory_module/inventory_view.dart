@@ -50,7 +50,7 @@ class InventoryView extends StatelessWidget {
               //   alignment: Alignment.topRight,
               //   child: MaterialButton(
               //     onPressed: () {},
-              //     color: Theme.of(context).colorScheme.primary,
+              //     color: Theme.of(context).primaryColor,
               //     textColor: Colors.white,
               //     shape: const CircleBorder(),
               //     child: SvgPicture.asset(ImageConstants.filter),
@@ -58,7 +58,7 @@ class InventoryView extends StatelessWidget {
               // ),
               Card(
                 margin: EdgeInsets.symmetric(horizontal: 15.w),
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).primaryColor,
                 elevation: 5,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20)),

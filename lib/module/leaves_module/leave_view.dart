@@ -150,7 +150,7 @@ class LeaveView extends StatelessWidget {
                         percent: bloc.completeLeavePercent,
                         linesAmount: 80,
                         linesLength: 20,
-                        linesColor: Theme.of(context).colorScheme.primary,
+                        linesColor: Theme.of(context).primaryColor,
                         centerWidgetBuilder: (context) => Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
@@ -222,7 +222,7 @@ class LeaveView extends StatelessWidget {
     final model = context.read<LeaveBloc>().details!.leaveTypeBalance[index];
 
     // final ccolor = index == 0
-    //     ? Theme.of(context).colorScheme.primary
+    //     ? Theme.of(context).primaryColor
     //     : index == 1
     //         ? const Color(0XFFC92434)
     //         : index == 2

@@ -52,7 +52,7 @@ class _MyScheduleViewState extends State<MyScheduleView> {
             return Column(
               children: [
                 ListTile(
-                  tileColor: const Color(0xff278BBC).withOpacity(0.2),
+                  tileColor: Theme.of(context).primaryColor.withOpacity(0.15),
                   leading: bloc.selectedDate.isAfter(DateTime.now())
                       ? IconButton(
                           onPressed: bloc.onPreviousDateSelect,
@@ -60,14 +60,14 @@ class _MyScheduleViewState extends State<MyScheduleView> {
                             Icons.chevron_left,
                             color: bloc.selectedDate == DateTime.now()
                                 ? Colors.grey
-                                : Theme.of(context).colorScheme.primary,
+                                : Theme.of(context).primaryColor,
                           ))
                       : const SizedBox(),
                   trailing: IconButton(
                       onPressed: bloc.onNextDateSelect,
                       icon: Icon(
                         Icons.chevron_right,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).primaryColor,
                       )),
                   title: TextButton(
                       onPressed: () async {
@@ -90,8 +90,7 @@ class _MyScheduleViewState extends State<MyScheduleView> {
                           backgroundColor: Colors.transparent,
                           textStyle:
                               const TextStyle(fontWeight: FontWeight.w700),
-                          foregroundColor:
-                              Theme.of(context).colorScheme.primary),
+                          foregroundColor: Theme.of(context).primaryColor),
                       child: Text(
                           bloc.selectedDate.toStringFormat('dd MMM yyyy'))),
                 ),
