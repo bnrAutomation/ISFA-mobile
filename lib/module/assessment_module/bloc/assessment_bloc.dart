@@ -71,6 +71,7 @@ class AssessmentBloc extends Bloc<AssessmentEvent, AssessmentState> {
         final score = await repo
             .saveAssessmentAnswers(answers, _secondsTook ~/ 60)
             .catchError((error) {
+          emit(SnackbarMessageAssessmentState('Something went wrong!!'));
           emit(ScoreCalculatedAssessmentState());
           return Future<AssessmentScoreModel>.error(error);
         });

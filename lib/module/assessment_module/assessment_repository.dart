@@ -37,8 +37,8 @@ class AssessmentRepository {
       List<Map<String, dynamic>> answers, int timeTook) async {
     final bodyMap = {
       "answerData": answers,
-      "assessmentCompletionTime": timeTook,
-      "assessmentId": answers.first['assessmentId']
+      "assessmentCompletionTime": timeTook.toString(),
+      "assessmentId": answers.first['assessmentId'].toString()
     };
     final response = await post(
       Uri.parse("${URLConstants.saveAssessmentAnswers}/$userId"),

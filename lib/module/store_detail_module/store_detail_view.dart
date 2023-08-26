@@ -24,64 +24,8 @@ class StoreDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: BlocBuilder<StoreDetailBloc, StoreDetailState>(
-        builder: (context, state) {
-          final bloc = context.read<StoreDetailBloc>();
-          if (!bloc.beatPlanModel.markin) {
-            return const SizedBox();
-          } else {
-            return SpeedDial(
-                speedDialChildren: [
-                  SpeedDialChild(
-                    child: const Icon(Icons.campaign),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    label: 'Campaign',
-                    onPressed: () => bloc.add(GotoCompaignEvent()),
-                    closeSpeedDialOnPressed: false,
-                  ),
-                  SpeedDialChild(
-                    child: const Icon(Icons.feedback),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    label: 'Feedback',
-                    onPressed: () {
-                      final storeDetail = bloc.details;
-                      if (storeDetail != null) {
-                        AppPopup.showAppBottomSheet(
-                          context: context,
-                          child: FeedbackView(storeName: storeDetail.name),
-                        );
-                      }
-                    },
-                  ),
-                  SpeedDialChild(
-                    child: const Icon(Icons.schedule),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    label: 'Schedule',
-                    onPressed: () {
-                      context.pushNamed(AppPaths.scheduleVisit,
-                          extra: [bloc.beatPlanModel]);
-                    },
-                  ),
-                ],
-                closedForegroundColor: Colors.white,
-                closedBackgroundColor: Theme.of(context).primaryColor,
-                openForegroundColor: Theme.of(context).primaryColor,
-                openBackgroundColor: Colors.white,
-                child: Icon(
-                  Icons.add,
-                  size: 30.w,
-                ));
-          }
-        },
-      ),
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () => context.pop(),
-            icon: const Icon(Icons.arrow_back_ios)),
-      ),
+      floatingActionButton: _floatingButtons(),
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: BlocConsumer<StoreDetailBloc, StoreDetailState>(
           listenWhen: (previous, current) =>
@@ -227,6 +171,62 @@ class StoreDetailView extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  Builder _floatingButtons() {
+    return Builder(
+      builder: (context) {
+        final bloc = context.read<StoreDetailBloc>();
+        if (!bloc.beatPlanModel.markin) {
+          return const SizedBox();
+        } else {
+          return SpeedDial(
+              speedDialChildren: [
+                SpeedDialChild(
+                  child: const Icon(Icons.campaign),
+                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  label: 'Campaign',
+                  onPressed: () => bloc.add(GotoCompaignEvent()),
+                  closeSpeedDialOnPressed: false,
+                ),
+                SpeedDialChild(
+                  child: const Icon(Icons.feedback),
+                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  label: 'Feedback',
+                  onPressed: () {
+                    final storeDetail = bloc.details;
+                    if (storeDetail != null) {
+                      AppPopup.showAppBottomSheet(
+                        context: context,
+                        child: FeedbackView(storeName: storeDetail.name),
+                      );
+                    }
+                  },
+                ),
+                SpeedDialChild(
+                  child: const Icon(Icons.schedule),
+                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  label: 'Schedule',
+                  onPressed: () {
+                    context.pushNamed(AppPaths.scheduleVisit,
+                        extra: [bloc.beatPlanModel]);
+                  },
+                ),
+              ],
+              closedForegroundColor: Colors.white,
+              closedBackgroundColor: Theme.of(context).primaryColor,
+              openForegroundColor: Theme.of(context).primaryColor,
+              openBackgroundColor: Colors.white,
+              child: Icon(
+                Icons.add,
+                size: 30.w,
+              ));
+        }
+      },
     );
   }
 

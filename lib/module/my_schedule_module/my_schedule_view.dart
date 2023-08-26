@@ -35,7 +35,7 @@ class _MyScheduleViewState extends State<MyScheduleView> {
             ? AppBar(title: const Text('Schedule'))
             : null,
         floatingActionButton:
-            widget.forUserId != null ? null : _floatingActionButtons(context),
+            widget.forUserId != null ? null : _floatingActionButtons(),
         body: BlocConsumer<MyScheduleBloc, MyScheduleState>(
           listenWhen: (previous, current) =>
               current is MyScheduleSnackBarMessage ||
@@ -176,8 +176,13 @@ class _MyScheduleViewState extends State<MyScheduleView> {
     );
   }
 
-  SpeedDial _floatingActionButtons(BuildContext context) {
-    return SpeedDial(
+  Widget _floatingActionButtons() {
+    return Builder(builder: (context) {
+      return SpeedDial(
+        closedForegroundColor: Colors.white,
+        closedBackgroundColor: Theme.of(context).primaryColor,
+        openForegroundColor: Theme.of(context).primaryColor,
+        openBackgroundColor: Colors.white,
         speedDialChildren: [
           SpeedDialChild(
             child: const Icon(Icons.article),
@@ -226,14 +231,12 @@ class _MyScheduleViewState extends State<MyScheduleView> {
           //   },
           // ),
         ],
-        closedForegroundColor: Colors.white,
-        closedBackgroundColor: Theme.of(context).primaryColor,
-        openForegroundColor: Theme.of(context).primaryColor,
-        openBackgroundColor: Colors.white,
         child: Icon(
           Icons.add,
           size: 30.w,
-        ));
+        ),
+      );
+    });
   }
 }
 

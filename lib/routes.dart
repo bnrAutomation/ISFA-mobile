@@ -7,7 +7,6 @@ import 'package:i_densfa/module/splash_module/splash_view.dart';
 import 'package:i_densfa/module/team_module/views/teams_main_view.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
-import 'module/assessment_module/assessment_repository.dart';
 import 'module/campaign_module/bloc/campaign_bloc.dart';
 import 'module/campaign_module/view/campaign_questions_view.dart';
 import 'module/campaign_module/view/campaign_view.dart';
@@ -74,14 +73,6 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
-      path: AppPaths.assessmentQuestion,
-      name: AppPaths.assessmentQuestion,
-      builder: (context, state) => BlocProvider.value(
-        value: state.extra as AssessmentBloc,
-        child: const AssessmentQuestionsView(),
-      ),
-    ),
-    GoRoute(
       path: AppPaths.campaignQuestion,
       name: AppPaths.campaignQuestion,
       builder: (context, state) => BlocProvider.value(
@@ -105,20 +96,22 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.assessmentList,
       name: AppPaths.assessmentList,
-      builder: (context, state) => BlocProvider(
-        create: (context) => AssessmentBloc(AssessmentRepository())
-          ..add(GetUserAssessmentsEvent()),
-        child: const AssessmentListView(),
-      ),
+      builder: (context, state) => const AssessmentListView(),
     ),
     GoRoute(
       path: AppPaths.assessment,
       name: AppPaths.assessment,
-      builder: (context, state) {
-        return BlocProvider.value(
-            value: state.extra as AssessmentBloc,
-            child: const SelectedAssessmentView());
-      },
+      builder: (context, state) => BlocProvider.value(
+          value: state.extra as AssessmentBloc,
+          child: const SelectedAssessmentView()),
+    ),
+    GoRoute(
+      path: AppPaths.assessmentQuestion,
+      name: AppPaths.assessmentQuestion,
+      builder: (context, state) => BlocProvider.value(
+        value: state.extra as AssessmentBloc,
+        child: const AssessmentQuestionsView(),
+      ),
     ),
     GoRoute(
       path: AppPaths.selfie,
