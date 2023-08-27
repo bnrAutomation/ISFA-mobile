@@ -1,4 +1,4 @@
-import 'package:http/http.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/module/my_activity_module/model/my_activity_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
@@ -13,7 +13,7 @@ class MyActivityRepository {
   Future<List<MyActivityDataList>> getMyActivity({
     required DateTime dateTime,
   }) async {
-    final response = await get(Uri.parse(
+    final response = await CustomHttpBaseClient().get(Uri.parse(
         '${URLConstants.activities}/$userId/${dateTime.toStringFormat('yyyy-MM-dd')}'));
     return response.body.isEmpty
         ? <MyActivityDataList>[]

@@ -2,18 +2,19 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/module/promoter_module/feedback/model/feedback_model.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
-import 'package:i_densfa/utility/handler.dart';
 import 'package:image_picker/image_picker.dart';
 
 class StoreDetailRepository {
   final userId = AppStorage().userDetail!.id;
+  final client = CustomHttpBaseClient();
   Future<GetStoreDetailDataModel> getStoreDetails(int storeId) async {
-    final response =
-        await get(Uri.parse("${URLConstants.getStoreDetail}/$userId/$storeId"));
+    final response = await client
+        .get(Uri.parse("${URLConstants.getStoreDetail}/$userId/$storeId"));
 
     if (response.statusCode == 200) {
       final dataJson = jsonDecode(response.body)['data'];
@@ -29,7 +30,7 @@ class StoreDetailRepository {
   Future<bool> addNoteForStore(String note, int storeId) async {
     final requestBody = {"note": note, "storeId": storeId, "userId": userId};
 
-    final response = await post(Uri.parse(URLConstants.addNote),
+    final response = await client.post(Uri.parse(URLConstants.addNote),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(requestBody));
     if (response.statusCode == 201 || response.statusCode == 200) {
@@ -45,7 +46,7 @@ class StoreDetailRepository {
       "createdBy": AppStorage().userDetail!.username
     };
 
-    final response = await post(
+    final response = await client.post(
         Uri.parse(URLConstants.getFeedbackByUserIdAndStore),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(requestBody));
@@ -60,7 +61,7 @@ class StoreDetailRepository {
 
   Future<bool> deleteNoteForStore(int noteId) async {
     final response =
-        await delete(Uri.parse('${URLConstants.deleteNote}/$noteId'));
+        await client.delete(Uri.parse('${URLConstants.deleteNote}/$noteId'));
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -77,18 +78,18 @@ class StoreDetailRepository {
       required bool isIn}) async {
     final url = Uri.parse(isIn ? URLConstants.markin : URLConstants.markOut);
     final request = MultipartRequest('POST', url);
-
+    request.headers.addAll({
+      'Authorization': 'Bearer ${AppStorage().authToken}',
+    });
     final multipartFile = await MultipartFile.fromPath('file', file.path);
-
     request.files.add(multipartFile);
-    final userId = AppStorage().userDetail!.id;
-    final companyId = AppStorage().userDetail!.companyId;
+
     request.fields.addAll({
       "userId": userId.toString(),
       "storeId": storeId.toString(),
       "status": isIn.toString(),
       "pjpId": pjpId.toString(),
-      "campaignId": companyId.toString()
+      "campaignId": AppStorage().userDetail!.companyId.toString()
     });
     if (isIn) {
       request.fields.addAll({

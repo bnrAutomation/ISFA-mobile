@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/module/my_schedule_module/beat_plan_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
-import 'package:i_densfa/utility/handler.dart';
 
 part 'schedule_visit_call_event.dart';
 part 'schedule_visit_call_state.dart';
@@ -56,7 +55,7 @@ class ScheduleVisitCallBloc
       final userId = AppStorage().userDetail!.id;
       final companyId = AppStorage().homeInfo!.userInfo.companyId;
       emit(ScheduleVisitCallLoadingState());
-      final response = await post(
+      final response = await CustomHttpBaseClient().post(
         Uri.parse(URLConstants.sheduleVisit),
         body: jsonEncode({
           "companyId": companyId,

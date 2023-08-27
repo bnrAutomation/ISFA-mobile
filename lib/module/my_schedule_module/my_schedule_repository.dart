@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart';
 import 'package:i_densfa/module/my_schedule_module/store_list_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
@@ -13,12 +12,13 @@ class MyScheduleRepository {
   final int companyId = AppStorage().homeInfo!.userInfo.companyId;
   final int userId;
 
+  final httpClient = CustomHttpBaseClient();
   MyScheduleRepository(int? forUserId)
       : userId = forUserId ?? AppStorage().userDetail!.id;
 
   Future<List<BeatPlanModel>> getBeatPlans(DateTime date) async {
     // {"date":"2023-04-09","userId":1,"companyId":33}
-    final response = await post(Uri.parse(URLConstants.beatPlans),
+    final response = await httpClient.post(Uri.parse(URLConstants.beatPlans),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           "date": date.toStringFormat("yyyy-MM-dd"),
@@ -41,7 +41,7 @@ class MyScheduleRepository {
 
   Future<List<StoreItemModel>> getStores() async {
     final response =
-        await get(Uri.parse('${URLConstants.getStores}/$companyId'));
+        await httpClient.get(Uri.parse('${URLConstants.getStores}/$companyId'));
 
     if (response.statusCode == 200) {
       final dataList = json.decode(response.body)["dataList"];
@@ -57,17 +57,18 @@ class MyScheduleRepository {
   }
 
   Future<bool> beatPlanUpload(DateTime date, String reason, int storeId) async {
-    final response = await post(Uri.parse(URLConstants.beatPlanUpload),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          "companyId": companyId,
-          "pjpDate": date.toStringFormat("yyyy-MM-dd"),
-          "remarks": reason,
-          "storeId": storeId,
-          "userId": userId,
-          "createdBy": AppStorage().userDetail?.roles,
-          "active": "true"
-        }));
+    final response =
+        await httpClient.post(Uri.parse(URLConstants.beatPlanUpload),
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode({
+              "companyId": companyId,
+              "pjpDate": date.toStringFormat("yyyy-MM-dd"),
+              "remarks": reason,
+              "storeId": storeId,
+              "userId": userId,
+              "createdBy": AppStorage().userDetail?.roles,
+              "active": "true"
+            }));
     if (response.statusCode != 200) {
       throw getErrorMessage(response.body);
     } else {

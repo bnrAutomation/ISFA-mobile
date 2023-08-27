@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/module/notification/notifcation_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 
@@ -18,7 +18,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       GetNotificationsEvent event, Emitter<NotificationState> emit) async {
     const url = "${URLConstants.getNotifications}/19";
     emit(NotificationsLoading());
-    final response = await get(Uri.parse(url));
+    final response = await CustomHttpBaseClient().get(Uri.parse(url));
     if (response.statusCode == 200) {
       try {
         notifcations =

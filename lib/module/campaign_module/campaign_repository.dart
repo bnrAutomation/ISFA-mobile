@@ -1,20 +1,19 @@
 import 'dart:convert';
 
-import 'package:http/http.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/module/campaign_module/new_models/campaign.dart';
 import 'package:i_densfa/module/campaign_module/new_models/question.dart';
 import 'package:i_densfa/module/campaign_module/new_models/question_section.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
-import 'package:i_densfa/utility/handler.dart';
 
 class CampaignRepository {
   final userId = AppStorage().userDetail!.id;
   final compId = AppStorage().homeInfo!.userInfo.companyId;
-
+  final client = CustomHttpBaseClient();
   Future<List<AllCampaignModel>> getCampaignsForStore() async {
-    final response = await get(Uri.parse(URLConstants.getAllCampaigns));
+    final response = await client.get(Uri.parse(URLConstants.getAllCampaigns));
 
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)
@@ -27,7 +26,7 @@ class CampaignRepository {
 
   Future<List<CampaignQuestionSectionModel>> getSections(
       {required String campaignUuid}) async {
-    final response = await get(
+    final response = await client.get(
         Uri.parse("${URLConstants.getAllCampaigns}/$campaignUuid/section"));
 
     if (response.statusCode == 200) {
@@ -41,7 +40,7 @@ class CampaignRepository {
 
   Future<List<CampaignQuestionModel>> getQuestions(
       {required String campaignUuid, required String sectionUuid}) async {
-    final response = await get(Uri.parse(
+    final response = await client.get(Uri.parse(
         "${URLConstants.getAllCampaigns}/$campaignUuid/section/$sectionUuid/question"));
 
     if (response.statusCode == 200) {
@@ -54,7 +53,7 @@ class CampaignRepository {
   }
 
   Future<bool> saveCampaignAnswers(Map<String, dynamic> bodyMap) async {
-    final response = await post(
+    final response = await client.post(
       Uri.parse(
           "${URLConstants.baseURLStart}/campaign-service/iSFA/api/v1/client/campaign/${bodyMap['campaignUuid']}/response"),
       body: jsonEncode(bodyMap),
@@ -69,7 +68,7 @@ class CampaignRepository {
 
   Future<SavedCampaignDataModel?> savedCampaignResponse(
       String campaignId) async {
-    final response = await get(
+    final response = await client.get(
         Uri.parse('${URLConstants.savedCampaignResponse}/$userId/$campaignId'));
 
     if (response.statusCode == 200) {

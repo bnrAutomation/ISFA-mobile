@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
-import 'package:i_densfa/utility/handler.dart';
 import 'package:image_picker/image_picker.dart';
 
 class TabbarRepository {
   final userId = AppStorage().userDetail!.id;
   final companyId = AppStorage().userDetail!.companyId;
   Future<SideMenuModel> getSideMenuDetails() async {
-    final response =
-        await get(Uri.parse('${URLConstants.sidemenuDetails}/$userId'));
+    final response = await CustomHttpBaseClient()
+        .get(Uri.parse('${URLConstants.sidemenuDetails}/$userId'));
     final jsonRec = jsonDecode(response.body);
     if (response.statusCode == 200) {
       return SideMenuModel.fromJson(jsonRec['data']);
@@ -26,7 +26,9 @@ class TabbarRepository {
     final url =
         Uri.parse(isStart ? URLConstants.startDuty : URLConstants.endDuty);
     final request = MultipartRequest('POST', url);
-
+    request.headers.addAll({
+      'Authorization': 'Bearer ${AppStorage().authToken}',
+    });
     final multipartFile = await MultipartFile.fromPath('file', file.path);
 
     request.files.add(multipartFile);

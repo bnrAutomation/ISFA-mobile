@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http/http.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/module/change_email_phone_module/changeEmailPhone/change_email_phone_bloc.dart';
 import 'package:i_densfa/module/change_email_phone_module/change_email_phone_repository.dart';
 import 'package:i_densfa/module/login_module/models/login_model.dart';
@@ -12,7 +12,6 @@ import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
-import 'package:i_densfa/utility/handler.dart';
 
 class ChangeEmailPhoneView extends StatefulWidget {
   final bool changeEmail;
@@ -174,7 +173,7 @@ class _ChangeEmailPhoneViewState extends State<ChangeEmailPhoneView> {
       if (email != null) "email": email,
       if (phone != null) "mobile": phone
     };
-    final response = await put(
+    final response = await CustomHttpBaseClient().put(
       Uri.parse('${URLConstants.updateProfile}/${AppStorage().userDetail!.id}'),
       body: jsonEncode(bodyMap),
       headers: {'Content-Type': 'application/json'},

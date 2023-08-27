@@ -4,13 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
-import 'package:i_densfa/utility/handler.dart';
 import 'package:image_picker/image_picker.dart';
 
 part 'tabbar_event.dart';
@@ -115,7 +114,7 @@ class TabbarBloc extends Bloc<TabberEvent, TabberState> {
   Future<bool> submitToken() async {
     final body = {"fcm": AppStorage().fcmToken};
 
-    final response = await put(
+    final response = await CustomHttpBaseClient().put(
         Uri.parse(
             "${URLConstants.updatefcmtoken}/${AppStorage().userDetail?.id}"),
         body: jsonEncode(body),

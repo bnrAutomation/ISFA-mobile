@@ -1,18 +1,18 @@
 import 'dart:convert';
 
-import 'package:http/http.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
-import 'package:i_densfa/utility/handler.dart';
 
 import 'assessment_model.dart';
 
 class AssessmentRepository {
   final userId = AppStorage().userDetail!.id;
   final compId = AppStorage().homeInfo!.userInfo.companyId;
+  final client = CustomHttpBaseClient();
   Future<List<AssessmentDetailModel>> getAssessmentForUser() async {
-    final response = await get(
-        Uri.parse("${URLConstants.getAssessmentListByUserId}/$userId"));
+    final response = await client
+        .get(Uri.parse("${URLConstants.getAssessmentListByUserId}/$userId"));
 
     if (response.statusCode == 200) {
       return UserAssessmentsModel.fromRawJson(response.body).dataList ?? [];
@@ -22,8 +22,8 @@ class AssessmentRepository {
   }
 
   Future<List<AssessQuestionModel>> getQuestions(int id) async {
-    final response = await get(
-        Uri.parse("${URLConstants.getAssessmentQuestions}/$compId/$id"));
+    final response = await client
+        .get(Uri.parse("${URLConstants.getAssessmentQuestions}/$compId/$id"));
 
     if (response.statusCode == 200) {
       final body = AssessmentQuestionsModel.fromRawJson(response.body);
@@ -40,7 +40,7 @@ class AssessmentRepository {
       "assessmentCompletionTime": timeTook,
       "assessmentId": answers.first['assessmentId']
     };
-    final response = await post(
+    final response = await client.post(
       Uri.parse("${URLConstants.saveAssessmentAnswers}/$userId"),
       body: jsonEncode(bodyMap),
       headers: {'Content-Type': 'application/json'},

@@ -22,12 +22,10 @@ class CustomHttpBaseClient extends BaseClient {
         'Authorization': 'Bearer ${AppStorage().authToken}',
       });
     }
-    log('👁️${request.method} => ${request.url.toString()}');
-    log(request.headers.toString());
-    final streamedResponse = await request.send();
-    final response = await Response.fromStream(streamedResponse);
-    log('Response :- ${response.statusCode}');
-    log(response.body);
-    return streamedResponse;
+    log('👁️ ${request.method} => ${request.url.toString()}');
+    if (request.headers.isNotEmpty) {
+      log(request.headers.toString());
+    }
+    return request.send();
   }
 }

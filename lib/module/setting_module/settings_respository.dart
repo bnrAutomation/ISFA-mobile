@@ -11,7 +11,9 @@ class SettingsRespository {
   Future<String> updateProfilePic(XFile profilePic) async {
     final url = Uri.parse('${URLConstants.updateProfilePic}/${userDetails.id}');
     final request = MultipartRequest('POST', url);
-
+    request.headers.addAll({
+      'Authorization': 'Bearer ${AppStorage().authToken}',
+    });
     final multipartFile =
         await MultipartFile.fromPath('image', profilePic.path);
 

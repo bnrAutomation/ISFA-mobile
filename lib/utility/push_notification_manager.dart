@@ -5,10 +5,9 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
-import 'package:i_densfa/utility/handler.dart';
 
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -64,7 +63,7 @@ class PushNotificationsManager {
 
   Future<bool> submitToken(String fcm, int userId) async {
     final body = {"fcm": fcm};
-    final response = await put(
+    final response = await CustomHttpBaseClient().put(
         Uri.parse("${URLConstants.updatefcmtoken}/$userId"),
         body: jsonEncode(body),
         headers: {'Content-Type': 'application/json'});

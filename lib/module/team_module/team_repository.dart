@@ -1,19 +1,20 @@
 import 'dart:convert';
 
-import 'package:http/http.dart';
+import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
-import 'package:i_densfa/utility/handler.dart';
 
 import 'models/team_data_model.dart';
 import 'models/team_list_model.dart';
 
 class TeamRepository {
   final userId = AppStorage().userDetail!.id;
+  final client = CustomHttpBaseClient();
   Future<TeamListResponse> getTeamMembers(int? forUserId) async {
     final id = forUserId ?? userId;
-    final response = await get(Uri.parse('${URLConstants.getTeamMembers}/$id'));
+    final response =
+        await client.get(Uri.parse('${URLConstants.getTeamMembers}/$id'));
     if (response.statusCode == 200) {
       final responseBody = TeamListResponse.fromRawJson(response.body);
       if (responseBody.dataList.isEmpty) {
@@ -28,7 +29,7 @@ class TeamRepository {
 
   Future<TeamDataModel> teamData() async {
     final date = DateTime.now().toStringFormat('yyyy-MM-dd');
-    final response = await post(
+    final response = await client.post(
         Uri.parse('${URLConstants.getTeamData}/$userId'),
         body: jsonEncode({"fromDate": date, "toDate": date}),
         headers: {
@@ -57,7 +58,7 @@ class TeamRepository {
 
     final url = Uri.parse('${URLConstants.teamNotification}/$leadUserId');
 
-    final res = await post(url, headers: headers, body: data);
+    final res = await client.post(url, headers: headers, body: data);
     if (res.statusCode == 200) {
       return jsonDecode(res.body)['message'];
     } else {
