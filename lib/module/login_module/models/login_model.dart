@@ -21,13 +21,8 @@ class LoginModel {
     status = json['status'];
   }
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['data'] = logindata.toJson();
-    data['message'] = message;
-    data['status'] = status;
-    return data;
-  }
+  Map<String, dynamic> toJson() =>
+      {'data': logindata.toJson(), 'message': message, 'status': status};
 }
 
 class LoginData {
@@ -40,11 +35,7 @@ class LoginData {
     userInfo = UserInfo.fromJson(json['user_info']);
   }
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['user_info'] = userInfo.toJson();
-    return data;
-  }
+  Map<String, dynamic> toJson() => {'user_info': userInfo.toJson()};
 }
 
 class UserInfo {
@@ -65,7 +56,7 @@ class UserInfo {
   late final String email;
   late final String supervisor;
   late final int companyId;
-  late final String companyName;
+  // late final String companyName;
   late final String designation;
   //late final String iRole;
   late final String mobile;
@@ -79,15 +70,13 @@ class UserInfo {
   String toRawJson() => json.encode(toJson());
 
   UserInfo.fromJson(Map<String, dynamic> json) {
-    photoUrl = json['photoUrl'] ?? "";
-    id = json['id'] ?? json['userId'];
+    photoUrl = json['photourl'] ?? "";
+    id = json['userId'];
     username = json['username'];
-    companyName = json['companyName'] ?? "";
     email = json['email'];
     supervisor = json['supervisor'];
     companyId = json['companyId'];
     designation = json['designation'] ?? "";
-    //iRole = json['iRole'] ?? "";
     mobile = json['mobile'] ?? "";
     pin = json['pin'] ?? "-1";
     roles = json['role'];
@@ -95,23 +84,18 @@ class UserInfo {
     // List.from(json['roles']).map((e) => Roles.fromJson(e)).toList();
   }
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['id'] = id;
-    data['username'] = username;
-    data['email'] = email;
-    data['supervisor'] = supervisor;
-    data['companyId'] = companyId;
-    data['companyName'] = companyName;
-    data['designation'] = designation;
-    data['pin'] = pin;
-    //data['iRole'] = iRole;
-    data['mobile'] = mobile;
-    data['photoUrl'] = photoUrl;
-    data['role'] = roles;
-    //.map((e) => e.toJson()).toList();
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        'userId': id,
+        'username': username,
+        'email': email,
+        'supervisor': supervisor,
+        'companyId': companyId,
+        'designation': designation,
+        'pin': pin,
+        'mobile': mobile,
+        'photourl': photoUrl,
+        'role': roles,
+      };
 }
 
 class Roles {
@@ -127,10 +111,5 @@ class Roles {
     name = json['name'];
   }
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {'id': id, 'name': name};
 }

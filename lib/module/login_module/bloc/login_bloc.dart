@@ -29,17 +29,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else {
         try {
           emit(LogInLoadingState());
-          final loginResponse = await repo
-              .login(
-                  username: event.username.trim(),
-                  password: event.password.trim())
-              .catchError((onError) {
-            throw onError.toString();
-          });
-          if (loginResponse.logindata.userInfo.roles != "admin") {
+          final loginResponse = await repo.login(
+              username: event.username.trim(), password: event.password.trim());
+
+          AppStorage().authToken = loginResponse.accessToken;
+
+          final logindata =
+              await repo.getUserDetails(loginResponse.getUserId());
+          if (logindata.data.roles != "admin") {
             debugPrint(loginResponse.toString());
-            AppStorage().userDetail = loginResponse.logindata.userInfo;
-            if ((int.tryParse(loginResponse.logindata.userInfo.pin) ?? 0) > 0) {
+            AppStorage().userDetail = logindata.data;
+            if ((int.tryParse(logindata.data.pin) ?? 0) > 0) {
               emit(LoginedSuccesfullState());
             } else {
               emit(MoveToSetPinState());

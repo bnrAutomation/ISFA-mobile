@@ -19,11 +19,12 @@ class AppStorage {
   }
 
   UserInfo? get userDetail {
-    final userRawJson = _box.get("user_detail");
-    if (userRawJson is String) {
+    final String userRawJson = _box.get("user_detail");
+    try {
       return UserInfo.fromRawJson(userRawJson);
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 
   set userDetail(UserInfo? userInfo) =>
