@@ -113,7 +113,7 @@ class TabbarBloc extends Bloc<TabberEvent, TabberState> {
   }
 
   Future<bool> submitToken() async {
-    final body = {"fcm": AppStorage().token};
+    final body = {"fcm": AppStorage().fcmToken};
 
     final response = await put(
         Uri.parse(

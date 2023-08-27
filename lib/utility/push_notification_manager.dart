@@ -32,7 +32,7 @@ class PushNotificationsManager {
           AwesomeNotifications().requestPermissionToSendNotifications();
         } else {
           FirebaseMessaging.instance.getToken().then((value) async {
-            AppStorage().token = value;
+            AppStorage().fcmToken = value;
             if (AppStorage().isLoggedIn()) {
               await submitToken(value ?? "", AppStorage().userDetail?.id ?? -1);
             }

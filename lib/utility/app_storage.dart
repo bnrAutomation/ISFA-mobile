@@ -4,31 +4,18 @@ import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 
 class AppStorage {
   static final AppStorage _singleton = AppStorage._internal();
-
-  factory AppStorage() {
-    return _singleton;
-  }
-
+  factory AppStorage() => _singleton;
   AppStorage._internal();
 
   final String _prefrenceName = "isfa_prefrence";
   late Box _box;
 
+  static Future<AppStorage> objectValue() async => await AppStorage()._init();
+
   Future<AppStorage> _init() async {
     await Hive.initFlutter();
     _box = await Hive.openBox(_prefrenceName);
     return this;
-  }
-
-  static Future<AppStorage> objectValue() async {
-    return await AppStorage()._init();
-  }
-
-  set token(String? token) => _box.put("token", token);
-
-  String? get token {
-    final token = _box.get("token");
-    return token;
   }
 
   UserInfo? get userDetail {
@@ -60,4 +47,8 @@ class AppStorage {
   set markedInStoreId(int? newVal) => _box.put("markedInStoreId", newVal);
   int get reminderCount => _box.get("reminderCount") ?? 0;
   set reminderCount(int newVal) => _box.put("reminderCount", newVal);
+  set fcmToken(String? token) => _box.put("token", token);
+  String? get fcmToken => _box.get("token");
+  set authToken(String? authToken) => _box.put("authToken", authToken);
+  String? get authToken => _box.get("authToken");
 }
