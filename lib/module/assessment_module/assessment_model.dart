@@ -270,7 +270,7 @@ extension Helper on QuestionInputType {
   String toStringName() {
     switch (this) {
       case QuestionInputType.dropdown:
-        return "SINGLE_SELECT_DROPDOWN";
+        return "SINGLE_SELECT_DROPDOWN"; //"QUESTION_WITH_OPTIONS_DROP_DOWN";
       case QuestionInputType.number:
         return "NUMBER";
       case QuestionInputType.radio:
@@ -278,9 +278,9 @@ extension Helper on QuestionInputType {
       case QuestionInputType.boolean:
         return "QUESTION_WITH_TRUE_FALSE";
       case QuestionInputType.singleLineText:
-        return "QUESTION_WITH_CORRECT_ANSWER";
+        return "TEXT"; // "QUESTION_WITH_CORRECT_ANSWER";
       case QuestionInputType.multiAnswers:
-        return "QUESTION_WITH_OPTIONS_CHECK_BOX";
+        return "MULTI_SELECT_CHECKBOX"; // "QUESTION_WITH_OPTIONS_CHECK_BOX";
       case QuestionInputType.image:
         return "IMAGE";
       case QuestionInputType.multiLineText:
