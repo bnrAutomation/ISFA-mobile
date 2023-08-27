@@ -36,7 +36,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
           final logindata =
               await repo.getUserDetails(loginResponse.getUserId());
-          if (logindata.data.roles != "admin") {
+          if (logindata.data.role != "admin") {
             debugPrint(loginResponse.toString());
             AppStorage().userDetail = logindata.data;
             if ((int.tryParse(logindata.data.pin) ?? 0) > 0) {

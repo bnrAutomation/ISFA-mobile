@@ -20,12 +20,12 @@ class ProfileInfoview extends StatelessWidget {
                 title: 'ID', info: profileDetail.id.toString()),
             const Divider(height: 0.4),
             ProfileInfoDetailTitle(
-                title: 'Emp-Role ID', info: profileDetail.roles
+                title: 'Emp-Role ID', info: profileDetail.role
                 //  .map((e) => e.id).join(', ')
 
                 ),
             const Divider(height: 0.4),
-            ProfileInfoDetailTitle(title: 'Role', info: profileDetail.roles
+            ProfileInfoDetailTitle(title: 'Role', info: profileDetail.role
                 //.map((e) => e.name).join(', ')
 
                 ),

@@ -66,7 +66,7 @@ class MyScheduleRepository {
               "remarks": reason,
               "storeId": storeId,
               "userId": userId,
-              "createdBy": AppStorage().userDetail?.roles,
+              "createdBy": AppStorage().userDetail?.role,
               "active": "true"
             }));
     if (response.statusCode != 200) {
