@@ -24,28 +24,29 @@ class NotificationsView extends StatelessWidget {
             final notifcations = context.read<NotificationBloc>().notifcations;
             final textTheme = Theme.of(context).textTheme;
             return ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
               itemCount: notifcations.length,
               separatorBuilder: (context, index) => const SizedBox(height: 8),
-              itemBuilder: (context, index) => ListTile(
-                tileColor: Theme.of(context).primaryColor,
-                textColor: Colors.white,
-                isThreeLine: true,
-                title: Text(notifcations[index].title),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(notifcations[index].message,
-                        style: textTheme.titleMedium
-                            ?.copyWith(color: Colors.white)),
-                    Text(
-                      notifcations[index]
-                          .createdDate
-                          .toStringFormat('dd-MM-yyyy hh:mma'),
-                      style:
-                          textTheme.labelSmall?.copyWith(color: Colors.white),
-                    ),
-                  ],
+              itemBuilder: (context, index) => Card(
+                child: ListTile(
+                  textColor: Colors.black,
+                  isThreeLine: true,
+                  title: Text(notifcations[index].title),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(notifcations[index].message,
+                          style: textTheme.titleMedium
+                              ?.copyWith(color: Colors.black)),
+                      Text(
+                        notifcations[index]
+                            .createdDate
+                            .toStringFormat('dd-MM-yyyy hh:mma'),
+                        style: textTheme.labelSmall
+                            ?.copyWith(color: Colors.black87),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

@@ -59,7 +59,7 @@ class NotificationModel {
         id: json["id"],
         title: json["title"],
         message: json["message"],
-        notificationType: json["notificationType"],
+        notificationType: json["notificationType"] ?? "",
         createdBy: json["createdBy"],
         createdDate: DateTime.parse(json["createdDate"]),
       );

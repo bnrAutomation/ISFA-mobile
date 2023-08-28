@@ -183,18 +183,18 @@ class _MyScheduleViewState extends State<MyScheduleView> {
         openForegroundColor: Theme.of(context).primaryColor,
         openBackgroundColor: Colors.white,
         speedDialChildren: [
-          SpeedDialChild(
-            child: const Icon(Icons.article),
-            foregroundColor: Colors.white,
-            backgroundColor: Theme.of(context).primaryColor,
-            label: 'Add Reminder',
-            onPressed: () {
-              AppPopup.showAppBottomSheet(
-                context: context,
-                child: const AddReminderView(),
-              );
-            },
-          ),
+          // SpeedDialChild(
+          //   child: const Icon(Icons.article),
+          //   foregroundColor: Colors.white,
+          //   backgroundColor: Theme.of(context).primaryColor,
+          //   label: 'Add Reminder',
+          //   onPressed: () {
+          //     AppPopup.showAppBottomSheet(
+          //       context: context,
+          //       child: const AddReminderView(),
+          //     );
+          //   },
+          // ),
           SpeedDialChild(
             child: const Icon(Icons.store),
             foregroundColor: Colors.white,
@@ -214,21 +214,21 @@ class _MyScheduleViewState extends State<MyScheduleView> {
               );
             },
           ),
-          // SpeedDialChild(
-          //   child: const Icon(Icons.pending_actions),
-          //   foregroundColor: Colors.white,
-          //   backgroundColor: Theme.of(context).primaryColor,
-          //   label: 'Schedule Visit',
-          //   onPressed: () {
-          //     final plans = context.read<MyScheduleBloc>().beatPlans;
-          //     if (plans.isEmpty) {
-          //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          //           content: Text("Don't have store to schedule visit.")));
-          //     } else {
-          //       context.pushNamed(AppPaths.scheduleVisit, extra: plans);
-          //     }
-          //   },
-          // ),
+          SpeedDialChild(
+            child: const Icon(Icons.pending_actions),
+            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).primaryColor,
+            label: 'Schedule Visit',
+            onPressed: () {
+              final plans = context.read<MyScheduleBloc>().beatPlans;
+              if (plans.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Don't have store to schedule visit.")));
+              } else {
+                context.pushNamed(AppPaths.scheduleVisit, extra: plans);
+              }
+            },
+          ),
         ],
         child: Icon(
           Icons.add,
