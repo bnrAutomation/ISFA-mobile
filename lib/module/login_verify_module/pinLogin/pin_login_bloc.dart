@@ -22,9 +22,13 @@ class PinLoginBloc extends Bloc<PinLoginEvent, PinLoginState> {
           AppStorage().userDetail = loginResponse.logindata.userInfo;
           emit(LoginedSuccesfullState());
         } catch (err) {
-          debugPrint(err.toString());
-          debugPrint("pin is:- ${AppStorage().userDetail?.pin}");
-          emit(PinLogInErrorState(err.toString()));
+          if (err.toString() == 'Please login instead') {
+            emit(PinLoginTokenExpiredState());
+          } else {
+            debugPrint(err.toString());
+            debugPrint("pin is:- ${AppStorage().userDetail?.pin}");
+            emit(PinLogInErrorState(err.toString()));
+          }
         }
       }
     });

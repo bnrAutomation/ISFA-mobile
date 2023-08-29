@@ -13,3 +13,5 @@ class PinLogInErrorState extends PinLoginState {
 class LoginedSuccesfullState extends PinLoginState {}
 
 class PinLoginLoadingState extends PinLoginState {}
+
+class PinLoginTokenExpiredState extends PinLoginState {}

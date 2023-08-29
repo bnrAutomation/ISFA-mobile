@@ -18,9 +18,14 @@ class AppStorage {
     return this;
   }
 
+  void logout() {
+    userDetail = null;
+    authToken = null;
+  }
+
   UserInfo? get userDetail {
-    final String userRawJson = _box.get("user_detail");
     try {
+      final String userRawJson = _box.get("user_detail");
       return UserInfo.fromRawJson(userRawJson);
     } catch (e) {
       return null;

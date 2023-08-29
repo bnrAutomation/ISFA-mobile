@@ -112,7 +112,7 @@ class AppSideMenu extends StatelessWidget {
             title: const Text('Logout'),
             onTap: () {
               Scaffold.of(context).closeDrawer();
-              AppStorage().userDetail = null;
+              AppStorage().logout();
               context.go(AppPaths.login);
             },
           ),

@@ -13,6 +13,9 @@ class PinLoginRepository {
         body: jsonEncode(body),
         headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 401) {
+      if (getErrorMessage(response.body) == 'Token is invalid') {
+        throw 'Please login instead';
+      }
       throw "Incorrect Pin";
     } else if (response.statusCode == 200) {
       return LoginModel.fromRawJson(response.body);

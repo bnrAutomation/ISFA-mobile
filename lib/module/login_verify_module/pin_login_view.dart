@@ -39,7 +39,15 @@ class _PinLoginViewState extends State<PinLoginView> {
                 create: (context) => PinLoginRepository(),
                 child: BlocProvider(
                   create: (context) => PinLoginBloc(context.read()),
-                  child: BlocBuilder<PinLoginBloc, PinLoginState>(
+                  child: BlocConsumer<PinLoginBloc, PinLoginState>(
+                    listenWhen: (previous, current) =>
+                        current is PinLoginTokenExpiredState,
+                    listener: (context, state) {
+                      AppStorage().logout();
+                      context.go(AppPaths.login);
+                    },
+                    buildWhen: (previous, current) =>
+                        current is! PinLoginTokenExpiredState,
                     builder: (context, state) {
                       var bloc = context.read<PinLoginBloc>();
                       return Column(

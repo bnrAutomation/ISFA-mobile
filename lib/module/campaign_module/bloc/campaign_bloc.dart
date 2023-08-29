@@ -111,6 +111,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
 
   Map<String, Object> _getSubmitRequestBody() {
     return {
+      // "storeId":
       "campaignUuid": selectedCampaign!.uuid,
       "campaignResponse": selectedCampSections
           .map((section) => {

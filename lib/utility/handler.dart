@@ -7,7 +7,7 @@ import 'package:i_densfa/utility/app_storage.dart';
 String getErrorMessage(String responseBody) {
   try {
     final body = jsonDecode(responseBody);
-    final String mess = body['message'];
+    final String mess = body['message'] ?? body["error"];
     return mess;
   } catch (e) {
     return "Something went wrong";
