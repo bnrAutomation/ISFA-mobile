@@ -67,12 +67,12 @@ class CampaignRepository {
   }
 
   Future<SavedCampaignDataModel?> savedCampaignResponse(
-      String campaignId) async {
-    final response = await client.get(
-        Uri.parse('${URLConstants.savedCampaignResponse}/$userId/$campaignId'));
+      String campaignUuid) async {
+    final response = await client.get(Uri.parse(
+        "${URLConstants.baseURLStart}/campaign-service/iSFA/api/v1/analytics/$userId/campaign/$campaignUuid?filterBy=date&unit=120"));
 
     if (response.statusCode == 200) {
-      final dataJson = jsonDecode(response.body)['data'];
+      final dataJson = jsonDecode(response.body);
       if (dataJson == null) {
         throw getErrorMessage(response.body);
       } else {

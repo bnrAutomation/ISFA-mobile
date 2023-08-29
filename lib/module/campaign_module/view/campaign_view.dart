@@ -200,23 +200,22 @@ class SelectedCampaignView extends StatelessWidget {
                                 ],
                               ),
                               SizedBox(height: 6.h),
-                              if (campaignData.includedStores > 0)
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(20.w),
-                                  child: LinearProgressIndicator(
-                                    backgroundColor: Colors.grey.shade400,
-                                    color: const Color(0xffDB4C5B),
-                                    minHeight: 40,
-                                    value: campaignData.includedStores /
-                                        max(1, campaignData.targetedStores),
-                                  ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20.w),
+                                child: LinearProgressIndicator(
+                                  backgroundColor: Colors.grey.shade400,
+                                  color: const Color(0xffDB4C5B),
+                                  minHeight: 40,
+                                  value: max(0.05, campaignData.totalResponse) /
+                                      max(1, campaignData.targetedStores),
                                 ),
+                              ),
                               SizedBox(height: 6.h),
                             ],
                           ),
                         ),
                       )
-                    : const Center(child: Text("Response is not available.")),
+                    : const Center(child: Text("Analytics is not available.")),
               ],
             );
           },

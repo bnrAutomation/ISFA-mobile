@@ -33,8 +33,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
 
     on((GetSavedCampaignResponseEvent event, emit) async {
       final response = await repo
-          .savedCampaignResponse(event.campaignId)
-          // ignore: invalid_return_type_for_catch_error
+          .savedCampaignResponse(event.campUuid)
           .catchError((onError) {
         emit(SnackbarMessageCampaignState(onError.toString()));
         throw onError;
@@ -46,7 +45,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
     });
 
     on((GetCampaignSections event, emit) async {
-      // add(GetSavedCampaignResponseEvent(event.id));
+      add(GetSavedCampaignResponseEvent(event.campUuId));
       selectedCampSections =
           await repo.getSections(campaignUuid: event.campUuId);
       if (selectedCampSections.isNotEmpty) {
@@ -103,7 +102,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
         return false;
       });
       if (score) {
-        // add(GetSavedCampaignResponseEvent(selectedCampaign!.uuid));
+        add(GetSavedCampaignResponseEvent(selectedCampaign!.uuid));
         emit(SnackbarMessageCampaignState("Saved Successfully"));
         emit(ScoreCalculatedCampaignState());
       }

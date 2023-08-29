@@ -23,9 +23,9 @@ class SaveCampaignAnswersEvent extends CampaignEvent {
 }
 
 class GetSavedCampaignResponseEvent extends CampaignEvent {
-  final String campaignId;
+  final String campUuid;
 
-  GetSavedCampaignResponseEvent(this.campaignId);
+  GetSavedCampaignResponseEvent(this.campUuid);
 }
 
 class AnswerUpdatedCampaignEvent extends CampaignEvent {}
