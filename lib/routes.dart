@@ -89,11 +89,6 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
-      path: AppPaths.campaignList,
-      name: AppPaths.campaignList,
-      builder: (context, state) => const CampaignView(),
-    ),
-    GoRoute(
       path: AppPaths.assessmentList,
       name: AppPaths.assessmentList,
       builder: (context, state) => const AssessmentListView(),
@@ -295,7 +290,6 @@ class AppPaths {
   static const resetPass = '/resetpass';
   static const scheduleVisit = '/scheduleVisit';
   static const selectedCampaignView = '/selectedCampaignView';
-  static const campaignList = '/campaignList';
   static const selfie = '/selfie';
   static const setting = '/setting';
   static const store = '/store';

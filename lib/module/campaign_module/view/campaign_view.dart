@@ -7,21 +7,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/campaign_module/bloc/campaign_bloc.dart';
-import 'package:i_densfa/module/campaign_module/campaign_repository.dart';
 import 'package:i_densfa/module/campaign_module/view/campain_list.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 class CampaignView extends StatelessWidget {
-  const CampaignView({super.key});
+  final int storeId;
+  const CampaignView({super.key, required this.storeId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
         create: (context) =>
-            CampaignBloc(CampaignRepository())..add(GetStoreCampaignsEvent()),
+            CampaignBloc(storeId)..add(GetStoreCampaignsEvent()),
         child: BlocBuilder<CampaignBloc, CampaignState>(
           builder: (context, state) {
             final CampaignBloc bloc = context.read();
@@ -131,7 +131,9 @@ class SelectedCampaignView extends StatelessWidget {
                           "From ${selectedCamp.startDate.toStringFormat('dd MMM yy')} To ${selectedCamp.endDate.toStringFormat('dd MMM yy')}"),
                     ),
                   ),
-                if (selectedCamp != null && selectedCamp.isNagative() == false)
+                if (!bloc.storeId.isNegative &&
+                    selectedCamp != null &&
+                    selectedCamp.isNagative() == false)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: FilledButton(

@@ -249,22 +249,7 @@ class PromoterView extends StatelessWidget {
             style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-
-          const Expanded(child: CampaignView()),
-          // Expanded(
-          //   child: ListView.separated(
-          //       itemCount: items.length,
-          //       separatorBuilder: (context, index) => const SizedBox(height: 5),
-          //       itemBuilder: (context, index) => InkWell(
-          //           onTap: () {
-          //             // Navigator.pop(context);
-          //             // AppPopup.showAppBottomSheet(
-          //             //   context: context,
-          //             //   child: salesLogForm(textTheme),
-          //             // );
-          //           },
-          //           child: CampaignListItem(item: items[index]))),
-          // ),
+          Expanded(child: CampaignView(storeId: storeDetail.storeId)),
         ],
       ),
     );

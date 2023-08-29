@@ -12,7 +12,8 @@ part 'campaign_event.dart';
 part 'campaign_state.dart';
 
 class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
-  final CampaignRepository repo;
+  final repo = CampaignRepository();
+  final int storeId;
   List<AllCampaignModel> storeCampaigns = [];
   List<CampaignQuestionSectionModel> selectedCampSections = [];
   AllCampaignModel? selectedCampaign;
@@ -22,7 +23,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
 
   List<QuestionModel> questionAnswers = [];
 
-  CampaignBloc(this.repo) : super(CampaignInitial()) {
+  CampaignBloc(this.storeId) : super(CampaignInitial()) {
     on(_answerUpdatedEvent);
     on((GetStoreCampaignsEvent event, emit) async {
       emit(CampaignListLoadingState());
@@ -111,7 +112,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
 
   Map<String, Object> _getSubmitRequestBody() {
     return {
-      // "storeId":
+      "storeId": storeId,
       "campaignUuid": selectedCampaign!.uuid,
       "campaignResponse": selectedCampSections
           .map((section) => {
