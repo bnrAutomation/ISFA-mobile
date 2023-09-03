@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:i_densfa/module/assessment_module/assessment_model.dart';
 import 'dart:convert';
 
 import 'package:i_densfa/module/dynamic_questions_module/model.dart';
@@ -53,7 +52,7 @@ class CampaignQuestionModel {
         "description": description,
         "rules": rules.map((x) => x.toJson()).toList(),
         "isInputMandatory": isInputMandatory,
-        "questionInputType": questionInputType.toStringName(),
+        "questionInputType": questionInputType.toCampaignStringName(),
         "inputTypeValidation": inputTypeValidation,
       };
 

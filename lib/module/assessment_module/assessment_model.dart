@@ -215,7 +215,7 @@ class AssessQuestionModel {
         "questionText": questionText,
         "correctAnswer": correctAnswer,
         "options": List<dynamic>.from(options.map((x) => x)),
-        "questionType": questionType.toStringName(),
+        "questionType": questionType.toAssessmentStringName(),
         "sequence": sequence,
       };
 
@@ -226,71 +226,6 @@ class AssessQuestionModel {
       questionType: questionType,
       placholder: questionText,
       assessmentQuestionDetails: this);
-}
-
-enum QuestionInputType {
-  dropdown,
-  amount,
-  number,
-  radio,
-  image,
-  boolean,
-  singleLineText,
-  multiLineText,
-  ddMMyy,
-  multiAnswers
-}
-
-extension Helper on QuestionInputType {
-  QuestionInputType fromString(String type) {
-    switch (type) {
-      case "MULTI_SELECT_CHECKBOX":
-      case "QUESTION_WITH_OPTIONS_CHECK_BOX":
-        return QuestionInputType.multiAnswers;
-      case "SINGLE_SELECT_DROPDOWN":
-      case "QUESTION_WITH_OPTIONS_DROP_DOWN":
-        return QuestionInputType.dropdown;
-      case "SINGLE_SELECT_RADIO":
-        return QuestionInputType.radio;
-      case "BOOLEAN":
-        return QuestionInputType.boolean;
-      case "NUMBER":
-        return QuestionInputType.number;
-      case "TEXT":
-      case "QUESTION_WITH_CORRECT_ANSWER":
-        return QuestionInputType.singleLineText;
-      case "IMAGE":
-        return QuestionInputType.image;
-
-      default:
-        return QuestionInputType.singleLineText;
-    }
-  }
-
-  String toStringName() {
-    switch (this) {
-      case QuestionInputType.dropdown:
-        return "SINGLE_SELECT_DROPDOWN"; //"QUESTION_WITH_OPTIONS_DROP_DOWN";
-      case QuestionInputType.number:
-        return "NUMBER";
-      case QuestionInputType.radio:
-        return "SINGLE_SELECT_RADIO";
-      case QuestionInputType.boolean:
-        return "QUESTION_WITH_TRUE_FALSE";
-      case QuestionInputType.singleLineText:
-        return "TEXT"; // "QUESTION_WITH_CORRECT_ANSWER";
-      case QuestionInputType.multiAnswers:
-        return "MULTI_SELECT_CHECKBOX"; // "QUESTION_WITH_OPTIONS_CHECK_BOX";
-      case QuestionInputType.image:
-        return "IMAGE";
-      case QuestionInputType.multiLineText:
-        return "";
-      case QuestionInputType.ddMMyy:
-        return "";
-      case QuestionInputType.amount:
-        return "";
-    }
-  }
 }
 
 class AssessmentScoreModel {

@@ -6,7 +6,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "iSFA-staging-debug",
+            "name": "iSFA-staging-debug", // for debugging
             "request": "launch",
             "type": "dart",
             "toolArgs": [
@@ -17,19 +17,19 @@
             ]
         },
         {
-            "name": "iSFA-staging-release",
+            "name": "iSFA-staging-release", // for staging internal release
             "request": "launch",
             "type": "dart",
-            //"flutterMode": "release",
+            "flutterMode": "release",
             "toolArgs": [
                 "--dart-define",
                 "APP_NAME=iDenSFA-Staging",
                 "--dart-define",
-                "BASE_URL=https://staging.denave.com:8445"
+                "BASE_URL=https://devapps.denave.com:8445"
             ]
         },
         {
-            "name": "iSFA-prod-profile",
+            "name": "iSFA-prod-profile", // for QA build
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
@@ -37,11 +37,11 @@
                 "--dart-define",
                 "APP_NAME=iDenSFA",
                 "--dart-define",
-                "BASE_URL=https://denave.com"
+                "BASE_URL=https://staging.denave.com:8445"
             ]
         },
         {
-            "name": "iSFA-prod-release",
+            "name": "iSFA-prod-release", // for production build
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",

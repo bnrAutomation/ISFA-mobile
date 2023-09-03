@@ -41,7 +41,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
               username: event.email,
               otp: event.otp,
               password: event.newPassword);
-          debugPrint(verificationResponse.toString());
+          debugPrint(verificationResponse.message);
 
           emit(ResetPasswordSuccesfullState());
         } catch (err) {

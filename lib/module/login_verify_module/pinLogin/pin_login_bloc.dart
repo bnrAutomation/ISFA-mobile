@@ -26,7 +26,7 @@ class PinLoginBloc extends Bloc<PinLoginEvent, PinLoginState> {
             emit(PinLoginTokenExpiredState());
           } else {
             debugPrint(err.toString());
-            debugPrint("pin is:- ${AppStorage().userDetail?.pin}");
+            debugPrint("local saved pin is:- ${AppStorage().userDetail?.pin}");
             emit(PinLogInErrorState(err.toString()));
           }
         }

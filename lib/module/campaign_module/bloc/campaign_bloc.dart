@@ -68,12 +68,6 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
         questions = await repo.getQuestions(
             campaignUuid: selectedCampaign!.uuid,
             sectionUuid: event.sectionUuId);
-        for (final q in questions) {
-          if (q.rules.isNotEmpty) {
-            final rule = q.rules.first;
-            debugPrint("----${rule.question}/${rule.answer}");
-          }
-        }
         selectedCampSections
             .firstWhere((element) => element.uuid == event.sectionUuId)
             .selectedSectionQuestions = questions;
@@ -123,7 +117,8 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
                     .map((question) => {
                           "questionName": question.question,
                           "questionUuid": question.uuid,
-                          "questionDataType": question.questionInputType.name,
+                          "questionDataType":
+                              question.questionInputType.toCampaignStringName(),
                           "answer": question.answer
                         })
                     .toList(),
@@ -213,7 +208,6 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
     if (lastSelectedQuestions == null) return;
     List<QuestionModel> newquestionsList = [];
     for (var question in lastSelectedQuestions) {
-      debugPrint("keyboard is:${question.inputTypeValidation}");
       if (question.rules.isEmpty) {
         newquestionsList.add(question.toViewQuestionModel());
       } else {

@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-import 'package:i_densfa/module/assessment_module/assessment_model.dart';
-import 'package:i_densfa/module/dynamic_questions_module/model.dart';
-
 class UserCampaignsModel {
   UserCampaignsModel({
     required this.message,
@@ -114,109 +111,6 @@ class CampaignDetailModel {
         "companyId": companyId,
         "savedCampaignData": campaignData?.toJson()
       };
-}
-
-class CampaignQuestionsModel {
-  CampaignQuestionsModel({
-    required this.message,
-    required this.status,
-    required this.data,
-  });
-
-  String message;
-  String status;
-  ResponseData? data;
-
-  factory CampaignQuestionsModel.fromRawJson(String str) =>
-      CampaignQuestionsModel.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory CampaignQuestionsModel.fromJson(Map<String, dynamic> json) =>
-      CampaignQuestionsModel(
-        message: json["message"],
-        status: json["status"],
-        data: json["data"] == null ? null : ResponseData.fromJson(json["data"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "message": message,
-        "status": status,
-        "data": data?.toJson(),
-      };
-}
-
-class ResponseData {
-  ResponseData({
-    required this.questionData,
-  });
-
-  List<CampQuestionModel> questionData;
-
-  factory ResponseData.fromRawJson(String str) =>
-      ResponseData.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory ResponseData.fromJson(Map<String, dynamic> json) => ResponseData(
-        questionData: List<CampQuestionModel>.from(
-            json["questionData"].map((x) => CampQuestionModel.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "questionData": List<dynamic>.from(questionData.map((x) => x.toJson())),
-      };
-}
-
-class CampQuestionModel {
-  CampQuestionModel({
-    required this.id,
-    required this.campaignId,
-    required this.questionText,
-    required this.options,
-    required this.questionType,
-    required this.sequence,
-  });
-
-  int id;
-  int campaignId;
-  String questionText;
-  List<String> options;
-  QuestionInputType questionType;
-  int sequence;
-
-  factory CampQuestionModel.fromRawJson(String str) =>
-      CampQuestionModel.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory CampQuestionModel.fromJson(Map<String, dynamic> json) =>
-      CampQuestionModel(
-        id: json["id"],
-        campaignId: json["campaignId"],
-        questionText: json["questionText"],
-        options: List<String>.from(json["options"].map((x) => x)),
-        questionType:
-            QuestionInputType.singleLineText.fromString(json["questionType"]),
-        sequence: json["sequence"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "campaignId": campaignId,
-        "questionText": questionText,
-        "options": List<dynamic>.from(options.map((x) => x)),
-        "questionType": questionType.toStringName(),
-        "sequence": sequence,
-      };
-
-  QuestionModel toViewQuestionModel() => QuestionModel(
-        isRequired: true,
-        options: options,
-        question: questionText,
-        questionType: questionType,
-        placholder: questionText,
-      );
 }
 
 class SavedCampaignDataModel {
