@@ -20,7 +20,6 @@ class ForgotPasswordBloc
           emit(ForgotPasswordLoadingState());
           final forgotPasswordResponse =
               await repo.forgotPassword(username: event.userid);
-          debugPrint(forgotPasswordResponse.toString());
           emit(ForgotPasswordSuccesfullState(
               event.userid, forgotPasswordResponse.message));
         } catch (err) {
