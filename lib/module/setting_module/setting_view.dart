@@ -275,7 +275,7 @@ class SettingListTile extends StatelessWidget {
           title,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onPrimary),
+              color: Theme.of(context).colorScheme.primary),
         ),
         subtitle: Text(
           subTitle,
