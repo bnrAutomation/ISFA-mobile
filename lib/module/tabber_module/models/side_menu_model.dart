@@ -94,8 +94,7 @@ class HomeUserInfo {
       email: json["email"],
       companyId: json["companyId"],
       storeId: (json["storeId"] ?? -1) > 0 ? json["storeId"] : null,
-      companyName: // json["companyName"] ??
-          "N/A",
+      companyName: json["companyName"] ?? "N/A",
       designation: json['designation'] ?? "",
       supervisor: json["supervisor"] ?? "",
       markInStoreId: json["markInStoreId"],

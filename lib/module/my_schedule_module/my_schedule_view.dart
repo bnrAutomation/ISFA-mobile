@@ -253,7 +253,7 @@ class StoreCardView extends StatelessWidget {
         Container(
           margin: EdgeInsets.only(top: 10.h, left: 40.w),
           decoration: BoxDecoration(
-            color: const Color(0xffBFD1DF),
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
             borderRadius: BorderRadius.circular(10),
           ),
           padding:
@@ -297,7 +297,11 @@ class StoreCardView extends StatelessWidget {
                         alignment: Alignment.center,
                         backgroundColor: Theme.of(context).primaryColor,
                       ),
-                      child: const Center(child: Text('View Store')))
+                      child: Center(
+                          child: Text(
+                        'View Store',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      )))
                 ],
               )
             ],
@@ -322,11 +326,13 @@ class StoreCardView extends StatelessWidget {
                 width: 80.w,
                 height: 126.h,
                 decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(6.w)),
                 alignment: Alignment.center,
                 child: Image.network(
-                    'https://media.istockphoto.com/id/912819604/vector/storefront-flat-design-e-commerce-icon.jpg?s=612x612&w=0&k=20&c=_x_QQJKHw_B9Z2HcbA2d1FH1U1JVaErOAp2ywgmmoTI=',
+                    beatPlan.storeImage1.isNotEmpty
+                        ? beatPlan.storeImage1
+                        : 'https://media.istockphoto.com/id/912819604/vector/storefront-flat-design-e-commerce-icon.jpg?s=612x612&w=0&k=20&c=_x_QQJKHw_B9Z2HcbA2d1FH1U1JVaErOAp2ywgmmoTI=',
                     fit: BoxFit.fitWidth)),
           ),
         ),

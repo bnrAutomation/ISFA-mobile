@@ -69,6 +69,7 @@ class _LoginViewState extends State<LoginView> {
                           ),
                         const SizedBox(height: 10),
                         TextField(
+                          enableInteractiveSelection: false,
                           controller: usernameController,
                           style: const TextStyle(color: Colors.white),
                           keyboardType: TextInputType.emailAddress,
@@ -96,6 +97,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                         const SizedBox(height: 10),
                         TextField(
+                          enableInteractiveSelection: false,
                           controller: passwordController,
                           inputFormatters: [
                             FilteringTextInputFormatter.deny(" ")

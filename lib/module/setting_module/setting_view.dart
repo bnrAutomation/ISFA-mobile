@@ -122,7 +122,8 @@ class SettingView extends StatelessWidget {
                                         .colorScheme
                                         .onPrimary),
                                 child: Text(
-                                  '',
+                                  AppStorage().homeInfo?.userInfo.companyName ??
+                                      "",
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleLarge
