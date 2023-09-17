@@ -12,6 +12,7 @@ import 'module/campaign_module/view/campaign_questions_view.dart';
 import 'module/campaign_module/view/campaign_view.dart';
 import 'module/change_password_module/change_password_view.dart';
 import 'module/checkin_module/check_in_view.dart';
+import 'module/help_module/help_view.dart';
 import 'module/inventory_module/inventory_view.dart';
 import 'module/leaves_module/leave_view.dart';
 import 'module/login_module/login_view.dart';
@@ -61,7 +62,7 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.tabbar,
       name: AppPaths.tabbar,
-      builder: (context, state) => const TabbarView(),
+      builder: (context, state) => const AppTabbarView(),
     ),
     GoRoute(
       path: AppPaths.store,
@@ -254,7 +255,12 @@ final router = GoRouter(
       name: AppPaths.teamProfile,
       builder: (context, state) =>
           TeamProfileView(memberDetail: state.extra as TeamMemberModel),
-    )
+    ),
+    GoRoute(
+      path: AppPaths.help,
+      name: AppPaths.help,
+      builder: (context, state) => const HelpView(),
+    ),
   ],
   errorBuilder: (context, state) {
     return Scaffold(
@@ -270,6 +276,7 @@ final router = GoRouter(
 
 class AppPaths {
   static const aboutUs = "/aboutus";
+  static const help = "/help";
   static const appwebview = '/appwebview';
   static const assessment = '/assessment';
   static const assessmentList = '/assessmentlist';

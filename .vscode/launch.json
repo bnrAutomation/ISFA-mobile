@@ -33,7 +33,7 @@
             "name": "iSFA-prod-profile", // for QA build
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile",
+            // "flutterMode": "profile",
             "toolArgs": [
                 "--dart-define",
                 "APP_NAME=iDenSFA",

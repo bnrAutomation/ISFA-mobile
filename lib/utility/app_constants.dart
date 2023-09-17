@@ -80,6 +80,7 @@ class URLConstants {
 
   static const getFeedbackPurposes = '$apiBaseUrl/getFeedbackPurposes';
   static const createFeedback = '$apiBaseUrl/createFeedback';
+  static const helpSupport = '$apiBaseUrl/help-support';
   static const markin = '$apiBaseUrl/MarkIn';
   static const markOut = '$apiBaseUrl/MarkOut';
   static const startDuty = '$apiBaseUrl/StartDuty';

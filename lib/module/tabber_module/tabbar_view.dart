@@ -17,8 +17,8 @@ import 'package:i_densfa/utility/extensions.dart';
 import '../../utility/network_helper.dart';
 import 'bloc/tabbar_bloc.dart';
 
-class TabbarView extends StatelessWidget {
-  const TabbarView({super.key});
+class AppTabbarView extends StatelessWidget {
+  const AppTabbarView({super.key});
 
   @override
   Widget build(BuildContext context) {

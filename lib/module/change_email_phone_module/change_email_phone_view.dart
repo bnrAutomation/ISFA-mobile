@@ -82,7 +82,8 @@ class _ChangeEmailPhoneViewState extends State<ChangeEmailPhoneView> {
                         keyboardType: TextInputType.phone,
                         inputFormatters: [
                           FilteringTextInputFormatter.deny(" "),
-                          FilteringTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10)
                         ],
                         decoration: InputDecoration(
                           filled: true,
