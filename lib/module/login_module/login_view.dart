@@ -122,7 +122,7 @@ class _LoginViewState extends State<LoginView> {
                                     ? state.visible
                                         ? Icons.visibility
                                         : Icons.visibility_off
-                                    : Icons.visibility_off,
+                                    : Icons.visibility,
                                 color: Colors.grey,
                               ),
                             ),

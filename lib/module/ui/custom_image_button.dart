@@ -38,7 +38,7 @@ class CustomImageButton extends StatelessWidget {
                   buttonText,
                   maxLines: 2,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
               ),
             ],

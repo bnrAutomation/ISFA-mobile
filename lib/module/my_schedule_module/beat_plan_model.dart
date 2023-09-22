@@ -50,7 +50,7 @@ class BeatPlanModel {
         latitude: double.tryParse(json["latitude"].toString()),
         longitude: double.tryParse(json["longitude"].toString()),
         activeStatus: json["activeStatus"],
-        storeImage1: json["storeImage1"],
+        storeImage1: json["storeImage1"] ?? "",
         storecode: json["storecode"],
         mobileNumber: json["mobileNumber"],
       );

@@ -106,12 +106,12 @@ class LeaveView extends StatelessWidget {
   Card leaveBalanceCard(
       BuildContext context, LeaveBloc bloc, TextTheme textTheme) {
     return Card(
-      color: const Color(0XFFBFD1DF),
+      color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
       margin: const EdgeInsets.symmetric(horizontal: 5),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
-      elevation: 5,
+      elevation: 0,
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Column(
@@ -178,37 +178,40 @@ class LeaveView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "⚫ Total Leave",
-                      style: textTheme.bodySmall,
-                    ),
-                    Text(
-                      bloc.details!.totalLeave.toString(),
-                      style: textTheme.bodyLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text(
-                      "⚫ Used Leave",
-                      style: textTheme.bodySmall,
-                    ),
-                    Text(
-                      bloc.details!.usedLeave.toString(),
-                      style: textTheme.bodyLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                )
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "⚫ Total Leave",
+                        style: textTheme.bodySmall,
+                      ),
+                      Text(
+                        bloc.details!.totalLeave.toString(),
+                        style: textTheme.bodyLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        "⚫ Used Leave",
+                        style: textTheme.bodySmall,
+                      ),
+                      Text(
+                        bloc.details!.usedLeave.toString(),
+                        style: textTheme.bodyLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
             const SizedBox(height: 8),
           ],

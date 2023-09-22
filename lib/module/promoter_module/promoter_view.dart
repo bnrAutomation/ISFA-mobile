@@ -31,30 +31,50 @@ class PromoterView extends StatelessWidget {
       body: Column(children: [
         const SizedBox(height: 5),
         Card(
-          color: const Color(0xffBFD1DF),
-          margin: const EdgeInsets.symmetric(horizontal: 5),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-          ),
-          elevation: 5,
-          child: Column(
-            children: [
-              Container(
-                  height: 0.2.sh,
-                  decoration: const BoxDecoration(
-                    color: Color(0xffBFD1DF),
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20)),
-                  ),
-                  alignment: Alignment.center,
-                  child: Image.network(
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpo1BfypXH0JcsdyjZI_w3rK-T4utQ_RAVjBx5ELNHpuN9fUdPBNuwjLjSxaVfCpXhsRQ&usqp=CAU",
-                    fit: BoxFit.fitWidth,
-                  )),
-              _storeDetailsView()
-            ],
-          ),
-        ),
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+            // color: const Color(0xffBFD1DF),
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            elevation: 0,
+            child: BlocConsumer<PromoterBloc, PromoterState>(
+              listenWhen: (previous, current) =>
+                  current is PromoterToastMessageState ||
+                  current is CompaignsLoadedPromoterState,
+              listener: (context, state) {
+                if (state is PromoterToastMessageState) {
+                  context.showSnackBarMessage(state.message);
+                } else if (state is CompaignsLoadedPromoterState) {
+                  final PromoterBloc bloc = context.read();
+                  AppPopup.showAppBottomSheet(
+                      context: context,
+                      child: _openCampaignSheet(context, bloc.storeDetail!));
+                }
+              },
+              builder: (context, state) {
+                final bloc = context.read<PromoterBloc>();
+                return Column(
+                  children: [
+                    Container(
+                        height: 0.2.sh,
+                        decoration: const BoxDecoration(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(20)),
+                        ),
+                        alignment: Alignment.center,
+                        child: Image.network(
+                          bloc.storeDetail?.storeImage1 ??
+                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpo1BfypXH0JcsdyjZI_w3rK-T4utQ_RAVjBx5ELNHpuN9fUdPBNuwjLjSxaVfCpXhsRQ&usqp=CAU",
+                          fit: BoxFit.cover,
+                          width: 1.sw,
+                          height: 1.sh,
+                        )),
+                    _storeDetailsView(bloc)
+                  ],
+                );
+              },
+            )),
         const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -127,78 +147,65 @@ class PromoterView extends StatelessWidget {
     );
   }
 
-  BlocConsumer<PromoterBloc, PromoterState> _storeDetailsView() {
-    return BlocConsumer<PromoterBloc, PromoterState>(
-      listenWhen: (previous, current) =>
-          current is PromoterToastMessageState ||
-          current is CompaignsLoadedPromoterState,
-      listener: (context, state) {
-        if (state is PromoterToastMessageState) {
-          context.showSnackBarMessage(state.message);
-        } else if (state is CompaignsLoadedPromoterState) {
-          final PromoterBloc bloc = context.read();
-          AppPopup.showAppBottomSheet(
-              context: context,
-              child: _openCampaignSheet(context, bloc.storeDetail!));
-        }
-      },
-      builder: (context, state) {
-        final bloc = context.read<PromoterBloc>();
-        return Container(
-          padding: const EdgeInsets.all(15),
-          decoration: const BoxDecoration(
-            color: Color(0xffBFD1DF),
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+  Widget _storeDetailsView(PromoterBloc bloc) {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  bloc.storeDetail?.name ?? "",
+                  style: GoogleFonts.inter(
+                      fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+              ),
+              if (bloc.storeDetail?.latitude != null)
+                IconButton(
+                    onPressed: () => bloc.add(GoToMapPromoterEvent()),
+                    icon: const Icon(
+                      Icons.location_on,
+                      color: Colors.red,
+                    ))
+            ],
           ),
-          child: Column(
+          const SizedBox(height: 5),
+          Row(
+            children: [
+              const Icon(CupertinoIcons.person, size: 12),
+              const SizedBox(width: 8),
+              Text(bloc.storeDetail?.storeBranch ?? "",
+                  style: GoogleFonts.inter(fontSize: 10))
+            ],
+          ),
+          const SizedBox(height: 5),
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      bloc.storeDetail?.name ?? "",
-                      style: GoogleFonts.inter(
-                          fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  if (bloc.storeDetail?.latitude != null)
-                    IconButton(
-                        onPressed: () => bloc.add(GoToMapPromoterEvent()),
-                        icon: const Icon(
-                          Icons.location_on,
-                          color: Colors.red,
-                        ))
-                ],
-              ),
-              const SizedBox(height: 5),
-              Row(
-                children: [
-                  const Icon(CupertinoIcons.person, size: 12),
-                  const SizedBox(width: 8),
-                  Text(bloc.storeDetail?.storeBranch ?? "",
-                      style: GoogleFonts.inter(fontSize: 10))
-                ],
-              ),
-              const SizedBox(height: 5),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(CupertinoIcons.placemark, size: 12),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(bloc.storeDetail?.address ?? "",
-                        maxLines: 3,
-                        overflow: TextOverflow.fade,
-                        style: GoogleFonts.inter(fontSize: 10)),
-                  )
-                ],
-              ),
-              const SizedBox(height: 8),
-              if (bloc.isAlreadyMarkin)
-                const Center(child: Text("Visit Complete"))
-              else if (bloc.isMarkedIn)
-                CustomMaterialButton(
+              const Icon(CupertinoIcons.placemark, size: 12),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(bloc.storeDetail?.address ?? "",
+                    maxLines: 3,
+                    overflow: TextOverflow.fade,
+                    style: GoogleFonts.inter(fontSize: 10)),
+              )
+            ],
+          ),
+          const SizedBox(height: 8),
+          if (bloc.isAlreadyMarkin)
+            const Center(child: Text("Visit Complete"))
+          else if (bloc.isMarkedIn)
+            BlocConsumer<PromoterBloc, PromoterState>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                return CustomMaterialButton(
+                    textColor: Colors.black,
                     gradient: const LinearGradient(
                       colors: <Color>[Color(0XFFC92434), ColorConstants.amber],
                     ),
@@ -211,9 +218,15 @@ class PromoterView extends StatelessWidget {
                           bloc.storeDetail != null) {
                         bloc.add(PromoterCheckOutStoreEvent());
                       }
-                    })
-              else
-                CustomMaterialButton(
+                    });
+              },
+            )
+          else
+            BlocConsumer<PromoterBloc, PromoterState>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                return CustomMaterialButton(
+                    textColor: Colors.black,
                     buttonText: state is PromoterStoreDetailLoadingState
                         ? "Loading..."
                         : bloc.storeDetail == null
@@ -228,11 +241,11 @@ class PromoterView extends StatelessWidget {
                           bloc.storeDetail != null) {
                         bloc.add(PromoterCheckInStoreEvent());
                       }
-                    }),
-            ],
-          ),
-        );
-      },
+                    });
+              },
+            ),
+        ],
+      ),
     );
   }
 

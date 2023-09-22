@@ -3,12 +3,14 @@ import 'package:i_densfa/utility/app_constants.dart';
 
 class CustomMaterialButton extends StatelessWidget {
   final String buttonText;
+  final Color textColor;
   final void Function() onPressed;
   final Gradient gradient;
   const CustomMaterialButton({
     super.key,
     required this.buttonText,
     required this.onPressed,
+    this.textColor = Colors.white,
     this.gradient = const LinearGradient(
       colors: <Color>[
         ColorConstants.amber,
@@ -38,7 +40,7 @@ class CustomMaterialButton extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             buttonText,
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: textColor),
           ),
         ),
       ),
