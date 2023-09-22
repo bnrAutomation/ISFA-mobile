@@ -56,6 +56,9 @@ class InventoryView extends StatelessWidget {
               //     child: SvgPicture.asset(ImageConstants.filter),
               //   ),
               // ),
+              const SizedBox(
+                height: 8,
+              ),
               Card(
                 margin: EdgeInsets.symmetric(horizontal: 15.w),
                 color: Theme.of(context).primaryColor,
@@ -67,7 +70,7 @@ class InventoryView extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       ImageConstants.inventoryMask,
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                     ),
                     BlocBuilder<PromoterBloc, PromoterState>(
                       buildWhen: (previous, current) =>
@@ -87,23 +90,19 @@ class InventoryView extends StatelessWidget {
                                 children: [
                                   Text(
                                     "Stock",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(color: Colors.white),
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
                                   ),
                                   const SizedBox(width: 4),
                                   const Icon(
                                     Icons.info_outline_rounded,
-                                    color: Colors.white,
+                                    color: Colors.black,
                                   ),
                                   const Expanded(child: SizedBox(height: 10)),
                                   Text(
                                     "Value in",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(color: Colors.white),
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
                                   ),
                                 ],
                               ),
@@ -141,7 +140,7 @@ class InventoryView extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
                 child: Text(
@@ -173,10 +172,11 @@ class InventoryView extends StatelessWidget {
               builder: (context, state) {
                 final bloc = context.read<PromoterBloc>();
                 return ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: bloc.filteredList.length,
                     padding: const EdgeInsets.all(5),
                     separatorBuilder: (context, index) =>
-                        const SizedBox(height: 5),
+                        const SizedBox(height: 2),
                     itemBuilder: (context, index) =>
                         ItemsList(detail: bloc.filteredList[index]));
               },
@@ -194,18 +194,12 @@ class InventoryView extends StatelessWidget {
       children: [
         Text(
           name,
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(color: Colors.white),
+          style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 10),
         Text(
           val,
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(color: Colors.white),
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       ],
     );
@@ -226,54 +220,58 @@ class ItemsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+      elevation: 0,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 0.2.sw,
-              child: SvgPicture.asset(ImageConstants.product),
-            ),
-            const SizedBox(width: 5),
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  detail.productName,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w600, color: Colors.blue),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "MOP: ",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    Text(
-                      detail.price.toStringAsFixed(2),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                )
-              ],
-            )),
-            Row(
-              children: [
-                Text(
-                  "Qty : ",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                Text(
-                  detail.stockBalance.toString(),
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-            const SizedBox(width: 5)
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: 10,
+                //child: SvgPicture.asset(ImageConstants.product),
+              ),
+              const SizedBox(width: 5),
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    detail.productName,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w600, color: Colors.black),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "MOP: ",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      Text(
+                        detail.price.toStringAsFixed(2),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  )
+                ],
+              )),
+              Row(
+                children: [
+                  Text(
+                    "Qty : ",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  Text(
+                    detail.stockBalance.toString(),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+              const SizedBox(width: 5)
+            ],
+          ),
         ),
       ),
     );

@@ -65,11 +65,11 @@ class StoreDetailView extends StatelessWidget {
                               ));
                         },
                         child: blueCard(context,
-                            leadingSVGImage: ImageConstants.feedback,
+                            leadingSVGImage: ImageConstants.feedbackWhite,
                             title: 'Feedback',
                             subtitle:
                                 'Feedback that you had given before to this store.',
-                            trailingSVGImage: ImageConstants.feedback),
+                            trailingSVGImage: ImageConstants.feedbackWhite),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -487,7 +487,9 @@ class StoreDetailView extends StatelessWidget {
         children: [
           Positioned.fill(
             child: CachedNetworkImage(
-                imageUrl: 'https://picsum.photos/200/300',
+                imageUrl: bloc.beatPlanModel.storeImage1.isNotEmpty
+                    ? bloc.beatPlanModel.storeImage1
+                    : 'https://picsum.photos/200/300',
                 fit: BoxFit.fitWidth),
           ),
           Positioned.fill(
@@ -497,7 +499,7 @@ class StoreDetailView extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               child: TextButton(
                   style: TextButton.styleFrom(
-                      backgroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 6)),
                   onPressed: () {
@@ -509,11 +511,14 @@ class StoreDetailView extends StatelessWidget {
                       bloc.add(MarkInStoreDetailEvent());
                     }
                   },
-                  child: Text(bloc.beatPlanModel.isAlreadyMarkin
-                      ? "Visited"
-                      : bloc.beatPlanModel.markin
-                          ? "Mark Out"
-                          : "Mark In")),
+                  child: Text(
+                    bloc.beatPlanModel.isAlreadyMarkin
+                        ? "Visited"
+                        : bloc.beatPlanModel.markin
+                            ? "Mark Out"
+                            : "Mark In",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  )),
             ),
           )),
           Padding(
@@ -536,20 +541,20 @@ class StoreDetailView extends StatelessWidget {
                 ),
                 const Spacer(),
                 CircleAvatar(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).primaryColor,
                   child: IconButton(
-                      color: Theme.of(context).primaryColor,
+                      color: Colors.black,
                       onPressed: () =>
                           bloc.add(ShowStoreOnMapStoreDetailEvent()),
                       icon: const Icon(Icons.location_on)),
                 ),
                 SizedBox(height: 5.h),
                 CircleAvatar(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).primaryColor,
                   child: IconButton(
-                    color: Theme.of(context).primaryColor,
+                    color: Colors.black,
                     onPressed: () => bloc.add(CallStoreDetailEvent()),
-                    icon: SvgPicture.asset(ImageConstants.telephone),
+                    icon: const Icon(Icons.call_outlined),
                   ),
                 ),
               ],
