@@ -165,6 +165,9 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                 CustomMaterialButton(
                     buttonText: "Submit",
                     onPressed: () => bloc.add(ModifyQtySubmitEvent())),
+                SizedBox(
+                  height: 100.h,
+                )
               ],
             ),
           );

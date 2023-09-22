@@ -22,6 +22,7 @@ class ImageConstants {
   static const box = "assets/icons/box.svg";
   static const campaign = "assets/icons/campaign.svg";
   static const feedback = "assets/icons/feedback.svg";
+  static const feedbackWhite = "assets/icons/feedbackWhite.svg";
   static const scan = "assets/icons/scan.svg";
 
   static const miniCalendar = "assets/icons/store/calendar-mini.svg";
