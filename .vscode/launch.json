@@ -21,12 +21,12 @@
             "name": "iSFA-staging-release", // for staging internal release
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release",
+            //"flutterMode": "release",
             "toolArgs": [
                 "--dart-define",
                 "APP_NAME=iDenSFA-Staging",
                 "--dart-define",
-                "BASE_URL=https://devapps.denave.com:8445"
+                "BASE_URL=https://isfaqa.denave.com:8445"
             ]
         },
         {

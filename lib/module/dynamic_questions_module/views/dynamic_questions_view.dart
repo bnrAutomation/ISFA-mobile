@@ -39,7 +39,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
       child: ListView.builder(
         shrinkWrap: true,
         itemCount: widget.questions.length,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) {
           final question = widget.questions[index];
           final textControler = controllers[index];
@@ -47,7 +47,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.singleLineText:
               return ListTile(
                 contentPadding: const EdgeInsets.all(0),
-                title: Row(
+                title: Wrap(
                   children: [
                     Text(question.question),
                     if (question.isRequired)
@@ -66,7 +66,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.multiLineText:
               return ListTile(
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                title: Row(
+                title: Wrap(
                   children: [
                     Text(question.question),
                     if (question.isRequired)
@@ -87,7 +87,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.amount:
               return ListTile(
                 contentPadding: const EdgeInsets.all(0),
-                title: Row(
+                title: Wrap(
                   children: [
                     Text(question.question),
                     if (question.isRequired)
@@ -110,7 +110,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.number:
               return ListTile(
                 contentPadding: const EdgeInsets.all(0),
-                title: Row(
+                title: Wrap(
                   children: [
                     Text(question.question),
                     if (question.isRequired)
@@ -134,7 +134,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.dropdown:
               return ListTile(
                 contentPadding: const EdgeInsets.all(0),
-                title: Row(
+                title: Wrap(
                   children: [
                     Text(question.question),
                     if (question.isRequired)
@@ -162,7 +162,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.ddMMyy:
               return ListTile(
                   contentPadding: const EdgeInsets.all(0),
-                  title: Row(
+                  title: Wrap(
                     children: [
                       Text(question.question),
                       if (question.isRequired)
@@ -209,7 +209,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
+        Wrap(
           children: [
             Text(
               question.question,
@@ -239,7 +239,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                       updateAnswer(question, val ?? '');
                       setState(() {});
                     }),
-                Text(option)
+                Flexible(child: Text(option))
               ],
             );
           },
@@ -253,7 +253,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
+        Wrap(
           children: [
             Text(
               question.question,
@@ -290,7 +290,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                       updateAnswer(question, ans.join(','));
                       setState(() {});
                     }),
-                Text(option)
+                Flexible(child: Text(option))
               ],
             );
           },
@@ -319,7 +319,8 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
           height: 80.h,
           width: 1.sw,
           decoration: BoxDecoration(
-              border: Border.all(strokeAlign: BorderSide.strokeAlignCenter)),
+              border: Border.all(
+                  width: 0.5, strokeAlign: BorderSide.strokeAlignCenter)),
           child: InkWell(
             onTap: () {
               AppImagePicker(context, (p0) {
@@ -333,9 +334,13 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                     children: [
                       const Icon(Icons.file_upload_outlined),
                       const SizedBox(height: 8),
-                      Text(
-                        question.placholder ?? "",
-                        style: textTheme.bodyMedium,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          question.placholder ?? "",
+                          style: textTheme.bodyMedium,
+                          textAlign: TextAlign.center,
+                        ),
                       )
                     ],
                   )

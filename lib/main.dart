@@ -19,7 +19,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(builder: (context, child) {
       return SecureApplication(
-          onNeedUnlock: (secure) async => null,
+          onNeedUnlock: (secure) {
+            debugPrint(secure.toString());
+            return null;
+          },
           child: MaterialApp.router(
             routerConfig: router,
             title: const String.fromEnvironment('APP_NAME'),

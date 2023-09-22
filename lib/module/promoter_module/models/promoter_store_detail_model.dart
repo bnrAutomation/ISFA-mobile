@@ -17,6 +17,7 @@ class PromoterStoreDetailModel {
     required this.latitude,
     required this.longitude,
     required this.phoneNo,
+    required this.storeImage1,
   });
 
   int clusterId;
@@ -34,6 +35,7 @@ class PromoterStoreDetailModel {
   double latitude;
   double longitude;
   String phoneNo;
+  String storeImage1;
   factory PromoterStoreDetailModel.fromRawJson(String str) =>
       PromoterStoreDetailModel.fromJson(json.decode(str));
 
@@ -54,6 +56,7 @@ class PromoterStoreDetailModel {
         alreadyMarkout: json["alreadyMarkout"] ?? false,
         zipcode: json["zipcode"],
         phoneNo: json['phoneNo'],
+        storeImage1: json['storeImage1'] ?? "",
         latitude: double.tryParse(json['latitude'].toString()) ?? 0,
         longitude: double.tryParse(json['logitude'].toString()) ?? 0,
       );
@@ -73,6 +76,7 @@ class PromoterStoreDetailModel {
         "latitude": latitude,
         "logitude": longitude,
         "phoneNo": phoneNo,
-        "alreadyMarkout": alreadyMarkout
+        "alreadyMarkout": alreadyMarkout,
+        "storeImage1": storeImage1
       };
 }

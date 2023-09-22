@@ -121,7 +121,7 @@ class SelectedCampaignView extends StatelessWidget {
                   Card(
                     child: ListTile(
                       textColor: theme.primaryColor,
-                      horizontalTitleGap: 0,
+                      horizontalTitleGap: 5,
                       leading: Icon(
                         Icons.calendar_month_outlined,
                         color: theme.primaryColor,
