@@ -8,7 +8,7 @@ part 'learner_state.dart';
 
 class LearnerBloc extends Bloc<LearnerEvent, LearnerState> {
   LearnerRepository repo;
-  List<LearnerDataList> dataList = [];
+  List<LearnerCategoryModel> categoryList = [];
   LearnerBloc(this.repo) : super(LearnerInitial()) {
     on<LearnerEvent>((event, emit) {});
     on((GetLearner event, emit) async => await _getLearner(emit));
@@ -17,7 +17,7 @@ class LearnerBloc extends Bloc<LearnerEvent, LearnerState> {
   Future<void> _getLearner(Emitter<LearnerState> emit) async {
     emit(LearnerLoadingState());
     await repo.getLearner().then((value) {
-      dataList = value.dataList;
+      categoryList = value;
       emit(LearnerLoadedState());
     }).catchError((err) {
       emit(LearnerToastMessageState(err.toString()));

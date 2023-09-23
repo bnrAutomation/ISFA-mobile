@@ -4,11 +4,10 @@ import 'package:i_densfa/utility/app_constants.dart';
 
 class LearnerRepository {
   final client = CustomHttpBaseClient();
-  Future<LearnerModel> getLearner() async {
+  Future<List<LearnerCategoryModel>> getLearner() async {
     final response = await client.get(Uri.parse(URLConstants.learnerContent));
-
     if (response.statusCode == 200) {
-      return LearnerModel.fromRawJson(response.body);
+      return LearnerResponseModel.fromRawJson(response.body).dataList;
     } else {
       throw getErrorMessage(response.body);
     }

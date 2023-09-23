@@ -19,6 +19,7 @@ class CustomHttpBaseClient extends BaseClient {
   Future<StreamedResponse> send(BaseRequest request) async {
     if (AppStorage().authToken != null) {
       request.headers.addAll({
+        'accept': 'application/json',
         'Authorization': 'Bearer ${AppStorage().authToken}',
       });
     }
