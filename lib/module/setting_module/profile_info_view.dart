@@ -19,11 +19,8 @@ class ProfileInfoview extends StatelessWidget {
             const ProfileInfoTitle(title: 'Account Information'),
             ProfileInfoDetailTitle(title: 'Name', info: profileDetail.fullName),
             const Divider(height: 0.4),
-            ProfileInfoDetailTitle(
-                title: 'Emp-Role ID', info: profileDetail.role
-                //  .map((e) => e.id).join(', ')
-
-                ),
+            // ProfileInfoDetailTitle(
+            //     title: 'Emp-Role ID', info: profileDetail.role),
             const Divider(height: 0.4),
             ProfileInfoDetailTitle(title: 'Role', info: profileDetail.role
                 //.map((e) => e.name).join(', ')
@@ -69,7 +66,7 @@ class ProfileInfoview extends StatelessWidget {
             const Divider(height: 0.4),
             ProfileInfoDetailTitle(
                 title: 'Last Login',
-                info: profileDetail.lastLogin.toStringFormat('dd MM yy HH:mm')),
+                info: profileDetail.lastLogin.toStringFormat('dd/MM/yy HH:mm')),
             const Divider(height: 0.4),
             const ProfileInfoDetailTitle(title: 'App Version', info: '1.0'),
           ],
