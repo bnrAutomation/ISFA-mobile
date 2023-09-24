@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:i_densfa/module/login_module/models/login_model.dart';
+import 'package:i_densfa/module/login_module/models/auth_model.dart';
 import 'package:i_densfa/module/login_set_pin_module/set_pin_repository.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 

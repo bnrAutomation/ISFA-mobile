@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:i_densfa/module/login_module/models/auth_model.dart';
 import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/module/change_email_phone_module/changeEmailPhone/change_email_phone_bloc.dart';
 import 'package:i_densfa/module/change_email_phone_module/change_email_phone_repository.dart';
-import 'package:i_densfa/module/login_module/models/login_model.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
@@ -128,12 +128,12 @@ class _ChangeEmailPhoneViewState extends State<ChangeEmailPhoneView> {
     } else if (!emailValid) {
       context.showSnackBarMessage("Please enter a valid email address");
     } else {
-      final response = await updateProfile(email: email).catchError((onError) {
+      final response = await _updateProfile(email: email).catchError((onError) {
         context.showSnackBarMessage(onError.toString());
         throw onError;
       });
-      if (response.logindata.userInfo.role != "admin") {
-        AppStorage().userDetail = response.logindata.userInfo;
+      if (response.role != "admin") {
+        AppStorage().userDetail = response;
         if (context.mounted) {
           context.showSnackBarMessage('Success');
           Navigator.of(context).pop();
@@ -153,12 +153,12 @@ class _ChangeEmailPhoneViewState extends State<ChangeEmailPhoneView> {
     } else if (phone.length != 10) {
       context.showSnackBarMessage("Please enter valid number");
     } else {
-      final response = await updateProfile(phone: phone).catchError((onError) {
+      final response = await _updateProfile(phone: phone).catchError((onError) {
         context.showSnackBarMessage(onError.toString());
         throw onError;
       });
-      if (response.logindata.userInfo.role != "admin") {
-        AppStorage().userDetail = response.logindata.userInfo;
+      if (response.role != "admin") {
+        AppStorage().userDetail = response;
         if (context.mounted) {
           context.showSnackBarMessage('Success');
           Navigator.of(context).pop();
@@ -169,19 +169,31 @@ class _ChangeEmailPhoneViewState extends State<ChangeEmailPhoneView> {
     }
   }
 
-  Future<LoginModel> updateProfile({String? phone, String? email}) async {
+  Future<UserInfo> _updateProfile({String? phone, String? email}) async {
+    final userId = AppStorage().userDetail!.id;
     Map<String, String> bodyMap = {
       if (email != null) "email": email,
       if (phone != null) "mobile": phone
     };
     final response = await CustomHttpBaseClient().put(
-      Uri.parse('${URLConstants.updateProfile}/${AppStorage().userDetail!.id}'),
+      Uri.parse('${URLConstants.updateProfile}/$userId'),
       body: jsonEncode(bodyMap),
       headers: {'Content-Type': 'application/json'},
     );
 
     if (response.statusCode == 200) {
-      return LoginModel.fromRawJson(response.body);
+      final info = await _getUserDetails(userId);
+      return info;
+    } else {
+      throw getErrorMessage(response.body);
+    }
+  }
+
+  Future<UserInfo> _getUserDetails(userID) async {
+    final response = await CustomHttpBaseClient()
+        .get(Uri.parse('${URLConstants.userDetails}/$userID'));
+    if (response.statusCode == 200) {
+      return UserDetailsResponseModel.fromRawJson(response.body).data;
     } else {
       throw getErrorMessage(response.body);
     }

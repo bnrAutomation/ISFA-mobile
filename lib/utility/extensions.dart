@@ -36,3 +36,56 @@ extension BuildContextHelper on BuildContext {
     ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(message)));
   }
 }
+
+class CustomDateTime extends DateTime {
+  CustomDateTime.fromDateTime(DateTime dateTime)
+      : super(dateTime.year, dateTime.month, dateTime.day, dateTime.hour,
+            dateTime.minute, dateTime.second, dateTime.millisecond);
+
+  CustomDateTime(int year, int month, int day,
+      [int hour = 0, int minute = 0, int second = 0, int millisecond = 0])
+      : super(year, month, day, hour, minute, second, millisecond);
+
+  factory CustomDateTime.fromList(List<int> dateTimeData) {
+    if (dateTimeData.length < 3) {
+      final now = DateTime.now();
+      return CustomDateTime(now.year, now.month, now.day);
+    }
+    final year = dateTimeData[0];
+    final month = dateTimeData[1];
+    final day = dateTimeData[2];
+
+    // Check if there is enough data to create a DateTime with time components
+    if (dateTimeData.length >= 6) {
+      final hour = dateTimeData[3];
+      final minute = dateTimeData[4];
+      final second = dateTimeData[5];
+
+      // Check if milliseconds are provided
+      if (dateTimeData.length >= 7) {
+        final millisecond = dateTimeData[6];
+        return CustomDateTime(
+            year, month, day, hour, minute, second, millisecond);
+      } else {
+        return CustomDateTime(year, month, day, hour, minute, second);
+      }
+    }
+
+    // If no time components are provided, return a DateTime with the date only
+    return CustomDateTime(year, month, day);
+  }
+
+  factory CustomDateTime.fromAny(dynamic dateTimeData) {
+    if (dateTimeData is List<int>) {
+      return CustomDateTime.fromList(dateTimeData);
+    } else if (dateTimeData is DateTime) {
+      return CustomDateTime.fromDateTime(dateTimeData);
+    } else if (dateTimeData is String) {
+      final date = DateTime.tryParse(dateTimeData) ?? DateTime.now();
+      return CustomDateTime.fromDateTime(date);
+    } else {
+      final date = DateTime(1970);
+      return CustomDateTime.fromDateTime(date);
+    }
+  }
+}

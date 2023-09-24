@@ -114,7 +114,7 @@ class SelectedCampaignView extends StatelessWidget {
                   child: ListTile(
                     leading: CircleAvatar(radius: 25.w),
                     title: Text(AppStorage().userDetail!.username),
-                    subtitle: Text(AppStorage().userDetail!.supervisor),
+                    subtitle: Text(AppStorage().userDetail!.reportTo),
                   ),
                 ),
                 if (selectedCamp != null)
