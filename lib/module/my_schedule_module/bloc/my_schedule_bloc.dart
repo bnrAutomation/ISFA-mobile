@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:i_densfa/module/my_schedule_module/beat_plan_model.dart';
@@ -125,11 +125,15 @@ class MyScheduleBloc extends Bloc<MyScheduleEvent, MyScheduleState> {
     if (userLocation == null) {
       return -1;
     } else {
-      return Geolocator.distanceBetween(
-          details.latitude ?? 0,
-          details.longitude ?? 0,
-          userLocation!.latitude,
-          userLocation!.longitude);
+      if (kReleaseMode) {
+        return Geolocator.distanceBetween(
+            details.latitude ?? 0,
+            details.longitude ?? 0,
+            userLocation!.latitude,
+            userLocation!.longitude);
+      } else {
+        return 0;
+      }
     }
   }
 

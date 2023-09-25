@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -69,8 +70,10 @@ class CheckInView extends StatelessWidget {
           CustomMaterialButton(
               buttonText: "Take Selfie ",
               onPressed: () async {
-                final image =
-                    await ImagePicker().pickImage(source: ImageSource.camera);
+                final image = await ImagePicker().pickImage(
+                    source: kReleaseMode
+                        ? ImageSource.camera
+                        : ImageSource.gallery);
                 if (context.mounted) {
                   context.pop(image);
                 }

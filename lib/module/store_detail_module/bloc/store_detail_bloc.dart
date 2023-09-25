@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
@@ -58,11 +58,15 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
     if (userLocation == null) {
       return -1;
     } else {
-      return Geolocator.distanceBetween(
-          details?.latitude ?? 0,
-          details?.longitude ?? 0,
-          userLocation!.latitude,
-          userLocation!.longitude);
+      if (kReleaseMode) {
+        return Geolocator.distanceBetween(
+            details?.latitude ?? 0,
+            details?.longitude ?? 0,
+            userLocation!.latitude,
+            userLocation!.longitude);
+      } else {
+        return 0;
+      }
     }
   }
 
@@ -150,7 +154,8 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       emit(StoreDetailToastMessageState('Please enable location service'));
       return;
     }
-    final img = await ImagePicker().pickImage(source: ImageSource.camera);
+    final img = await ImagePicker().pickImage(
+        source: kReleaseMode ? ImageSource.camera : ImageSource.gallery);
     if (img == null) {
       emit(StoreDetailToastMessageState('Please click image'));
       return;
@@ -186,7 +191,8 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
       emit(StoreDetailToastMessageState('Please enable location service'));
       return;
     }
-    final img = await ImagePicker().pickImage(source: ImageSource.camera);
+    final img = await ImagePicker().pickImage(
+        source: kReleaseMode ? ImageSource.camera : ImageSource.gallery);
     if (img == null) {
       emit(StoreDetailToastMessageState('Please click image'));
       return;

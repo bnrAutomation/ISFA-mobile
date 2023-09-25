@@ -90,8 +90,10 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
       return Future<Position>.error(onError);
     });
 
-    final storeDistance = Geolocator.distanceBetween(storeDetail?.latitude ?? 0,
-        storeDetail?.longitude ?? 0, loc.latitude, loc.longitude);
+    final storeDistance = kReleaseMode
+        ? Geolocator.distanceBetween(storeDetail?.latitude ?? 0,
+            storeDetail?.longitude ?? 0, loc.latitude, loc.longitude)
+        : 0;
     if (storeDistance > AppConstant.storeRange) {
       emit(PromoterToastMessageState('You are not in store range'));
       return;
@@ -134,8 +136,10 @@ class PromoterBloc extends Bloc<PromoterEvent, PromoterState> {
       return Future<Position>.error(onError);
     });
 
-    final storeDistance = Geolocator.distanceBetween(storeDetail!.latitude,
-        storeDetail!.longitude, loc.latitude, loc.longitude);
+    final storeDistance = kReleaseMode
+        ? Geolocator.distanceBetween(storeDetail!.latitude,
+            storeDetail!.longitude, loc.latitude, loc.longitude)
+        : 0;
     if (storeDistance > 250) {
       emit(PromoterToastMessageState('You are not in store range'));
       return;

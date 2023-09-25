@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/promoter_module/feedback/feedback_model.dart';
 import 'package:i_densfa/module/promoter_module/feedback/feedback_repository.dart';
@@ -34,7 +34,8 @@ class FeedbackBloc extends Bloc<FeedbackEvent, FeedbackState> {
       emit(FeedbackInitial());
     });
     on((ClickImageFeedbackEvent event, emit) async {
-      final img = await ImagePicker().pickImage(source: ImageSource.camera);
+      final img = await ImagePicker().pickImage(
+          source: kReleaseMode ? ImageSource.camera : ImageSource.gallery);
       if (img != null) {
         selectedImage = img;
         emit(FeedbackInitial());

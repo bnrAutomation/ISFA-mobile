@@ -2,8 +2,8 @@
     // Use IntelliSense to learn about possible attributes.
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    //  flutter build apk --release --dart-define APP_NAME=iDenSFA-Staging --dart-define BASE_URL=https://devapps.denave.com:8448
-    //  flutter build apk --release --dart-define APP_NAME=iDenSFA --dart-define BASE_URL=https://staging.denave.com:8448
+    //  flutter build apk --release --dart-define APP_NAME=iDenSFA --dart-define BASE_URL=https://isfaqa.denave.com:8445
+    //  flutter build ios --release --dart-define APP_NAME=iDenSFA --dart-define BASE_URL=https://isfaqa.denave.com:8445
     "version": "0.2.0",
     "configurations": [
         {

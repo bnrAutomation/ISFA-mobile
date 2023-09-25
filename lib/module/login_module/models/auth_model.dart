@@ -146,7 +146,9 @@ class UserInfo {
         mobile: json["mobile"],
         pin: json["pin"],
         photoUrl: json["photourl"],
-        tags: List<String>.from(json["tags"].map((x) => x)),
+        tags: json["tags"] == null
+            ? []
+            : List<String>.from(json["tags"].map((x) => x)),
         fullName: json["fullName"],
         city: json["city"],
         state: json["state"],
