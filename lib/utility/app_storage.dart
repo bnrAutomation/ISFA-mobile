@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:i_densfa/module/login_module/models/login_model.dart';
+import 'package:i_densfa/module/login_module/models/auth_model.dart';
 import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 
 class AppStorage {

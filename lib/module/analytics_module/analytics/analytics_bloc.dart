@@ -24,6 +24,7 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
 
     on((GetAnalyticsEvent event, emit) async {
       try {
+        emit(LoadingState());
         final details = await repo.getDetails(days: selectedDays);
         analyticsList = details;
         emit(AnalyticsUpdateData());

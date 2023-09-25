@@ -27,7 +27,7 @@ class SettingsRespository {
       var loginModel = await PinLoginRepository()
           .verifyPin(username: userDetails.username, pin: userDetails.pin);
 
-      AppStorage().userDetail = loginModel.logindata.userInfo;
+      AppStorage().userDetail = loginModel;
       return json.decode(body)['message'] ?? "";
     } else {
       throw body.isEmpty

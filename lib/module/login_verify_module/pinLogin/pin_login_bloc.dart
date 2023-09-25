@@ -19,7 +19,7 @@ class PinLoginBloc extends Bloc<PinLoginEvent, PinLoginState> {
           final loginResponse = await repo.verifyPin(
               username: AppStorage().userDetail?.username.toString() ?? "",
               pin: event.pin);
-          AppStorage().userDetail = loginResponse.logindata.userInfo;
+          AppStorage().userDetail = loginResponse;
           emit(LoginedSuccesfullState());
         } catch (err) {
           if (err.toString() == 'Please login instead') {

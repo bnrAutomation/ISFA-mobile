@@ -12,3 +12,5 @@ class AnalyticsSnackBarMessage extends AnalyticsState {
 
   AnalyticsSnackBarMessage(this.message);
 }
+
+class LoadingState extends AnalyticsState {}

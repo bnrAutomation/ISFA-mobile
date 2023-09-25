@@ -56,7 +56,7 @@ class AnalyticsView extends StatelessWidget {
                                               .placeholderUserUrl),
                                 ),
                               ),
-                              Text(bloc.userDetails.username,
+                              Text(bloc.userDetails.fullName,
                                   style: textTheme.bodyLarge
                                       ?.copyWith(color: Colors.white)),
                               Text(bloc.userDetails.designation,
@@ -132,93 +132,103 @@ class AnalyticsView extends StatelessWidget {
     return BlocBuilder<AnalyticsBloc, AnalyticsState>(
       builder: (context, state) {
         final AnalyticsBloc bloc = context.read();
-        return ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: bloc.analyticsList.length,
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-          separatorBuilder: (context, index) => const SizedBox(height: 12),
-          itemBuilder: (context, index) {
-            final TextTheme textTheme = Theme.of(context).textTheme;
-            final item = bloc.analyticsList[index];
-            return Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.white,
-                  border: Border.all(color: ColorConstants.amber),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: ColorConstants.amber,
-                      blurRadius: 1,
-                      spreadRadius: 0.5,
-                    )
-                  ]),
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: 100.w,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        children: [
-                          FittedBox(
-                            child: Text(
-                              item.kpiName,
-                              style: textTheme.titleLarge,
+        return state is LoadingState
+            ? SizedBox(
+                width: 1.sw,
+                height: 0.5.sh,
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: bloc.analyticsList.length,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  final TextTheme textTheme = Theme.of(context).textTheme;
+                  final item = bloc.analyticsList[index];
+                  return Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.white,
+                        border: Border.all(color: ColorConstants.amber),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: ColorConstants.amber,
+                            blurRadius: 1,
+                            spreadRadius: 0.5,
+                          )
+                        ]),
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 100.w,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              children: [
+                                FittedBox(
+                                  child: Text(
+                                    item.kpiName,
+                                    style: textTheme.titleLarge,
+                                  ),
+                                ),
+                                Text(
+                                  "Target",
+                                  style: textTheme.titleSmall,
+                                ),
+                                Text(
+                                  item.target.toString(),
+                                  style: textTheme.titleMedium,
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            "Target",
-                            style: textTheme.titleSmall,
-                          ),
-                          Text(
-                            item.target.toString(),
-                            style: textTheme.titleMedium,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        "",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      Text(
-                        "Achieved",
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      Text(
-                        item.achieved.toString(),
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ],
-                  ),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        width: 60,
-                        height: 60,
-                        child: CircularProgressIndicator(
-                          value: item.percentage / 100,
-                          backgroundColor: const Color(0xffededee),
-                          strokeWidth: 12,
-                          color: ColorConstants.amber,
                         ),
-                      ),
-                      Text("${item.percentage.toStringAsFixed(1)}%")
-                    ],
-                  )
-                ],
-              ),
-            );
-          },
-        );
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            Text(
+                              "Achieved",
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            Text(
+                              item.achieved.toString(),
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: CircularProgressIndicator(
+                                value: item.percentage / 100,
+                                backgroundColor: const Color(0xffededee),
+                                strokeWidth: 12,
+                                color: ColorConstants.amber,
+                              ),
+                            ),
+                            Text("${item.percentage.toStringAsFixed(1)}%")
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                },
+              );
       },
     );
   }

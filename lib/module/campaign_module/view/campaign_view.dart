@@ -113,8 +113,8 @@ class SelectedCampaignView extends StatelessWidget {
                 Card(
                   child: ListTile(
                     leading: CircleAvatar(radius: 25.w),
-                    title: Text(AppStorage().userDetail!.username),
-                    subtitle: Text(AppStorage().userDetail!.supervisor),
+                    title: Text(AppStorage().userDetail?.username ?? ""),
+                    subtitle: Text(AppStorage().userDetail?.reportTo ?? ""),
                   ),
                 ),
                 if (selectedCamp != null)

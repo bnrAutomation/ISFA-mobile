@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 class ProfileInfoview extends StatelessWidget {
   const ProfileInfoview({super.key});
@@ -16,14 +17,10 @@ class ProfileInfoview extends StatelessWidget {
         child: Column(
           children: [
             const ProfileInfoTitle(title: 'Account Information'),
-            ProfileInfoDetailTitle(
-                title: 'ID', info: profileDetail.id.toString()),
+            ProfileInfoDetailTitle(title: 'Name', info: profileDetail.fullName),
             const Divider(height: 0.4),
-            ProfileInfoDetailTitle(
-                title: 'Emp-Role ID', info: profileDetail.role
-                //  .map((e) => e.id).join(', ')
-
-                ),
+            // ProfileInfoDetailTitle(
+            //     title: 'Emp-Role ID', info: profileDetail.role),
             const Divider(height: 0.4),
             ProfileInfoDetailTitle(title: 'Role', info: profileDetail.role
                 //.map((e) => e.name).join(', ')
@@ -31,7 +28,7 @@ class ProfileInfoview extends StatelessWidget {
                 ),
             const Divider(height: 0.4),
             ProfileInfoDetailTitle(
-                title: 'Reports To', info: profileDetail.supervisor),
+                title: 'Reports To', info: profileDetail.reportTo),
             const Divider(height: 0.4),
             ProfileInfoDetailTitle(
                 title: 'Designation', info: profileDetail.designation),
@@ -40,13 +37,18 @@ class ProfileInfoview extends StatelessWidget {
             const Divider(height: 0.4),
             ProfileInfoDetailTitle(title: 'Mobile', info: profileDetail.mobile),
             const Divider(height: 0.4),
-            const ProfileInfoDetailTitle(title: 'Create Date', info: 'XXX'),
+            ProfileInfoDetailTitle(
+                title: 'Create Date',
+                info: profileDetail.createdDate.toStringFormat('dd MMM yy')),
             const Divider(height: 0.4),
-            const ProfileInfoDetailTitle(title: 'Date of joining', info: 'XXX'),
+            ProfileInfoDetailTitle(
+                title: 'Date of joining',
+                info: profileDetail.doj.toStringFormat('dd MMM yy')),
             const Divider(height: 0.4),
-            const ProfileInfoDetailTitle(title: 'Status', info: 'XXX'),
+            ProfileInfoDetailTitle(
+                title: 'Status', info: profileDetail.userStatus),
             const Divider(height: 0.4),
-            const ProfileInfoDetailTitle(title: 'Team Cluster', info: 'XXX'),
+            // const ProfileInfoDetailTitle(title: 'Team Cluster', info: 'XXX'),
             const ProfileInfoTitle(title: 'Device Information'),
             FutureBuilder<String>(
                 future: deviceInfo.deviceOs(),
@@ -62,7 +64,9 @@ class ProfileInfoview extends StatelessWidget {
                       title: 'Device Model', info: snapshot.data ?? '');
                 }),
             const Divider(height: 0.4),
-            const ProfileInfoDetailTitle(title: 'Last Login', info: 'XXX'),
+            ProfileInfoDetailTitle(
+                title: 'Last Login',
+                info: profileDetail.lastLogin.toStringFormat('dd/MM/yy HH:mm')),
             const Divider(height: 0.4),
             const ProfileInfoDetailTitle(title: 'App Version', info: '1.0'),
           ],
