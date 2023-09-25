@@ -16,9 +16,14 @@ class CampaignRepository {
     final response = await client.get(Uri.parse(URLConstants.getAllCampaigns));
 
     if (response.statusCode == 200) {
-      return (json.decode(response.body) as List)
+      List<AllCampaignModel> alllist = (json.decode(response.body) as List)
           .map((e) => AllCampaignModel.fromJson(e))
           .toList();
+
+      List<AllCampaignModel> publishList = [];
+      publishList
+          .addAll(alllist.where((element) => element.status == "PUBLISHED"));
+      return publishList;
     } else {
       throw getErrorMessage(response.body);
     }
