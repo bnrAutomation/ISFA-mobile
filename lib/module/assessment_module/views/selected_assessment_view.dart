@@ -29,19 +29,19 @@ class SelectedAssessmentView extends StatelessWidget {
             Card(
               child: ListTile(
                 leading: CircleAvatar(radius: 25.w),
-                title: Text(AppStorage().userDetail!.username),
-                subtitle: Text(AppStorage().userDetail!.reportTo),
+                title: Text(AppStorage().userDetail?.username ?? ""),
+                subtitle: Text(AppStorage().userDetail?.reportTo ?? ""),
               ),
             ),
             Card(
               child: ListTile(
                 textColor: theme.primaryColor,
-                horizontalTitleGap: 0,
+                horizontalTitleGap: 10,
                 leading: Icon(
                   Icons.calendar_month_outlined,
                   color: theme.primaryColor,
                 ),
-                title: Text(bloc.selectedAssessment!.name),
+                title: Text(bloc.selectedAssessment?.name ?? ""),
                 subtitle: Text(
                     "From: ${bloc.selectedAssessment!.startDate.toStringFormat("dd-MM-yyyy")} To: ${bloc.selectedAssessment!.endDate.toStringFormat("dd-MM-yyyy")}"),
               ),

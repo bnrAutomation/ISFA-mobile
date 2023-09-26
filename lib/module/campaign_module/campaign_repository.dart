@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/module/campaign_module/new_models/campaign.dart';
@@ -13,8 +14,13 @@ class CampaignRepository {
   final compId = AppStorage().homeInfo!.userInfo.companyId;
   final client = CustomHttpBaseClient();
   Future<List<AllCampaignModel>> getCampaignsForStore() async {
-    final response = await client.get(Uri.parse(URLConstants.getAllCampaigns));
-
+    final response = await client.get(
+      Uri.parse(URLConstants.getAllCampaigns),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${AppStorage().authToken}'
+      },
+    );
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)
           .map((e) => AllCampaignModel.fromJson(e))
@@ -29,7 +35,12 @@ class CampaignRepository {
   Future<List<CampaignQuestionSectionModel>> getSections(
       {required String campaignUuid}) async {
     final response = await client.get(
-        Uri.parse("${URLConstants.getAllCampaigns}/$campaignUuid/section"));
+      Uri.parse("${URLConstants.getAllCampaigns}/$campaignUuid/section"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${AppStorage().authToken}'
+      },
+    );
 
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)
@@ -42,8 +53,14 @@ class CampaignRepository {
 
   Future<List<CampaignQuestionModel>> getQuestions(
       {required String campaignUuid, required String sectionUuid}) async {
-    final response = await client.get(Uri.parse(
-        "${URLConstants.getAllCampaigns}/$campaignUuid/section/$sectionUuid/question"));
+    final response = await client.get(
+      Uri.parse(
+          "${URLConstants.getAllCampaigns}/$campaignUuid/section/$sectionUuid/question"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${AppStorage().authToken}'
+      },
+    );
 
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)
@@ -55,12 +72,17 @@ class CampaignRepository {
   }
 
   Future<bool> saveCampaignAnswers(Map<String, dynamic> bodyMap) async {
+    debugPrint(jsonEncode(bodyMap));
     final response = await client.post(
       Uri.parse(
           "${URLConstants.baseURLStart}/campaign-service/iSFA/api/v1/client/campaign/${bodyMap['campaignUuid']}/response"),
       body: jsonEncode(bodyMap),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${AppStorage().authToken}'
+      },
     );
+
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -70,8 +92,14 @@ class CampaignRepository {
 
   Future<SavedCampaignDataModel?> savedCampaignResponse(
       String campaignUuid) async {
-    final response = await client.get(Uri.parse(
-        "${URLConstants.baseURLStart}/campaign-service/iSFA/api/v1/analytics/$userId/campaign/$campaignUuid?filterBy=date&unit=120"));
+    final response = await client.get(
+      Uri.parse(
+          "${URLConstants.baseURLStart}/campaign-service/iSFA/api/v1/analytics/$userId/campaign/$campaignUuid?filterBy=date&unit=120"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${AppStorage().authToken}'
+      },
+    );
 
     if (response.statusCode == 200) {
       final dataJson = jsonDecode(response.body);

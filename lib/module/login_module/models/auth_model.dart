@@ -154,7 +154,7 @@ class UserInfo {
         state: json["state"],
         createdDate: DateTime.parse(json["createdDate"]),
         createdById: json["createdBy"],
-        active: json["active"],
+        active: json["active"] ?? false,
         doj: DateTime.parse(json["doj"]),
       );
 
