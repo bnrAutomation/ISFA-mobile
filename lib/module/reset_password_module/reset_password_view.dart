@@ -28,20 +28,20 @@ class ResetPasswordView extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 1.0, // soften the shadow
-                        spreadRadius: 1.0, //extend the shadow
-                        offset: Offset(
-                          1.0, // Move to right 5  horizontally
-                          1.0, // Move to bottom 5 Vertically
-                        ))
-                  ],
-                ),
+                // decoration: BoxDecoration(
+                //   color: Theme.of(context).cardColor,
+                //   borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                //   boxShadow: const [
+                //     BoxShadow(
+                //         color: Colors.grey,
+                //         blurRadius: 1.0, // soften the shadow
+                //         spreadRadius: 1.0, //extend the shadow
+                //         offset: Offset(
+                //           1.0, // Move to right 5  horizontally
+                //           1.0, // Move to bottom 5 Vertically
+                //         ))
+                //   ],
+                // ),
                 width: 0.9.sw >= 0.9.sh ? 0.9.sh : 0.9.sw,
                 // height: 0.7.sw >= 0.7.sh ? 0.7.sh:0.7.sw,
                 padding: const EdgeInsets.all(6),
@@ -69,7 +69,7 @@ class ResetPasswordView extends StatelessWidget {
                               child: Text(
                                 "Your new password must be different from your previously password",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(),
+                                style: TextStyle(color: Colors.white),
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -81,6 +81,7 @@ class ResetPasswordView extends StatelessWidget {
                                 : const SizedBox(),
                             const SizedBox(height: 10),
                             TextField(
+                              style: const TextStyle(color: Colors.white),
                               controller: newPasswordController,
                               onChanged: (value) => bloc.add(ChangePassword(
                                   newPasswordController.text,
@@ -104,19 +105,29 @@ class ResetPasswordView extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+                                hintStyle: const TextStyle(color: Colors.white),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50.w),
+                                    borderSide: const BorderSide(
+                                        color: ColorConstants.amber)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50.w),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white54)),
                                 filled: true,
                                 fillColor:
                                     const Color.fromARGB(74, 158, 158, 158),
                                 hintText: "New Password",
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(10)),
+                                // border: OutlineInputBorder(
+                                //     borderSide: BorderSide.none,
+                                //     borderRadius: BorderRadius.circular(10)),
                               ),
                             ),
                             const SizedBox(
                               height: 10,
                             ),
                             TextField(
+                              style: const TextStyle(color: Colors.white),
                               controller: confirmPasssordController,
                               onChanged: (value) => bloc.add(ChangePassword(
                                   newPasswordController.text,
@@ -140,6 +151,15 @@ class ResetPasswordView extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+                                hintStyle: const TextStyle(color: Colors.white),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50.w),
+                                    borderSide: const BorderSide(
+                                        color: ColorConstants.amber)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50.w),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white54)),
                                 filled: true,
                                 fillColor:
                                     const Color.fromARGB(74, 158, 158, 158),

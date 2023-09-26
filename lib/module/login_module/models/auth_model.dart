@@ -149,7 +149,7 @@ class UserInfo {
         tags: json["tags"] == null
             ? []
             : List<String>.from(json["tags"].map((x) => x)),
-        fullName: json["fullName"],
+        fullName: json["fullName"] ?? json["username"] ?? "",
         city: json["city"],
         state: json["state"],
         createdDate: DateTime.parse(json["createdDate"]),
