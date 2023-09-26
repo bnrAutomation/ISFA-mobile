@@ -29,3 +29,9 @@ class GetSavedCampaignResponseEvent extends CampaignEvent {
 }
 
 class AnswerUpdatedCampaignEvent extends CampaignEvent {}
+
+class SnackbarMessageCampaignEvent extends CampaignEvent {
+  final String message;
+
+  SnackbarMessageCampaignEvent({required this.message});
+}

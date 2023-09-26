@@ -25,6 +25,10 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
 
   CampaignBloc(this.storeId) : super(CampaignInitial()) {
     on(_answerUpdatedEvent);
+
+    on((SnackbarMessageCampaignEvent event, emit) =>
+        emit(SnackbarMessageCampaignState(event.message)));
+
     on((GetStoreCampaignsEvent event, emit) async {
       emit(CampaignListLoadingState());
       storeCampaigns = await repo.getCampaignsForStore();

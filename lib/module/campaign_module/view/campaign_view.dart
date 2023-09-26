@@ -137,8 +137,15 @@ class SelectedCampaignView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: FilledButton(
-                        onPressed: () => context
-                            .pushNamed(AppPaths.campaignQuestion, extra: bloc),
+                        onPressed: () {
+                          if (bloc.selectedCampSections.isEmpty) {
+                            bloc.add(SnackbarMessageCampaignEvent(
+                                message: 'No Questions added.'));
+                            return;
+                          }
+                          context.pushNamed(AppPaths.campaignQuestion,
+                              extra: bloc);
+                        },
                         style: TextButton.styleFrom(
                           elevation: 2,
                           alignment: Alignment.center,
