@@ -24,15 +24,13 @@ class CampaignListItem extends StatelessWidget {
                     child: Text(
                       item.name,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: item.isNagative() ? Colors.grey : Colors.blue),
+                          fontWeight: FontWeight.w600, color: Colors.blue),
                     ),
                   ),
                   Text(
                     "Active",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: item.isNagative() ? Colors.red : Colors.green),
+                        fontWeight: FontWeight.w600, color: Colors.green),
                   ),
                   const SizedBox(width: 10)
                 ],

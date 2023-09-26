@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:i_densfa/utility/app_storage.dart';
@@ -19,8 +20,8 @@ class CustomHttpBaseClient extends BaseClient {
   Future<StreamedResponse> send(BaseRequest request) async {
     if (AppStorage().authToken != null) {
       request.headers.addAll({
-        'accept': 'application/json',
-        'Authorization': 'Bearer ${AppStorage().authToken}',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer ${AppStorage().authToken}',
       });
     }
     log('👁️ ${request.method} => ${request.url.toString()}');

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:i_densfa/utility/handler.dart';
@@ -14,13 +15,9 @@ class CampaignRepository {
   final compId = AppStorage().homeInfo!.userInfo.companyId;
   final client = CustomHttpBaseClient();
   Future<List<AllCampaignModel>> getCampaignsForStore() async {
-    final response = await client.get(
-      Uri.parse(URLConstants.getAllCampaigns),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${AppStorage().authToken}'
-      },
-    );
+    final uri = Uri.parse(URLConstants.getAllCampaigns)
+        .replace(queryParameters: {'userId': userId.toString()});
+    final response = await client.get(uri);
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)
           .map((e) => AllCampaignModel.fromJson(e))
@@ -36,10 +33,6 @@ class CampaignRepository {
       {required String campaignUuid}) async {
     final response = await client.get(
       Uri.parse("${URLConstants.getAllCampaigns}/$campaignUuid/section"),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${AppStorage().authToken}'
-      },
     );
 
     if (response.statusCode == 200) {
@@ -56,10 +49,6 @@ class CampaignRepository {
     final response = await client.get(
       Uri.parse(
           "${URLConstants.getAllCampaigns}/$campaignUuid/section/$sectionUuid/question"),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${AppStorage().authToken}'
-      },
     );
 
     if (response.statusCode == 200) {
@@ -77,10 +66,7 @@ class CampaignRepository {
       Uri.parse(
           "${URLConstants.baseURLStart}/campaign-service/iSFA/api/v1/client/campaign/${bodyMap['campaignUuid']}/response"),
       body: jsonEncode(bodyMap),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${AppStorage().authToken}'
-      },
+      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     );
 
     if (response.statusCode == 200) {
@@ -95,10 +81,6 @@ class CampaignRepository {
     final response = await client.get(
       Uri.parse(
           "${URLConstants.baseURLStart}/campaign-service/iSFA/api/v1/analytics/$userId/campaign/$campaignUuid?filterBy=date&unit=120"),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${AppStorage().authToken}'
-      },
     );
 
     if (response.statusCode == 200) {

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
 import 'package:i_densfa/utility/extensions.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class ProfileInfoview extends StatelessWidget {
   const ProfileInfoview({super.key});
@@ -51,24 +52,30 @@ class ProfileInfoview extends StatelessWidget {
             // const ProfileInfoDetailTitle(title: 'Team Cluster', info: 'XXX'),
             const ProfileInfoTitle(title: 'Device Information'),
             FutureBuilder<String>(
+                future: deviceInfo.name(),
+                builder: (context, snapshot) {
+                  return ProfileInfoDetailTitle(
+                      title: 'Device Model', info: snapshot.data ?? '');
+                }),
+            const Divider(height: 0.4),
+            FutureBuilder<String>(
                 future: deviceInfo.deviceOs(),
                 builder: (context, snapshot) {
                   return ProfileInfoDetailTitle(
                       title: 'OS Version', info: snapshot.data ?? '');
                 }),
             const Divider(height: 0.4),
-            FutureBuilder<String>(
-                future: deviceInfo.deviceId(),
-                builder: (context, snapshot) {
-                  return ProfileInfoDetailTitle(
-                      title: 'Device Model', info: snapshot.data ?? '');
-                }),
-            const Divider(height: 0.4),
             ProfileInfoDetailTitle(
                 title: 'Last Login',
                 info: profileDetail.lastLogin.toStringFormat('dd/MM/yy HH:mm')),
             const Divider(height: 0.4),
-            const ProfileInfoDetailTitle(title: 'App Version', info: '1.0'),
+            FutureBuilder(
+                future: PackageInfo.fromPlatform(),
+                builder: (context, snapshot) {
+                  return ProfileInfoDetailTitle(
+                      title: 'App Version',
+                      info: snapshot.data?.version ?? '1.0');
+                }),
           ],
         ),
       ),

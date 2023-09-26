@@ -16,13 +16,10 @@ class CampaignQuestionsView extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         final response = await _showQuitWarning(context, bloc);
-        debugPrint(response);
-        if (response == "Yes") {
-          // ignore: use_build_context_synchronously
-          //context.pop();
-          // ignore: use_build_context_synchronously
-          Navigator.pop(context);
-          //bloc.add(SaveCampaignAnswersEvent(false));
+        if (response == true) {
+          if (context.mounted) {
+            Navigator.pop(context);
+          }
         }
         return false;
       },
@@ -101,21 +98,21 @@ class CampaignQuestionsView extends StatelessWidget {
     );
   }
 
-  Future<String?> _showQuitWarning(BuildContext context, CampaignBloc bloc) {
+  Future<bool?> _showQuitWarning(BuildContext context, CampaignBloc bloc) {
     return showCupertinoModalPopup(
         context: context,
         builder: (context) {
           return CupertinoActionSheet(
             title: const Text("Are you sure you want to quit Campaign"),
             cancelButton: TextButton(
-                onPressed: () => Navigator.pop(context, 'No'),
+                onPressed: () => Navigator.pop(context, false),
                 child: const Text(
                   'No',
                   style: TextStyle(color: Colors.red),
                 )),
             actions: [
               TextButton(
-                  onPressed: () => Navigator.pop(context, 'Yes'),
+                  onPressed: () => Navigator.pop(context, true),
                   child: const Text('Yes')),
             ],
           );

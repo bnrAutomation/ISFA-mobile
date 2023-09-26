@@ -14,7 +14,7 @@ class Device {
 
     if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.utsname.machine;
+      return iosInfo.name;
     }
     return '';
   }
@@ -40,7 +40,7 @@ class Device {
   Future<String> deviceOs() async {
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.hardware;
+      return androidInfo.version.release;
     }
 
     if (Platform.isIOS) {

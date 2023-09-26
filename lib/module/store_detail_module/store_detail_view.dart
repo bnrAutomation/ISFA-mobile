@@ -43,7 +43,9 @@ class StoreDetailView extends StatelessWidget {
           },
           builder: (context, state) {
             return state is MarkingLoadingStoreDetailState
-                ? const Center(child: CircularProgressIndicator())
+                ? SizedBox(
+                    height: 1.sh - 10.h,
+                    child: const Center(child: CircularProgressIndicator()))
                 : Column(
                     children: [
                       headerImage(context),
