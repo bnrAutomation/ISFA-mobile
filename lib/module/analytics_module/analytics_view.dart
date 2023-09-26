@@ -168,15 +168,17 @@ class AnalyticsView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: 100.w,
+                          width: 0.25.sw,
                           child: Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: Alignment.center,
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 FittedBox(
                                   child: Text(
                                     item.kpiName,
-                                    style: textTheme.titleLarge,
+                                    style: textTheme.titleSmall
+                                        ?.copyWith(fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Text(
