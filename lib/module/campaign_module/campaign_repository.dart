@@ -19,6 +19,7 @@ class CampaignRepository {
       return (json.decode(response.body) as List)
           .map((e) => AllCampaignModel.fromJson(e))
           .where((element) => element.status == "PUBLISHED")
+          .where((element) => !element.isNagative())
           .toList();
     } else {
       throw getErrorMessage(response.body);

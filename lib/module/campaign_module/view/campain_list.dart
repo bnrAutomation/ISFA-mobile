@@ -29,7 +29,7 @@ class CampaignListItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    item.isNagative() ? "De-Active" : "Active",
+                    "Active",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: item.isNagative() ? Colors.red : Colors.green),
