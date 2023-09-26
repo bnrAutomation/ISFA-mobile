@@ -11,11 +11,11 @@ import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 
 class CampaignRepository {
-  final userId = AppStorage().userDetail!.id;
+  final userId = AppStorage().userDetail?.id;
   final compId = AppStorage().homeInfo!.userInfo.companyId;
   final client = CustomHttpBaseClient();
   Future<List<AllCampaignModel>> getCampaignsForStore() async {
-    final uri = Uri.parse(URLConstants.getAllCampaigns)
+    final uri = Uri.parse("${URLConstants.getAllCampaignsList}/client")
         .replace(queryParameters: {'userId': userId.toString()});
     final response = await client.get(uri);
     if (response.statusCode == 200) {
@@ -32,7 +32,7 @@ class CampaignRepository {
   Future<List<CampaignQuestionSectionModel>> getSections(
       {required String campaignUuid}) async {
     final response = await client.get(
-      Uri.parse("${URLConstants.getAllCampaigns}/$campaignUuid/section"),
+      Uri.parse("${URLConstants.getAllCampaignsList}/$campaignUuid/section"),
     );
 
     if (response.statusCode == 200) {
@@ -48,7 +48,7 @@ class CampaignRepository {
       {required String campaignUuid, required String sectionUuid}) async {
     final response = await client.get(
       Uri.parse(
-          "${URLConstants.getAllCampaigns}/$campaignUuid/section/$sectionUuid/question"),
+          "${URLConstants.getAllCampaignsList}/$campaignUuid/section/$sectionUuid/question"),
     );
 
     if (response.statusCode == 200) {
@@ -64,7 +64,8 @@ class CampaignRepository {
     debugPrint(jsonEncode(bodyMap));
     final response = await client.post(
       Uri.parse(
-          "${URLConstants.baseURLStart}/campaign-service/iSFA/api/v1/client/campaign/${bodyMap['campaignUuid']}/response"),
+              "${URLConstants.baseURLStart}/campaign-service/iSFA/api/v1/client/campaign/${bodyMap['campaignUuid']}/response")
+          .replace(queryParameters: {'userId': userId.toString()}),
       body: jsonEncode(bodyMap),
       headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     );
@@ -82,7 +83,6 @@ class CampaignRepository {
       Uri.parse(
           "${URLConstants.baseURLStart}/campaign-service/iSFA/api/v1/analytics/$userId/campaign/$campaignUuid?filterBy=date&unit=120"),
     );
-
     if (response.statusCode == 200) {
       final dataJson = jsonDecode(response.body);
       if (dataJson == null) {

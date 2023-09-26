@@ -84,7 +84,7 @@ class CampaignQuestionsView extends StatelessWidget {
                   child: Text(
                     context.select((CampaignBloc bloc) =>
                         bloc.state is SavingAnswersLoadingState
-                            ? "Loading.."
+                            ? "Loading..."
                             : "SUBMIT"),
                     style: TextStyle(
                         color: Colors.white,
