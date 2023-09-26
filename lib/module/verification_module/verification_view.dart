@@ -47,7 +47,9 @@ class VerificationView extends StatelessWidget {
                                 child: Text(
                                   "Please enter the 4 digits code sent\nto your registered E-Mail.",
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
                                 ),
                               ),
                               const SizedBox(
@@ -68,8 +70,13 @@ class VerificationView extends StatelessWidget {
                                     MainAxisAlignment.spaceAround,
                                 fieldWidth: 45,
                                 fieldStyle: FieldStyle.underline,
+                                otpFieldStyle: OtpFieldStyle(
+                                    enabledBorderColor: Colors.amber,
+                                    focusBorderColor: Colors.amber,
+                                    borderColor: Colors.white),
                                 outlineBorderRadius: 15,
-                                style: const TextStyle(fontSize: 17),
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.white),
                                 onChanged: (String code) {
                                   bloc.add(
                                       VerificationTextChangeEvent(code, email));
@@ -89,7 +96,7 @@ class VerificationView extends StatelessWidget {
                                       backgroundColor: ColorConstants.amber,
                                       content: Text(
                                         'Your Verification code has re-sent your registerd e-mail.',
-                                        style: TextStyle(color: Colors.black),
+                                        style: TextStyle(color: Colors.white),
                                       ),
                                       duration: Duration(seconds: 2),
                                     ));
@@ -137,7 +144,7 @@ class VerificationView extends StatelessWidget {
                                           elevation: 2,
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .onPrimary,
+                                              .primary,
                                           splashColor:
                                               Colors.red.withOpacity(0.5),
                                           padding: const EdgeInsets.symmetric(
@@ -151,7 +158,7 @@ class VerificationView extends StatelessWidget {
                                                 ? "Loading.."
                                                 : "Verify OTP",
                                             style: const TextStyle(
-                                                color: Colors.white),
+                                                color: Colors.black),
                                           ),
                                         ),
                                       ),

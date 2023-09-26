@@ -231,7 +231,7 @@ class LeaveView extends StatelessWidget {
     //         : index == 2
     //             ? ColorConstants.amber
     //             : Colors.black;
-    final bloc = context.read<LeaveBloc>();
+    //final bloc = context.read<LeaveBloc>();
     return Card(
       color: model.leaveTypeColor.toColor(),
       child: Stack(
@@ -241,10 +241,12 @@ class LeaveView extends StatelessWidget {
               right: 2,
               top: 2,
               child: Container(
-                padding: const EdgeInsets.all(10.0),
+                width: 34.w,
+                height: 34.h,
+                padding: const EdgeInsets.all(5.0),
                 decoration: const BoxDecoration(
                     shape: BoxShape.circle, color: Color(0xFFFFFFFF)),
-                child: SvgPicture.asset(bloc.getLeaveTypeBalanceIcon(index)),
+                child: Image.network(model.leaveTypeIcon ?? ""),
               )),
           Positioned(
               left: 4,

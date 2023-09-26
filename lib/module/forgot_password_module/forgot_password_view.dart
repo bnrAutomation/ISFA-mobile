@@ -26,20 +26,20 @@ class ForgotPasswordView extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 1.0, // soften the shadow
-                      spreadRadius: 1.0, //extend the shadow
-                      offset: Offset(
-                        1.0, // Move to right 5  horizontally
-                        1.0, // Move to bottom 5 Vertically
-                      ))
-                ],
-              ),
+              // decoration: BoxDecoration(
+              //   //   color: Theme.of(context).cardColor,
+              //   borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+              //   boxShadow: const [
+              //     BoxShadow(
+              //         color: Colors.grey,
+              //         blurRadius: 1.0, // soften the shadow
+              //         spreadRadius: 1.0, //extend the shadow
+              //         offset: Offset(
+              //           1.0, // Move to right 5  horizontally
+              //           1.0, // Move to bottom 5 Vertically
+              //         ))
+              //   ],
+              // ),
               width: 0.9.sw >= 0.9.sh ? 0.9.sh : 0.9.sw,
               // height: 0.7.sw >= 0.7.sh ? 0.7.sh:0.7.sw,
               padding: const EdgeInsets.all(6),
@@ -62,12 +62,15 @@ class ForgotPasswordView extends StatelessWidget {
                             //  height: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
                           ),
                           const SizedBox(height: 10),
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: Text(
                               "Please enter your registered email ID to receive Verification code",
                               textAlign: TextAlign.center,
-                              style: TextStyle(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(color: Colors.white),
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -82,17 +85,29 @@ class ForgotPasswordView extends StatelessWidget {
                             inputFormatters: [
                               FilteringTextInputFormatter.deny(" ")
                             ],
+                            keyboardType: TextInputType.emailAddress,
+                            style: const TextStyle(color: Colors.white),
                             controller: usernameController,
                             onChanged: (value) => bloc
                                 .add(ChangeTextEvent(usernameController.text)),
                             decoration: InputDecoration(
+                              hintStyle: const TextStyle(color: Colors.white),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50.w),
+                                  borderSide: const BorderSide(
+                                      color: ColorConstants.amber)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50.w),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white54)),
+
                               filled: true,
                               fillColor:
                                   const Color.fromARGB(74, 158, 158, 158),
                               hintText: "Email Id",
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(10)),
+                              // border: OutlineInputBorder(
+                              //     borderSide: BorderSide.none,
+                              //     borderRadius: BorderRadius.circular(10)),
                             ),
                           ),
                           const SizedBox(height: 10),
