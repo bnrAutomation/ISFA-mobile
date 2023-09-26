@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/campaign_module/bloc/campaign_bloc.dart';
 import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions_view.dart';
 import 'package:i_densfa/utility/custom_tab_view.dart';
@@ -16,8 +17,13 @@ class CampaignQuestionsView extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         final response = await _showQuitWarning(context, bloc);
+        debugPrint(response);
         if (response == "Yes") {
-          bloc.add(SaveCampaignAnswersEvent(false));
+          // ignore: use_build_context_synchronously
+          //context.pop();
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+          //bloc.add(SaveCampaignAnswersEvent(false));
         }
         return false;
       },
