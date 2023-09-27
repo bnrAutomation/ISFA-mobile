@@ -78,12 +78,11 @@ class UserInfo {
   int id;
   String uuid;
   String email;
-
   String username;
   String supervisorId;
   int companyId;
   String designation;
-  DateTime lastLogin;
+  DateTime? lastLogin;
   String reportTo;
   String userStatus;
   String role;
@@ -130,28 +129,30 @@ class UserInfo {
   String toRawJson() => json.encode(toJson());
 
   factory UserInfo.fromJson(Map<String, dynamic> json) => UserInfo(
-        id: json["userId"],
-        uuid: json["uuid"],
+        id: json["userId"] ?? "",
+        uuid: json["uuid"] ?? "",
         email: json["email"] ?? "",
-        username: json["username"],
-        supervisorId: json["supervisor"],
-        companyId: json["companyId"],
-        designation: json["designation"],
-        lastLogin: DateTime.parse(json["lastLogin"]),
-        reportTo: json["reportTo"],
-        userStatus: json["userStatus"],
-        role: json["role"],
-        mobile: json["mobile"],
-        pin: json["pin"],
-        photoUrl: json["photourl"],
+        username: json["username"] ?? "",
+        supervisorId: json["supervisor"] ?? "",
+        companyId: json["companyId"] ?? "",
+        designation: json["designation"] ?? "",
+        lastLogin: json["lastLogin"] != null
+            ? DateTime.parse(json["lastLogin"])
+            : null,
+        reportTo: json["reportTo"] ?? "",
+        userStatus: json["userStatus"] ?? "",
+        role: json["role"] ?? '',
+        mobile: json["mobile"] ?? "",
+        pin: json["pin"] ?? "",
+        photoUrl: json["photourl"] ?? "",
         tags: json["tags"] == null
             ? []
             : List<String>.from(json["tags"].map((x) => x)),
         fullName: json["fullName"] ?? json["username"] ?? "",
-        city: json["city"],
-        state: json["state"],
+        city: json["city"] ?? "",
+        state: json["state"] ?? "",
         createdDate: DateTime.parse(json["createdDate"]),
-        createdById: json["createdBy"],
+        createdById: json["createdBy"] ?? "",
         active: json["active"] ?? false,
         doj: DateTime.parse(json["doj"]),
       );
@@ -164,7 +165,7 @@ class UserInfo {
         "supervisor": supervisorId,
         "companyId": companyId,
         "designation": designation,
-        "lastLogin": lastLogin.toIso8601String(),
+        "lastLogin": lastLogin?.toIso8601String(),
         "reportTo": reportTo,
         "userStatus": userStatus,
         "role": role,

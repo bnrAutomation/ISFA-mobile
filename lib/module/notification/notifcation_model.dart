@@ -57,10 +57,10 @@ class NotificationModel {
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
       NotificationModel(
         id: json["id"],
-        title: json["title"],
+        title: json["title"] ?? "",
         message: json["message"],
         notificationType: json["notificationType"] ?? "",
-        createdBy: json["createdBy"],
+        createdBy: json["createdBy"] ?? "",
         createdDate: DateTime.parse(json["createdDate"]),
       );
 

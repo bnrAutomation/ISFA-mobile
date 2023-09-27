@@ -1,15 +1,26 @@
-import 'package:i_densfa/utility/handler.dart';
+import 'dart:convert';
+
+import 'package:http/http.dart';
 import 'package:i_densfa/module/learner_module/learner/model/learner_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 
 class LearnerRepository {
-  final client = CustomHttpBaseClient();
-  Future<List<LearnerCategoryModel>> getLearner() async {
-    final response = await client.get(Uri.parse(URLConstants.learnerContent));
+  Future<LearnerModel> getLearner() async {
+    final response = await get(
+      Uri.parse(URLConstants.learnerContent),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer ${AppStorage().authToken}",
+      },
+    );
+
     if (response.statusCode == 200) {
-      return LearnerResponseModel.fromRawJson(response.body).dataList;
+      return LearnerModel.fromRawJson(response.body);
     } else {
-      throw getErrorMessage(response.body);
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : jsonDecode(response.body)['message'] ?? "Something went wrong";
     }
   }
 }

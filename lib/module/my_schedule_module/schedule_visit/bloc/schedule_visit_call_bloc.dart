@@ -60,12 +60,14 @@ class ScheduleVisitCallBloc
         body: jsonEncode({
           "companyId": companyId,
           "pjpDate": selectedDate!.toStringFormat("yyyy-MM-dd"),
-          // "pjpId": selectedStore.pjpId,
           "remarks": remark,
           "storeId": selectedStore.storeId,
           "userId": userId
         }),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer ${AppStorage().authToken}",
+        },
       );
 
       if (response.statusCode == 200) {

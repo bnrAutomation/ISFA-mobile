@@ -13,8 +13,13 @@ class StoreDetailRepository {
   final userId = AppStorage().userDetail!.id;
   final client = CustomHttpBaseClient();
   Future<GetStoreDetailDataModel> getStoreDetails(int storeId) async {
-    final response = await client
-        .get(Uri.parse("${URLConstants.getStoreDetail}/$userId/$storeId"));
+    final response = await client.get(
+      Uri.parse("${URLConstants.getStoreDetail}/$userId/$storeId"),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer ${AppStorage().authToken}",
+      },
+    );
 
     if (response.statusCode == 200) {
       final dataJson = jsonDecode(response.body)['data'];
@@ -31,7 +36,10 @@ class StoreDetailRepository {
     final requestBody = {"note": note, "storeId": storeId, "userId": userId};
 
     final response = await client.post(Uri.parse(URLConstants.addNote),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer ${AppStorage().authToken}",
+        },
         body: json.encode(requestBody));
     if (response.statusCode == 201 || response.statusCode == 200) {
       return true;
@@ -46,10 +54,13 @@ class StoreDetailRepository {
       "createdBy": AppStorage().userDetail!.username
     };
 
-    final response = await client.post(
-        Uri.parse(URLConstants.getFeedbackByUserIdAndStore),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(requestBody));
+    final response =
+        await client.post(Uri.parse(URLConstants.getFeedbackByUserIdAndStore),
+            headers: {
+              'Content-Type': 'application/json',
+              "Authorization": "Bearer ${AppStorage().authToken}",
+            },
+            body: json.encode(requestBody));
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       debugPrint(response.body);
@@ -60,8 +71,13 @@ class StoreDetailRepository {
   }
 
   Future<bool> deleteNoteForStore(int noteId) async {
-    final response =
-        await client.delete(Uri.parse('${URLConstants.deleteNote}/$noteId'));
+    final response = await client.delete(
+      Uri.parse('${URLConstants.deleteNote}/$noteId'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer ${AppStorage().authToken}",
+      },
+    );
     if (response.statusCode == 200) {
       return true;
     } else {

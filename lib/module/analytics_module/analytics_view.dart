@@ -174,13 +174,15 @@ class AnalyticsView extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                FittedBox(
-                                  child: Text(
-                                    item.kpiName,
-                                    style: textTheme.titleSmall
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ),
+                                // FittedBox(
+                                //   child:
+                                Text(
+                                  item.kpiName,
+                                  style: textTheme.titleSmall?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10.sp),
                                 ),
+                                //   ),
                                 Text(
                                   "Target",
                                   style: textTheme.titleSmall,

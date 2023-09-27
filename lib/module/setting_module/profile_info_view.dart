@@ -67,7 +67,9 @@ class ProfileInfoview extends StatelessWidget {
             const Divider(height: 0.4),
             ProfileInfoDetailTitle(
                 title: 'Last Login',
-                info: profileDetail.lastLogin.toStringFormat('dd/MM/yy HH:mm')),
+                info:
+                    profileDetail.lastLogin?.toStringFormat('dd/MM/yy HH:mm') ??
+                        ""),
             const Divider(height: 0.4),
             FutureBuilder(
                 future: PackageInfo.fromPlatform(),
