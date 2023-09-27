@@ -62,7 +62,7 @@ class UserDetailsResponseModel {
 
   factory UserDetailsResponseModel.fromJson(Map<String, dynamic> json) =>
       UserDetailsResponseModel(
-        message: json["message"],
+        message: json["message"] ?? "",
         status: json["status"],
         data: UserInfo.fromJson(json["data"]),
       );
@@ -78,7 +78,7 @@ class UserInfo {
   int id;
   String uuid;
   String email;
-  String password;
+
   String username;
   String supervisorId;
   int companyId;
@@ -103,7 +103,6 @@ class UserInfo {
     required this.id,
     required this.uuid,
     required this.email,
-    required this.password,
     required this.username,
     required this.supervisorId,
     required this.companyId,
@@ -133,8 +132,7 @@ class UserInfo {
   factory UserInfo.fromJson(Map<String, dynamic> json) => UserInfo(
         id: json["userId"],
         uuid: json["uuid"],
-        email: json["email"],
-        password: json["password"],
+        email: json["email"] ?? "",
         username: json["username"],
         supervisorId: json["supervisor"],
         companyId: json["companyId"],
@@ -162,7 +160,6 @@ class UserInfo {
         "userId": id,
         "uuid": uuid,
         "email": email,
-        "password": password,
         "username": username,
         "supervisor": supervisorId,
         "companyId": companyId,
