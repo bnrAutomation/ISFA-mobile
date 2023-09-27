@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -60,6 +61,9 @@ class AppTabbarView extends StatelessWidget {
                   ? null
                   : AppSideMenu(data: bloc.sideMenuData!),
               appBar: AppBar(
+                systemOverlayStyle: const SystemUiOverlayStyle(
+                    statusBarColor: Colors.black,
+                    statusBarBrightness: Brightness.light),
                 title: Text(bloc.tabberItems[bloc.selectIndex].navTitle()),
                 leading: BlocListener<TabbarBloc, TabberState>(
                   listenWhen: (previous, current) =>
