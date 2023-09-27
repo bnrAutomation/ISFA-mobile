@@ -15,10 +15,6 @@ class StoreDetailRepository {
   Future<GetStoreDetailDataModel> getStoreDetails(int storeId) async {
     final response = await client.get(
       Uri.parse("${URLConstants.getStoreDetail}/$userId/$storeId"),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer ${AppStorage().authToken}",
-      },
     );
 
     if (response.statusCode == 200) {
@@ -36,10 +32,7 @@ class StoreDetailRepository {
     final requestBody = {"note": note, "storeId": storeId, "userId": userId};
 
     final response = await client.post(Uri.parse(URLConstants.addNote),
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": "Bearer ${AppStorage().authToken}",
-        },
+        headers: {'Content-Type': 'application/json'},
         body: json.encode(requestBody));
     if (response.statusCode == 201 || response.statusCode == 200) {
       return true;
@@ -73,10 +66,7 @@ class StoreDetailRepository {
   Future<bool> deleteNoteForStore(int noteId) async {
     final response = await client.delete(
       Uri.parse('${URLConstants.deleteNote}/$noteId'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer ${AppStorage().authToken}",
-      },
+      headers: {'Content-Type': 'application/json'},
     );
     if (response.statusCode == 200) {
       return true;

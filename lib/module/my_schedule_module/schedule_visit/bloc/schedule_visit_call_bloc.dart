@@ -64,10 +64,7 @@ class ScheduleVisitCallBloc
           "storeId": selectedStore.storeId,
           "userId": userId
         }),
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": "Bearer ${AppStorage().authToken}",
-        },
+        headers: {'Content-Type': 'application/json'},
       );
 
       if (response.statusCode == 200) {
