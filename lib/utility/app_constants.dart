@@ -108,7 +108,7 @@ class URLConstants {
   static const deleteNote = '$apiBaseUrl/deleteNote';
   static const savedCampaignResponse = '$apiBaseUrl/savedCampaignResponse';
   static const sheduleVisit = '$apiBaseUrl/beatPlanUpload';
-  static const learnerContent = '$isfaBaseURL/server/learner-content';
+  static const learnerContent = '$apiBaseUrl/learner/category';
   static const getFeedbackByUserIdAndStore =
       "$isfaBaseURL/api/getFeedbackByUserIdAndStore";
   static const getNotifications =
