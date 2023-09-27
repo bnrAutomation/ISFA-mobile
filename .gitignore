@@ -75,3 +75,4 @@ macos/Podfile
 build/*
 */Flutter/Debug.xcconfig
 */Flutter/Release.xcconfig
+pubspec.lock
