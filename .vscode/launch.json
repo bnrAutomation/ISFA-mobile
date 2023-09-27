@@ -45,12 +45,12 @@
             "name": "iSFA-prod-release", // for production build
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release",
+            //"flutterMode": "release",
             "toolArgs": [
                 "--dart-define",
                 "APP_NAME=iSFA",
                 "--dart-define",
-                "BASE_URL=https://denave.com"
+                "BASE_URL=https://isfa.denave.com:8445"
             ]
         }
     ]
