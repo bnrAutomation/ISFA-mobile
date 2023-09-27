@@ -30,9 +30,13 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
         emit(SnackbarMessageCampaignState(event.message)));
 
     on((GetStoreCampaignsEvent event, emit) async {
-      emit(CampaignListLoadingState());
-      storeCampaigns = await repo.getCampaignsForStore();
-      emit(CampaignListLoadedState());
+      try {
+        emit(CampaignListLoadingState());
+        storeCampaigns = await repo.getCampaignsForStore();
+        emit(CampaignListLoadedState());
+      } catch (e) {
+        emit(SnackbarMessageCampaignState(onError.toString()));
+      }
     });
 
     on((GetSavedCampaignResponseEvent event, emit) async {
