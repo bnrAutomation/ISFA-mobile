@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:i_densfa/module/ui/dialog_view.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
@@ -18,6 +19,7 @@ class AppSideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var bloc = context.read<TabbarBloc>();
     return Drawer(
       child: ListView(
         children: [
@@ -29,7 +31,7 @@ class AppSideMenu extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(110),
                   child: CachedNetworkImage(
-                    imageUrl: AppStorage().userDetail!.photoUrl,
+                    imageUrl: AppStorage().userDetail?.photoUrl ?? "",
                     fit: BoxFit.cover,
                     errorWidget: (context, url, error) => CachedNetworkImage(
                         imageUrl: ImageConstants.placeholderUserUrl),
@@ -112,8 +114,16 @@ class AppSideMenu extends StatelessWidget {
             title: const Text('Logout'),
             onTap: () {
               Scaffold.of(context).closeDrawer();
-              AppStorage().logout();
-              context.go(AppPaths.login);
+              showGeneralDialog(
+                  context: context,
+                  pageBuilder: (context, _, __) => DialogView(
+                        title: "Logout",
+                        description: "Do you want to logout ?",
+                        okayButtonText: "Logout",
+                        onDelete: () async {
+                          bloc.add(LogoutEvent());
+                        },
+                      ));
             },
           ),
         ],

@@ -32,6 +32,7 @@ class TabbarBloc extends Bloc<TabberEvent, TabberState> {
     on(_endDuty);
     on(_startDuty);
     on<SubmitToken>((event, emit) => submitToken());
+    on<LogoutEvent>((event, emit) => logout(event, emit));
   }
 
   Future<void> _getSideMenuData(Emitter<TabberState> emit) async {
@@ -124,6 +125,21 @@ class TabbarBloc extends Bloc<TabberEvent, TabberState> {
       return true;
     } else {
       throw getErrorMessage(response.body);
+    }
+  }
+
+  Future<void> logout(LogoutEvent event, Emitter<TabberState> emit) async {
+    final body = {"userId": AppStorage().userDetail?.id.toString()};
+    final response = await CustomHttpBaseClient().post(
+        Uri.parse(URLConstants.logout),
+        body: jsonEncode(body),
+        headers: {'Content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      emit(LogoutSuccessfullState());
+    } else {
+      throw response.body.isEmpty
+          ? "Something went wrong"
+          : json.decode(response.body)['message'] ?? "Something went wrong";
     }
   }
 }

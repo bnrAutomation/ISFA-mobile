@@ -56,6 +56,9 @@ class URLConstants {
   static const login =
       "$baseURLStart/authentication-service/iam/api/v1/authenticate";
 
+  static const logout =
+      "$baseURLStart/authentication-service/iam/api/v1/logout";
+
   static const userDetails = "$apiBaseUrl/user/detail";
   static const setpin = "$loginAuth/set-pin";
   static const loginwithpin = "$loginAuth/loginwithpin";

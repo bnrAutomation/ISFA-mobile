@@ -23,3 +23,5 @@ class StartDutyStatusTabberEvent extends TabberEvent {
 class UpdateSideMenuDetailsEvent extends TabberEvent {}
 
 class SubmitToken extends TabberEvent {}
+
+class LogoutEvent extends TabberEvent {}

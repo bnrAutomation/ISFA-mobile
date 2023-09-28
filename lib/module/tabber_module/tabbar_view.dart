@@ -12,6 +12,7 @@ import 'package:i_densfa/module/tabber_module/models/side_menu_model.dart';
 import 'package:i_densfa/module/tabber_module/side_menu_view.dart';
 import 'package:i_densfa/module/tabber_module/tabbar_repository.dart';
 import 'package:i_densfa/routes.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 import '../../utility/network_helper.dart';
@@ -51,7 +52,13 @@ class AppTabbarView extends StatelessWidget {
             }
           }
         },
-        child: BlocBuilder<TabbarBloc, TabberState>(
+        child: BlocConsumer<TabbarBloc, TabberState>(
+          listener: (context, state) {
+            if (state is LogoutSuccessfullState) {
+              AppStorage().logout();
+              context.go(AppPaths.login);
+            }
+          },
           builder: (context, state) {
             final bloc = context.read<TabbarBloc>();
 

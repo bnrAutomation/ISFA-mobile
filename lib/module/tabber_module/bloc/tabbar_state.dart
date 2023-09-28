@@ -19,3 +19,5 @@ class TabbarSnackBarMessageState extends TabberState {
 
   TabbarSnackBarMessageState(this.message);
 }
+
+class LogoutSuccessfullState extends TabberState {}
