@@ -17,7 +17,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(LoginShowPasswordState(isShowingPassword));
     });
     on<LoginTextChangeEvent>((event, emit) {
-      emit(LogInValidState());
+      if (event.userValue.isEmpty) {
+        emit(LogInErrorState("Username is empty"));
+      } else if (event.passwordValue.isEmpty) {
+        emit(LogInErrorState("Password is empty"));
+      } else {
+        emit(LogInValidState());
+      }
     });
     on<LoginSubmitEvent>((event, emit) async {
       if (event.username.isEmpty) {

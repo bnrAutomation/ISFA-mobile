@@ -158,6 +158,8 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     final leaveTypeId = leaveOptions
         .firstWhere((element) => element.leaveType == selectLeaveType)
         .leaveId;
+
+    emit(LoadingState());
     final response = await repo
         .applyLeave(
             leaveTypeId: leaveTypeId,
@@ -169,6 +171,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       emit(LeaveViewShowSnack(e.toString()));
       return false;
     });
+
     if (response) {
       if (tabbarTitles.length > 1) {
         bottomTabSelectedIndex = 1;

@@ -226,8 +226,15 @@ class _ApplyLeaveFormViewState extends State<ApplyLeaveFormView> {
                     ),
                     const SizedBox(height: 10),
                     CustomMaterialButton(
-                        buttonText: "Submit for Approval",
-                        onPressed: () => bloc.add(ApplyNewLeave())),
+                        buttonText: state is LoadingState
+                            ? "Loading.."
+                            : "Submit for Approval",
+                        onPressed: () {
+                          context.hideKeyboard();
+                          if (state is! LoadingState) {
+                            bloc.add(ApplyNewLeave());
+                          }
+                        }),
                     const SizedBox(height: 10),
                   ],
                 ),

@@ -82,7 +82,7 @@ class _LoginViewState extends State<LoginView> {
                                     passwordController.text));
                           },
                           decoration: InputDecoration(
-                            hintText: "Email Id",
+                            hintText: "Email Id/Username",
                             hintStyle: const TextStyle(color: Colors.white),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50.w),
