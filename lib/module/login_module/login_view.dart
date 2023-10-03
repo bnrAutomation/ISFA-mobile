@@ -77,12 +77,12 @@ class _LoginViewState extends State<LoginView> {
                             FilteringTextInputFormatter.deny(" ")
                           ],
                           onChanged: (change) {
-                            BlocProvider.of<LoginBloc>(context).add(
-                                LoginTextChangeEvent(usernameController.text,
-                                    passwordController.text));
+                            // BlocProvider.of<LoginBloc>(context).add(
+                            //     LoginTextChangeEvent(usernameController.text,
+                            //         passwordController.text));
                           },
                           decoration: InputDecoration(
-                            hintText: "Email Id/Username",
+                            hintText: "Username",
                             hintStyle: const TextStyle(color: Colors.white),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50.w),
@@ -103,9 +103,9 @@ class _LoginViewState extends State<LoginView> {
                             FilteringTextInputFormatter.deny(" ")
                           ],
                           onChanged: (change) {
-                            bloc.add(LoginTextChangeEvent(
-                                usernameController.text,
-                                passwordController.text));
+                            // bloc.add(LoginTextChangeEvent(
+                            //     usernameController.text,
+                            //     passwordController.text));
                           },
                           keyboardType: TextInputType.visiblePassword,
                           obscureText:

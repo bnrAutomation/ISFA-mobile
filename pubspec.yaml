@@ -46,7 +46,6 @@ dependencies:
   smooth_star_rating_null_safety: ^1.0.4+2
   flutter_svg: ^2.0.1
   mat_month_picker_dialog: ^1.1.1
-  # month_picker_dialog: ^2.0.2
   simple_circular_progress_bar: ^1.0.2
   circular_progress_bar_with_lines: ^0.0.7
   cached_network_image: ^3.2.3

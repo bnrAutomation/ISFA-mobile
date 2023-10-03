@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
 class Device {
@@ -29,6 +30,11 @@ class Device {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
 
       return iosInfo.identifierForVendor ?? '';
+    }
+    if (kIsWeb) {
+      WebBrowserInfo webInfo = await deviceInfo.webBrowserInfo;
+
+      return webInfo.userAgent ?? '';
     }
     return '';
   }

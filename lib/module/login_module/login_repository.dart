@@ -9,7 +9,10 @@ class LoginRepository {
 
   Future<AuthenticateResponseModel> login(
       {required String username, required String password}) async {
-    final body = {"username": username, "password": password};
+    final body = {
+      "username": username,
+      "password": password,
+    };
     final response = await client.post(Uri.parse(URLConstants.login),
         body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 201) {
