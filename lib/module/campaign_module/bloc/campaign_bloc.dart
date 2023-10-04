@@ -86,6 +86,15 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
 
     on((SaveCampaignAnswersEvent event, emit) async {
       saveAnswersForSelectedSection();
+
+      final unAnsweredSection = selectedCampSections.firstWhereOrNull(
+          (element) => element.selectedSectionQuestions.isEmpty);
+      if (unAnsweredSection != null) {
+        emit(SnackbarMessageCampaignState(
+            "Please answer for Section: ${unAnsweredSection.name}"));
+        return;
+      }
+
       final notAnsweredQuestions = event.checkLeftAnswer
           ? _totalNotAnsweredQuestions()
           : <CampaignQuestionModel>[];
