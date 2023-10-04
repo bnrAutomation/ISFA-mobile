@@ -7,7 +7,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:i_densfa/module/assessment_module/assessment_model.dart';
 import 'package:i_densfa/module/assessment_module/bloc/assessment_bloc.dart';
 import 'package:i_densfa/routes.dart';
-import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
@@ -96,8 +95,8 @@ class SelectedAssessmentView extends StatelessWidget {
                                     text: 'Right Answers',
                                   ),
                                   const SizedBox(height: 4),
-                                  const ChartIndicator(
-                                    color: ColorConstants.amber,
+                                  ChartIndicator(
+                                    color: Colors.amber.shade900,
                                     text: 'Missed',
                                   ),
                                   const SizedBox(height: 4),
@@ -199,7 +198,7 @@ class SelectedAssessmentView extends StatelessWidget {
       final color = i == 0
           ? theme.primaryColor
           : i == 1
-              ? ColorConstants.amber
+              ? Colors.amber.shade900
               : const Color(0xffDB4C5B);
       return PieChartSectionData(
         color: color,

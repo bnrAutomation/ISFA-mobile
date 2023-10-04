@@ -3,8 +3,10 @@ import 'dart:core';
 
 List<LeaveTypeModel> leaveTypeListfromBody(String body) {
   final j = json.decode(body);
-  return List<LeaveTypeModel>.from(
-      j["dataList"].map((x) => LeaveTypeModel.fromJson(x)));
+  if (j["dataList"] is! List) return [];
+  return (j["dataList"] as List)
+      .map((x) => LeaveTypeModel.fromJson(x))
+      .toList();
 }
 
 class LeaveTypeModel {

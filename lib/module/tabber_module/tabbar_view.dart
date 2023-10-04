@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -23,7 +21,6 @@ class AppTabbarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BuildContext? networkAlertContext;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -34,103 +31,84 @@ class AppTabbarView extends StatelessWidget {
           create: (context) => NetworkBloc()..add(NetworkObserve()),
         ),
       ],
-      child: BlocListener<NetworkBloc, NetworkState>(
-        listener: (c, state) {
-          if (state is NetworkFailure && Platform.isAndroid) {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (c) {
-                  networkAlertContext = c;
-                  return const AlertDialog(
-                    content: Text("No Internet Connection"),
-                  );
-                });
-          } else {
-            if (networkAlertContext != null) {
-              Navigator.pop(networkAlertContext!);
-            }
+      child: BlocConsumer<TabbarBloc, TabberState>(
+        listener: (context, state) {
+          if (state is LogoutSuccessfullState) {
+            AppStorage().logout();
+            context.go(AppPaths.login);
           }
         },
-        child: BlocConsumer<TabbarBloc, TabberState>(
-          listener: (context, state) {
-            if (state is LogoutSuccessfullState) {
-              AppStorage().logout();
-              context.go(AppPaths.login);
-            }
-          },
-          builder: (context, state) {
-            final bloc = context.read<TabbarBloc>();
+        builder: (context, state) {
+          final bloc = context.read<TabbarBloc>();
 
-            return Scaffold(
-              drawer: bloc.sideMenuData == null
-                  ? null
-                  : AppSideMenu(data: bloc.sideMenuData!),
-              appBar: AppBar(
-                title: Text(bloc.tabberItems[bloc.selectIndex].navTitle()),
-                leading: BlocListener<TabbarBloc, TabberState>(
-                  listenWhen: (previous, current) =>
-                      current is TabbarSnackBarMessageState,
-                  listener: (context, state) {
-                    if (state is TabbarSnackBarMessageState) {
-                      context.showSnackBarMessage(state.message);
-                    }
-                  },
-                  child: Builder(builder: (context) {
-                    return (bloc.sideMenuData == null)
-                        ? const SizedBox()
-                        : IconButton(
-                            onPressed: () => Scaffold.of(context).openDrawer(),
-                            icon: const Icon(Icons.blur_on_sharp));
-                  }),
-                ),
-                actions: [
-                  IconButton(
-                      onPressed: () => context.push(AppPaths.notification),
-                      icon: const Icon(Icons.notifications_outlined))
+          return Scaffold(
+            drawer: bloc.sideMenuData == null
+                ? null
+                : AppSideMenu(data: bloc.sideMenuData!),
+            appBar: AppBar(
+              title: Text(bloc.tabberItems[bloc.selectIndex].navTitle()),
+              leading: BlocListener<TabbarBloc, TabberState>(
+                listenWhen: (previous, current) =>
+                    current is TabbarSnackBarMessageState,
+                listener: (context, state) {
+                  if (state is TabbarSnackBarMessageState) {
+                    context.showSnackBarMessage(state.message);
+                  }
+                },
+                child: Builder(builder: (context) {
+                  return (bloc.sideMenuData == null)
+                      ? const SizedBox()
+                      : IconButton(
+                          onPressed: () => Scaffold.of(context).openDrawer(),
+                          icon: const Icon(Icons.blur_on_sharp));
+                }),
+              ),
+              actions: [
+                IconButton(
+                    onPressed: () => context.push(AppPaths.notification),
+                    icon: const Icon(Icons.notifications_outlined))
+              ],
+            ),
+            body: Center(child: atSelectedIndex(bloc)),
+            bottomNavigationBar: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 20,
+                    color: Colors.white.withOpacity(.1),
+                  )
                 ],
               ),
-              body: Center(child: atSelectedIndex(bloc)),
-              bottomNavigationBar: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 20,
-                      color: Colors.white.withOpacity(.1),
-                    )
-                  ],
-                ),
-                child: SafeArea(
-                    child: Padding(
+              child: SafeArea(
+                  child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8),
+                child: GNav(
+                  rippleColor: Colors.grey[300]!,
+                  hoverColor: Colors.grey[100]!,
+                  gap: 6,
+                  activeColor: Colors.black,
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8),
-                  child: GNav(
-                    rippleColor: Colors.grey[300]!,
-                    hoverColor: Colors.grey[100]!,
-                    gap: 6,
-                    activeColor: Colors.black,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
-                    curve: Curves.linear,
-                    duration: const Duration(milliseconds: 400),
-                    tabBackgroundColor: Colors.grey[100]!,
-                    color: Colors.white,
-                    tabs: bloc.tabberItems
-                        .map((e) =>
-                            GButton(icon: tabIcon(e), text: e.bottomTitle()))
-                        .toList(),
-                    selectedIndex: bloc.selectIndex,
-                    onTabChange: (index) {
-                      BlocProvider.of<TabbarBloc>(context)
-                          .add(ChangeTabEvent(index));
-                    },
-                  ),
-                )),
-              ),
-            );
-          },
-        ),
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+                  curve: Curves.linear,
+                  duration: const Duration(milliseconds: 400),
+                  tabBackgroundColor: Colors.grey[100]!,
+                  color: Colors.white,
+                  tabs: bloc.tabberItems
+                      .map((e) =>
+                          GButton(icon: tabIcon(e), text: e.bottomTitle()))
+                      .toList(),
+                  selectedIndex: bloc.selectIndex,
+                  onTabChange: (index) {
+                    BlocProvider.of<TabbarBloc>(context)
+                        .add(ChangeTabEvent(index));
+                  },
+                ),
+              )),
+            ),
+          );
+        },
       ),
     );
   }
