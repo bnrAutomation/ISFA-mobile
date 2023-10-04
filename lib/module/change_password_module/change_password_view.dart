@@ -36,12 +36,11 @@ class ChangePasswordView extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(),
                       ),
-                      state is ChangePasswordErrorState
-                          ? Text(
-                              state.errorMessage,
-                              style: const TextStyle(color: Colors.red),
-                            )
-                          : const SizedBox(),
+                      if (state is ChangePasswordErrorState)
+                        Text(
+                          state.errorMessage,
+                          style: const TextStyle(color: Colors.red),
+                        ),
                       const SizedBox(height: 10),
                       TextField(
                         inputFormatters: [
@@ -52,14 +51,11 @@ class ChangePasswordView extends StatelessWidget {
                         decoration: InputDecoration(
                           suffixIcon: GestureDetector(
                             onTap: () => bloc.add(OldPasswordButtonEvent()),
-                            child: Container(
-                              color: Colors.transparent,
-                              child: Icon(
-                                bloc.isShowingOldPassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: Colors.grey,
-                              ),
+                            child: Icon(
+                              bloc.isShowingOldPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
                             ),
                           ),
                           filled: true,
@@ -80,14 +76,11 @@ class ChangePasswordView extends StatelessWidget {
                         decoration: InputDecoration(
                           suffixIcon: GestureDetector(
                             onTap: () => bloc.add(NewPasswordButtonEvent()),
-                            child: Container(
-                              color: Colors.transparent,
-                              child: Icon(
-                                bloc.isShowingNewPassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: Colors.grey,
-                              ),
+                            child: Icon(
+                              bloc.isShowingNewPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
                             ),
                           ),
                           filled: true,

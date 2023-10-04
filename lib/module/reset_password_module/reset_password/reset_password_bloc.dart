@@ -18,22 +18,13 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
       isShowingConfirmPassword = !isShowingConfirmPassword;
       emit(ShowConfirmPasswordState(isShowingConfirmPassword));
     });
-    on<ChangePassword>((event, emit) {
-      if (event.newPasswordValue.isEmpty || event.confirmasswordValue.isEmpty) {
-        emit(ResetPasswordErrorState("The field should not be empty."));
-      } else if (event.newPasswordValue != event.confirmasswordValue) {
-        emit(ResetPasswordErrorState(
-            "Confirm password is not match with new password."));
-      } else {
-        emit(ResetPasswordValidState());
-      }
-    });
+
     on<SubmitChangePasswordEvent>((event, emit) async {
       if (event.newPassword.isEmpty || event.confirmassword.isEmpty) {
         emit(ResetPasswordErrorState("The field should not be empty."));
       } else if (event.newPassword != event.confirmassword) {
         emit(ResetPasswordErrorState(
-            "Confirm password is not match with new password."));
+            "The new password doesn't match with Confirm password."));
       } else {
         try {
           emit(ResetPasswordLoadingState());
