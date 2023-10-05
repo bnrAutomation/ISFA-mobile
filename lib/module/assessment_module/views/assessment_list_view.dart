@@ -50,7 +50,7 @@ class AssessmentListView extends StatelessWidget {
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(item.name),
+                        Expanded(child: Text(item.name)),
                         //if (DateTime.now().isAfter(DateTime.parse(item.endDate)))
                         if (item.isNagative())
                           const Text(
