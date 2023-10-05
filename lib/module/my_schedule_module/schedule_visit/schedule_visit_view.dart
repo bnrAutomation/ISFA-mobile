@@ -15,7 +15,7 @@ class ScheduleVisitView extends StatelessWidget {
     final type = bloc.schedulingFor;
     return Scaffold(
       appBar: AppBar(title: const Text('Schedule Visit')),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(8.0),
         child: BlocListener<ScheduleVisitCallBloc, ScheduleVisitCallState>(
           listenWhen: (previous, current) =>
@@ -101,6 +101,10 @@ class ScheduleVisitView extends StatelessWidget {
                 minLines: 5,
                 maxLines: 10,
                 maxLength: 256,
+                onTapOutside: (event) {
+                  context.hideKeyboard();
+                },
+                textInputAction: TextInputAction.done,
                 onChanged: (value) {
                   bloc.add(ScheduleVisitChangeRemarkEvent(value));
                 },
