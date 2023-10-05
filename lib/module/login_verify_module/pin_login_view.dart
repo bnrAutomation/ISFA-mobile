@@ -52,7 +52,7 @@ class _PinLoginViewState extends State<PinLoginView> {
                       var bloc = context.read<PinLoginBloc>();
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Image.asset(ImageConstants.denSfa),
                           SizedBox(height: 30.h),
@@ -162,6 +162,17 @@ class _PinLoginViewState extends State<PinLoginView> {
                                       fontWeight: FontWeight.w400),
                                 )),
                           ),
+                          SizedBox(height: 10.h),
+                          TextButton(
+                              onPressed: () =>
+                                  context.pushReplacement(AppPaths.login),
+                              child: Text(
+                                "Login instead?",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400),
+                              )),
                         ],
                       );
                     },
@@ -170,18 +181,6 @@ class _PinLoginViewState extends State<PinLoginView> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: TextButton(
-                onPressed: () => context.pushReplacement(AppPaths.login),
-                child: Text(
-                  "Login instead?",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w400),
-                )),
-          )
         ],
       ),
     );
