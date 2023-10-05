@@ -52,7 +52,7 @@ class CampaignListItem extends StatelessWidget {
                         ?.copyWith(fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    item.startDate.toStringFormat("d MMMM yyyy"),
+                    item.startDate.toStringFormat("d MMM yyyy"),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
@@ -66,7 +66,7 @@ class CampaignListItem extends StatelessWidget {
                         ?.copyWith(fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    item.endDate.toStringFormat("d MMMM yyyy"),
+                    item.endDate.toStringFormat("d MMM yyyy"),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
