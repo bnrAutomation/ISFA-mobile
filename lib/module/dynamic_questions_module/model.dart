@@ -64,6 +64,9 @@ extension Helper on QuestionInputType {
         return QuestionInputType.radio;
       case "BOOLEAN":
         return QuestionInputType.boolean;
+      case "QUESTION_WITH_TRUE_FALSE":
+        return QuestionInputType.boolean;
+
       case "NUMBER":
         return QuestionInputType.number;
       case "TEXT":

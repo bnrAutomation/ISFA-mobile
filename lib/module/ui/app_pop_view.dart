@@ -43,6 +43,7 @@ class AppPopup {
         child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
           borderRadius: BorderRadius.circular(10),
+          isExpanded: true,
           value: value,
           items: options
               .toSet()

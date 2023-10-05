@@ -21,3 +21,5 @@ class VerificationValidState extends VerificationState {}
 class VerificationCodeResend extends VerificationState {}
 
 class VerificationLoadingState extends VerificationState {}
+
+class ReSendLoadingState extends VerificationState {}

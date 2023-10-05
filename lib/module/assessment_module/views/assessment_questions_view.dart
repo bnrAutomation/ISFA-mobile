@@ -25,7 +25,7 @@ class AssessmentQuestionsView extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Assessment"),
+          title: Text(bloc.selectedAssessment?.name ?? ""),
           actions: [
             BlocBuilder<AssessmentBloc, AssessmentState>(
               buildWhen: (previous, current) =>

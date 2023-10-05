@@ -47,7 +47,7 @@ class PromoterView extends StatelessWidget {
             return bloc.storeDetail == null
                 ? Center(
                     child: Text(
-                        "Look's like store not assigne yet.".toUpperCase()),
+                        "Look's like store not assigned yet.".toUpperCase()),
                   )
                 : Column(children: [
                     const SizedBox(height: 5),

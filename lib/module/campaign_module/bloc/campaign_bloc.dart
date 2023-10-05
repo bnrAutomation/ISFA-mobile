@@ -55,7 +55,9 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
     on((GetCampaignSections event, emit) async {
       add(GetSavedCampaignResponseEvent(event.campUuId));
       selectedCampSections =
-          await repo.getSections(campaignUuid: event.campUuId);
+          (await repo.getSections(campaignUuid: event.campUuId));
+      selectedCampSections
+          .sort((a, b) => a.priorityOrder.compareTo(b.priorityOrder));
       if (selectedCampSections.isNotEmpty) {
         add(GetQuestionsForSection(sectionUuId: selectedCampSections[0].uuid));
       }

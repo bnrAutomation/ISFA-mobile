@@ -14,7 +14,7 @@
                 "--dart-define",
                 "APP_NAME=iSFA-Staging",
                 "--dart-define",
-                "BASE_URL=https://devapps.denave.com:8448"
+                "BASE_URL=https://isfadev.denave.com:8445"
             ]
         },
         {

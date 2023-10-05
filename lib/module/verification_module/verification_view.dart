@@ -105,9 +105,11 @@ class VerificationView extends StatelessWidget {
                                 builder: (context, state) {
                                   return InkWell(
                                     onTap: () =>
-                                        {bloc.add(ReSendPasswordEvent())},
+                                        {bloc.add(ReSendPasswordEvent(email))},
                                     child: Text(
-                                      "Resend OTP",
+                                      state is ReSendLoadingState
+                                          ? "Loading..."
+                                          : "Resend OTP",
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme

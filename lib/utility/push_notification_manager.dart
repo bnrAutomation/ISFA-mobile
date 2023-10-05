@@ -23,7 +23,9 @@ class PushNotificationsManager {
   Future<void> init() async {
     initNotificationChanel();
     if (!_initialized) {
-      await Firebase.initializeApp();
+      await Firebase.initializeApp(
+          // options:FirebaseOptions(apiKey: apiKey, appId: appId, messagingSenderId: messagingSenderId, projectId: projectId),
+          );
 
       FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
       AwesomeNotifications().isNotificationAllowed().then((isAllowed) {

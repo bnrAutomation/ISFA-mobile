@@ -239,7 +239,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                       updateAnswer(question, val ?? '');
                       setState(() {});
                     }),
-                Flexible(child: Text(option))
+                Expanded(child: Text(option))
               ],
             );
           },
@@ -290,7 +290,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                       updateAnswer(question, ans.join(','));
                       setState(() {});
                     }),
-                Flexible(child: Text(option))
+                Expanded(child: Text(option))
               ],
             );
           },
