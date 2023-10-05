@@ -32,9 +32,13 @@ class AssessmentQuestionsView extends StatelessWidget {
                   current is TimerUpdateAssessmentState,
               builder: (context, state) {
                 if (state is TimerUpdateAssessmentState) {
-                  return Text(
-                    state.leftTime,
-                    style: textTheme.titleMedium?.copyWith(color: Colors.white),
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: Text(
+                      state.leftTime,
+                      style:
+                          textTheme.titleMedium?.copyWith(color: Colors.white),
+                    ),
                   );
                 } else {
                   return const SizedBox();
