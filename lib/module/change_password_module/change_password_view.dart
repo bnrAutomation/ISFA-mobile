@@ -16,16 +16,21 @@ class ChangePasswordView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(title: const Text("Change Password")),
-      body: RepositoryProvider(
-        create: (context) => ChangePasswordRepository(),
-        child: BlocProvider(
-          create: (context) => ChangePasswordBloc(context.read()),
-          child: BlocBuilder<ChangePasswordBloc, ChangePasswordState>(
-            builder: (context, state) {
-              var bloc = context.read<ChangePasswordBloc>();
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: RepositoryProvider(
+          create: (context) => ChangePasswordRepository(),
+          child: BlocProvider(
+            create: (context) => ChangePasswordBloc(context.read()),
+            child: BlocConsumer<ChangePasswordBloc, ChangePasswordState>(
+              listener: (context, state) {
+                if (state is ChangePasswordSuccesfullState) {
+                  Navigator.pop(context);
+                }
+              },
+              builder: (context, state) {
+                var bloc = context.read<ChangePasswordBloc>();
+                return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
@@ -92,39 +97,28 @@ class ChangePasswordView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      BlocConsumer<ChangePasswordBloc, ChangePasswordState>(
-                        listener: (context, state) {
-                          if (state is ChangePasswordSuccesfullState) {
-                            Navigator.pop(context);
-                          }
-                        },
-                        builder: (context, state) {
-                          return SizedBox(
-                            width: 1.sw,
-                            child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: CustomMaterialButton(
-                                  onPressed: () {
-                                    if (state is! ChangePasswordLoadingState) {
-                                      bloc.add(SubmitChangePasswordEvent(
-                                        newPasswordController.text,
-                                        oldPasswordController.text,
-                                      ));
-                                    }
-                                  },
-                                  buttonText:
-                                      state is ChangePasswordLoadingState
-                                          ? "Loading..."
-                                          : "Change Passsord",
-                                )),
-                          );
-                        },
+                      SizedBox(
+                        width: 1.sw,
+                        child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: CustomMaterialButton(
+                              onPressed: () {
+                                if (state is! ChangePasswordLoadingState) {
+                                  bloc.add(SubmitChangePasswordEvent(
+                                    newPasswordController.text,
+                                    oldPasswordController.text,
+                                  ));
+                                }
+                              },
+                              buttonText: state is ChangePasswordLoadingState
+                                  ? "Loading..."
+                                  : "Change Passsord",
+                            )),
                       ),
                       const SizedBox(height: 10)
-                    ]),
-              );
-            },
+                    ]);
+              },
+            ),
           ),
         ),
       ),
