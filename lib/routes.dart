@@ -157,7 +157,7 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.forgotpass,
       name: AppPaths.forgotpass,
-      builder: (context, state) => ForgotPasswordView(),
+      builder: (context, state) => const ForgotPasswordView(),
     ),
     GoRoute(
       path: "${AppPaths.passVerification}/:email/:msg",

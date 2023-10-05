@@ -279,7 +279,10 @@ class StoreDetailView extends StatelessWidget {
                                 }));
                           });
                     },
-                    icon: const Icon(Icons.add)),
+                    icon: const Icon(
+                      Icons.add,
+                      color: Colors.green,
+                    )),
               )
             ],
           ),
@@ -296,13 +299,17 @@ class StoreDetailView extends StatelessWidget {
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 10),
                         itemBuilder: (context, index) => ListTile(
-                          tileColor: Theme.of(context).secondaryHeaderColor,
+                          tileColor:
+                              Theme.of(context).primaryColor.withOpacity(0.2),
                           title: Text(notes[index].note),
                           trailing: IconButton(
                               onPressed: () => bloc.add(
                                   DeleteNoteStoreDetailEvent(
                                       notes[index].noteId)),
-                              icon: const Icon(Icons.delete)),
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              )),
                         ),
                       );
               },
@@ -341,8 +348,9 @@ class StoreDetailView extends StatelessWidget {
                           final item = bloc.feedbackList[index];
                           return ListTile(
                             isThreeLine: true,
-                            tileColor: Theme.of(context).secondaryHeaderColor,
-                            //leading: Image.network(item.imageUrl),
+                            tileColor:
+                                Theme.of(context).primaryColor.withOpacity(0.2),
+                            leading: Image.network(item.imageUrl),
                             title: Text(item.purposeName),
                             subtitle: Text(
                                 '${item.reason}\n${item.createdDate!.toStringFormat('dd-MMM-yyyy')}'),
@@ -360,9 +368,11 @@ class StoreDetailView extends StatelessWidget {
   Material addNoteDialogWidget(BuildContext context) {
     return Material(
       type: MaterialType.transparency,
-      child: CupertinoAlertDialog(
+      child: AlertDialog(
         title: const Text("Add Note"),
         content: TextField(
+          maxLines: 5,
+          maxLength: 150,
           onChanged: (value) {
             context.read<StoreDetailBloc>().noteToAdd = value;
           },
@@ -371,14 +381,14 @@ class StoreDetailView extends StatelessWidget {
               border: OutlineInputBorder()),
         ),
         actions: [
-          CupertinoButton(
+          MaterialButton(
               padding: EdgeInsets.zero,
               child: const Text("Save"),
               onPressed: () {
                 context.read<StoreDetailBloc>().add(SaveNoteStoreDetailEvent());
                 Navigator.pop(context);
               }),
-          CupertinoButton(
+          MaterialButton(
               padding: EdgeInsets.zero,
               onPressed: () {
                 Navigator.pop(context);

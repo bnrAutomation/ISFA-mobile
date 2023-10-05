@@ -13,6 +13,13 @@ extension DateTimeHelper on DateTime {
   }
 }
 
+extension Amount on double {
+  String toformat() {
+    var price = this;
+    return "₹ ${price.toStringAsFixed(2)}";
+  }
+}
+
 extension Helper on String {
   String capitalizeFirst() {
     return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";

@@ -23,10 +23,15 @@ class PushNotificationsManager {
   Future<void> init() async {
     initNotificationChanel();
     if (!_initialized) {
+      WidgetsFlutterBinding.ensureInitialized();
       await Firebase.initializeApp(
-          // options:FirebaseOptions(apiKey: apiKey, appId: appId, messagingSenderId: messagingSenderId, projectId: projectId),
-          );
-
+        options: const FirebaseOptions(
+          apiKey: "AIzaSyBs2IXbLsjHLibX4Cie7uoSbz9XsjECQuM",
+          appId: "1:950410544983:web:fc358706310adf4807e012",
+          messagingSenderId: "950410544983",
+          projectId: "isfa-d6459",
+        ),
+      );
       FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
       AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
         if (!isAllowed) {
