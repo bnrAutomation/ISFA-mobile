@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 import '../login_repository.dart';
 
@@ -9,7 +10,7 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginRepository repo;
-  bool isShowingPassword = true;
+  bool isShowingPassword = false;
 
   LoginBloc(this.repo) : super(LoginInitialState()) {
     on<LoginShowPasswordButtonEvent>((event, emit) {
@@ -30,8 +31,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LogInErrorState("Username is empty"));
       } else if (event.password.isEmpty) {
         emit(LogInErrorState("Password is empty"));
-      } else if (event.password.length < 6) {
-        emit(LogInErrorState("Short password"));
+      } else if (event.password.trim().isNotEmpty &&
+          !event.password.trim().passwordValid()) {
+        emit(LogInErrorState(
+            "Password should be minimum eight characters and at least one uppercase letter, one lowercase letter, one number and one special character"));
       } else {
         try {
           emit(LogInLoadingState());

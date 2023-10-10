@@ -109,7 +109,7 @@ class _LoginViewState extends State<LoginView> {
                           },
                           keyboardType: TextInputType.visiblePassword,
                           obscureText:
-                              context.read<LoginBloc>().isShowingPassword,
+                              !context.read<LoginBloc>().isShowingPassword,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             hintText: "Password",
@@ -122,7 +122,7 @@ class _LoginViewState extends State<LoginView> {
                                     ? state.visible
                                         ? Icons.visibility
                                         : Icons.visibility_off
-                                    : Icons.visibility,
+                                    : Icons.visibility_off,
                                 color: Colors.grey,
                               ),
                             ),

@@ -32,6 +32,10 @@ extension Helper on String {
     buffer.write(hexString.replaceFirst('#', ''));
     return Color(int.parse(buffer.toString(), radix: 16));
   }
+
+  bool passwordValid() => RegExp(
+          r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$")
+      .hasMatch(this);
 }
 
 extension BuildContextHelper on BuildContext {
