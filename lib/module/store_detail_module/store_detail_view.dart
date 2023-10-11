@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:i_densfa/module/my_schedule_module/beat_plan_model.dart';
 import 'package:i_densfa/module/promoter_module/feedback/feedback_view.dart';
 import 'package:i_densfa/routes.dart';
@@ -371,6 +372,9 @@ class StoreDetailView extends StatelessWidget {
       child: AlertDialog(
         title: const Text("Add Note"),
         content: TextField(
+          inputFormatters: [
+            FilteringTextInputFormatter.deny(RegExp('(’|‘|”|“||<|>|)')),
+          ],
           maxLines: 5,
           maxLength: 150,
           onChanged: (value) {

@@ -179,6 +179,8 @@ class StoreDetailBloc extends Bloc<StoreDetailEvent, StoreDetailState> {
   }
 
   Future<void> _markOutStore(MarkOutStoreDetailEvent event, emit) async {
+    emit(MarkingLoadingStoreDetailState());
+
     await _updateUserPosition().catchError((onError) {
       emit(StoreDetailToastMessageState(onError.toString()));
       return Future<void>.error(onError);

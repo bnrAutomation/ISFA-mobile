@@ -16,7 +16,7 @@ class AddBeatPlanView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(8.0),
         child: BlocConsumer<MyScheduleBloc, MyScheduleState>(
           listener: (context, state) {

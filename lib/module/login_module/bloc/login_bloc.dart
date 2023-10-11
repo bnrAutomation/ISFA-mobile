@@ -29,10 +29,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginSubmitEvent>((event, emit) async {
       if (event.username.isEmpty) {
         emit(LogInErrorState("Username is empty"));
-      } else if (event.password.isEmpty) {
+      } else if (event.password.trim().isEmpty) {
         emit(LogInErrorState("Password is empty"));
-      } else if (event.password.trim().isNotEmpty &&
-          !event.password.trim().passwordValid()) {
+      } else if (!event.password.trim().passwordValid()) {
         emit(LogInErrorState(
             "Password should be minimum eight characters and at least one uppercase letter, one lowercase letter, one number and one special character"));
       } else {
