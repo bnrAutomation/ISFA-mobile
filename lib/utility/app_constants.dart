@@ -54,12 +54,6 @@ class URLConstants {
 
   // static const userDetails =
   //     "$baseURLStart/authentication-service/iam/api/v1/user/detail";
-  // static const setpin =
-  //     "$baseURLStart/authentication-service/iam/api/v1/set-pin";
-  // static const loginwithpin =
-  //     "$baseURLStart/authentication-service/iam/api/v1/loginwithpin";
-  //       static const updatefcmtoken =
-  //     "$baseURLStart/authentication-service/iam/api/v1/auth/updatefcmtoken";
 
   static const updatefcmtoken = "$loginAuth/updatefcmtoken";
   static const login =

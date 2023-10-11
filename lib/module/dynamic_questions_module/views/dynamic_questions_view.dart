@@ -273,7 +273,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
           shrinkWrap: true,
           itemCount: question.options.length,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              childAspectRatio: 4 / 1,
+              childAspectRatio: 3 / 1,
               mainAxisSpacing: 4,
               maxCrossAxisExtent: 1.sw / 2),
           itemBuilder: (context, index) {
@@ -324,7 +324,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
           shrinkWrap: true,
           itemCount: question.options.length,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              childAspectRatio: 4 / 1,
+              childAspectRatio: 3 / 1,
               mainAxisSpacing: 4,
               maxCrossAxisExtent: 1.sw / 2),
           itemBuilder: (context, index) {
@@ -346,7 +346,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                       updateAnswer(question, ans.join(','));
                       setState(() {});
                     }),
-                Expanded(child: Text(option))
+                Flexible(child: Text(option))
               ],
             );
           },
