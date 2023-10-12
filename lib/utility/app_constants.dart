@@ -51,9 +51,8 @@ class URLConstants {
   static const loginAuth = "$apiBaseUrl/auth";
   static const sidemenuDetails = '$apiBaseUrl/user/home';
   static const version = "v1";
-
-  // static const userDetails =
-  //     "$baseURLStart/authentication-service/iam/api/v1/user/detail";
+  static const userDetails =
+      "$baseURLStart/authentication-service/iam/api/v1/user/detail";
 
   static const updatefcmtoken = "$loginAuth/updatefcmtoken";
   static const login =
@@ -62,7 +61,7 @@ class URLConstants {
   static const logout =
       "$baseURLStart/authentication-service/iam/api/v1/logout";
 
-  static const userDetails = "$apiBaseUrl/user/detail";
+  // static const userDetails = "$apiBaseUrl/user/detail";
   static const setpin = "$loginAuth/set-pin";
   static const loginwithpin = "$loginAuth/loginwithpin";
   static const forgotPassword = "$loginAuth/$version/forgot-password";
