@@ -28,6 +28,18 @@
                 "--dart-define",
                 "BASE_URL=https://isfaqa.denave.com:8445"
             ]
+        },
+        {
+            "name": "isfaProd", // for staging internal release
+            "request": "launch",
+            "type": "dart",
+            //"flutterMode": "release",
+            "toolArgs": [
+                "--dart-define",
+                "APP_NAME=iSFA-Production",
+                "--dart-define",
+                "BASE_URL=https://isfa.denave.com:8445"
+            ]
         }
     ]
 }

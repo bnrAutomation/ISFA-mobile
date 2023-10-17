@@ -60,7 +60,6 @@ class TabbarBloc extends Bloc<TabberEvent, TabberState> {
       emit(TabbarSnackBarMessageState("Please mark-out from the store first"));
       return;
     }
-
     final loc = await Device().userPosition().onError((error, stackTrace) {
       emit(TabbarSnackBarMessageState(error.toString()));
       throw error ?? stackTrace;

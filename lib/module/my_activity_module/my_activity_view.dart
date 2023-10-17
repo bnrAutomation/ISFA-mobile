@@ -77,7 +77,7 @@ class MyActivityViewState extends State<MyActivityView> {
                             style: TextStyle(
                               fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           IconButton(
@@ -93,9 +93,9 @@ class MyActivityViewState extends State<MyActivityView> {
                                   bloc.add(MyActivityChangeMonth(date));
                                 }
                               },
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.calendar_month,
-                                color: Colors.blue,
+                                color: Theme.of(context).colorScheme.primary,
                               )),
                         ],
                       )),
@@ -141,7 +141,8 @@ class MyActiviyItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: Colors.white,
+        elevation: 0.5,
+        //color: Colors.white,
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: Column(
@@ -154,7 +155,8 @@ class MyActiviyItemView extends StatelessWidget {
                 Text(
                   "Activity : ${item.activityName.toUpperCase()}",
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w600, color: Colors.blue),
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.primary),
                 ),
                 Text(
                   "Activity On : ${item.storeName}",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/module/campaign_module/campaign_repository.dart';
@@ -233,9 +234,17 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
         final rule = question.rules.first;
         final compareQuestion = lastSelectedQuestions
             .firstWhereOrNull((q) => q.uuid == rule.questionUuid);
-        if (compareQuestion?.answer?.toLowerCase() ==
-            rule.answer.toLowerCase()) {
-          newquestionsList.add(question.toViewQuestionModel());
+
+        if ((compareQuestion?.questionInputType ?? "") == 'multiAnswers') {
+          if ((compareQuestion?.answer?.split(',') ?? [])
+              .contains(rule.answer)) {
+            newquestionsList.add(question.toViewQuestionModel());
+          }
+        } else {
+          if (compareQuestion?.answer?.toLowerCase() ==
+              rule.answer.toLowerCase()) {
+            newquestionsList.add(question.toViewQuestionModel());
+          }
         }
       }
       questionAnswers = newquestionsList;

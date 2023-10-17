@@ -90,9 +90,7 @@ class AttendanceView extends StatelessWidget {
                     child: Row(
                       children: [
                         const RowCellAttendance(
-                            text: 'Date',
-                            isBold: true,
-                            textColor: ColorConstants.amber),
+                            text: 'Date', isBold: true, textColor: Colors.red),
                         RowCellAttendance(
                           isBold: true,
                           textColor: Theme.of(context).primaryColor,

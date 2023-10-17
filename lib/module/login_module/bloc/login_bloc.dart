@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_densfa/utility/app_storage.dart';
-import 'package:i_densfa/utility/extensions.dart';
 
 import '../login_repository.dart';
 
@@ -31,10 +30,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LogInErrorState("Username is empty"));
       } else if (event.password.trim().isEmpty) {
         emit(LogInErrorState("Password is empty"));
-      } else if (!event.password.trim().passwordValid()) {
-        emit(LogInErrorState(
-            "Password should be minimum eight characters and at least one uppercase letter, one lowercase letter, one number and one special character"));
-      } else {
+      }
+
+      //  else if (!event.password.trim().passwordValid()) {
+      //   emit(LogInErrorState(
+      //       "Password should be minimum eight characters and at least one uppercase letter, one lowercase letter, one number and one special character"));
+      // }
+
+      else {
         try {
           emit(LogInLoadingState());
           final loginResponse = await repo.login(

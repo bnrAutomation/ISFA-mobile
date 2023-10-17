@@ -34,7 +34,6 @@ class CampaignRepository {
     final response = await client.get(
       Uri.parse("${URLConstants.getAllCampaignsList}/$campaignUuid/section"),
     );
-
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)
           .map((e) => CampaignQuestionSectionModel.fromJson(e))

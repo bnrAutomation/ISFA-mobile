@@ -343,6 +343,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                       } else {
                         ans.remove(option);
                       }
+                      ans.removeWhere((element) => element.isEmpty);
                       updateAnswer(question, ans.join(','));
                       setState(() {});
                     }),
