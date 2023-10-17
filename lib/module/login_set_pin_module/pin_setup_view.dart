@@ -107,6 +107,7 @@ class _PinSetupViewState extends State<PinSetupView> {
                                       FilteringTextInputFormatter.digitsOnly
                                     ],
                                     autofocus: true,
+                                    textInputAction: TextInputAction.next,
                                     enableInteractiveSelection: false,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
@@ -144,6 +145,7 @@ class _PinSetupViewState extends State<PinSetupView> {
                                   ),
                                   TextField(
                                     maxLength: 4,
+                                    textInputAction: TextInputAction.done,
                                     controller: confirmPinController,
                                     enableInteractiveSelection: false,
                                     focusNode: confirmPinFocus,
