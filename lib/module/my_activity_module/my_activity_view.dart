@@ -111,13 +111,13 @@ class MyActivityViewState extends State<MyActivityView> {
                               ),
                             )
                           : Expanded(
-                              child: ListView.separated(
+                              child: ListView.builder(
                                   itemCount: bloc.activityList.length,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
-                                  separatorBuilder: (context, index) =>
-                                      Container(
-                                          color: Colors.grey[300]!, height: 1),
+                                  // separatorBuilder: (context, index) =>
+                                  //     Container(
+                                  //         color: Colors.grey[300]!, height: 1),
                                   itemBuilder: (context, index) =>
                                       MyActiviyItemView(
                                           index, bloc.activityList[index])),
