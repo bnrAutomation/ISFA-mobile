@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(builder: (context, child) {
       return MaterialApp.router(
         routerConfig: router,
-        title: const String.fromEnvironment('APP_NAME'),
+        title: 'iSFA',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
