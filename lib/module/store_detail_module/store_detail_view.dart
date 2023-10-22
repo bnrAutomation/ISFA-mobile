@@ -500,11 +500,14 @@ class StoreDetailView extends StatelessWidget {
         alignment: Alignment.centerRight,
         children: [
           Positioned.fill(
-            child: CachedNetworkImage(
-                imageUrl: bloc.beatPlanModel.storeImage1.isNotEmpty
-                    ? bloc.beatPlanModel.storeImage1
-                    : 'https://picsum.photos/200/300',
-                fit: BoxFit.fitWidth),
+            child: Hero(
+              tag: 'storeImage',
+              child: CachedNetworkImage(
+                  imageUrl: bloc.beatPlanModel.storeImage1.isNotEmpty
+                      ? bloc.beatPlanModel.storeImage1
+                      : 'https://picsum.photos/200/300',
+                  fit: BoxFit.fitWidth),
+            ),
           ),
           Positioned.fill(
               child: Align(

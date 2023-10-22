@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -69,7 +70,18 @@ class AppTabbarView extends StatelessWidget {
                     icon: const Icon(Icons.notifications_outlined))
               ],
             ),
-            body: Center(child: atSelectedIndex(bloc)),
+            body: PageTransitionSwitcher(
+              duration: const Duration(seconds: 1),
+              transitionBuilder: (child, animation, secondAnimation) =>
+                  FadeThroughTransition(
+                animation: animation,
+                secondaryAnimation: secondAnimation,
+                child: child,
+              ),
+              child: atSelectedIndex(bloc),
+            ),
+
+            //,
             bottomNavigationBar: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
@@ -131,7 +143,7 @@ class AppTabbarView extends StatelessWidget {
     switch (tab) {
       case TabbarItemCase.schedule:
         return (bloc.sideMenuData == null)
-            ? const CircularProgressIndicator()
+            ? const Center(child: CircularProgressIndicator())
             : const MyScheduleView();
       case TabbarItemCase.learner:
         return const LearnerView();
