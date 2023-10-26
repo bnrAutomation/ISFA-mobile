@@ -291,8 +291,15 @@ class StoreCardView extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   FilledButton(
-                      onPressed: () =>
-                          context.pushNamed(AppPaths.store, extra: beatPlan),
+                      onPressed: () async {
+                        await context.pushNamed(AppPaths.store,
+                            extra: beatPlan);
+                        if (context.mounted) {
+                          context
+                              .read<MyScheduleBloc>()
+                              .add(MyScheduleUpdateData());
+                        }
+                      },
                       style: TextButton.styleFrom(
                         alignment: Alignment.center,
                         backgroundColor: Theme.of(context).primaryColor,

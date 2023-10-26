@@ -121,6 +121,7 @@ class AppSideMenu extends StatelessWidget {
                         description: "Do you want to logout ?",
                         okayButtonText: "Logout",
                         onDelete: () async {
+                          context.pop();
                           bloc.add(LogoutEvent());
                         },
                       ));

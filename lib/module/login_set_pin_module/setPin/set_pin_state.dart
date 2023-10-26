@@ -10,4 +10,6 @@ class SetPinErrorState extends SetPinState {
   SetPinErrorState(this.errorMessage);
 }
 
+class InprogressSetPinState extends SetPinState {}
+
 class SetPinedSuccesfullState extends SetPinState {}

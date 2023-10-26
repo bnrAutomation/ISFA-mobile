@@ -21,6 +21,7 @@ class SetPinBloc extends Bloc<SetPinEvent, SetPinState> {
       } else if (event.pin != event.confirmPin) {
         emit(SetPinErrorState("Given Pin not matched."));
       } else {
+        emit(InprogressSetPinState());
         try {
           final setPinResponse = await repo.setPin(
               username: AppStorage().userDetail?.email.toString() ?? "",

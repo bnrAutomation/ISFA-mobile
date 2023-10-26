@@ -213,7 +213,7 @@ class SelectedCampaignView extends StatelessWidget {
                                   backgroundColor: Colors.grey.shade400,
                                   color: const Color(0xffDB4C5B),
                                   minHeight: 40,
-                                  value: max(0.05, campaignData.totalResponse) /
+                                  value: max(0.0, campaignData.totalResponse) /
                                       max(1, campaignData.targetedStores),
                                 ),
                               ),

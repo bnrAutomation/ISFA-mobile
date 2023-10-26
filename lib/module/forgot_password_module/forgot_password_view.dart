@@ -79,12 +79,14 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          state is ForgotPasswordErrorState
-                              ? Text(
-                                  state.errorMessage,
-                                  style: const TextStyle(color: Colors.red),
-                                )
-                              : const SizedBox(),
+                          if (state is ForgotPasswordErrorState)
+                            Align(
+                              child: Text(
+                                state.errorMessage,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            ),
                           const SizedBox(height: 10),
                           TextField(
                             inputFormatters: [

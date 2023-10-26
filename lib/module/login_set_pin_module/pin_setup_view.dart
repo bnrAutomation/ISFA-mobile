@@ -185,12 +185,16 @@ class _PinSetupViewState extends State<PinSetupView> {
                                           borderRadius:
                                               BorderRadius.circular(50.w)),
                                       onPressed: () {
-                                        bloc.add(MoveSetPinEvent(
-                                            pinController.text,
-                                            confirmPinController.text));
+                                        if (state is! InprogressSetPinState) {
+                                          bloc.add(MoveSetPinEvent(
+                                              pinController.text,
+                                              confirmPinController.text));
+                                        }
                                       },
                                       child: Text(
-                                        'SUBMIT',
+                                        state is InprogressSetPinState
+                                            ? 'Loading..'
+                                            : 'SUBMIT',
                                         style: TextStyle(
                                             fontSize: 16.sp,
                                             fontWeight: FontWeight.w400),

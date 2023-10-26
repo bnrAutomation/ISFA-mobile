@@ -10,6 +10,7 @@
             "name": "isfadev", // for debugging
             "request": "launch",
             "type": "dart",
+            // "flutterMode": "release",
             "toolArgs": [
                 "--dart-define",
                 "BASE_URL=https://isfadev.denave.com:8445"
