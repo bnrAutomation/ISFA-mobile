@@ -268,14 +268,14 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                       fontWeight: FontWeight.bold))
           ],
         ),
-        GridView.builder(
+        ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: question.options.length,
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              childAspectRatio: 3 / 1,
-              mainAxisSpacing: 4,
-              maxCrossAxisExtent: 1.sw / 2),
+          // gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          //     childAspectRatio: 3 / 1,
+          //     mainAxisSpacing: 4,
+          //     maxCrossAxisExtent: 1.sw / 2),
           itemBuilder: (context, index) {
             final option = question.options[index];
             return Row(

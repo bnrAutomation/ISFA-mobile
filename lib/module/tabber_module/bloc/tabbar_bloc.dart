@@ -112,8 +112,11 @@ class TabbarBloc extends Bloc<TabberEvent, TabberState> {
   }
 
   Future<bool> submitToken() async {
-    final body = {"fcm": AppStorage().fcmToken};
-
+    final token = AppStorage().fcmToken;
+    if (token == null) {
+      return false;
+    }
+    final body = {"fcm": token};
     final response = await CustomHttpBaseClient().put(
         Uri.parse(
             "${URLConstants.updatefcmtoken}/${AppStorage().userDetail?.id}"),

@@ -20,7 +20,35 @@ class PushNotificationsManager {
   static final PushNotificationsManager _instance =
       PushNotificationsManager._();
   bool _initialized = false;
-  Future<void> init() async {
+
+  Future<void> initIos() async {
+    await Firebase.initializeApp();
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // ignore: unused_local_variable
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      sound: true,
+      badge: true,
+      announcement: false,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+    );
+    final isAllowed = await AwesomeNotifications().isNotificationAllowed();
+
+    if (!isAllowed) {
+      return;
+    }
+
+    final token = await messaging.getToken();
+    if (token != null) {
+      AppStorage().fcmToken = token;
+      await submitToken(token, AppStorage().userDetail?.id ?? -1);
+    }
+  }
+
+  Future<void> initAndroid() async {
     initNotificationChanel();
     if (!_initialized) {
       WidgetsFlutterBinding.ensureInitialized();

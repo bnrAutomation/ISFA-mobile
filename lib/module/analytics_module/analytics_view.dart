@@ -168,7 +168,7 @@ class AnalyticsView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: 0.25.sw,
+                          width: 0.3.sw,
                           child: Align(
                             alignment: Alignment.center,
                             child: Column(

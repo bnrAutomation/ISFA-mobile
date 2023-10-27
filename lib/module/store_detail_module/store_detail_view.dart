@@ -432,11 +432,12 @@ class StoreDetailView extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: Theme.of(context).primaryColor),
               ),
-              Text(
-                "${(bloc.distanceFromStore / 1000).toStringAsFixed(2)} km Away",
-                style: GoogleFonts.inter(
-                    fontSize: 12.sp, fontWeight: FontWeight.w400),
-              ),
+              if (bloc.distanceFromStore > 0)
+                Text(
+                  "${(bloc.distanceFromStore / 1000).toStringAsFixed(2)} km Away",
+                  style: GoogleFonts.inter(
+                      fontSize: 12.sp, fontWeight: FontWeight.w400),
+                ),
             ],
           ),
         ],

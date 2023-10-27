@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/campaign_module/bloc/campaign_bloc.dart';
 import 'package:i_densfa/module/campaign_module/view/campain_list.dart';
 import 'package:i_densfa/routes.dart';
+import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
@@ -110,13 +112,7 @@ class SelectedCampaignView extends StatelessWidget {
             final campaignData = bloc.savedCampaignDetails;
             return Column(
               children: [
-                Card(
-                  child: ListTile(
-                    leading: CircleAvatar(radius: 25.w),
-                    title: Text(AppStorage().userDetail?.username ?? ""),
-                    subtitle: Text(AppStorage().userDetail?.reportTo ?? ""),
-                  ),
-                ),
+                _userCard(),
                 if (selectedCamp != null)
                   Card(
                     child: ListTile(
@@ -227,6 +223,32 @@ class SelectedCampaignView extends StatelessWidget {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget _userCard() {
+    final user = AppStorage().userDetail;
+    if (user == null) {
+      return const SizedBox();
+    }
+    return Card(
+      child: ListTile(
+        leading: CircleAvatar(
+          radius: 25.w,
+          backgroundColor: Colors.grey.withOpacity(0.2),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(110),
+            child: CachedNetworkImage(
+              imageUrl: user.photoUrl,
+              fit: BoxFit.cover,
+              errorWidget: (context, url, error) => CachedNetworkImage(
+                  imageUrl: ImageConstants.placeholderUserUrl),
+            ),
+          ),
+        ),
+        title: Text(user.username),
+        subtitle: Text(user.reportTo),
       ),
     );
   }
