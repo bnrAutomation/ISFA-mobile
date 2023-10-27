@@ -10,15 +10,23 @@ import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
-class ResetPasswordView extends StatelessWidget {
+class ResetPasswordView extends StatefulWidget {
+  final String email;
+  final String otp;
+
+  const ResetPasswordView({super.key, required this.email, required this.otp});
+
+  @override
+  State<ResetPasswordView> createState() => _ResetPasswordViewState();
+}
+
+// class _LoginViewState extends State<LoginView> {
+
+class _ResetPasswordViewState extends State<ResetPasswordView> {
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController confirmPasssordController =
       TextEditingController();
 
-  final String email;
-  final String otp;
-
-  ResetPasswordView({super.key, required this.email, required this.otp});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,8 +169,8 @@ class ResetPasswordView extends StatelessWidget {
                                             bloc.add(SubmitChangePasswordEvent(
                                                 newPasswordController.text,
                                                 confirmPasssordController.text,
-                                                otp,
-                                                email));
+                                                widget.otp,
+                                                widget.email));
                                           }
                                         },
                                         buttonText:
