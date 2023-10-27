@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:i_densfa/module/login_module/models/auth_model.dart';
+import 'package:i_densfa/utility/device_helper.dart';
 import 'package:i_densfa/utility/handler.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 
@@ -13,8 +14,15 @@ class LoginRepository {
       "username": username,
       "password": password,
     };
-    final response = await client.post(Uri.parse(URLConstants.login),
-        body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
+    var name = await Device().name();
+    var deviceId = await Device().deviceId();
+
+    final response = await client
+        .post(Uri.parse(URLConstants.login), body: jsonEncode(body), headers: {
+      'Content-Type': 'application/json',
+      'User-Agent': name,
+      'Device-Id': deviceId,
+    });
     if (response.statusCode == 201) {
       return AuthenticateResponseModel.fromRawJson(response.body);
     } else {

@@ -28,6 +28,8 @@ class NotificationsView extends StatelessWidget {
               itemCount: notifcations.length,
               separatorBuilder: (context, index) => const SizedBox(height: 8),
               itemBuilder: (context, index) => Card(
+                elevation: 0,
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
                 child: ListTile(
                   textColor: Colors.black,
                   isThreeLine: true,
