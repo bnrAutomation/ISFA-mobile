@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/campaign_module/bloc/campaign_bloc.dart';
@@ -37,17 +38,28 @@ class CampaignView extends StatelessWidget {
                 style: Theme.of(context).textTheme.labelLarge,
               ));
             }
-            return ListView.separated(
-                itemCount: bloc.storeCampaigns.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 5),
-                itemBuilder: (context, index) => InkWell(
-                    onTap: () {
-                      final campaign = bloc.storeCampaigns[index];
-                      bloc.selectedCampaign = campaign;
-                      bloc.add(GetCampaignSections(campaign.uuid));
-                      context.push(AppPaths.selectedCampaignView, extra: bloc);
-                    },
-                    child: CampaignListItem(item: bloc.storeCampaigns[index])));
+            return AnimationLimiter(
+              child: ListView.separated(
+                  itemCount: bloc.storeCampaigns.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 5),
+                  itemBuilder: (context, index) => InkWell(
+                      onTap: () {
+                        final campaign = bloc.storeCampaigns[index];
+                        bloc.selectedCampaign = campaign;
+                        bloc.add(GetCampaignSections(campaign.uuid));
+                        context.push(AppPaths.selectedCampaignView,
+                            extra: bloc);
+                      },
+                      child: AnimationConfiguration.staggeredList(
+                        position: index,
+                        duration: const Duration(milliseconds: 500),
+                        child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: CampaignListItem(
+                                item: bloc.storeCampaigns[index])),
+                      ))),
+            );
           },
         ),
       ),

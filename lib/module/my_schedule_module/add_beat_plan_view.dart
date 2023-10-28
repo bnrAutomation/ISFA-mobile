@@ -26,88 +26,88 @@ class AddBeatPlanView extends StatelessWidget {
           },
           builder: (context, state) {
             final MyScheduleBloc bloc = context.read();
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Select Store",
-                    style: Theme.of(context).textTheme.labelLarge),
-                const SizedBox(height: 5),
-                DropDownWithOptions(
-                  options: bloc.storesList.map((e) => e.name).toList(),
-                  hint: "Please select store",
-                  selectedVal: context.select(
-                      (MyScheduleBloc value) => value.selectedStore?.name),
-                  valChanged: (value) {
-                    if (value != null) {
-                      bloc.selectedStore = bloc.storesList
-                          .firstWhere((element) => element.name == value);
-                    }
-                  },
-                ),
-                Text("Show on date",
-                    style: Theme.of(context).textTheme.labelLarge),
-                const SizedBox(height: 5),
-                Container(
-                  width: 1.sw,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(10),
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Select Store",
+                      style: Theme.of(context).textTheme.labelLarge),
+                  const SizedBox(height: 5),
+                  DropDownWithOptions(
+                    options: bloc.storesList.map((e) => e.name).toList(),
+                    hint: "Please select store",
+                    selectedVal: context.select(
+                        (MyScheduleBloc value) => value.selectedStore?.name),
+                    valChanged: (value) {
+                      if (value != null) {
+                        bloc.selectedStore = bloc.storesList
+                            .firstWhere((element) => element.name == value);
+                      }
+                    },
                   ),
-                  child: TextFormField(
-                    controller: TextEditingController(
-                        text: bloc.storeAddDate?.toStringFormat('dd/MM/yyyy')),
-                    decoration: const InputDecoration(
-                        suffixIcon: Icon(Icons.calendar_month_outlined),
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        contentPadding: EdgeInsets.only(
-                            left: 8, bottom: 11, top: 11, right: 8),
-                        hintText: "DD/MM/YYYY"),
-                    readOnly: true,
-                    onTap: () => _selectDate(context),
-                  ),
-                ),
-                Text("Reason", style: Theme.of(context).textTheme.labelLarge),
-                const SizedBox(height: 5),
-                Container(
-                  width: 1.sw,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        contentPadding: EdgeInsets.only(
-                            left: 8, bottom: 8, top: 8, right: 8),
-                        hintText: "Type your reason here..."),
-                    minLines: 3,
-                    maxLines: 6,
-                    keyboardType: TextInputType.multiline,
-                    onChanged: (value) => bloc.storeAddRemark = value,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Align(
-                  child: MaterialButton(
-                    onPressed: () => bloc.add(BeatPlanAddEvent()),
-                    color: ColorConstants.amber,
-                    child: Text(
-                      state is BeatPlanUploadLoadingState
-                          ? "Loading..."
-                          : "Submit",
+                  Text("Show on date",
+                      style: Theme.of(context).textTheme.labelLarge),
+                  const SizedBox(height: 5),
+                  InputDecorator(
+                    decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 12),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5))),
+                    child: TextFormField(
+                      controller: TextEditingController(
+                          text:
+                              bloc.storeAddDate?.toStringFormat('dd/MM/yyyy')),
+                      decoration: const InputDecoration(
+                          suffixIcon: Icon(Icons.calendar_month_outlined),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          hintText: "DD/MM/YYYY"),
+                      readOnly: true,
+                      onTap: () => _selectDate(context),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-              ],
+                  Text("Reason", style: Theme.of(context).textTheme.labelLarge),
+                  const SizedBox(height: 5),
+                  InputDecorator(
+                    decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 12),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5))),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          hintText: "Type your reason here..."),
+                      minLines: 3,
+                      maxLines: 6,
+                      keyboardType: TextInputType.multiline,
+                      onChanged: (value) => bloc.storeAddRemark = value,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Align(
+                    child: MaterialButton(
+                      onPressed: () => bloc.add(BeatPlanAddEvent()),
+                      color: ColorConstants.amber,
+                      child: Text(
+                        state is BeatPlanUploadLoadingState
+                            ? "Loading..."
+                            : "Submit",
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
             );
           },
         ),

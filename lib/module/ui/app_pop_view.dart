@@ -37,7 +37,7 @@ class AppPopup {
     return InputDecorator(
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: DropdownButtonHideUnderline(

@@ -53,6 +53,8 @@ class ScheduleVisitView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
                         child: Column(
@@ -61,30 +63,37 @@ class ScheduleVisitView extends StatelessWidget {
                         Text(type == SchuduleType.visit
                             ? "Visit date*"
                             : "Call date*"),
-                        TextField(
-                          readOnly: true,
-                          controller: TextEditingController(
-                              text: context.select(
-                                  (ScheduleVisitCallBloc value) => bloc
-                                      .selectedDate
-                                      ?.toStringFormat('dd/MM/yyyy'))),
-                          onTap: () async {
-                            final now = DateTime.now();
-                            final selectedDate = await showDatePicker(
-                                context: context,
-                                initialDate: now,
-                                firstDate: now,
-                                lastDate: DateTime(now.year, 12, 31));
-                            if (selectedDate != null) {
-                              bloc.add(
-                                  ScheduleVisitChangeDateEvent(selectedDate));
-                            }
-                          },
+                        const SizedBox(height: 5),
+                        InputDecorator(
                           decoration: InputDecoration(
-                              enabledBorder: underLineBorder(),
-                              suffixIcon:
-                                  const Icon(Icons.calendar_month_outlined),
-                              hintText: 'DD/MM/YYYY'),
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5))),
+                          child: TextField(
+                            readOnly: true,
+                            controller: TextEditingController(
+                                text: context.select(
+                                    (ScheduleVisitCallBloc value) => bloc
+                                        .selectedDate
+                                        ?.toStringFormat('dd/MM/yyyy'))),
+                            onTap: () async {
+                              final now = DateTime.now();
+                              final selectedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: now,
+                                  firstDate: now,
+                                  lastDate: DateTime(now.year, 12, 31));
+                              if (selectedDate != null) {
+                                bloc.add(
+                                    ScheduleVisitChangeDateEvent(selectedDate));
+                              }
+                            },
+                            decoration: const InputDecoration(
+                                enabledBorder: InputBorder.none,
+                                suffixIcon: Icon(Icons.calendar_month_outlined),
+                                hintText: 'DD/MM/YYYY'),
+                          ),
                         ),
                       ],
                     )),
@@ -97,20 +106,26 @@ class ScheduleVisitView extends StatelessWidget {
               ),
 
               const Text("Agenda"),
-              TextField(
-                minLines: 5,
-                maxLines: 10,
-                maxLength: 256,
-                onTapOutside: (event) {
-                  context.hideKeyboard();
-                },
-                textInputAction: TextInputAction.done,
-                onChanged: (value) {
-                  bloc.add(ScheduleVisitChangeRemarkEvent(value));
-                },
+              InputDecorator(
                 decoration: InputDecoration(
-                    enabledBorder: underLineBorder(),
-                    hintText: 'Type here (max 256 characters allowed)'),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5))),
+                child: TextField(
+                  minLines: 5,
+                  maxLines: 10,
+                  maxLength: 256,
+                  onTapOutside: (event) {
+                    context.hideKeyboard();
+                  },
+                  textInputAction: TextInputAction.done,
+                  onChanged: (value) {
+                    bloc.add(ScheduleVisitChangeRemarkEvent(value));
+                  },
+                  decoration: const InputDecoration(
+                      enabledBorder: InputBorder.none,
+                      hintText: 'Type here (max 256 characters allowed)'),
+                ),
               ),
               const SizedBox(height: 20),
               BlocBuilder<ScheduleVisitCallBloc, ScheduleVisitCallState>(
@@ -145,32 +160,39 @@ class ScheduleVisitView extends StatelessWidget {
       children: [
         const Text("Select Store*"),
         const SizedBox(height: 5),
-        FittedBox(
-          child: DropdownButton<String>(
-            itemHeight: 60,
-            borderRadius: BorderRadius.circular(10),
-            value: context.select(
-                (ScheduleVisitCallBloc value) => value.selectedStore.storeName),
-            items: bloc.beatPlans
-                .map((e) => e.storeName)
-                .toSet()
-                .map((value) => DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    ))
-                .toList(),
-            onChanged: (String? val) {
-              if (val != null) {
-                bloc.add(ScheduleVisitChangeStore(val));
-              }
-            },
-            icon: const Icon(Icons.keyboard_arrow_down),
-            hint: const Text(
-              'Select Store',
-              style: TextStyle(color: Colors.grey),
+        InputDecorator(
+          decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              isExpanded: true,
+              borderRadius: BorderRadius.circular(10),
+              value: context.select((ScheduleVisitCallBloc value) =>
+                  value.selectedStore.storeName),
+              items: bloc.beatPlans
+                  .map((e) => e.storeName)
+                  .toSet()
+                  .map((value) => DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      ))
+                  .toList(),
+              onChanged: (String? val) {
+                if (val != null) {
+                  bloc.add(ScheduleVisitChangeStore(val));
+                }
+              },
+              icon: const Icon(Icons.keyboard_arrow_down),
+              hint: const Text(
+                'Select Store',
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

@@ -10,7 +10,8 @@ class CampaignListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.white,
+      elevation: 0,
+      color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Column(
@@ -24,7 +25,7 @@ class CampaignListItem extends StatelessWidget {
                     child: Text(
                       item.name,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w600, color: Colors.blue),
+                          fontWeight: FontWeight.w600, color: Colors.black),
                     ),
                   ),
                   Text(
@@ -73,6 +74,7 @@ class CampaignListItem extends StatelessWidget {
                   const SizedBox(width: 5),
                 ],
               ),
+              SizedBox(width: 1.sw, height: 5),
             ],
           )),
     );

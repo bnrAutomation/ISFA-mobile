@@ -502,7 +502,7 @@ class StoreDetailView extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Hero(
-              tag: 'storeImage',
+              tag: bloc.beatPlanModel.pjpId,
               child: CachedNetworkImage(
                   imageUrl: bloc.beatPlanModel.storeImage1.isNotEmpty
                       ? bloc.beatPlanModel.storeImage1
