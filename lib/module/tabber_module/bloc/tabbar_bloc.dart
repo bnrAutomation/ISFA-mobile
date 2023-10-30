@@ -138,6 +138,8 @@ class TabbarBloc extends Bloc<TabberEvent, TabberState> {
         headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       emit(LogoutSuccessfullState());
+    } else if (response.statusCode == 401) {
+      emit(LogoutSuccessfullState());
     } else if (response.statusCode == 404) {
       emit(LogoutSuccessfullState());
     } else {

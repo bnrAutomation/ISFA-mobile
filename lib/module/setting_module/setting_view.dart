@@ -102,7 +102,7 @@ class SettingView extends StatelessWidget {
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                "${userdetails.username}(${userdetails.designation})",
+                                "${userdetails.fullName}(${userdetails.role})",
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleLarge

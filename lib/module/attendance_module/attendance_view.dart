@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/extensions.dart';
 import 'package:mat_month_picker_dialog/mat_month_picker_dialog.dart';
@@ -127,15 +128,27 @@ class AttendanceView extends StatelessWidget {
                           ),
                         )
                       : Expanded(
-                          child: ListView.separated(
-                              itemCount: bloc.attandenceData.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              separatorBuilder: (context, index) => Container(
-                                  color: Colors.grey[300]!, height: 1),
-                              itemBuilder: (context, index) =>
-                                  AttendanceItemView(
-                                      index, bloc.attandenceData[index])),
+                          child: AnimationLimiter(
+                            child: ListView.separated(
+                                itemCount: bloc.attandenceData.length,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                separatorBuilder: (context, index) => Container(
+                                    color: Colors.grey[300]!, height: 1),
+                                itemBuilder: (context, index) =>
+                                    AnimationConfiguration.staggeredList(
+                                      position: index,
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      child: SlideAnimation(
+                                        verticalOffset: 50.0,
+                                        child: FadeInAnimation(
+                                          child: AttendanceItemView(index,
+                                              bloc.attandenceData[index]),
+                                        ),
+                                      ),
+                                    )),
+                          ),
                         )
                 ],
               );

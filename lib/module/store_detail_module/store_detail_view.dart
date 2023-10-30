@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:i_densfa/module/my_schedule_module/beat_plan_model.dart';
 import 'package:i_densfa/module/promoter_module/feedback/feedback_view.dart';
 import 'package:i_densfa/routes.dart';
@@ -295,22 +296,35 @@ class StoreDetailView extends StatelessWidget {
                 final notes = bloc.details?.userNote ?? [];
                 return notes.isEmpty
                     ? const Center(child: Text("No note added"))
-                    : ListView.separated(
-                        itemCount: notes.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 10),
-                        itemBuilder: (context, index) => ListTile(
-                          tileColor:
-                              Theme.of(context).primaryColor.withOpacity(0.2),
-                          title: Text(notes[index].note),
-                          trailing: IconButton(
-                              onPressed: () => bloc.add(
-                                  DeleteNoteStoreDetailEvent(
-                                      notes[index].noteId)),
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                              )),
+                    : AnimationLimiter(
+                        child: ListView.separated(
+                          itemCount: notes.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (context, index) =>
+                              AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: ListTile(
+                                  tileColor: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.2),
+                                  title: Text(notes[index].note),
+                                  trailing: IconButton(
+                                      onPressed: () => bloc.add(
+                                          DeleteNoteStoreDetailEvent(
+                                              notes[index].noteId)),
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      )),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       );
               },
@@ -340,23 +354,35 @@ class StoreDetailView extends StatelessWidget {
 
                 return bloc.feedbackList.isEmpty
                     ? const Center(child: Text("No Feedback added"))
-                    : ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: bloc.feedbackList.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 10),
-                        itemBuilder: (context, index) {
-                          final item = bloc.feedbackList[index];
-                          return ListTile(
-                            isThreeLine: true,
-                            tileColor:
-                                Theme.of(context).primaryColor.withOpacity(0.2),
-                            leading: Image.network(item.imageUrl),
-                            title: Text(item.purposeName),
-                            subtitle: Text(
-                                '${item.reason}\n${item.createdDate!.toStringFormat('dd-MMM-yyyy')}'),
-                          );
-                        },
+                    : AnimationLimiter(
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: bloc.feedbackList.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (context, index) {
+                            final item = bloc.feedbackList[index];
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: ListTile(
+                                    isThreeLine: true,
+                                    tileColor: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.2),
+                                    leading: Image.network(item.imageUrl),
+                                    title: Text(item.purposeName),
+                                    subtitle: Text(
+                                        '${item.reason}\n${item.createdDate!.toStringFormat('dd-MMM-yyyy')}'),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       );
               },
             ),
@@ -414,13 +440,19 @@ class StoreDetailView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(beatPlanModel.storeName,
-              style: GoogleFonts.inter(
-                  fontSize: 16.sp, fontWeight: FontWeight.w600)),
+          Hero(
+            tag: "${bloc.beatPlanModel.pjpId}_${beatPlanModel.storeName}",
+            child: Text(beatPlanModel.storeName,
+                style: GoogleFonts.inter(
+                    fontSize: 16.sp, fontWeight: FontWeight.w600)),
+          ),
           SizedBox(height: 10.h),
-          Text(beatPlanModel.address,
-              style: GoogleFonts.inter(
-                  fontSize: 12.sp, fontWeight: FontWeight.w400)),
+          Hero(
+            tag: "${bloc.beatPlanModel.pjpId}_${beatPlanModel.address}",
+            child: Text(beatPlanModel.address,
+                style: GoogleFonts.inter(
+                    fontSize: 12.sp, fontWeight: FontWeight.w400)),
+          ),
           SizedBox(height: 10.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -494,7 +526,6 @@ class StoreDetailView extends StatelessWidget {
 
   AspectRatio headerImage(BuildContext context) {
     final StoreDetailBloc bloc = context.read<StoreDetailBloc>();
-
     return AspectRatio(
       aspectRatio: 2,
       child: Stack(
