@@ -10,12 +10,14 @@ class LoginRepository {
 
   Future<AuthenticateResponseModel> login(
       {required String username, required String password}) async {
+    var name = await Device().name();
+    var deviceId = await Device().deviceId();
+
     final body = {
       "username": username,
       "password": password,
+      "userAgent": "${name}_$deviceId"
     };
-    var name = await Device().name();
-    var deviceId = await Device().deviceId();
 
     final response = await client
         .post(Uri.parse(URLConstants.login), body: jsonEncode(body), headers: {
