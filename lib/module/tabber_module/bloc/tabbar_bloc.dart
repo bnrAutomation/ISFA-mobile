@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -111,23 +112,26 @@ class TabbarBloc extends Bloc<TabberEvent, TabberState> {
     emit(OnlineStatusUpdateState());
   }
 
-  Future<bool> submitToken() async {
-    final token = AppStorage().fcmToken;
-    if (token == null) {
-      return false;
-    }
-    final body = {"fcm": token};
-    final response = await CustomHttpBaseClient().put(
-        Uri.parse(
-            "${URLConstants.updatefcmtoken}/${AppStorage().userDetail?.id}"),
-        body: jsonEncode(body),
-        headers: {'Content-Type': 'application/json'});
+  Future<void> submitToken() async {
+    await FirebaseMessaging.instance.getToken().then((value) async {
+      debugPrint("FCM TOKEN $value");
+      AppStorage().fcmToken = value;
+      final token = AppStorage().fcmToken;
+      if (token != null) {
+        final body = {"fcm": token};
+        final response = await CustomHttpBaseClient().put(
+            Uri.parse(
+                "${URLConstants.updatefcmtoken}/${AppStorage().userDetail?.id}"),
+            body: jsonEncode(body),
+            headers: {'Content-Type': 'application/json'});
 
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      throw getErrorMessage(response.body);
-    }
+        if (response.statusCode == 200) {
+          return true;
+        } else {
+          throw getErrorMessage(response.body);
+        }
+      }
+    });
   }
 
   Future<void> logout(LogoutEvent event, Emitter<TabberState> emit) async {
