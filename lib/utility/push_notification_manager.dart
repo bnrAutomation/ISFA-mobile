@@ -105,6 +105,8 @@ class PushNotificationsManager {
         headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       return true;
+    } else if (response.statusCode == 401) {
+      throw "Please Re-Login into app.";
     } else {
       throw getErrorMessage(response.body);
     }
