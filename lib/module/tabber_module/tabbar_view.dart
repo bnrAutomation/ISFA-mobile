@@ -80,8 +80,6 @@ class AppTabbarView extends StatelessWidget {
               ),
               child: atSelectedIndex(bloc),
             ),
-
-            //,
             bottomNavigationBar: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
