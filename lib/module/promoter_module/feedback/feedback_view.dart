@@ -57,7 +57,8 @@ class FeedbackView extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(storeName,
+                      const SizedBox(height: 5),
+                      Text("Feedback For : $storeName",
                           style: Theme.of(context).textTheme.labelLarge),
                       const SizedBox(height: 5),
                       Text("Select Purpose",
@@ -81,7 +82,7 @@ class FeedbackView extends StatelessWidget {
                         width: 1.sw,
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         child: TextFormField(
                           decoration: const InputDecoration(
@@ -93,8 +94,8 @@ class FeedbackView extends StatelessWidget {
                               contentPadding: EdgeInsets.only(
                                   left: 8, bottom: 8, top: 8, right: 8),
                               hintText: "Type your remark here..."),
-                          minLines: 2,
-                          maxLines: 5,
+                          minLines: 3,
+                          maxLines: 8,
                           keyboardType: TextInputType.multiline,
                           onChanged: (value) =>
                               bloc.add(AddRemarkFeedbackEvent(value)),

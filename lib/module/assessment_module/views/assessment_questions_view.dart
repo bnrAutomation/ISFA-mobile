@@ -25,16 +25,20 @@ class AssessmentQuestionsView extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Assessment"),
+          title: Text(bloc.selectedAssessment?.name ?? ""),
           actions: [
             BlocBuilder<AssessmentBloc, AssessmentState>(
               buildWhen: (previous, current) =>
                   current is TimerUpdateAssessmentState,
               builder: (context, state) {
                 if (state is TimerUpdateAssessmentState) {
-                  return Text(
-                    state.leftTime,
-                    style: textTheme.titleMedium?.copyWith(color: Colors.white),
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: Text(
+                      state.leftTime,
+                      style:
+                          textTheme.titleMedium?.copyWith(color: Colors.white),
+                    ),
                   );
                 } else {
                   return const SizedBox();

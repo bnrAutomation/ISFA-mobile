@@ -17,4 +17,6 @@ class LeaveViewShowSnack extends LeaveState {
 
 class LeaveAppliedSuccess extends LeaveState {}
 
+class LoadingState extends LeaveState {}
+
 class LeaveApplyLoadingState extends LeaveState {}

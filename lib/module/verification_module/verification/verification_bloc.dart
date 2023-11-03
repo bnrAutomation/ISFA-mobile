@@ -16,8 +16,23 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
       varificationCode = event.otpValue;
       emit(VerificationValidState());
     });
-    on<ReSendPasswordEvent>((event, emit) {
-      emit(VerificationCodeResend());
+    on<ReSendPasswordEvent>((event, emit) async {
+      if (event.email.isEmpty) {
+        emit(VerificationErrorState("The field should not be empty."));
+      } else {
+        try {
+          emit(ReSendLoadingState());
+          final forgotPasswordResponse =
+              await repo.forgotPassword(username: event.email);
+          if (forgotPasswordResponse != null) {
+            emit(VerificationErrorState(forgotPasswordResponse.message));
+          } else {
+            emit(VerificationErrorState('Something went wrong!'));
+          }
+        } catch (err) {
+          emit(VerificationErrorState(err.toString()));
+        }
+      }
     });
 
     on<VerificationSubmitEvent>((event, emit) async {

@@ -20,6 +20,7 @@ class PinSetupView extends StatefulWidget {
 class _PinSetupViewState extends State<PinSetupView> {
   final pinController = TextEditingController();
   final confirmPinController = TextEditingController();
+  final confirmPinFocus = FocusNode();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,6 +107,7 @@ class _PinSetupViewState extends State<PinSetupView> {
                                       FilteringTextInputFormatter.digitsOnly
                                     ],
                                     autofocus: true,
+                                    textInputAction: TextInputAction.next,
                                     enableInteractiveSelection: false,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
@@ -124,6 +126,11 @@ class _PinSetupViewState extends State<PinSetupView> {
                                               color: Colors.white54)),
                                       counterText: '',
                                     ),
+                                    onChanged: (value) {
+                                      if (value.length == 4) {
+                                        confirmPinFocus.requestFocus();
+                                      }
+                                    },
                                   ),
                                   SizedBox(height: 15.h),
                                   Align(
@@ -138,8 +145,10 @@ class _PinSetupViewState extends State<PinSetupView> {
                                   ),
                                   TextField(
                                     maxLength: 4,
+                                    textInputAction: TextInputAction.done,
                                     controller: confirmPinController,
                                     enableInteractiveSelection: false,
+                                    focusNode: confirmPinFocus,
                                     inputFormatters: [
                                       FilteringTextInputFormatter.digitsOnly
                                     ],
@@ -160,6 +169,11 @@ class _PinSetupViewState extends State<PinSetupView> {
                                               color: Colors.white54)),
                                       counterText: '',
                                     ),
+                                    onChanged: (value) {
+                                      if (value.length == 4) {
+                                        context.hideKeyboard();
+                                      }
+                                    },
                                   ),
                                   SizedBox(height: 20.h),
                                   MaterialButton(
@@ -171,12 +185,16 @@ class _PinSetupViewState extends State<PinSetupView> {
                                           borderRadius:
                                               BorderRadius.circular(50.w)),
                                       onPressed: () {
-                                        bloc.add(MoveSetPinEvent(
-                                            pinController.text,
-                                            confirmPinController.text));
+                                        if (state is! InprogressSetPinState) {
+                                          bloc.add(MoveSetPinEvent(
+                                              pinController.text,
+                                              confirmPinController.text));
+                                        }
                                       },
                                       child: Text(
-                                        'SUBMIT',
+                                        state is InprogressSetPinState
+                                            ? 'Loading..'
+                                            : 'SUBMIT',
                                         style: TextStyle(
                                             fontSize: 16.sp,
                                             fontWeight: FontWeight.w400),

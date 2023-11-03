@@ -11,9 +11,14 @@ import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
-class ForgotPasswordView extends StatelessWidget {
-  ForgotPasswordView({super.key});
+class ForgotPasswordView extends StatefulWidget {
+  const ForgotPasswordView({super.key});
 
+  @override
+  State<ForgotPasswordView> createState() => _ForgotPasswordViewState();
+}
+
+class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   final TextEditingController usernameController = TextEditingController();
 
   @override
@@ -74,12 +79,14 @@ class ForgotPasswordView extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          state is ForgotPasswordErrorState
-                              ? Text(
-                                  state.errorMessage,
-                                  style: const TextStyle(color: Colors.red),
-                                )
-                              : const SizedBox(),
+                          if (state is ForgotPasswordErrorState)
+                            Align(
+                              child: Text(
+                                state.errorMessage,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            ),
                           const SizedBox(height: 10),
                           TextField(
                             inputFormatters: [

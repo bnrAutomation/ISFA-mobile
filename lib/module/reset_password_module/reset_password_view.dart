@@ -8,16 +8,25 @@ import 'package:i_densfa/module/ui/background.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
-class ResetPasswordView extends StatelessWidget {
+class ResetPasswordView extends StatefulWidget {
+  final String email;
+  final String otp;
+
+  const ResetPasswordView({super.key, required this.email, required this.otp});
+
+  @override
+  State<ResetPasswordView> createState() => _ResetPasswordViewState();
+}
+
+// class _LoginViewState extends State<LoginView> {
+
+class _ResetPasswordViewState extends State<ResetPasswordView> {
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController confirmPasssordController =
       TextEditingController();
 
-  final String email;
-  final String otp;
-
-  ResetPasswordView({super.key, required this.email, required this.otp});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,22 +37,7 @@ class ResetPasswordView extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: Container(
-                // decoration: BoxDecoration(
-                //   color: Theme.of(context).cardColor,
-                //   borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-                //   boxShadow: const [
-                //     BoxShadow(
-                //         color: Colors.grey,
-                //         blurRadius: 1.0, // soften the shadow
-                //         spreadRadius: 1.0, //extend the shadow
-                //         offset: Offset(
-                //           1.0, // Move to right 5  horizontally
-                //           1.0, // Move to bottom 5 Vertically
-                //         ))
-                //   ],
-                // ),
                 width: 0.9.sw >= 0.9.sh ? 0.9.sh : 0.9.sw,
-                // height: 0.7.sw >= 0.7.sh ? 0.7.sh:0.7.sw,
                 padding: const EdgeInsets.all(6),
                 child: RepositoryProvider(
                   create: (context) => ResetPasswordRepository(),
@@ -61,34 +55,27 @@ class ResetPasswordView extends StatelessWidget {
                             Image.asset(
                               ImageConstants.logo,
                               width: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
-                              // height: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
                             ),
                             const SizedBox(height: 10),
                             const Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                "Your new password must be different from your previously password",
+                                "Your new password must be different from your previous password",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
                             const SizedBox(height: 10),
-                            state is ResetPasswordErrorState
-                                ? Text(
-                                    state.errorMessage,
-                                    style: const TextStyle(color: Colors.red),
-                                  )
-                                : const SizedBox(),
+                            if (state is ResetPasswordErrorState)
+                              Text(
+                                state.errorMessage,
+                                style: const TextStyle(color: Colors.red),
+                              ),
                             const SizedBox(height: 10),
                             TextField(
                               style: const TextStyle(color: Colors.white),
                               controller: newPasswordController,
-                              onChanged: (value) => bloc.add(ChangePassword(
-                                  newPasswordController.text,
-                                  confirmPasssordController.text)),
-                              obscureText: context
-                                  .read<ResetPasswordBloc>()
-                                  .isShowingNewPassword,
+                              obscureText: bloc.isShowingNewPassword,
                               decoration: InputDecoration(
                                 suffixIcon: GestureDetector(
                                   onTap: () =>
@@ -118,27 +105,17 @@ class ResetPasswordView extends StatelessWidget {
                                 fillColor:
                                     const Color.fromARGB(74, 158, 158, 158),
                                 hintText: "New Password",
-                                // border: OutlineInputBorder(
-                                //     borderSide: BorderSide.none,
-                                //     borderRadius: BorderRadius.circular(10)),
                               ),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            const SizedBox(height: 10),
                             TextField(
                               style: const TextStyle(color: Colors.white),
                               controller: confirmPasssordController,
-                              onChanged: (value) => bloc.add(ChangePassword(
-                                  newPasswordController.text,
-                                  confirmPasssordController.text)),
-                              obscureText: context
-                                  .read<ResetPasswordBloc>()
-                                  .isShowingConfirmPassword,
+                              obscureText: bloc.isShowingConfirmPassword,
                               decoration: InputDecoration(
                                 suffixIcon: GestureDetector(
                                   onTap: () =>
-                                      {bloc.add(ConfirmPasswordButtonEvent())},
+                                      bloc.add(ConfirmPasswordButtonEvent()),
                                   child: Container(
                                     color: Colors.transparent,
                                     child: Icon(
@@ -170,12 +147,12 @@ class ResetPasswordView extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: 10.h),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            const SizedBox(height: 10),
                             BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
                               listener: (context, state) {
                                 if (state is ResetPasswordSuccesfullState) {
+                                  context.showSnackBarMessage(
+                                      "successfully reset password");
                                   context.go(AppPaths.login);
                                 }
                               },
@@ -192,8 +169,8 @@ class ResetPasswordView extends StatelessWidget {
                                             bloc.add(SubmitChangePasswordEvent(
                                                 newPasswordController.text,
                                                 confirmPasssordController.text,
-                                                otp,
-                                                email));
+                                                widget.otp,
+                                                widget.email));
                                           }
                                         },
                                         buttonText:
@@ -204,9 +181,7 @@ class ResetPasswordView extends StatelessWidget {
                                 );
                               },
                             ),
-                            const SizedBox(
-                              height: 10,
-                            )
+                            const SizedBox(height: 10)
                           ],
                         );
                       },

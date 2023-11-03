@@ -13,6 +13,13 @@ extension DateTimeHelper on DateTime {
   }
 }
 
+extension Amount on double {
+  String toformat() {
+    var price = this;
+    return "₹ ${price.toStringAsFixed(2)}";
+  }
+}
+
 extension Helper on String {
   String capitalizeFirst() {
     return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
@@ -25,6 +32,10 @@ extension Helper on String {
     buffer.write(hexString.replaceFirst('#', ''));
     return Color(int.parse(buffer.toString(), radix: 16));
   }
+
+  bool passwordValid() => RegExp(
+          r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$")
+      .hasMatch(this);
 }
 
 extension BuildContextHelper on BuildContext {

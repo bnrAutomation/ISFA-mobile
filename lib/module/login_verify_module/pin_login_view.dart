@@ -32,158 +32,154 @@ class _PinLoginViewState extends State<PinLoginView> {
                   ))),
           Positioned.fill(
               child: ColoredBox(color: Colors.black.withOpacity(0.6))),
-          Align(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.w),
-              child: RepositoryProvider(
-                create: (context) => PinLoginRepository(),
-                child: BlocProvider(
-                  create: (context) => PinLoginBloc(context.read()),
-                  child: BlocConsumer<PinLoginBloc, PinLoginState>(
-                    listenWhen: (previous, current) =>
-                        current is PinLoginTokenExpiredState,
-                    listener: (context, state) {
-                      AppStorage().logout();
-                      context.go(AppPaths.login);
-                    },
-                    buildWhen: (previous, current) =>
-                        current is! PinLoginTokenExpiredState,
-                    builder: (context, state) {
-                      var bloc = context.read<PinLoginBloc>();
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(ImageConstants.denSfa),
-                          SizedBox(height: 30.h),
-                          Image.asset(ImageConstants.poweredBy),
-                          SizedBox(height: 60.h),
-                          Text(
-                            'Enter Login PIN',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(height: 20.h),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              AppStorage().userDetail?.username ?? "",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          if (state is PinLogInErrorState)
-                            Text(
-                              state.message,
-                              style: const TextStyle(color: Colors.red),
-                            ),
-                          Container(
-                            margin: EdgeInsets.only(top: 5.h, bottom: 15.h),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 2, color: ColorConstants.amber),
-                                borderRadius: BorderRadius.circular(30.w)),
-                            padding: EdgeInsets.all(5.w),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 120.w,
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: List.generate(4, (index) {
-                                        if (otpTextFieldController.text.length >
-                                            index) {
-                                          return const Icon(Icons.circle,
-                                              color: Colors.black);
-                                        } else {
-                                          return const Icon(
-                                              Icons.radio_button_off,
-                                              color: Colors.black);
-                                        }
-                                      }).toList()),
-                                ),
-                                TextField(
-                                  maxLength: 4,
-                                  controller: otpTextFieldController,
-                                  autofocus: true,
-                                  enableInteractiveSelection: false,
-                                  textAlign: TextAlign.center,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  showCursor: false,
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    counterText: '',
-                                  ),
-                                  style: const TextStyle(
-                                      color: Colors.transparent),
-                                  onChanged: (value) {
-                                    setState(() {});
-                                    if (value.length == 4) {
-                                      context.hideKeyboard();
-                                    }
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
-                          BlocListener<PinLoginBloc, PinLoginState>(
-                            listener: (context, state) {
-                              if (state is LoginedSuccesfullState) {
-                                context.go(AppPaths.tabbar);
-                              }
-                            },
-                            child: MaterialButton(
-                                minWidth: double.maxFinite,
-                                color: ColorConstants.amber,
-                                padding: EdgeInsets.symmetric(vertical: 10.h),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50.w)),
-                                onPressed: () {
-                                  if (state is! PinLoginLoadingState) {
-                                    bloc.add(VerifyPinEvent(
-                                        otpTextFieldController.text));
-                                  }
-                                },
+          SafeArea(
+            child: Align(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                child: RepositoryProvider(
+                  create: (context) => PinLoginRepository(),
+                  child: BlocProvider(
+                    create: (context) => PinLoginBloc(context.read()),
+                    child: BlocConsumer<PinLoginBloc, PinLoginState>(
+                      listenWhen: (previous, current) =>
+                          current is PinLoginTokenExpiredState,
+                      listener: (context, state) {
+                        AppStorage().logout();
+                        context.go(AppPaths.login);
+                      },
+                      buildWhen: (previous, current) =>
+                          current is! PinLoginTokenExpiredState,
+                      builder: (context, state) {
+                        var bloc = context.read<PinLoginBloc>();
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(child: contentView(bloc, state)),
+                            TextButton(
+                                onPressed: () =>
+                                    context.pushReplacement(AppPaths.login),
                                 child: Text(
-                                  state is PinLoginLoadingState
-                                      ? "Loading..."
-                                      : 'ENTER',
+                                  "Login instead?",
                                   style: TextStyle(
-                                      fontSize: 16.sp,
+                                      color: Colors.white,
+                                      fontSize: 14.sp,
                                       fontWeight: FontWeight.w400),
                                 )),
-                          ),
-                        ],
-                      );
-                    },
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: TextButton(
-                onPressed: () => context.pushReplacement(AppPaths.login),
-                child: Text(
-                  "Login instead?",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w400),
-                )),
-          )
         ],
       ),
+    );
+  }
+
+  Widget contentView(PinLoginBloc bloc, PinLoginState state) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(ImageConstants.denSfa),
+        SizedBox(height: 30.h),
+        Image.asset(ImageConstants.poweredBy),
+        SizedBox(height: 60.h),
+        Text(
+          'Enter Login PIN',
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500),
+        ),
+        SizedBox(height: 20.h),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            AppStorage().userDetail?.username ?? "",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w500),
+          ),
+        ),
+        if (state is PinLogInErrorState)
+          Text(
+            state.message,
+            style: const TextStyle(color: Colors.red),
+          ),
+        Container(
+          margin: EdgeInsets.only(top: 5.h, bottom: 15.h),
+          decoration: BoxDecoration(
+              border: Border.all(width: 2, color: ColorConstants.amber),
+              borderRadius: BorderRadius.circular(30.w)),
+          padding: EdgeInsets.all(5.w),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: 120.w,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(4, (index) {
+                      if (otpTextFieldController.text.length > index) {
+                        return const Icon(Icons.circle, color: Colors.black);
+                      } else {
+                        return const Icon(Icons.radio_button_off,
+                            color: Colors.black);
+                      }
+                    }).toList()),
+              ),
+              TextField(
+                maxLength: 4,
+                controller: otpTextFieldController,
+                autofocus: true,
+                enableInteractiveSelection: false,
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                showCursor: false,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  counterText: '',
+                ),
+                style: const TextStyle(color: Colors.transparent),
+                onChanged: (value) {
+                  setState(() {});
+                  if (value.length == 4) {
+                    context.hideKeyboard();
+                  }
+                },
+              )
+            ],
+          ),
+        ),
+        BlocListener<PinLoginBloc, PinLoginState>(
+          listener: (context, state) {
+            if (state is LoginedSuccesfullState) {
+              context.go(AppPaths.tabbar);
+            }
+          },
+          child: MaterialButton(
+              minWidth: double.maxFinite,
+              color: ColorConstants.amber,
+              padding: EdgeInsets.symmetric(vertical: 10.h),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.w)),
+              onPressed: () {
+                if (state is! PinLoginLoadingState) {
+                  bloc.add(VerifyPinEvent(otpTextFieldController.text));
+                }
+              },
+              child: Text(
+                state is PinLoginLoadingState ? "Loading..." : 'ENTER',
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
+              )),
+        ),
+      ],
     );
   }
 }

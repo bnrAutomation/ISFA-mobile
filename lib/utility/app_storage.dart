@@ -19,6 +19,7 @@ class AppStorage {
   }
 
   void logout() {
+    _box.clear();
     userDetail = null;
     authToken = null;
   }

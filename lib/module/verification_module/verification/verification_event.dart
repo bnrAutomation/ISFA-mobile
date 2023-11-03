@@ -15,7 +15,10 @@ class VerificationSubmitEvent extends VerificationEvent {
   VerificationSubmitEvent(this.verificationCode, this.username);
 }
 
-class ReSendPasswordEvent extends VerificationEvent {}
+class ReSendPasswordEvent extends VerificationEvent {
+  final String email;
+  ReSendPasswordEvent(this.email);
+}
 
 class VerificationErrorEvent extends VerificationEvent {
   final String msg;

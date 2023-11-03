@@ -51,12 +51,17 @@ class URLConstants {
   static const loginAuth = "$apiBaseUrl/auth";
   static const sidemenuDetails = '$apiBaseUrl/user/home';
   static const version = "v1";
+  static const userDetails =
+      "$baseURLStart/authentication-service/iam/api/v1/user/detail";
 
   static const updatefcmtoken = "$loginAuth/updatefcmtoken";
   static const login =
       "$baseURLStart/authentication-service/iam/api/v1/authenticate";
 
-  static const userDetails = "$apiBaseUrl/user/detail";
+  static const logout =
+      "$baseURLStart/authentication-service/iam/api/v1/logout-user";
+
+  // static const userDetails = "$apiBaseUrl/user/detail";
   static const setpin = "$loginAuth/set-pin";
   static const loginwithpin = "$loginAuth/loginwithpin";
   static const forgotPassword = "$loginAuth/$version/forgot-password";
@@ -102,6 +107,7 @@ class URLConstants {
       '$baseURLStart/campaign-service/iSFA/api/v1/campaign/client';
   static const getAllCampaignsList =
       '$baseURLStart/campaign-service/iSFA/api/v1/campaign';
+
   static const saveCampaignAnswers = '$apiBaseUrl/saveCampaignAnswers';
   static const getStoreDetail = '$apiBaseUrl/getStoreDetail';
   static const addNote = '$apiBaseUrl/addNote';

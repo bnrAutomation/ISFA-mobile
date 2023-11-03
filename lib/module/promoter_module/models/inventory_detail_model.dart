@@ -13,8 +13,8 @@ class InventoryDetailModel {
   int numberOfProduct;
   int numberOfSelling;
   DateTime lastReciveDate;
-  String openingBalance;
-  String closingBalance;
+  double openingBalance;
+  double closingBalance;
   List<InventoryProductDetailModel> productList;
 
   factory InventoryDetailModel.fromRawJson(String str) =>
@@ -26,8 +26,8 @@ class InventoryDetailModel {
       InventoryDetailModel(
         numberOfProduct: json["numberOfProduct"],
         numberOfSelling: json["numberOfSelling"],
-        openingBalance: json['openingBalance'] ?? "0",
-        closingBalance: json['closingBalance'] ?? "0",
+        openingBalance: double.parse(json['openingBalance'] ?? "0.0"),
+        closingBalance: double.parse(json['closingBalance'] ?? " 0.0"),
         lastReciveDate: DateTime.parse(json["lastReciveDate"]),
         productList: json["productList"] == null
             ? []

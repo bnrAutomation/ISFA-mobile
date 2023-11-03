@@ -37,27 +37,28 @@ class _LoginViewState extends State<LoginView> {
               height: 1.sh,
               width: 1.sw,
               child: ColoredBox(color: Colors.black.withOpacity(0.6))),
-          Positioned.fill(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: RepositoryProvider(
-                  create: (context) => LoginRepository(),
-                  child: BlocProvider(
-                    create: (context) => LoginBloc(context.read()),
-                    child: BlocConsumer<LoginBloc, LoginState>(
-                      listener: (context, state) {
-                        if (state is LoginedSuccesfullState) {
-                          context.hideKeyboard();
-                          context.go(AppPaths.tabbar);
-                        } else if (state is MoveToSetPinState) {
-                          context.push(AppPaths.pinset,
-                              extra: context.read<LoginBloc>());
-                        }
-                      },
-                      builder: (context, state) {
-                        var bloc = context.read<LoginBloc>();
-                        return Column(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: RepositoryProvider(
+              create: (context) => LoginRepository(),
+              child: BlocProvider(
+                create: (context) => LoginBloc(context.read()),
+                child: BlocConsumer<LoginBloc, LoginState>(
+                  listener: (context, state) {
+                    if (state is LoginedSuccesfullState) {
+                      context.hideKeyboard();
+                      context.go(AppPaths.tabbar);
+                    } else if (state is MoveToSetPinState) {
+                      context.push(AppPaths.pinset,
+                          extra: context.read<LoginBloc>());
+                    }
+                  },
+                  builder: (context, state) {
+                    var bloc = context.read<LoginBloc>();
+                    return SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: 1.sh),
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -81,13 +82,12 @@ class _LoginViewState extends State<LoginView> {
                                 FilteringTextInputFormatter.deny(" ")
                               ],
                               onChanged: (change) {
-                                BlocProvider.of<LoginBloc>(context).add(
-                                    LoginTextChangeEvent(
-                                        usernameController.text,
-                                        passwordController.text));
+                                // BlocProvider.of<LoginBloc>(context).add(
+                                //     LoginTextChangeEvent(usernameController.text,
+                                //         passwordController.text));
                               },
                               decoration: InputDecoration(
-                                hintText: "Email Id",
+                                hintText: "Username",
                                 hintStyle: const TextStyle(color: Colors.white),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50.w),
@@ -108,13 +108,13 @@ class _LoginViewState extends State<LoginView> {
                                 FilteringTextInputFormatter.deny(" ")
                               ],
                               onChanged: (change) {
-                                bloc.add(LoginTextChangeEvent(
-                                    usernameController.text,
-                                    passwordController.text));
+                                // bloc.add(LoginTextChangeEvent(
+                                //     usernameController.text,
+                                //     passwordController.text));
                               },
                               keyboardType: TextInputType.visiblePassword,
                               obscureText:
-                                  context.read<LoginBloc>().isShowingPassword,
+                                  !context.read<LoginBloc>().isShowingPassword,
                               style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 hintText: "Password",
@@ -127,7 +127,7 @@ class _LoginViewState extends State<LoginView> {
                                         ? state.visible
                                             ? Icons.visibility
                                             : Icons.visibility_off
-                                        : Icons.visibility,
+                                        : Icons.visibility_off,
                                     color: Colors.grey,
                                   ),
                                 ),
@@ -186,10 +186,10 @@ class _LoginViewState extends State<LoginView> {
                                 )),
                             const SizedBox(height: 10)
                           ],
-                        );
-                      },
-                    ),
-                  ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

@@ -55,15 +55,18 @@ extension Helper on QuestionInputType {
   QuestionInputType fromString(String type) {
     switch (type) {
       case "MULTI_SELECT_CHECKBOX":
-      case "QUESTION_WITH_OPTIONS_CHECK_BOX":
         return QuestionInputType.multiAnswers;
       case "SINGLE_SELECT_DROPDOWN":
       case "QUESTION_WITH_OPTIONS_DROP_DOWN":
         return QuestionInputType.dropdown;
       case "SINGLE_SELECT_RADIO":
+      case "QUESTION_WITH_OPTIONS_CHECK_BOX":
         return QuestionInputType.radio;
       case "BOOLEAN":
         return QuestionInputType.boolean;
+      case "QUESTION_WITH_TRUE_FALSE":
+        return QuestionInputType.boolean;
+
       case "NUMBER":
         return QuestionInputType.number;
       case "TEXT":
@@ -109,13 +112,13 @@ extension Helper on QuestionInputType {
       case QuestionInputType.number:
         return "QUESTION_WITH_NUMERIC_ANSWER";
       case QuestionInputType.radio:
-        return "SINGLE_SELECT_RADIO";
+        return "QUESTION_WITH_OPTIONS_CHECK_BOX";
       case QuestionInputType.boolean:
         return "QUESTION_WITH_TRUE_FALSE";
       case QuestionInputType.singleLineText:
         return "QUESTION_WITH_CORRECT_ANSWER";
       case QuestionInputType.multiAnswers:
-        return "QUESTION_WITH_OPTIONS_CHECK_BOX";
+        return "";
       case QuestionInputType.image:
         return "IMAGE";
       case QuestionInputType.multiLineText:

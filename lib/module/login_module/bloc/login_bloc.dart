@@ -9,7 +9,7 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginRepository repo;
-  bool isShowingPassword = true;
+  bool isShowingPassword = false;
 
   LoginBloc(this.repo) : super(LoginInitialState()) {
     on<LoginShowPasswordButtonEvent>((event, emit) {
@@ -17,16 +17,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(LoginShowPasswordState(isShowingPassword));
     });
     on<LoginTextChangeEvent>((event, emit) {
-      emit(LogInValidState());
+      if (event.userValue.isEmpty) {
+        emit(LogInErrorState("Username is empty"));
+      } else if (event.passwordValue.isEmpty) {
+        emit(LogInErrorState("Password is empty"));
+      } else {
+        emit(LogInValidState());
+      }
     });
     on<LoginSubmitEvent>((event, emit) async {
       if (event.username.isEmpty) {
         emit(LogInErrorState("Username is empty"));
-      } else if (event.password.isEmpty) {
+      } else if (event.password.trim().isEmpty) {
         emit(LogInErrorState("Password is empty"));
-      } else if (event.password.length < 6) {
-        emit(LogInErrorState("Short password"));
-      } else {
+      }
+
+      //  else if (!event.password.trim().passwordValid()) {
+      //   emit(LogInErrorState(
+      //       "Password should be minimum eight characters and at least one uppercase letter, one lowercase letter, one number and one special character"));
+      // }
+
+      else {
         try {
           emit(LogInLoadingState());
           final loginResponse = await repo.login(

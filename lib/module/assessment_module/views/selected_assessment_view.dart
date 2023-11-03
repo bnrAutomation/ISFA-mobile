@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,13 +27,7 @@ class SelectedAssessmentView extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Card(
-              child: ListTile(
-                leading: CircleAvatar(radius: 25.w),
-                title: Text(AppStorage().userDetail?.username ?? ""),
-                subtitle: Text(AppStorage().userDetail?.reportTo ?? ""),
-              ),
-            ),
+            _userCard(),
             Card(
               child: ListTile(
                 textColor: theme.primaryColor,
@@ -96,8 +91,8 @@ class SelectedAssessmentView extends StatelessWidget {
                                     text: 'Right Answers',
                                   ),
                                   const SizedBox(height: 4),
-                                  const ChartIndicator(
-                                    color: ColorConstants.amber,
+                                  ChartIndicator(
+                                    color: Colors.amber.shade900,
                                     text: 'Missed',
                                   ),
                                   const SizedBox(height: 4),
@@ -118,6 +113,32 @@ class SelectedAssessmentView extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _userCard() {
+    final user = AppStorage().userDetail;
+    if (user == null) {
+      return const SizedBox();
+    }
+    return Card(
+      child: ListTile(
+        leading: CircleAvatar(
+          radius: 25.w,
+          backgroundColor: Colors.grey.withOpacity(0.2),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(110),
+            child: CachedNetworkImage(
+              imageUrl: user.photoUrl,
+              fit: BoxFit.cover,
+              errorWidget: (context, url, error) => CachedNetworkImage(
+                  imageUrl: ImageConstants.placeholderUserUrl),
+            ),
+          ),
+        ),
+        title: Text(user.username),
+        subtitle: Text(user.reportTo),
       ),
     );
   }
@@ -199,7 +220,7 @@ class SelectedAssessmentView extends StatelessWidget {
       final color = i == 0
           ? theme.primaryColor
           : i == 1
-              ? ColorConstants.amber
+              ? Colors.amber.shade900
               : const Color(0xffDB4C5B);
       return PieChartSectionData(
         color: color,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/my_schedule_module/beat_plan_model.dart';
@@ -140,27 +141,41 @@ class _MyScheduleViewState extends State<MyScheduleView> {
                                             child: Text("No data")),
                                       ),
                                     )
-                                  : ListView.separated(
-                                      padding: const EdgeInsets.all(10),
-                                      itemCount: bloc.beatPlans.length,
-                                      separatorBuilder: (context, index) =>
-                                          const SizedBox(height: 10),
-                                      itemBuilder: (context, index) {
-                                        final store = bloc.beatPlans[index];
-                                        final distance =
-                                            bloc.distanceFromStore(store);
-                                        return InkWell(
-                                            onTap: widget.forUserId == null
-                                                ? () {
-                                                    context.pushNamed(
-                                                        AppPaths.store,
-                                                        extra: bloc
-                                                            .beatPlans[index]);
-                                                  }
-                                                : null,
-                                            child: StoreCardView(store,
-                                                distanceInMeters: distance));
-                                      },
+                                  : AnimationLimiter(
+                                      child: ListView.separated(
+                                        padding: const EdgeInsets.all(10),
+                                        itemCount: bloc.beatPlans.length,
+                                        separatorBuilder: (context, index) =>
+                                            const SizedBox(height: 10),
+                                        itemBuilder: (context, index) {
+                                          final store = bloc.beatPlans[index];
+                                          final distance =
+                                              bloc.distanceFromStore(store);
+                                          return AnimationConfiguration
+                                              .staggeredList(
+                                            position: index,
+                                            duration: const Duration(
+                                                milliseconds: 500),
+                                            child: SlideAnimation(
+                                              verticalOffset: 50.0,
+                                              child: InkWell(
+                                                  onTap: widget.forUserId ==
+                                                          null
+                                                      ? () {
+                                                          context.pushNamed(
+                                                              AppPaths.store,
+                                                              extra:
+                                                                  bloc.beatPlans[
+                                                                      index]);
+                                                        }
+                                                      : null,
+                                                  child: StoreCardView(store,
+                                                      distanceInMeters:
+                                                          distance)),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                         )
                       ],
@@ -291,8 +306,15 @@ class StoreCardView extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   FilledButton(
-                      onPressed: () =>
-                          context.pushNamed(AppPaths.store, extra: beatPlan),
+                      onPressed: () async {
+                        await context.pushNamed(AppPaths.store,
+                            extra: beatPlan);
+                        if (context.mounted) {
+                          context
+                              .read<MyScheduleBloc>()
+                              .add(MyScheduleUpdateData());
+                        }
+                      },
                       style: TextButton.styleFrom(
                         alignment: Alignment.center,
                         backgroundColor: Theme.of(context).primaryColor,
@@ -329,11 +351,14 @@ class StoreCardView extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(6.w)),
                 alignment: Alignment.center,
-                child: Image.network(
-                    beatPlan.storeImage1.isNotEmpty
-                        ? beatPlan.storeImage1
-                        : 'https://media.istockphoto.com/id/912819604/vector/storefront-flat-design-e-commerce-icon.jpg?s=612x612&w=0&k=20&c=_x_QQJKHw_B9Z2HcbA2d1FH1U1JVaErOAp2ywgmmoTI=',
-                    fit: BoxFit.fitWidth)),
+                child: Hero(
+                  tag: beatPlan.pjpId,
+                  child: Image.network(
+                      beatPlan.storeImage1.isNotEmpty
+                          ? beatPlan.storeImage1
+                          : 'https://media.istockphoto.com/id/912819604/vector/storefront-flat-design-e-commerce-icon.jpg?s=612x612&w=0&k=20&c=_x_QQJKHw_B9Z2HcbA2d1FH1U1JVaErOAp2ywgmmoTI=',
+                      fit: BoxFit.fitWidth),
+                )),
           ),
         ),
       ],

@@ -27,124 +27,139 @@ class PromoterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Promoter")),
-      body: Column(children: [
-        const SizedBox(height: 5),
-        Card(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-            // color: const Color(0xffBFD1DF),
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-            ),
-            elevation: 0,
-            child: BlocConsumer<PromoterBloc, PromoterState>(
-              listenWhen: (previous, current) =>
-                  current is PromoterToastMessageState ||
-                  current is CompaignsLoadedPromoterState,
-              listener: (context, state) {
-                if (state is PromoterToastMessageState) {
-                  context.showSnackBarMessage(state.message);
-                } else if (state is CompaignsLoadedPromoterState) {
-                  final PromoterBloc bloc = context.read();
-                  AppPopup.showAppBottomSheet(
-                      context: context,
-                      child: _openCampaignSheet(context, bloc.storeDetail!));
-                }
-              },
-              builder: (context, state) {
-                final bloc = context.read<PromoterBloc>();
-                return Column(
-                  children: [
-                    Container(
-                        height: 0.2.sh,
-                        decoration: const BoxDecoration(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(20)),
+        appBar: AppBar(title: const Text("Promoter")),
+        body: BlocConsumer<PromoterBloc, PromoterState>(
+          listenWhen: (previous, current) =>
+              current is PromoterToastMessageState ||
+              current is CompaignsLoadedPromoterState,
+          listener: (context, state) {
+            if (state is PromoterToastMessageState) {
+              context.showSnackBarMessage(state.message);
+            } else if (state is CompaignsLoadedPromoterState) {
+              final PromoterBloc bloc = context.read();
+              AppPopup.showAppBottomSheet(
+                  context: context,
+                  child: _openCampaignSheet(context, bloc.storeDetail!));
+            }
+          },
+          builder: (context, state) {
+            final bloc = context.read<PromoterBloc>();
+            return bloc.storeDetail == null
+                ? Center(
+                    child: Text(
+                        "Look's like store not assigned yet.".toUpperCase()),
+                  )
+                : Column(children: [
+                    const SizedBox(height: 5),
+                    Card(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.2),
+                        // color: const Color(0xffBFD1DF),
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
-                        alignment: Alignment.center,
-                        child: Image.network(
-                          bloc.storeDetail?.storeImage1 ??
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpo1BfypXH0JcsdyjZI_w3rK-T4utQ_RAVjBx5ELNHpuN9fUdPBNuwjLjSxaVfCpXhsRQ&usqp=CAU",
-                          fit: BoxFit.cover,
-                          width: 1.sw,
-                          height: 1.sh,
+                        elevation: 0,
+                        child: Column(
+                          children: [
+                            Container(
+                                height: 0.2.sh,
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20)),
+                                ),
+                                alignment: Alignment.center,
+                                child: Image.network(
+                                  bloc.storeDetail?.storeImage1 ??
+                                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpo1BfypXH0JcsdyjZI_w3rK-T4utQ_RAVjBx5ELNHpuN9fUdPBNuwjLjSxaVfCpXhsRQ&usqp=CAU",
+                                  fit: BoxFit.cover,
+                                  width: 1.sw,
+                                  height: 1.sh,
+                                )),
+                            _storeDetailsView(bloc)
+                          ],
                         )),
-                    _storeDetailsView(bloc)
-                  ],
-                );
-              },
-            )),
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: BlocBuilder<PromoterBloc, PromoterState>(
-            builder: (context, state) {
-              if (!context.read<PromoterBloc>().isMarkedIn) {
-                return const SizedBox();
-              }
-              return Row(
-                children: [
-                  Expanded(
-                    child: CustomImageButton(
-                      buttonText: "Sale Log",
-                      onPressed: () => _saleLogTapped(context),
-                      image: SvgPicture.asset(
-                        ImageConstants.navigator,
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: BlocBuilder<PromoterBloc, PromoterState>(
+                        builder: (context, state) {
+                          if (!context.read<PromoterBloc>().isMarkedIn) {
+                            return const SizedBox();
+                          }
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: CustomImageButton(
+                                  buttonText: "Sale Log",
+                                  onPressed: () => _saleLogTapped(context),
+                                  image: SvgPicture.asset(
+                                    ImageConstants.navigator,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: CustomImageButton(
+                                  buttonText: "Inventory",
+                                  onPressed: () {
+                                    final promoterBloc =
+                                        context.read<PromoterBloc>();
+                                    final storeId =
+                                        promoterBloc.storeDetail?.storeId;
+                                    if (storeId == null) {
+                                      promoterBloc.add(
+                                          PromoterShowToastMessageEvent(
+                                              "Store not found"));
+                                      return;
+                                    }
+                                    context.pushNamed(AppPaths.inventory,
+                                        extra: promoterBloc);
+                                  },
+                                  image: SvgPicture.asset(ImageConstants.box),
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: CustomImageButton(
+                                  buttonText: "Start\nCampaign",
+                                  onPressed: () => context
+                                      .read<PromoterBloc>()
+                                      .add(GotoCompaignEvent()),
+                                  image:
+                                      SvgPicture.asset(ImageConstants.campaign),
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: CustomImageButton(
+                                  buttonText: "Feedback",
+                                  onPressed: () {
+                                    final storeDetail = context
+                                        .read<PromoterBloc>()
+                                        .storeDetail;
+                                    if (storeDetail != null) {
+                                      AppPopup.showAppBottomSheet(
+                                        context: context,
+                                        child: FeedbackView(
+                                            storeName: storeDetail.name),
+                                      );
+                                    }
+                                  },
+                                  image:
+                                      SvgPicture.asset(ImageConstants.feedback),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 5),
-                  Expanded(
-                    child: CustomImageButton(
-                      buttonText: "Inventory",
-                      onPressed: () {
-                        final promoterBloc = context.read<PromoterBloc>();
-                        final storeId = promoterBloc.storeDetail?.storeId;
-                        if (storeId == null) {
-                          promoterBloc.add(
-                              PromoterShowToastMessageEvent("Store not found"));
-                          return;
-                        }
-                        context.pushNamed(AppPaths.inventory,
-                            extra: promoterBloc);
-                      },
-                      image: SvgPicture.asset(ImageConstants.box),
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  Expanded(
-                    child: CustomImageButton(
-                      buttonText: "Start\nCampaign",
-                      onPressed: () =>
-                          context.read<PromoterBloc>().add(GotoCompaignEvent()),
-                      image: SvgPicture.asset(ImageConstants.campaign),
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  Expanded(
-                    child: CustomImageButton(
-                      buttonText: "Feedback",
-                      onPressed: () {
-                        final storeDetail =
-                            context.read<PromoterBloc>().storeDetail;
-                        if (storeDetail != null) {
-                          AppPopup.showAppBottomSheet(
-                            context: context,
-                            child: FeedbackView(storeName: storeDetail.name),
-                          );
-                        }
-                      },
-                      image: SvgPicture.asset(ImageConstants.feedback),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ]),
-    );
+                  ]);
+          },
+        ));
   }
 
   Widget _storeDetailsView(PromoterBloc bloc) {
@@ -179,7 +194,7 @@ class PromoterView extends StatelessWidget {
             children: [
               const Icon(CupertinoIcons.person, size: 12),
               const SizedBox(width: 8),
-              Text(bloc.storeDetail?.storeBranch ?? "",
+              Text(bloc.storeDetail?.storeCode ?? "",
                   style: GoogleFonts.inter(fontSize: 10))
             ],
           ),

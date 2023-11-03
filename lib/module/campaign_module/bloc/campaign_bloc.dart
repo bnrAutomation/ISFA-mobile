@@ -55,7 +55,9 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
     on((GetCampaignSections event, emit) async {
       add(GetSavedCampaignResponseEvent(event.campUuId));
       selectedCampSections =
-          await repo.getSections(campaignUuid: event.campUuId);
+          (await repo.getSections(campaignUuid: event.campUuId));
+      selectedCampSections
+          .sort((a, b) => a.priorityOrder.compareTo(b.priorityOrder));
       if (selectedCampSections.isNotEmpty) {
         add(GetQuestionsForSection(sectionUuId: selectedCampSections[0].uuid));
       }
@@ -86,6 +88,15 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
 
     on((SaveCampaignAnswersEvent event, emit) async {
       saveAnswersForSelectedSection();
+
+      final unAnsweredSection = selectedCampSections.firstWhereOrNull(
+          (element) => element.selectedSectionQuestions.isEmpty);
+      if (unAnsweredSection != null) {
+        emit(SnackbarMessageCampaignState(
+            "Please answer for Section: ${unAnsweredSection.name}"));
+        return;
+      }
+
       final notAnsweredQuestions = event.checkLeftAnswer
           ? _totalNotAnsweredQuestions()
           : <CampaignQuestionModel>[];
@@ -222,9 +233,17 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
         final rule = question.rules.first;
         final compareQuestion = lastSelectedQuestions
             .firstWhereOrNull((q) => q.uuid == rule.questionUuid);
-        if (compareQuestion?.answer?.toLowerCase() ==
-            rule.answer.toLowerCase()) {
-          newquestionsList.add(question.toViewQuestionModel());
+
+        if ((compareQuestion?.questionInputType ?? "") == 'multiAnswers') {
+          if ((compareQuestion?.answer?.split(',') ?? [])
+              .contains(rule.answer)) {
+            newquestionsList.add(question.toViewQuestionModel());
+          }
+        } else {
+          if (compareQuestion?.answer?.toLowerCase() ==
+              rule.answer.toLowerCase()) {
+            newquestionsList.add(question.toViewQuestionModel());
+          }
         }
       }
       questionAnswers = newquestionsList;

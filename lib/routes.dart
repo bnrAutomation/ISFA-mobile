@@ -6,6 +6,7 @@ import 'package:i_densfa/module/login_verify_module/pin_login_view.dart';
 import 'package:i_densfa/module/splash_module/splash_view.dart';
 import 'package:i_densfa/module/team_module/views/teams_main_view.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/extensions.dart';
 
 import 'module/campaign_module/bloc/campaign_bloc.dart';
 import 'module/campaign_module/view/campaign_questions_view.dart';
@@ -157,7 +158,7 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.forgotpass,
       name: AppPaths.forgotpass,
-      builder: (context, state) => ForgotPasswordView(),
+      builder: (context, state) => const ForgotPasswordView(),
     ),
     GoRoute(
       path: "${AppPaths.passVerification}/:email/:msg",
@@ -178,7 +179,10 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.checkin,
       name: AppPaths.checkin,
-      builder: (context, state) => const CheckInView(),
+      builder: (context, state) {
+        context.hideKeyboard();
+        return const CheckInView();
+      },
     ),
     GoRoute(
       path: AppPaths.attendance,

@@ -3,12 +3,12 @@ import 'dart:convert';
 class AuthenticateResponseModel {
   final String accessToken;
   final String tokenType;
-  final int tokeExpiry;
+  //final String tokeExpiry;
 
   AuthenticateResponseModel({
     required this.accessToken,
     required this.tokenType,
-    required this.tokeExpiry,
+    // required this.tokeExpiry,
   });
 
   factory AuthenticateResponseModel.fromRawJson(String str) =>
@@ -20,13 +20,13 @@ class AuthenticateResponseModel {
       AuthenticateResponseModel(
         accessToken: json["access_token"],
         tokenType: json["token_type"],
-        tokeExpiry: json["toke_expiry"],
+        //tokeExpiry: json["toke_expiry"],
       );
 
   Map<String, dynamic> toJson() => {
         "access_token": accessToken,
         "token_type": tokenType,
-        "toke_expiry": tokeExpiry,
+        //"toke_expiry": tokeExpiry,
       };
 
   String getUserId() {

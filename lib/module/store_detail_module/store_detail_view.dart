@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:i_densfa/module/my_schedule_module/beat_plan_model.dart';
 import 'package:i_densfa/module/promoter_module/feedback/feedback_view.dart';
 import 'package:i_densfa/routes.dart';
@@ -279,7 +281,10 @@ class StoreDetailView extends StatelessWidget {
                                 }));
                           });
                     },
-                    icon: const Icon(Icons.add)),
+                    icon: const Icon(
+                      Icons.add,
+                      color: Colors.green,
+                    )),
               )
             ],
           ),
@@ -291,18 +296,35 @@ class StoreDetailView extends StatelessWidget {
                 final notes = bloc.details?.userNote ?? [];
                 return notes.isEmpty
                     ? const Center(child: Text("No note added"))
-                    : ListView.separated(
-                        itemCount: notes.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 10),
-                        itemBuilder: (context, index) => ListTile(
-                          tileColor: Theme.of(context).secondaryHeaderColor,
-                          title: Text(notes[index].note),
-                          trailing: IconButton(
-                              onPressed: () => bloc.add(
-                                  DeleteNoteStoreDetailEvent(
-                                      notes[index].noteId)),
-                              icon: const Icon(Icons.delete)),
+                    : AnimationLimiter(
+                        child: ListView.separated(
+                          itemCount: notes.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (context, index) =>
+                              AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: ListTile(
+                                  tileColor: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.2),
+                                  title: Text(notes[index].note),
+                                  trailing: IconButton(
+                                      onPressed: () => bloc.add(
+                                          DeleteNoteStoreDetailEvent(
+                                              notes[index].noteId)),
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      )),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       );
               },
@@ -332,22 +354,35 @@ class StoreDetailView extends StatelessWidget {
 
                 return bloc.feedbackList.isEmpty
                     ? const Center(child: Text("No Feedback added"))
-                    : ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: bloc.feedbackList.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 10),
-                        itemBuilder: (context, index) {
-                          final item = bloc.feedbackList[index];
-                          return ListTile(
-                            isThreeLine: true,
-                            tileColor: Theme.of(context).secondaryHeaderColor,
-                            //leading: Image.network(item.imageUrl),
-                            title: Text(item.purposeName),
-                            subtitle: Text(
-                                '${item.reason}\n${item.createdDate!.toStringFormat('dd-MMM-yyyy')}'),
-                          );
-                        },
+                    : AnimationLimiter(
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: bloc.feedbackList.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (context, index) {
+                            final item = bloc.feedbackList[index];
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: ListTile(
+                                    isThreeLine: true,
+                                    tileColor: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.2),
+                                    leading: Image.network(item.imageUrl),
+                                    title: Text(item.purposeName),
+                                    subtitle: Text(
+                                        '${item.reason}\n${item.createdDate!.toStringFormat('dd-MMM-yyyy')}'),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       );
               },
             ),
@@ -360,9 +395,14 @@ class StoreDetailView extends StatelessWidget {
   Material addNoteDialogWidget(BuildContext context) {
     return Material(
       type: MaterialType.transparency,
-      child: CupertinoAlertDialog(
+      child: AlertDialog(
         title: const Text("Add Note"),
         content: TextField(
+          inputFormatters: [
+            FilteringTextInputFormatter.deny(RegExp('(’|‘|”|“||<|>|)')),
+          ],
+          maxLines: 5,
+          maxLength: 150,
           onChanged: (value) {
             context.read<StoreDetailBloc>().noteToAdd = value;
           },
@@ -371,14 +411,14 @@ class StoreDetailView extends StatelessWidget {
               border: OutlineInputBorder()),
         ),
         actions: [
-          CupertinoButton(
+          MaterialButton(
               padding: EdgeInsets.zero,
               child: const Text("Save"),
               onPressed: () {
                 context.read<StoreDetailBloc>().add(SaveNoteStoreDetailEvent());
                 Navigator.pop(context);
               }),
-          CupertinoButton(
+          MaterialButton(
               padding: EdgeInsets.zero,
               onPressed: () {
                 Navigator.pop(context);
@@ -400,13 +440,19 @@ class StoreDetailView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(beatPlanModel.storeName,
-              style: GoogleFonts.inter(
-                  fontSize: 16.sp, fontWeight: FontWeight.w600)),
+          Hero(
+            tag: "${bloc.beatPlanModel.pjpId}_${beatPlanModel.storeName}",
+            child: Text(beatPlanModel.storeName,
+                style: GoogleFonts.inter(
+                    fontSize: 16.sp, fontWeight: FontWeight.w600)),
+          ),
           SizedBox(height: 10.h),
-          Text(beatPlanModel.address,
-              style: GoogleFonts.inter(
-                  fontSize: 12.sp, fontWeight: FontWeight.w400)),
+          Hero(
+            tag: "${bloc.beatPlanModel.pjpId}_${beatPlanModel.address}",
+            child: Text(beatPlanModel.address,
+                style: GoogleFonts.inter(
+                    fontSize: 12.sp, fontWeight: FontWeight.w400)),
+          ),
           SizedBox(height: 10.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -418,11 +464,12 @@ class StoreDetailView extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: Theme.of(context).primaryColor),
               ),
-              Text(
-                "${(bloc.distanceFromStore / 1000).toStringAsFixed(2)} km Away",
-                style: GoogleFonts.inter(
-                    fontSize: 12.sp, fontWeight: FontWeight.w400),
-              ),
+              if (bloc.distanceFromStore > 0)
+                Text(
+                  "${(bloc.distanceFromStore / 1000).toStringAsFixed(2)} km Away",
+                  style: GoogleFonts.inter(
+                      fontSize: 12.sp, fontWeight: FontWeight.w400),
+                ),
             ],
           ),
         ],
@@ -479,18 +526,20 @@ class StoreDetailView extends StatelessWidget {
 
   AspectRatio headerImage(BuildContext context) {
     final StoreDetailBloc bloc = context.read<StoreDetailBloc>();
-
     return AspectRatio(
       aspectRatio: 2,
       child: Stack(
         alignment: Alignment.centerRight,
         children: [
           Positioned.fill(
-            child: CachedNetworkImage(
-                imageUrl: bloc.beatPlanModel.storeImage1.isNotEmpty
-                    ? bloc.beatPlanModel.storeImage1
-                    : 'https://picsum.photos/200/300',
-                fit: BoxFit.fitWidth),
+            child: Hero(
+              tag: bloc.beatPlanModel.pjpId,
+              child: CachedNetworkImage(
+                  imageUrl: bloc.beatPlanModel.storeImage1.isNotEmpty
+                      ? bloc.beatPlanModel.storeImage1
+                      : 'https://picsum.photos/200/300',
+                  fit: BoxFit.fitWidth),
+            ),
           ),
           Positioned.fill(
               child: Align(

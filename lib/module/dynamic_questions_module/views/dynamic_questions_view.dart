@@ -47,11 +47,18 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.singleLineText:
               return ListTile(
                 contentPadding: const EdgeInsets.all(0),
-                title: Wrap(
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(question.question),
+                    Expanded(
+                      child: Text(question.question),
+                    ),
                     if (question.isRequired)
-                      const Text('*', style: TextStyle(color: Colors.red))
+                      const Text('*',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold))
                   ],
                 ),
                 subtitle: TextField(
@@ -66,11 +73,18 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.multiLineText:
               return ListTile(
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                title: Wrap(
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(question.question),
+                    Expanded(
+                      child: Text(question.question),
+                    ),
                     if (question.isRequired)
-                      const Text('*', style: TextStyle(color: Colors.red))
+                      const Text('*',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold))
                   ],
                 ),
                 subtitle: TextField(
@@ -87,11 +101,18 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.amount:
               return ListTile(
                 contentPadding: const EdgeInsets.all(0),
-                title: Wrap(
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(question.question),
+                    Expanded(
+                      child: Text(question.question),
+                    ),
                     if (question.isRequired)
-                      const Text('*', style: TextStyle(color: Colors.red))
+                      const Text('*',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold))
                   ],
                 ),
                 subtitle: TextField(
@@ -110,11 +131,18 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.number:
               return ListTile(
                 contentPadding: const EdgeInsets.all(0),
-                title: Wrap(
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(question.question),
+                    Expanded(
+                      child: Text(question.question),
+                    ),
                     if (question.isRequired)
-                      const Text('*', style: TextStyle(color: Colors.red))
+                      const Text('*',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold))
                   ],
                 ),
                 subtitle: TextField(
@@ -134,11 +162,18 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.dropdown:
               return ListTile(
                 contentPadding: const EdgeInsets.all(0),
-                title: Wrap(
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(question.question),
+                    Expanded(
+                      child: Text(question.question),
+                    ),
                     if (question.isRequired)
-                      const Text('*', style: TextStyle(color: Colors.red))
+                      const Text('*',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold))
                   ],
                 ),
                 subtitle: Padding(
@@ -162,11 +197,18 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
             case QuestionInputType.ddMMyy:
               return ListTile(
                   contentPadding: const EdgeInsets.all(0),
-                  title: Wrap(
+                  title: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(question.question),
+                      Expanded(
+                        child: Text(question.question),
+                      ),
                       if (question.isRequired)
-                        const Text('*', style: TextStyle(color: Colors.red))
+                        const Text('*',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold))
                     ],
                   ),
                   subtitle: InkWell(
@@ -209,24 +251,31 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Wrap(
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              question.question,
-              style: textTheme.bodyLarge,
+            Expanded(
+              child: Text(
+                question.question,
+                style: textTheme.bodyLarge,
+              ),
             ),
             if (question.isRequired)
-              const Text('*', style: TextStyle(color: Colors.red))
+              const Text('*',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold))
           ],
         ),
-        GridView.builder(
+        ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: question.options.length,
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              childAspectRatio: 4 / 1,
-              mainAxisSpacing: 4,
-              maxCrossAxisExtent: 1.sw / 2),
+          // gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          //     childAspectRatio: 3 / 1,
+          //     mainAxisSpacing: 4,
+          //     maxCrossAxisExtent: 1.sw / 2),
           itemBuilder: (context, index) {
             final option = question.options[index];
             return Row(
@@ -239,7 +288,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                       updateAnswer(question, val ?? '');
                       setState(() {});
                     }),
-                Flexible(child: Text(option))
+                Expanded(child: Text(option))
               ],
             );
           },
@@ -253,14 +302,21 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Wrap(
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              question.question,
-              style: textTheme.bodyLarge,
+            Expanded(
+              child: Text(
+                question.question,
+                style: textTheme.bodyLarge,
+              ),
             ),
             if (question.isRequired)
-              const Text('*', style: TextStyle(color: Colors.red))
+              const Text('*',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold))
           ],
         ),
         GridView.builder(
@@ -268,7 +324,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
           shrinkWrap: true,
           itemCount: question.options.length,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              childAspectRatio: 4 / 1,
+              childAspectRatio: 3 / 1,
               mainAxisSpacing: 4,
               maxCrossAxisExtent: 1.sw / 2),
           itemBuilder: (context, index) {
@@ -287,6 +343,7 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
                       } else {
                         ans.remove(option);
                       }
+                      ans.removeWhere((element) => element.isEmpty);
                       updateAnswer(question, ans.join(','));
                       setState(() {});
                     }),
@@ -305,13 +362,20 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              question.question,
-              style: textTheme.titleMedium,
+            Expanded(
+              child: Text(
+                question.question,
+                style: textTheme.titleMedium,
+              ),
             ),
             if (question.isRequired)
-              const Text('*', style: TextStyle(color: Colors.red))
+              const Text('*',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold))
           ],
         ),
         Container(

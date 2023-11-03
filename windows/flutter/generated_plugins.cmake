@@ -8,7 +8,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_windows
   firebase_core
   geolocator_windows
-  secure_application
   syncfusion_pdfviewer_windows
   url_launcher_windows
 )

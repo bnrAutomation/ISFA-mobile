@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:i_densfa/module/my_activity_module/model/my_activity_model.dart';
 import 'package:i_densfa/module/my_activity_module/myActivity/my_activity_bloc.dart';
 import 'package:i_densfa/module/my_activity_module/my_activity_repository.dart';
@@ -77,7 +78,7 @@ class MyActivityViewState extends State<MyActivityView> {
                             style: TextStyle(
                               fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           IconButton(
@@ -93,9 +94,9 @@ class MyActivityViewState extends State<MyActivityView> {
                                   bloc.add(MyActivityChangeMonth(date));
                                 }
                               },
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.calendar_month,
-                                color: Colors.blue,
+                                color: Theme.of(context).colorScheme.primary,
                               )),
                         ],
                       )),
@@ -111,16 +112,29 @@ class MyActivityViewState extends State<MyActivityView> {
                               ),
                             )
                           : Expanded(
-                              child: ListView.separated(
-                                  itemCount: bloc.activityList.length,
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  separatorBuilder: (context, index) =>
-                                      Container(
-                                          color: Colors.grey[300]!, height: 1),
-                                  itemBuilder: (context, index) =>
-                                      MyActiviyItemView(
-                                          index, bloc.activityList[index])),
+                              child: AnimationLimiter(
+                                child: ListView.separated(
+                                    itemCount: bloc.activityList.length,
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.vertical,
+                                    separatorBuilder: (context, index) =>
+                                        Container(
+                                            color: Colors.grey[300]!,
+                                            height: 1),
+                                    itemBuilder: (context, index) =>
+                                        AnimationConfiguration.staggeredList(
+                                          position: index,
+                                          duration:
+                                              const Duration(milliseconds: 500),
+                                          child: SlideAnimation(
+                                            verticalOffset: 50.0,
+                                            child: FadeInAnimation(
+                                              child: MyActiviyItemView(index,
+                                                  bloc.activityList[index]),
+                                            ),
+                                          ),
+                                        )),
+                              ),
                             )
                 ],
               );
@@ -141,7 +155,8 @@ class MyActiviyItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: Colors.white,
+        elevation: 0,
+        //color: Colors.white,
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: Column(
@@ -154,7 +169,8 @@ class MyActiviyItemView extends StatelessWidget {
                 Text(
                   "Activity : ${item.activityName.toUpperCase()}",
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w600, color: Colors.blue),
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.primary),
                 ),
                 Text(
                   "Activity On : ${item.storeName}",

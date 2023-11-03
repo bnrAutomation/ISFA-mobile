@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/leaves_module/apply_leave_form_view.dart';
@@ -51,7 +52,6 @@ class LeaveView extends StatelessWidget {
                   ),
                 );
               }
-
               return SafeArea(
                 child: CustomScrollView(
                   slivers: [
@@ -64,11 +64,21 @@ class LeaveView extends StatelessWidget {
                         constraints:
                             BoxConstraints(minWidth: 1.sw, maxHeight: 130),
                         padding: const EdgeInsets.all(2.0),
-                        child: ListView.builder(
-                          itemCount: bloc.details!.leaveTypeBalance.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) =>
-                              _leaveTypeBalance(context, index),
+                        child: AnimationLimiter(
+                          child: ListView.builder(
+                            itemCount: bloc.details!.leaveTypeBalance.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) =>
+                                AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                  verticalOffset: 50.0,
+                                  child: FadeInAnimation(
+                                      child:
+                                          _leaveTypeBalance(context, index))),
+                            ),
+                          ),
                         ),
                       ),
                     ])),
@@ -80,17 +90,28 @@ class LeaveView extends StatelessWidget {
                         onTabTap: (p0) => bloc.bottomTabSelectedIndex = p0,
                         titles: bloc.tabbarTitles,
                         children: bloc.tabbarLeavesList.map((leaves) {
-                          return ListView.separated(
-                              itemCount: leaves.length,
-                              padding: const EdgeInsets.all(5),
-                              separatorBuilder: (context, index) =>
-                                  const Divider(
-                                    height: 5,
-                                    thickness: 1.0,
-                                    color: Colors.black12,
-                                  ),
-                              itemBuilder: (c, index) =>
-                                  ApproveLeave(leaves[index]));
+                          return AnimationLimiter(
+                            child: ListView.separated(
+                                itemCount: leaves.length,
+                                padding: const EdgeInsets.all(5),
+                                separatorBuilder: (context, index) =>
+                                    const Divider(
+                                      height: 5,
+                                      thickness: 1.0,
+                                      color: Colors.black12,
+                                    ),
+                                itemBuilder: (c, index) =>
+                                    AnimationConfiguration.staggeredList(
+                                      position: index,
+                                      duration:
+                                          const Duration(milliseconds: 375),
+                                      child: SlideAnimation(
+                                          verticalOffset: 50.0,
+                                          child: FadeInAnimation(
+                                              child:
+                                                  ApproveLeave(leaves[index]))),
+                                    )),
+                          );
                         }).toList(),
                       ))
                   ],
@@ -114,108 +135,118 @@ class LeaveView extends StatelessWidget {
       elevation: 0,
       child: Padding(
         padding: const EdgeInsets.all(2.0),
-        child: Column(
+        child: AnimationLimiter(
+            child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 4),
-            InkWell(
-              onTap: () {
-                AppPopup.showAppBottomSheet(
-                  context: context,
-                  child: BlocProvider.value(
-                    value: bloc..add(GetLeaveTypes()),
-                    child: const ApplyLeaveFormView(),
-                  ),
-                );
-              },
-              child: Column(
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      RotationTransition(
-                        turns: AlwaysStoppedAnimation(bloc.fadeRotatedAngle),
-                        child: SizedBox(
-                          width: bloc.fadeCirlceDiameter,
-                          height: bloc.fadeCirlceDiameter,
-                          child: CircularProgressIndicator(
-                            value: bloc.incompleteLeavePercent,
-                            color: Colors.grey.shade500,
-                            strokeWidth: 3,
+          children: AnimationConfiguration.toStaggeredList(
+            duration: const Duration(milliseconds: 375),
+            childAnimationBuilder: (widget) => SlideAnimation(
+              horizontalOffset: 50.0,
+              child: FadeInAnimation(
+                child: widget,
+              ),
+            ),
+            children: [
+              const SizedBox(height: 4),
+              InkWell(
+                onTap: () {
+                  AppPopup.showAppBottomSheet(
+                    context: context,
+                    child: BlocProvider.value(
+                      value: bloc..add(GetLeaveTypes()),
+                      child: const ApplyLeaveFormView(),
+                    ),
+                  );
+                },
+                child: Column(
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        RotationTransition(
+                          turns: AlwaysStoppedAnimation(bloc.fadeRotatedAngle),
+                          child: SizedBox(
+                            width: bloc.fadeCirlceDiameter,
+                            height: bloc.fadeCirlceDiameter,
+                            child: CircularProgressIndicator(
+                              value: bloc.incompleteLeavePercent,
+                              color: Colors.grey.shade500,
+                              strokeWidth: 3,
+                            ),
                           ),
                         ),
-                      ),
-                      CircularProgressBarWithLines(
-                        radius: bloc.circleRadius,
-                        percent: bloc.completeLeavePercent,
-                        linesAmount: 80,
-                        linesLength: 20,
-                        linesColor: Theme.of(context).primaryColor,
-                        centerWidgetBuilder: (context) => Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              bloc.details!.leaveBalance.toString(),
-                              style: textTheme.headlineLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "Leave Balance",
-                              style: textTheme.bodyMedium,
-                            )
-                          ],
+                        CircularProgressBarWithLines(
+                          radius: bloc.circleRadius,
+                          percent: bloc.completeLeavePercent,
+                          linesAmount: 80,
+                          linesLength: 20,
+                          linesColor: Theme.of(context).primaryColor,
+                          centerWidgetBuilder: (context) => Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                bloc.details!.leaveBalance.toString(),
+                                style: textTheme.headlineLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "Leave Balance",
+                                style: textTheme.bodyMedium,
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    "Click to apply for leave",
-                    style: textTheme.labelSmall,
-                  ),
-                ],
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      "Click to apply for leave",
+                      style: textTheme.labelSmall,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 5),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "⚫ Total Leave",
-                        style: textTheme.bodySmall,
-                      ),
-                      Text(
-                        bloc.details!.totalLeave.toString(),
-                        style: textTheme.bodyLarge
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        "⚫ Used Leave",
-                        style: textTheme.bodySmall,
-                      ),
-                      Text(
-                        bloc.details!.usedLeave.toString(),
-                        style: textTheme.bodyLarge
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  )
-                ],
+              const SizedBox(height: 5),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "⚫ Total Leave",
+                          style: textTheme.bodySmall,
+                        ),
+                        Text(
+                          bloc.details!.totalLeave.toString(),
+                          style: textTheme.bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          "⚫ Used Leave",
+                          style: textTheme.bodySmall,
+                        ),
+                        Text(
+                          bloc.details!.usedLeave.toString(),
+                          style: textTheme.bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-          ],
-        ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        )),
       ),
     );
   }
@@ -223,15 +254,6 @@ class LeaveView extends StatelessWidget {
   Widget _leaveTypeBalance(BuildContext context, int index) {
     final textTheme = Theme.of(context).textTheme;
     final model = context.read<LeaveBloc>().details!.leaveTypeBalance[index];
-
-    // final ccolor = index == 0
-    //     ? Theme.of(context).primaryColor
-    //     : index == 1
-    //         ? const Color(0XFFC92434)
-    //         : index == 2
-    //             ? ColorConstants.amber
-    //             : Colors.black;
-    //final bloc = context.read<LeaveBloc>();
     return Card(
       color: model.leaveTypeColor.toColor(),
       child: Stack(

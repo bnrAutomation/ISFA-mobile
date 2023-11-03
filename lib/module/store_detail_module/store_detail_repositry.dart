@@ -44,7 +44,7 @@ class StoreDetailRepository {
   Future<List<FeedbackDataList>> getFeedback(String storeName) async {
     final requestBody = {
       "storeName": storeName,
-      "createdBy": AppStorage().userDetail!.username
+      "createdBy": AppStorage().userDetail!.id
     };
 
     final response =

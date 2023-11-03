@@ -23,11 +23,14 @@ class AssessmentBloc extends Bloc<AssessmentEvent, AssessmentState> {
     final totalMin = selectedAssessment?.duration ?? 1;
     final totalSeconds = totalMin * 60;
     final time = totalSeconds - _secondsTook;
-    int sec = time % 60;
-    int min = (time / 60).floor();
-    String minute = min.toString().length <= 1 ? "0$min" : "$min";
-    String second = sec.toString().length <= 1 ? "0$sec" : "$sec";
-    return "$minute : $second";
+
+    final duration = Duration(seconds: time);
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    String hours =
+        duration.inHours > 0 ? '${twoDigits(duration.inHours)}:' : '';
+    return "$hours$twoDigitMinutes:$twoDigitSeconds";
   }
 
   AssessmentBloc(this.repo) : super(AssessmentInitial()) {
@@ -67,9 +70,13 @@ class AssessmentBloc extends Bloc<AssessmentEvent, AssessmentState> {
             .where((element) => element.answer?.isNotEmpty ?? false)
             .map((e) => e.toAssessmentRequest())
             .toList();
+        if (answers.isEmpty) {
+          emit(ScoreCalculatedAssessmentState());
+          return;
+        }
         emit(SavingAnswersLoadingState());
         final score = await repo
-            .saveAssessmentAnswers(answers, _secondsTook ~/ 60)
+            .saveAssessmentAnswers(answers, _secondsTook)
             .catchError((error) {
           emit(SnackbarMessageAssessmentState('Something went wrong!!'));
           emit(ScoreCalculatedAssessmentState());

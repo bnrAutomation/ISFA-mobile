@@ -23,7 +23,7 @@ class CheckInView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Text(
-              "Please ensure you are at the store while making the attendence and do not forget to sync it.",
+              "Please ensure you are at the store while Mark-In the attendence and do not forget to sync it.",
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),

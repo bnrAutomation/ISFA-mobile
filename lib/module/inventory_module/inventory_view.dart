@@ -108,7 +108,7 @@ class InventoryView extends StatelessWidget {
                               ),
                               SizedBox(height: 5.h),
                               _detailNameVal(context,
-                                  name: "Products Recived",
+                                  name: "Products Received",
                                   val: bloc.inventoryDetail?.numberOfProduct
                                           .toString() ??
                                       '0'),
@@ -121,17 +121,19 @@ class InventoryView extends StatelessWidget {
                               _detailDivider(),
                               if (bloc.inventoryDetail != null)
                                 _detailNameVal(context,
-                                    name: "Last Stock Recived On",
+                                    name: "Last Stock Received On",
                                     val: bloc.inventoryDetail!.lastReciveDate
                                         .toStringFormat('dd MMM yyyy')),
                               _detailDivider(),
                               _detailNameVal(context,
                                   name: 'Opening Balance',
-                                  val: bloc.inventoryDetail!.openingBalance),
+                                  val: bloc.inventoryDetail!.openingBalance
+                                      .toformat()),
                               _detailDivider(),
                               _detailNameVal(context,
                                   name: "Closing Balance",
-                                  val: bloc.inventoryDetail!.closingBalance),
+                                  val: bloc.inventoryDetail!.closingBalance
+                                      .toformat()),
                             ],
                           ),
                         );
