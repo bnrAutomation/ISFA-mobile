@@ -11,19 +11,15 @@ class LoginRepository {
       {required String username, required String password}) async {
     var name = await Device().name();
     var deviceId = await Device().deviceId();
-
     final body = {
       "username": username,
       "password": password,
       "userAgent": "${name}_$deviceId"
     };
-
     final response = await post(Uri.parse(URLConstants.login),
         body: jsonEncode(body),
         headers: {
           'Content-Type': 'application/json',
-          'User-Agent': name,
-          'Device-Id': deviceId,
         });
     if (response.statusCode == 201) {
       return AuthenticateResponseModel.fromRawJson(response.body);
