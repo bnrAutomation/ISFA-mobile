@@ -1,0 +1,2 @@
+/home/vishal-sandhu/Project/Gitgyan/iSFA/android/app/.cxx/RelWithDebInfo/3b1d4b1k/arm64-v8a/CMakeFiles/edit_cache.dir
+/home/vishal-sandhu/Project/Gitgyan/iSFA/android/app/.cxx/RelWithDebInfo/3b1d4b1k/arm64-v8a/CMakeFiles/rebuild_cache.dir

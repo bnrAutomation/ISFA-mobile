@@ -1,0 +1,1 @@
+/home/vishal-sandhu/Project/Gitgyan/iSFA/build/app/intermediates/cxx/Debug/1y192s3u/obj/arm64-v8a

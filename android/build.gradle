@@ -1,0 +1,21 @@
+allprojects {
+   repositories {
+       google()
+       mavenCentral()
+   }
+   configurations.configureEach {
+       resolutionStrategy {
+           force 'androidx.camera:camera-core:1.4.1',
+                   'androidx.camera:camera2:1.4.1',
+                   'androidx.camera:camera-video:1.4.1'
+       }
+   }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+   project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+tasks.register("clean", Delete) {
+   delete rootProject.buildDir
+}

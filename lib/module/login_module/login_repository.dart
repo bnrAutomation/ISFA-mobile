@@ -1,0 +1,43 @@
+import 'dart:convert';
+
+import 'package:http/http.dart';
+import 'package:i_densfa/module/login_module/models/auth_model.dart';
+import 'package:i_densfa/utility/device_auth_helper.dart';
+import 'package:i_densfa/utility/device_helper.dart';
+import 'package:i_densfa/utility/handler.dart';
+import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/extensions.dart';
+import 'package:i_densfa/utility/login_device_headers.dart';
+
+class LoginRepository {
+  Future<AuthenticateResponseModel> login(
+      {required String username, required String password}) async {
+    final device = await Device().collectAuthDeviceInfo();
+    final body = <String, dynamic>{
+      "username": username,
+      "password": encryptPassword(password),
+      "userAgent": "${device.deviceName}_${device.deviceUniqueId}",
+      "device": device.toJson(),
+    };
+    final response = await post(
+      Uri.parse(URLConstants.login),
+      body: jsonEncode(body),
+      headers: loginDeviceHeaders(device),
+    );
+    if (response.statusCode == 201) {
+      return AuthenticateResponseModel.fromRawJson(response.body);
+    } else {
+      throwIfDeviceAuthError(response);
+      throw getErrorMessage(response);
+    }
+  }
+
+  Future<UserDetailsResponseModel> getUserDetails(userID) async {
+    final response = await CustomHttpBaseClient.instance.get(Uri.parse('${URLConstants.userDetails}/$userID'));
+    if (response.statusCode == 200) {
+      return UserDetailsResponseModel.fromRawJson(response.body);
+    } else {
+      throw getErrorMessage(response);
+    }
+  }
+}

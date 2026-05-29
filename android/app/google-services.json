@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "project_number": "950410544983",
+    "project_id": "isfa-d6459"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950410544983:android:89ddddccad4df53107e012",
+        "android_client_info": {
+          "package_name": "com.denave.isfa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "950410544983-pfl2nb9bo5bumpapal7vr4i8lvn5140r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM3b1L_M942QCMkniCTTXBwlPfieJves8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950410544983-pfl2nb9bo5bumpapal7vr4i8lvn5140r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "950410544983-28ualvh6uq92upbma9inam7maqraspjk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.denave.isfa"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
