@@ -40,6 +40,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
   List<AllCampaignModel> storeCampaigns = [];
   List<String> filledCampaignList = [];
   bool alreadyVisited = false;
+  List<CampaignQuestionSectionModel> allCampSections = [];
   List<CampaignQuestionSectionModel> selectedCampSections = [];
   AllCampaignModel? selectedCampaign;
   SavedCampaignDataModel? savedCampaignDetails;
@@ -60,6 +61,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
   bool isloading = false;
   String selectedMechanicName="";
   String selectedMechanicContact = "";
+  String retailerName="";
 
   CampaignBloc(this.storeId, this.from, this.storeLat, this.storeLong)
       : super(CampaignInitial()) {
@@ -108,6 +110,11 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       try {
         emit(CampaignListLoadingState());
         storeCampaigns = await repo.getCampaignsForStore(event.storeId);
+
+        if(event.mechanicsName.isEmpty){
+        storeCampaigns.removeWhere(
+            (campaign) => campaign.name.toLowerCase() == "mechanic visit");
+        }
         emit(CampaignListLoadedState());
 
         // If online, trigger background pre-sync of all campaign data
@@ -161,13 +168,15 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       segmentList.clear();
       indexCampaign = event.index;
       add(GetSavedCampaignResponseEvent(event.campUuId));
-      selectedCampSections =
-          (await repo.getSections(campaignUuid: event.campUuId));
-      selectedCampSections
+      allCampSections =
+          await repo.getSections(campaignUuid: event.campUuId);
+      allCampSections
           .sort((a, b) => a.priorityOrder.compareTo(b.priorityOrder));
+      _updateVisibleSections(switchSectionIfHidden: false);
       if (selectedCampSections.isNotEmpty) {
+        lastSelectedSectionUuid = selectedCampSections.first.uuid;
         add(GetQuestionsForSectionFirstTime(
-            sectionUuId: selectedCampSections[0].uuid));
+            sectionUuId: selectedCampSections.first.uuid));
       }
     });
 
@@ -176,12 +185,14 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       segmentList.clear();
       indexCampaign = event.index;
       add(GetSavedCampaignResponseEvent(event.campUuId));
-      selectedCampSections =
-          (await repo.getSections(campaignUuid: event.campUuId));
-      selectedCampSections
+      allCampSections =
+          await repo.getSections(campaignUuid: event.campUuId);
+      allCampSections
           .sort((a, b) => a.priorityOrder.compareTo(b.priorityOrder));
+      _updateVisibleSections(switchSectionIfHidden: false);
       if (selectedCampSections.isNotEmpty) {
-        add(GetQuestionsForSection(sectionUuId: selectedCampSections[0].uuid));
+        lastSelectedSectionUuid = selectedCampSections.first.uuid;
+        add(GetQuestionsForSection(sectionUuId: selectedCampSections.first.uuid));
       }
     });
 
@@ -273,7 +284,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
             try {
               final isOnline = await _offlineService.isOnline();
               if (isOnline) {
-                recs = await repo.getRecruiters();
+                recs = await repo.getRecruiters(retailerName);
               }
               if (recs.isNotEmpty) {
                 final optionsList = recs.map((e) => e.counterName).toList();
@@ -328,11 +339,9 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
 
         // Now switch active section.
         lastSelectedSectionUuid = event.sectionUuId;
-
         var questions = section.selectedSectionQuestions;
         questionAnswers.clear();
         emit(CampaignQuestionsLoadedState());
-
         if (questions.isEmpty) {
           emit(CampaignListLoadingState());
           try {
@@ -346,7 +355,6 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
             emit(CampaignQuestionsLoadedState());
             return;
           }
-
           // Inject mechanic options only when online (or if we already have cached mechanics in memory).
           if (questions.any((element) =>
               element.question.trim().toLowerCase() ==
@@ -396,7 +404,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
             try {
               final isOnline = await _offlineService.isOnline();
               if (isOnline) {
-                recs = await repo.getRecruiters();
+                recs = await repo.getRecruiters(retailerName);
               }
               if (recs.isNotEmpty) {
                 final optionsList = recs.map((e) => e.counterName).toList();
@@ -549,6 +557,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
             // Clear campaign state to allow opening other campaigns
             final campaignUuid = selectedCampaign?.uuid ?? "";
             selectedCampaign = null;
+            allCampSections.clear();
             selectedCampSections.clear();
 
             add(GetSavedCampaignResponseEvent(campaignUuid));
@@ -587,6 +596,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
 
           // Fix Issue 4: Reset state
           selectedCampaign = null;
+          allCampSections.clear();
           selectedCampSections.clear();
           // Also clear dynamic segments so they don't leak into the next visit
           segmentList.clear();
@@ -1544,6 +1554,34 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
               "Please enter valid contact for ${q.question}"));
           return false;
         }
+      } else if (q.inputTypeValidation == 'gst_number') {
+        final bool gstValid = RegExp(
+                r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$')
+            .hasMatch((q.answer ?? '').trim().toUpperCase());
+        if (!gstValid) {
+          isloading = false;
+          emit(SnackbarMessageCampaignState(
+              "Please enter valid GST number for ${q.question}"));
+          return false;
+        }
+      } else if (q.inputTypeValidation == 'fssai_number') {
+        final bool fssaiValid = RegExp(r'^[1-3][0-9]{13}$')
+            .hasMatch((q.answer ?? '').trim());
+        if (!fssaiValid) {
+          isloading = false;
+          emit(SnackbarMessageCampaignState(
+              "Please enter valid FSSAI number for ${q.question}"));
+          return false;
+        }
+      } else if (q.inputTypeValidation == 'udyam_number') {
+        final bool udyamValid = RegExp(r'^UDYAM-[A-Z]{2}-\d{2}-\d{7}$')
+            .hasMatch((q.answer ?? '').trim().toUpperCase());
+        if (!udyamValid) {
+          isloading = false;
+          emit(SnackbarMessageCampaignState(
+              "Please enter valid UDYAM number for ${q.question}"));
+          return false;
+        }
       } else if (q.inputTypeValidation == 'email') {
         final bool emailValid = RegExp(
                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -1570,7 +1608,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
   }
 
   void saveAnswersForSelectedSection() {
-    var lastSelectedQuestions = selectedCampSections
+    var lastSelectedQuestions = allCampSections
         .firstWhereOrNull((element) => element.uuid == lastSelectedSectionUuid)
         ?.selectedSectionQuestions;
     for (final q in questionAnswers) {
@@ -1593,7 +1631,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
   }
 
   List<CampaignQuestionModel> _allQuestions() {
-    return selectedCampSections
+    return allCampSections
         .map((e) => e.selectedSectionQuestions)
         .expand((element) => element)
         .toList();
@@ -1672,6 +1710,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
     saveAnswersForSelectedSection();
     // Recalculate visible questions once and emit a single state
     _updateQuestionModelWithRule();
+    _updateVisibleSections();
     emit(CampaignQuestionsLoadedState());
   }
 
@@ -1804,7 +1843,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       if (existingRecCase || revisitCase || buyfrom) {
         emit(CampaignListLoadingState());
         try {
-          recs = await repo.getRecruiters();
+          recs = await repo.getRecruiters(retailerName);
           // .where((element) =>
           //     element.isNew == (revisitCase || existingRecCase))
           // .toList();
@@ -1820,7 +1859,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
             null; // optionsList.isEmpty ? null : optionsList.first;
 
         // update Options globally
-        selectedCampSections
+        allCampSections
             .firstWhereOrNull(
                 (element) => element.uuid == lastSelectedSectionUuid)
             ?.selectedSectionQuestions
@@ -2352,8 +2391,65 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
     });
   }
 
+  bool _sectionRuleMatches(SectionRule rule, CampaignQuestionModel trigger) {
+    final compareAnswer = (trigger.answer?.split(',') ?? <String>[])
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+    final ruleAnswers = rule.answer
+        .split(',')
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+
+    if (trigger.inputTypeValidation == "MULTI_SELECT_CHECKBOX" ||
+        trigger.inputTypeValidation == "MULTI_SELECT_DROPDOWN") {
+      return hasCommonIgnoreCase(compareAnswer, ruleAnswers);
+    }
+
+    return compareAnswer.contains(rule.answer) ||
+        trigger.answer?.trim().toLowerCase() ==
+            rule.answer.trim().toLowerCase();
+  }
+
+  CampaignQuestionModel? _findTriggerQuestionForSectionRule(SectionRule rule) {
+    final sectionsToSearch = rule.sectionUuid.isEmpty
+        ? allCampSections
+        : allCampSections.where((s) => s.uuid == rule.sectionUuid).toList();
+
+    for (final section in sectionsToSearch) {
+      final question = section.selectedSectionQuestions
+          .firstWhereOrNull((q) => q.uuid == rule.questionUuid);
+      if (question != null) return question;
+    }
+    return null;
+  }
+
+  bool _isSectionVisible(CampaignQuestionSectionModel section) {
+    if (section.rules.isEmpty) return true;
+
+    return section.rules.any((rule) {
+      final trigger = _findTriggerQuestionForSectionRule(rule);
+      if (trigger == null) return false;
+      return _sectionRuleMatches(rule, trigger);
+    });
+  }
+
+  void _updateVisibleSections({bool switchSectionIfHidden = true}) {
+    selectedCampSections =
+        allCampSections.where(_isSectionVisible).toList();
+
+    if (switchSectionIfHidden &&
+        selectedCampSections.isNotEmpty &&
+        !selectedCampSections
+            .any((s) => s.uuid == lastSelectedSectionUuid)) {
+      lastSelectedSectionUuid = selectedCampSections.first.uuid;
+      add(GetQuestionsForSection(sectionUuId: lastSelectedSectionUuid));
+    }
+  }
+
   void _updateQuestionModelWithRule() {
-    var lastSelectedQuestions = selectedCampSections
+    var lastSelectedQuestions = allCampSections
         .firstWhereOrNull((element) => element.uuid == lastSelectedSectionUuid)
         ?.selectedSectionQuestions;
     if (lastSelectedQuestions == null) return;

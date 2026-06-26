@@ -280,6 +280,21 @@ class StoreDetailBloc extends BaseBloc<StoreDetailEvent, StoreDetailState> with 
         return;
       }
     }
+
+       // FWP: restrict duty start before 10:30 AM (system-level validation)
+    if (userDetail?.role.toLowerCase() == 'fwp' &&
+        userDetail!.designation.toString().toLowerCase().contains("field") &&
+         AppStorage().userDetail?.companyName.toLowerCase() == "BrotherInternational".toLowerCase()) {
+      final now = DateTime.now();
+      final allowedStart = DateTime(now.year, now.month, now.day, 11, 00);
+      if (now.isBefore(allowedStart)) {
+        loading = false;
+        emit(StoreDetailToastMessageState(
+            'You cannot start duty before 11:00 AM'));
+        return;
+      }
+    }
+
     if (AppStorage().markedInStoreId != null &&
         AppStorage().markedInStoreId != beatPlanModel.storeId) {
       loading = false;
@@ -287,8 +302,6 @@ class StoreDetailBloc extends BaseBloc<StoreDetailEvent, StoreDetailState> with 
           'You are already marked In for other store\nPlease mark Out first.'));
       return;
     }
-
-    
 
     await _updateUserPosition(secure: true).catchError((onError) {
       loading = false;

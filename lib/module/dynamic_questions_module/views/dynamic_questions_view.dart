@@ -240,6 +240,38 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView>
               );
 
             case QuestionInputType.number:
+              final validation =
+                  question.campQuestionModel?.inputTypeValidation;
+              final maxLength = switch (validation) {
+                'gst_number' => 15,
+                'fssai_number' => 14,
+                'udyam_number' => 19,
+                _ => null,
+              };
+              final hintText = switch (validation) {
+                'gst_number' => 'Enter 15-digit GST number',
+                'fssai_number' => 'Enter 14-digit FSSAI number',
+                'udyam_number' => 'Enter UDYAM number (UDYAM-XX-00-0000000)',
+                _ => 'Enter your answer..',
+              };
+              final inputFormatters = switch (validation) {
+                'udyam_number' => [
+                    FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9-]'))
+                  ],
+                'gst_number' || 'pan_number' => [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9A-Z]'))
+                  ],
+                'fssai_number' => [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
+                  ],
+                _ => question.keyboardPref == TextInputType.text
+                    ? [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9A-Z]'))
+                      ]
+                    : [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9 ]'))
+                      ],
+              };
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,21 +290,13 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView>
                       },
                       child: TextField(
                         autofocus: false,
-                        inputFormatters:
-                            question.keyboardPref == TextInputType.text
-                                ? [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'^[0-9A-Z]+$'))
-                                  ]
-                                : [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9 ]'))
-                                  ],
+                        maxLength: maxLength,
+                        inputFormatters: inputFormatters,
                         onChanged: (value) => updateAnswer(question, value),
                         enabled: question.isEditable,
                         controller: textController,
                         decoration: InputDecoration(
-                            hintText: "Enter your answer..",
+                            hintText: hintText,
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8))),
                         keyboardType:
@@ -692,9 +716,9 @@ class _DynamicQuestionsViewState extends State<DynamicQuestionsView>
                   final image = await ImagePicker()
                       .pickImage(source: ImageSource.gallery);
                   if (image != null) {
-                    String imageUrl = await addTextToImage(image);
+                   // String imageUrl = await addTextToImage(image);
                     widget.onImageUpload
-                        ?.call(question.uuid, imageUrl, false, -1);
+                        ?.call(question.uuid, image.path, false, -1);
                   }
                 } else {
                   final image = await context.pushNamed<String>(

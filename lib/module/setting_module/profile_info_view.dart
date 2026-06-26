@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/device_helper.dart';
 import 'package:i_densfa/utility/extensions.dart';
@@ -87,22 +85,22 @@ class ProfileInfoview extends StatelessWidget {
                 ? 'Registered on this device'
                 : 'Not registered',
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 8.h),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: TextButton.icon(
-                onPressed: () {
-                  context.pushNamed(
-                    AppPaths.deviceRegistration,
-                    extra: {'username': profileDetail.username},
-                  );
-                },
-                icon: const Icon(Icons.phonelink_setup_rounded, size: 18),
-                label: const Text('Request device change'),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: EdgeInsets.only(top: 8.h),
+          //   child: Align(
+          //     alignment: Alignment.centerRight,
+          //     child: TextButton.icon(
+          //       onPressed: () {
+          //         context.pushNamed(
+          //           AppPaths.deviceRegistration,
+          //           extra: {'username': profileDetail.username},
+          //         );
+          //       },
+          //       icon: const Icon(Icons.phonelink_setup_rounded, size: 18),
+          //       label: const Text('Request device change'),
+          //     ),
+          //   ),
+          // ),
         ],
       );
     }

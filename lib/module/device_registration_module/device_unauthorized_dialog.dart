@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:i_densfa/routes.dart';
 
 /// Shown when login is blocked because the device is not registered.
 Future<void> showDeviceUnauthorizedDialog(
@@ -36,16 +34,16 @@ Future<void> showDeviceUnauthorizedDialog(
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: const Text('OK'),
           ),
-          FilledButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-              context.pushNamed(
-                AppPaths.deviceRegistration,
-                extra: {'username': username},
-              );
-            },
-            child: const Text('Request device change'),
-          ),
+          // FilledButton(
+          //   onPressed: () {
+          //     Navigator.of(dialogContext).pop();
+          //     context.pushNamed(
+          //       AppPaths.deviceRegistration,
+          //       extra: {'username': username},
+          //     );
+          //   },
+          //   child: const Text('Request device change'),
+          // ),
         ],
       );
     },

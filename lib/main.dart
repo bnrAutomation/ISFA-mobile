@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/credential_storage.dart';
 import 'package:i_densfa/utility/push_notification_manager.dart';
 import 'package:i_densfa/utility/services/global_offline_sync_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -52,6 +53,7 @@ Future<void> main() async {
     },
     appRunner: () async {
       await AppStorage.objectValue();
+      await CredentialStorage.ensureInitialized();
       await GlobalOfflineSyncService.instance.init();
 
       runApp(

@@ -207,6 +207,7 @@ class AppTabbarView extends StatelessWidget {
         return const LearnerView();
       case TabbarItemCase.campaign:
         return const CampaignView(
+          retailerName: "",
           mechanicsContact: "",
           mechanicsName: "",
           storeId: -1, from: AppPaths.tabbar,storeLat:0.0,storeLong:0.0);

@@ -12,7 +12,7 @@ import 'package:i_densfa/module/tabber_module/bloc/tabbar_bloc.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';
 import 'package:i_densfa/module/ui/custom_search_bar.dart';
 import 'package:i_densfa/routes.dart';
-import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/add_retailer_helper.dart';
 import 'package:i_densfa/utility/extensions.dart';
 import 'package:simple_speed_dial/simple_speed_dial.dart';
 import 'package:upgrader/upgrader.dart';
@@ -71,8 +71,18 @@ class _MyScheduleViewState extends State<MyScheduleView>
               : AnimatedBuilder(
                   animation: _tabController,
                   builder: (context, _) {
-                    if (_tabController.index != 0) return _mechanicfloatingActionButtons();
-                    return _floatingActionButtons();
+                    if (_tabController.index != 0) {
+                      return _mechanicfloatingActionButtons();
+                    }
+                    return BlocBuilder<MyScheduleBloc, MyScheduleState>(
+                      builder: (context, state) {
+                        final bloc = context.read<MyScheduleBloc>();
+                        return _floatingActionButtons(
+                          bloc.allPlans,
+                          showAddMechanic: bloc.mechanicVisits.isEmpty,
+                        );
+                      },
+                    );
                   },
                 ),
           body: BlocConsumer<MyScheduleBloc, MyScheduleState>(
@@ -422,7 +432,24 @@ class _MyScheduleViewState extends State<MyScheduleView>
 
 
 
-  Widget _floatingActionButtons() {
+  void _openAddMechanicSheet(BuildContext context) {
+    final bloc = context.read<MyScheduleBloc>();
+    bloc.selectedMechanic = null;
+    bloc.storeAddRemark = "";
+    bloc.storeAddDate = null;
+    AppPopup.showAppBottomSheet(
+      context: context,
+      child: BlocProvider.value(
+        value: bloc..add(GetAllMechancicListEvent()),
+        child: const AddMechanicView(),
+      ),
+    );
+  }
+
+  Widget _floatingActionButtons(
+    List<BeatPlanModel> assignedStores, {
+    bool showAddMechanic = false,
+  }) {
     return Builder(builder: (context) {
       return SpeedDial(
         closedForegroundColor: Colors.white,
@@ -430,7 +457,15 @@ class _MyScheduleViewState extends State<MyScheduleView>
         openForegroundColor: Theme.of(context).primaryColor,
         openBackgroundColor: Colors.white,
         speedDialChildren: [
-        if(AppStorage().userDetail?.configuration.requiredFwpStore??false)
+        if (showAddMechanic)
+          SpeedDialChild(
+            child: const Icon(Icons.store),
+            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).primaryColor,
+            label: 'Add Mechanic',
+            onPressed: () => _openAddMechanicSheet(context),
+          ),
+        if (AddRetailerHelper.showAddNewRetailer(assignedStores))
           SpeedDialChild(
             child: const Icon(Icons.add_business),
             foregroundColor: Colors.white,
@@ -512,19 +547,7 @@ class _MyScheduleViewState extends State<MyScheduleView>
             foregroundColor: Colors.white,
             backgroundColor: Theme.of(context).primaryColor,
             label: 'Add Mechanic',
-            onPressed: () {
-              var bloc = context.read<MyScheduleBloc>();
-              bloc.selectedMechanic = null;
-              bloc.storeAddRemark = "";
-              bloc.storeAddDate = null;
-              AppPopup.showAppBottomSheet(
-                context: context,
-                child: BlocProvider.value(
-                  value: bloc..add(GetAllMechancicListEvent()),
-                  child: const AddMechanicView(),
-                ),
-              );
-            },
+            onPressed: () => _openAddMechanicSheet(context),
           ),
           
         ],

@@ -155,18 +155,7 @@ class TabbarBloc extends BaseBloc<TabbarEvent, TabbarState> {
       emit(TabbarSnackBarMessageState("Please mark-out from the store first"));
       return;
     }
-    // FWP: restrict duty start before 10:30 AM (system-level validation)
-    // if (userDetail?.role.toLowerCase() == 'fwp' &&
-    //     userDetail!.designation.toString().toLowerCase().contains("field") &&
-    //      AppStorage().userDetail?.companyName.toLowerCase() == "BrotherInternational".toLowerCase()) {
-    //   final now = DateTime.now();
-    //   final allowedStart = DateTime(now.year, now.month, now.day, 10, 30);
-    //   if (now.isBefore(allowedStart)) {
-    //     emit(TabbarSnackBarMessageState(
-    //         'You cannot start duty before 10:30 AM'));
-    //     return;
-    //   }
-    // }
+ 
     //  File? modifiedImage;
     if (AppStorage().userDetail?.configuration.requiredSelfieForStartDuty ??
         true) {

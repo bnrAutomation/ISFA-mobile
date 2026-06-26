@@ -111,6 +111,12 @@ class CampaignQuestionModel {
         return TextInputType.number;
       case 'pan_number':
         return TextInputType.text;
+      case 'gst_number':
+        return TextInputType.text;
+      case 'fssai_number':
+        return TextInputType.number;
+      case 'udyam_number':
+        return TextInputType.text;
     }
     return null;
   }

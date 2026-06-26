@@ -8,6 +8,7 @@ import 'package:i_densfa/module/ui/background.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/credential_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 class ResetPasswordView extends StatefulWidget {
@@ -146,8 +147,9 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                         SizedBox(height: 10.h),
                         const SizedBox(height: 10),
                         BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
-                          listener: (context, state) {
+                          listener: (context, state) async {
                             if (state is ResetPasswordSuccesfullState) {
+                              await CredentialStorage.clearAll();
                               context.showSnackBarMessage(
                                   "successfully reset password");
                               context.go(AppPaths.login);

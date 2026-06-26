@@ -20,6 +20,7 @@ class CampaignView extends StatelessWidget {
   final double storeLat;
   final double storeLong;
   final String from;
+  final String retailerName;
   final String mechanicsName;
   final String mechanicsContact;
   const CampaignView(
@@ -28,6 +29,7 @@ class CampaignView extends StatelessWidget {
       required this.from,
       required this.storeLat,
       required this.storeLong,
+      required this.retailerName,
       required this.mechanicsContact,
       required this.mechanicsName});
 
@@ -43,7 +45,7 @@ class CampaignView extends StatelessWidget {
         body: BlocProvider(
           create: (context) => CampaignBloc(storeId, from, storeLat, storeLong)
             ..add(GetFilledCampaignsEvent(storeId.toString()))
-            ..add(GetStoreCampaignsEvent(storeId.toString())),
+            ..add(GetStoreCampaignsEvent(storeId.toString(),mechanicsName,retailerName)),
           child: Column(
             children: [
               Builder(
@@ -81,6 +83,7 @@ class CampaignView extends StatelessWidget {
                     }
                     bloc.selectedMechanicContact = mechanicsContact;
                     bloc.selectedMechanicName = mechanicsName;
+                    bloc.retailerName = retailerName;
                     context
                         .pushNamed(AppPaths.campaignQuestion, extra: bloc)
                         .then((value) {
@@ -95,7 +98,7 @@ class CampaignView extends StatelessWidget {
                         Navigator.pop(context);
                       }
                       bloc.add(GetFilledCampaignsEvent(storeId.toString()));
-                      bloc.add(GetStoreCampaignsEvent(storeId.toString()));
+                      bloc.add(GetStoreCampaignsEvent(storeId.toString(),mechanicsName,retailerName));
                     });
                   }
                 });
@@ -138,7 +141,7 @@ class CampaignView extends StatelessWidget {
                                     .showSnackBarMessage("You already filled.");
                                 return;
                               }
-                               bloc.selectedMechanicContact = mechanicsContact;
+                              bloc.selectedMechanicContact = mechanicsContact;
                               bloc.selectedMechanicName = mechanicsName;
                               bloc.selectedCampaign = bloc.storeCampaigns[index];
                               bloc.add(GetCampaignSectionsFirstTime(bloc.storeCampaigns[index].uuid, index));

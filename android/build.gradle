@@ -5,9 +5,10 @@ allprojects {
    }
    configurations.configureEach {
        resolutionStrategy {
-           force 'androidx.camera:camera-core:1.4.1',
-                   'androidx.camera:camera2:1.4.1',
-                   'androidx.camera:camera-video:1.4.1'
+           force 'androidx.camera:camera-core:1.6.0',
+                   'androidx.camera:camera-camera2:1.6.0',
+                   'androidx.camera:camera-lifecycle:1.6.0',
+                   'androidx.camera:camera-video:1.6.0'
        }
    }
 }

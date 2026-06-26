@@ -174,7 +174,7 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.login,
       name: AppPaths.login,
-      builder: (context, state) => const LoginView(),
+      builder: (context, state) => LoginView(key: state.pageKey),
     ),
     GoRoute(
         path: AppPaths.pinLogin,

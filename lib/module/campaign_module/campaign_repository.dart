@@ -140,7 +140,6 @@ class CampaignRepository {
         final sections = (json.decode(response.body) as List)
             .map((e) => CampaignQuestionSectionModel.fromJson(e))
             .toList();
-        
         // Cache the data
         await _offlineService.cacheSections(campaignUuid, sections);
         
@@ -411,7 +410,7 @@ class CampaignRepository {
     }
   }
 
-  Future<List<RecruiterModel>> getRecruiters(
+  Future<List<RecruiterModel>> getRecruiters(String retailerName, 
       {bool silentSessionExpiry = false}) async {
     await initOfflineService();
     final isOnline = await _offlineService.isOnline();
@@ -432,6 +431,10 @@ class CampaignRepository {
     if (response.statusCode == 200) {
       final recruiters = (json.decode(response.body) as List)
           .map((e) => RecruiterModel.fromJson(e))
+          .where((retailer) =>
+            retailer.counterName.toLowerCase().trim() ==
+            retailerName.toLowerCase().trim())
+        
           .toList();
       // Cache for offline usage.
       await _offlineService.cacheRecruiters(recruiters);
@@ -602,7 +605,7 @@ class CampaignRepository {
       }
       
       try {
-        final recruiters = await getRecruiters(
+        final recruiters = await getRecruiters("",
             silentSessionExpiry: silentSessionExpiry);
         await _offlineService.cacheRecruiters(recruiters);
         if (kDebugMode) {

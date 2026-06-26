@@ -198,6 +198,7 @@ class StoreDetailView extends StatelessWidget {
                                       width: 1.sw,
                                       height: 1.sh,
                                       child: CampaignView(
+                                        retailerName: bloc.beatPlanModel.storeName,
                                           mechanicsContact: bloc.beatPlanModel.mechanicContact,
                                           mechanicsName: bloc.beatPlanModel.mechanicName,
                                           storeId: bloc.beatPlanModel.storeId,

@@ -11,6 +11,7 @@ import 'package:i_densfa/module/my_store_module/mystore/mystore_bloc.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';
 import 'package:i_densfa/module/ui/custom_search_bar.dart' show CustomSearchBar;
 import 'package:i_densfa/routes.dart';
+import 'package:i_densfa/utility/add_retailer_helper.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/custom_paints.dart';
 import 'package:i_densfa/utility/extensions.dart';
@@ -39,18 +40,23 @@ class _MyStoreViewState extends State<MyStoreView> {
         showIgnore: false,
         showLater: false,
         navigatorKey: router.routerDelegate.navigatorKey,
-        child: Scaffold(
+        child: BlocProvider(
+          create: (context) =>
+              MystoreBloc(MyStoreRepository(widget.forUserId))
+                ..add(MyStoreUpdateData()),
+          child: Scaffold(
           appBar: widget.forUserId != null
               ? AppBar(title: const Text('My Stores'))
               : null,
-          floatingActionButton: widget.forUserId != null 
-              ? null 
-              : _floatingActionButtons(),
-          body: BlocProvider(
-            create: (context) =>
-                MystoreBloc(MyStoreRepository(widget.forUserId))
-                  ..add(MyStoreUpdateData()),
-            child: BlocConsumer<MystoreBloc, MystoreState>(
+          floatingActionButton: widget.forUserId != null
+              ? null
+              : BlocBuilder<MystoreBloc, MystoreState>(
+                  builder: (context, state) {
+                    final bloc = context.read<MystoreBloc>();
+                    return _floatingActionButtons(bloc.allPlans);
+                  },
+                ),
+          body: BlocConsumer<MystoreBloc, MystoreState>(
               listener: (context, state) {
                 if (state is MyStoreShowError) {
                   context.showSnackBarMessage(state.message);
@@ -229,7 +235,7 @@ class _MyStoreViewState extends State<MyStoreView> {
     );
   }
 
-  Widget _floatingActionButtons() {
+  Widget _floatingActionButtons(List<BeatPlanModel> assignedStores) {
     return Builder(builder: (context) {
       return SpeedDial(
         closedForegroundColor: Colors.white,
@@ -237,7 +243,7 @@ class _MyStoreViewState extends State<MyStoreView> {
         openForegroundColor: Theme.of(context).primaryColor,
         openBackgroundColor: Colors.white,
         speedDialChildren: [
-        if(AppStorage().userDetail?.configuration.requiredFwpStore??false)
+        if (AddRetailerHelper.showAddNewRetailer(assignedStores))
           SpeedDialChild(
             child: const Icon(Icons.add_business),
             foregroundColor: Colors.white,
@@ -286,6 +292,7 @@ Widget _openCampaignSheet(BuildContext context, BeatPlanModel beatPlanModel) {
             child: CampaignView(
                 mechanicsContact: beatPlanModel.mechanicContact,
                 mechanicsName: beatPlanModel.mechanicName,
+                retailerName: beatPlanModel.storeName,
                 storeId: beatPlanModel.storeId,
                 from: AppPaths.tabbar,
                 storeLat: beatPlanModel.latitude ?? 0.0,

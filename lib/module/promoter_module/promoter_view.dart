@@ -342,6 +342,7 @@ class PromoterView extends StatelessWidget {
           const SizedBox(height: 10),
           Expanded(
               child: CampaignView(
+                retailerName:storeDetail.name ,
                 mechanicsContact: "",
                 mechanicsName: "",
                   storeId: storeDetail.storeId,

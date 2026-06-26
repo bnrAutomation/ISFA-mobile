@@ -1,5 +1,9 @@
+import 'dart:async';
 import 'dart:io';
+
 import 'package:camera/camera.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,12 +11,94 @@ import 'package:go_router/go_router.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/continuous_location_service.dart';
 import 'package:i_densfa/utility/extensions.dart';
-import 'dart:ui' as ui;
-import 'package:flutter/foundation.dart';
+import 'package:image/image.dart' as img;
+
+/// Params for [watermarkImageWorker] — must be a simple top-level type for [compute].
+class WatermarkImageParams {
+  const WatermarkImageParams({
+    required this.path,
+    required this.text,
+    required this.maxWidth,
+  });
+
+  final String path;
+  final String text;
+  final int maxWidth;
+}
+
+/// Decode cap keeps overlay work bounded vs full [ResolutionPreset] capture.
+const int kCameraWatermarkMaxWidth = 1600;
+
+int _bitmapFontStringWidth(img.BitmapFont font, String string) {
+  var width = 0;
+  for (final codeUnit in string.codeUnits) {
+    if (!font.characters.containsKey(codeUnit)) {
+      width += font.base ~/ 2;
+      continue;
+    }
+    width += font.characters[codeUnit]!.xAdvance;
+  }
+  return width;
+}
+
+/// Burns stamp text into [WatermarkImageParams.path] as JPEG (runs in isolate).
+String watermarkImageWorker(WatermarkImageParams params) {
+  final bytes = File(params.path).readAsBytesSync();
+  img.Image? image = img.decodeImage(bytes);
+  if (image == null) {
+    throw Exception('Failed to decode image for watermark');
+  }
+
+  if (image.width > params.maxWidth) {
+    image = img.copyResize(image, width: params.maxWidth);
+  }
+
+  final lines = params.text.split('\n');
+  const lineHeight = 28;
+  const padding = 8;
+  var maxLineWidth = 0;
+  for (final line in lines) {
+    final w = _bitmapFontStringWidth(img.arial24, line);
+    if (w > maxLineWidth) maxLineWidth = w;
+  }
+
+  final blockHeight = lines.length * lineHeight + padding * 2;
+  final blockWidth = maxLineWidth + padding * 2;
+  final blockX =
+      (image.width - blockWidth - 16).clamp(0, image.width).toInt();
+  final blockY =
+      (image.height - blockHeight - 16).clamp(0, image.height).toInt();
+
+  img.fillRect(
+    image,
+    x1: blockX,
+    y1: blockY,
+    x2: blockX + blockWidth,
+    y2: blockY + blockHeight,
+    color: img.ColorRgb8(255, 255, 255),
+  );
+
+  var y = blockY + padding;
+  for (final line in lines) {
+    img.drawString(
+      image,
+      line,
+      font: img.arial24,
+      x: blockX + blockWidth - padding,
+      y: y,
+      rightJustify: true,
+      color: img.ColorRgb8(255, 0, 0),
+    );
+    y += lineHeight;
+  }
+
+  File(params.path).writeAsBytesSync(img.encodeJpg(image, quality: 88));
+  return params.path;
+}
 
 class AppCameraPreview extends StatefulWidget {
   final String from;
-  const AppCameraPreview({required this.from,super.key});
+  const AppCameraPreview({required this.from, super.key});
   @override
   State<AppCameraPreview> createState() => _CameraPreviewState();
 }
@@ -25,29 +111,121 @@ class _CameraPreviewState extends State<AppCameraPreview>
   bool isFront = false;
   Position? loc;
   bool capturing = false;
+  bool _watermarking = false;
+  bool _locating = false;
+  int _watermarkGeneration = 0;
+  int _locationPrefetchGeneration = 0;
+  int _cameraSetupGeneration = 0;
+  final ContinuousLocationService _locationService =
+      ContinuousLocationService.instance;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _locationService.addListener(_onLocationServiceUpdate);
+    unawaited(_locationService.start());
+    _applyCachedLocation();
+    _prefetchLocation();
     _setUpCameraController();
+  }
+
+  void _applyCachedLocation() {
+    final cached = _locationService.snapshot.lastValidPosition;
+    if (cached != null) {
+      loc = cached;
+    }
+  }
+
+  void _onLocationServiceUpdate() {
+    if (!mounted || loc != null) return;
+    final cached = _locationService.snapshot.lastValidPosition;
+    if (cached != null) {
+      setState(() => loc = cached);
+    }
+  }
+
+  Future<void> _prefetchLocation() async {
+    if (loc != null) return;
+    final gen = ++_locationPrefetchGeneration;
+    if (mounted) setState(() => _locating = true);
+    try {
+      final position =
+          await _locationService.resolveForSecureActionFast();
+      if (!mounted || gen != _locationPrefetchGeneration || loc != null) {
+        return;
+      }
+      setState(() => loc = position);
+    } catch (_) {
+      // Shutter tap will retry; chip stays on "GPS on capture" until then.
+    } finally {
+      if (mounted && gen == _locationPrefetchGeneration) {
+        setState(() => _locating = false);
+      }
+    }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _disposeCamera();
+    _locationService.removeListener(_onLocationServiceUpdate);
+    _locationPrefetchGeneration++;
+    _watermarkGeneration++;
+    _cameraSetupGeneration++;
+    unawaited(_disposeCamera());
     super.dispose();
   }
 
   /// Dispose camera controller safely to avoid NPE in plugin (closeCaptureSession on null).
-  void _disposeCamera() {
-    if (cameraController == null) return;
+  Future<void> _disposeCamera() async {
+    final controller = cameraController;
+    cameraController = null;
+    if (controller == null) return;
     try {
-      cameraController?.dispose();
+      await controller.dispose();
     } catch (_) {
       // Plugin may throw when session is already closed (e.g. device closed first).
     }
-    cameraController = null;
+  }
+
+  /// iPhone 17+ needs a lower preset to avoid unsupported btp2 pixel formats.
+  Future<ResolutionPreset> _resolveResolutionPreset() async {
+    if (!Platform.isIOS) return ResolutionPreset.high;
+    final ios = await DeviceInfoPlugin().iosInfo;
+    if (ios.utsname.machine.contains('iPhone18')) {
+      return ResolutionPreset.veryHigh;
+    }
+    return ResolutionPreset.high;
+  }
+
+  CameraDescription _selectCamera(List<CameraDescription> cameras) {
+    if (isFront) {
+      if (Platform.isIOS) {
+        final mainFront = cameras.where(
+          (c) =>
+              c.lensDirection == CameraLensDirection.front &&
+              c.name.endsWith(':1'),
+        );
+        if (mainFront.isNotEmpty) return mainFront.first;
+      }
+      return cameras.firstWhere(
+        (c) => c.lensDirection == CameraLensDirection.front,
+        orElse: () => cameras.first,
+      );
+    }
+
+    if (Platform.isIOS) {
+      // Prefer main wide back (:0); avoid ultra-wide (:5) on multi-camera iPhones.
+      final mainBack = cameras.where(
+        (c) =>
+            c.lensDirection == CameraLensDirection.back && c.name.endsWith(':0'),
+      );
+      if (mainBack.isNotEmpty) return mainBack.first;
+    }
+    return cameras.firstWhere(
+      (c) => c.lensDirection == CameraLensDirection.back,
+      orElse: () => cameras.first,
+    );
   }
 
   @override
@@ -60,6 +238,7 @@ class _CameraPreviewState extends State<AppCameraPreview>
           !(cameraController?.value.isInitialized ?? false)) {
         _setUpCameraController();
       }
+      _prefetchLocation();
     }
   }
 
@@ -114,9 +293,23 @@ class _CameraPreviewState extends State<AppCameraPreview>
             child: Image.file(
               File(_file!.path),
               fit: BoxFit.contain,
+              gaplessPlayback: true,
             ),
           ),
         ),
+        if (_watermarking)
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: EdgeInsets.only(top: 12.h),
+                child: _pillChip(
+                  icon: Icons.branding_watermark_outlined,
+                  label: 'Stamping photo…',
+                ),
+              ),
+            ),
+          ),
         SafeArea(
           child: Align(
             alignment: Alignment.topLeft,
@@ -151,10 +344,17 @@ class _CameraPreviewState extends State<AppCameraPreview>
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: () {
-                          setState(() => _file = null);
-                        },
-                        icon: const Icon(Icons.refresh_rounded, color: Colors.white),
+                        onPressed: _watermarking
+                            ? null
+                            : () {
+                                _watermarkGeneration++;
+                                setState(() {
+                                  _file = null;
+                                  _watermarking = false;
+                                });
+                              },
+                        icon: const Icon(Icons.refresh_rounded,
+                            color: Colors.white),
                         label: const Text('Retake'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -170,9 +370,20 @@ class _CameraPreviewState extends State<AppCameraPreview>
                     Expanded(
                       flex: 2,
                       child: FilledButton.icon(
-                        onPressed: () => context.pop(_file!.path),
-                        icon: const Icon(Icons.check_rounded),
-                        label: const Text('Use photo'),
+                        onPressed: _watermarking
+                            ? null
+                            : () => context.pop(_file!.path),
+                        icon: _watermarking
+                            ? SizedBox(
+                                width: 18.w,
+                                height: 18.w,
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.black87,
+                                ),
+                              )
+                            : const Icon(Icons.check_rounded),
+                        label: Text(_watermarking ? 'Stamping…' : 'Use photo'),
                         style: FilledButton.styleFrom(
                           backgroundColor: ColorConstants.amber,
                           foregroundColor: Colors.black87,
@@ -245,6 +456,11 @@ class _CameraPreviewState extends State<AppCameraPreview>
                     _pillChip(
                       icon: Icons.gps_fixed_rounded,
                       label: 'Location locked',
+                    )
+                  else if (_locating)
+                    _pillChip(
+                      icon: Icons.gps_not_fixed_rounded,
+                      label: 'Acquiring GPS…',
                     )
                   else
                     _pillChip(
@@ -332,7 +548,7 @@ class _CameraPreviewState extends State<AppCameraPreview>
                     ),
                     SizedBox(height: 16.h),
                     Text(
-                      'Saving photo…',
+                      'Capturing…',
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 15.sp,
@@ -368,9 +584,7 @@ class _CameraPreviewState extends State<AppCameraPreview>
               height: 58.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: capturing
-                    ? Colors.white24
-                    : ColorConstants.amber,
+                color: capturing ? Colors.white24 : ColorConstants.amber,
               ),
             ),
           ),
@@ -425,173 +639,145 @@ class _CameraPreviewState extends State<AppCameraPreview>
     );
   }
 
+  String _stampText() =>
+      'DateTime: ${DateTime.now().toStringFormat("dd-MMM-yyyy hh:mm aa")}\n'
+      'Latitude: ${loc?.latitude ?? 0.0}\n'
+      'Longitude: ${loc?.longitude ?? 0.0}';
+
+  Future<void> _applyWatermarkAsync(XFile capturefile, String text) async {
+    final gen = ++_watermarkGeneration;
+    final capturePath = capturefile.path;
+    try {
+      final path = await compute(
+        watermarkImageWorker,
+        WatermarkImageParams(
+          path: capturePath,
+          text: text,
+          maxWidth: kCameraWatermarkMaxWidth,
+        ),
+      );
+      if (!mounted ||
+          gen != _watermarkGeneration ||
+          _file?.path != capturePath) {
+        return;
+      }
+      setState(() {
+        _file = XFile(path);
+        _watermarking = false;
+      });
+    } catch (e) {
+      if (!mounted ||
+          gen != _watermarkGeneration ||
+          _file?.path != capturePath) {
+        return;
+      }
+      setState(() => _watermarking = false);
+      context.showSnackBarMessage('Failed to stamp photo: $e');
+    }
+  }
+
   Future<void> _handleShutterTap() async {
     try {
       if (loc == null) {
-        context.showSnackBarMessage(
-            'Location is required to stamp the photo.');
+        setState(() => capturing = true);
         try {
-          setState(() => capturing = true);
-          loc = await ContinuousLocationService.instance.resolveForSecureAction(
-            fallbackDesiredAccuracy: LocationAccuracy.medium,
-          );
+          loc = await _locationService.resolveForSecureActionFast();
           if (mounted) setState(() {});
         } catch (e) {
-          setState(() => capturing = false);
-          if (mounted) context.showSnackBarMessage(e.toString());
+          if (mounted) {
+            setState(() => capturing = false);
+            context.showSnackBarMessage(e.toString());
+          }
           return;
         }
       }
       if (!mounted) return;
       setState(() => capturing = true);
-      final text =
-          'DateTime: ${DateTime.now().toStringFormat("dd-MMM-yyyy hh:mm aa")}\nLatitude: ${loc?.latitude ?? 0.0}\nLongitude: ${loc?.longitude ?? 0.0}';
       final capturefile = await cameraController?.takePicture();
       if (capturefile == null) {
         if (mounted) setState(() => capturing = false);
         return;
       }
-      final file = await addTextToImage(capturefile, text);
+      final text = _stampText();
       if (!mounted) return;
       setState(() {
-        _file = XFile(file);
+        _file = capturefile;
         capturing = false;
+        _watermarking = true;
       });
+      await _applyWatermarkAsync(capturefile, text);
     } catch (e) {
       if (kDebugMode) {
         debugPrint(e.toString());
       }
       if (mounted) {
         context.showSnackBarMessage(e.toString());
-        setState(() => capturing = false);
+        setState(() {
+          capturing = false;
+          _watermarking = false;
+        });
       }
-    }
-  }
-
-  /// Decode cap keeps overlay GPU/CPU work bounded vs full [ResolutionPreset] capture.
-  static const int _overlayMaxWidth = 1600;
-
-  Future<String> addTextToImage(XFile imageFile, String text) async {
-    final Uint8List bytes = await imageFile.readAsBytes();
-    final ui.Codec codec = await ui.instantiateImageCodec(
-      bytes,
-      targetWidth: _overlayMaxWidth,
-    );
-    ui.Image? decoded;
-    try {
-      final ui.FrameInfo frameInfo = await codec.getNextFrame();
-      final image = frameInfo.image;
-      decoded = image;
-      final fontSize = (image.width * 0.038).clamp(22.0, 56.0);
-      final recorder = ui.PictureRecorder();
-      final canvas = Canvas(
-        recorder,
-        Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()),
-      );
-      canvas.drawImage(image, Offset.zero, Paint());
-
-      final textPainter = TextPainter(
-        text: TextSpan(
-          text: text,
-          style: TextStyle(
-            color: Colors.red,
-            backgroundColor: Colors.white,
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        textDirection: TextDirection.ltr,
-      );
-
-      textPainter.layout(maxWidth: image.width.toDouble() - 24);
-
-      final x = (image.width - textPainter.width - 16)
-          .clamp(0.0, image.width.toDouble());
-      final y = (image.height - textPainter.height - 16)
-          .clamp(0.0, image.height.toDouble());
-
-      textPainter.paint(canvas, Offset(x, y));
-
-      final picture = recorder.endRecording();
-      final img = await picture.toImage(image.width, image.height);
-      picture.dispose();
-      final ByteData? byteData =
-          await img.toByteData(format: ui.ImageByteFormat.png);
-      img.dispose();
-
-      final Uint8List pngBytes = byteData!.buffer.asUint8List();
-      final File file = File(imageFile.path);
-      await file.writeAsBytes(pngBytes);
-      return file.path;
-    } finally {
-      decoded?.dispose();
-      codec.dispose();
     }
   }
 
   Future<void> _setUpCameraController() async {
+    if (!mounted) return;
+    final gen = ++_cameraSetupGeneration;
     try {
-      List<CameraDescription> cameress = await availableCameras();
-      if (cameress.isNotEmpty) {
-        setState(() {
-          cameres = cameress;
+      final cameras = await availableCameras();
+      if (!mounted || gen != _cameraSetupGeneration) return;
 
-          if (kDebugMode) {
-            debugPrint('Available cameras: ${cameres.length}');
-            for (var i = 0; i < cameres.length; i++) {
-              debugPrint(
-                  'Camera $i: ${cameres[i].name} - ${cameres[i].lensDirection}');
-            }
-          }
-
-          // Properly identify front and back cameras by lensDirection
-          CameraDescription selectedCamera;
-          
-          if (isFront) {
-            // Find front camera explicitly by lens direction
-            try {
-              selectedCamera = cameres.firstWhere(
-                (camera) => camera.lensDirection == CameraLensDirection.front,
-              );
-              if (kDebugMode) {
-                debugPrint('Selected FRONT camera: ${selectedCamera.name}');
-              }
-            } catch (e) {
-              if (kDebugMode) {
-                debugPrint('Front camera not found, using first camera');
-              }
-              selectedCamera = cameres.first;
-            }
-          } else {
-            // Find back camera explicitly by lens direction
-            try {
-              selectedCamera = cameres.firstWhere(
-                (camera) => camera.lensDirection == CameraLensDirection.back,
-              );
-              if (kDebugMode) {
-                debugPrint('Selected BACK camera: ${selectedCamera.name}');
-              }
-            } catch (e) {
-              if (kDebugMode) {
-                debugPrint('Back camera not found, using first camera');
-              }
-              selectedCamera = cameres.first;
-            }
-          }
-          
-          cameraController = CameraController(
-            selectedCamera,
-            ResolutionPreset.high,
-            enableAudio: false,
-          );
-        });
-        cameraController?.initialize().then((value) {
-          setState(() {});
-        });
-      } else {
+      if (cameras.isEmpty) {
         context.showSnackBarMessage('Please allow camera permission.');
+        return;
       }
+
+      if (kDebugMode) {
+        debugPrint('Available cameras: ${cameras.length}');
+        for (var i = 0; i < cameras.length; i++) {
+          debugPrint(
+            'Camera $i: ${cameras[i].name} - ${cameras[i].lensDirection}',
+          );
+        }
+      }
+
+      final selectedCamera = _selectCamera(cameras);
+      final preset = await _resolveResolutionPreset();
+      if (!mounted || gen != _cameraSetupGeneration) return;
+
+      if (kDebugMode) {
+        debugPrint(
+          'Selected ${isFront ? 'FRONT' : 'BACK'} camera: '
+          '${selectedCamera.name} (preset: $preset)',
+        );
+      }
+
+      await _disposeCamera();
+      if (!mounted || gen != _cameraSetupGeneration) return;
+
+      final controller = CameraController(
+        selectedCamera,
+        preset,
+        enableAudio: false,
+        imageFormatGroup:
+            Platform.isIOS ? ImageFormatGroup.jpeg : ImageFormatGroup.yuv420,
+      );
+
+      await controller.initialize();
+      if (!mounted || gen != _cameraSetupGeneration) {
+        await controller.dispose();
+        return;
+      }
+
+      setState(() {
+        cameres = cameras;
+        cameraController = controller;
+      });
+    } on CameraException catch (e) {
+      if (!mounted || gen != _cameraSetupGeneration) return;
+      context.showSnackBarMessage(e.description ?? e.code);
     } catch (e) {
+      if (!mounted || gen != _cameraSetupGeneration) return;
       context.showSnackBarMessage(e.toString());
     }
   }

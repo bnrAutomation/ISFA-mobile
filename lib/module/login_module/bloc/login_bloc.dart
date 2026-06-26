@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/credential_storage.dart';
 import 'package:i_densfa/utility/device_auth_exception.dart';
 import 'package:i_densfa/utility/device_auth_session.dart';
 import 'package:i_densfa/utility/handler.dart' show resetHttpAuthGuards;
@@ -53,6 +54,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               await repo.getUserDetails(loginResponse.getUserId());
           if (logindata.data.role != "admin") {
             AppStorage().userDetail = logindata.data;
+            await CredentialStorage.persist(
+              remember: event.rememberMe,
+              username: event.username.trim(),
+              password: event.password.trim(),
+            );
             if (logindata.data.pin.length == 4 &&
                 (int.tryParse(logindata.data.pin) ?? -1) >= 0) {
               emit(LoginedSuccesfullState());

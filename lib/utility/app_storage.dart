@@ -28,12 +28,18 @@ class AppStorage {
 
   void logout() {
     _box.clear();
-    // Clear cached objects
     _cachedUserDetail = null;
     _cachedHomeInfo = null;
     _cachedUserDetailVersion = null;
     _cachedHomeInfoVersion = null;
-    // Device keys cleared with _box.clear()
+  }
+
+  /// Legacy keys — used only for one-time migration into [CredentialStorage].
+  bool get rememberCredentials => _box.get('remember_credentials') ?? false;
+  String? get savedUsername => _box.get('saved_username');
+  void clearSavedCredentials() {
+    _box.delete('remember_credentials');
+    _box.delete('saved_username');
   }
 
   /// Optimized userDetail getter with caching

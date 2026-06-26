@@ -241,6 +241,7 @@ class CustomHttpBaseClient extends BaseClient {
       path.contains("/iSFA/recruiter")||
       path.contains("iSFA/client/modules")||
       path.contains("/leave/user/")||
+      path.contains("/attendance")||
       path.contains("/authentication-service/iam/api/v1/user/detail")||
       path.contains("/authentication-service/iam/api/v1/authenticate")||
       path.contains('/campaign-service/iSFA/api/v1/campaign/client') ||
@@ -257,7 +258,7 @@ class CustomHttpBaseClient extends BaseClient {
         path.contains('getPromoterDetail') ||
         path.contains('getInventory') ||
         path.contains('getCategoryList') ||
-        
+         path.contains("/attendance")||
         path.contains('productNames') ||
         path.contains("api/check")||
         path.contains('MarkIn') ||

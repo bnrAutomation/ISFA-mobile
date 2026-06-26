@@ -4,7 +4,9 @@ abstract class CampaignEvent {}
 
 class GetStoreCampaignsEvent extends CampaignEvent {
   final String storeId;
-  GetStoreCampaignsEvent(this.storeId);
+  final String mechanicsName;
+  final String retailerName; 
+  GetStoreCampaignsEvent(this.storeId,this.mechanicsName,this.retailerName);
 }
 
 class GetFilledCampaignsEvent extends CampaignEvent {

@@ -9,6 +9,7 @@ import 'package:i_densfa/module/login_module/bloc/login_bloc.dart';
 import 'package:i_densfa/module/ui/custom_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/credential_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 import 'package:upgrader/upgrader.dart';
 import 'login_repository.dart';
@@ -23,17 +24,40 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final passwordController = TextEditingController();
   final usernameController = TextEditingController();
+  bool rememberMe = false;
+  int _loadToken = 0;
 
   @override
   void initState() {
-    //FlutterScreenshotSwitcher.disableScreenshots();
-
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadSavedCredentials());
+  }
+
+  Future<void> _loadSavedCredentials() async {
+    if (usernameController.text.isNotEmpty ||
+        passwordController.text.isNotEmpty) {
+      return;
+    }
+
+    final token = ++_loadToken;
+    final saved = await CredentialStorage.loadSaved();
+    if (!mounted || token != _loadToken || !saved.remember) return;
+
+    setState(() {
+      rememberMe = true;
+      if (saved.username != null && saved.username!.isNotEmpty) {
+        usernameController.text = saved.username!;
+      }
+      if (saved.password != null && saved.password!.isNotEmpty) {
+        passwordController.text = saved.password!;
+      }
+    });
   }
 
   @override
   void dispose() {
-    // FlutterScreenshotSwitcher.enableScreenshots();
+    usernameController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -73,7 +97,6 @@ class _LoginViewState extends State<LoginView> {
                             message: state.message,
                           );
                         } else if (state is LoginedSuccesfullState) {
-                          // FlutterScreenshotSwitcher.enableScreenshots();
                           Future.delayed(const Duration(seconds: 1), () {
                             if (context.mounted) {
                               context.hideKeyboard();
@@ -81,7 +104,6 @@ class _LoginViewState extends State<LoginView> {
                             }
                           });
                         } else if (state is MoveToSetPinState) {
-                          // FlutterScreenshotSwitcher.enableScreenshots();
                           context.push(AppPaths.pinset,
                               extra: context.read<LoginBloc>());
                         }
@@ -180,58 +202,84 @@ class _LoginViewState extends State<LoginView> {
                                     counterText: '',
                                   ),
                                 ),
-                                const SizedBox(height: 8.0),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: InkWell(
-                                    onTap: () {
-                                      context.hideKeyboard();
-                                      context.pushNamed(AppPaths.forgotpass);
-                                    },
-                                    child: Text(
-                                      "Forgot Password?",
-                                      textAlign: TextAlign.right,
-                                      style: GoogleFonts.metrophobic(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12.sp,
-                                        color: Colors.white,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: CheckboxListTile(
+                                        
+                                        value: rememberMe,
+                                        onChanged: (value) => setState(
+                                            () => rememberMe = value ?? false),
+                                        title: Text(
+                                          'Remember Me',
+                                          style: GoogleFonts.metrophobic(
+                                            fontSize: 12.sp,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        controlAffinity:
+                                            ListTileControlAffinity.leading,
+                                        contentPadding: const EdgeInsets.all(0),
+                                        activeColor: ColorConstants.amber,
+                                        checkColor: Colors.black,
+                                        dense: true,
                                       ),
                                     ),
-                                  ),
+                                    InkWell(
+                                      onTap: () {
+                                        context.hideKeyboard();
+                                        context.pushNamed(AppPaths.forgotpass);
+                                      },
+                                      child: Text(
+                                        "Forgot Password?",
+                                        textAlign: TextAlign.right,
+                                        style: GoogleFonts.metrophobic(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12.sp,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 20.h),
+                             SizedBox(height: 20.h),
                                 CustomButton(
                                   buttonText: "LOGIN",
                                   onPressed: () {
                                     if (state is! LogInLoadingState) {
                                       context.hideKeyboard();
                                       bloc.add(LoginSubmitEvent(
-                                          usernameController.text,
-                                          passwordController.text));
+                                        usernameController.text,
+                                        passwordController.text,
+                                        rememberMe: rememberMe,
+                                      ));
                                     }
                                   },
                                   isLoading: state is LogInLoadingState,
                                   isSuccess: state is LoginedSuccesfullState,
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    context.hideKeyboard();
-                                    context.pushNamed(
-                                      AppPaths.deviceRegistration,
-                                      extra: {
-                                        'username': usernameController.text,
-                                      },
-                                    );
-                                  },
-                                  child: Text(
-                                    'Request device change',
-                                    style: GoogleFonts.metrophobic(
-                                      fontSize: 12.sp,
-                                      color: Colors.white70,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
+                                // TextButton(
+                                //   onPressed: () {
+                                //     context.hideKeyboard();
+                                //     context.pushNamed(
+                                //       AppPaths.deviceRegistration,
+                                //       extra: {
+                                //         'username': usernameController.text,
+                                //       },
+                                //     );
+                                //   },
+                                //   child: Text(
+                                //     'Request device change',
+                                //     style: GoogleFonts.metrophobic(
+                                //       fontSize: 12.sp,
+                                //       color: Colors.white70,
+                                //       fontWeight: FontWeight.w500,
+                                //     ),
+                                //   ),
+                                // ),
                                 const SizedBox(height: 10),
                               ],
                             ),

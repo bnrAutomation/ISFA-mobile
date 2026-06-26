@@ -153,6 +153,8 @@ class ContinuousLocationService extends ChangeNotifier {
         onError: _onPositionStreamError,
       );
 
+      unawaited(_seedFromLastKnownPosition());
+
       _setSnapshot(
         ContinuousLocationSnapshot(
           phase: ContinuousLocationPhase.active,
@@ -195,6 +197,20 @@ class ContinuousLocationService extends ChangeNotifier {
     _scheduleBlockedRecoveryPoll();
   }
 
+  Future<void> _seedFromLastKnownPosition() async {
+    if (!_started || _snapshot.lastValidPosition != null) return;
+    try {
+      final lastKnown = await Geolocator.getLastKnownPosition();
+      if (lastKnown != null && _started) {
+        _onPositionUpdate(lastKnown);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('ContinuousLocationService seed error: $e');
+      }
+    }
+  }
+
   void _onPositionUpdate(Position pos) {
     if (!_started) return;
     final gen = ++_evalGeneration;
@@ -223,13 +239,10 @@ class ContinuousLocationService extends ChangeNotifier {
     });
   }
 
-  /// Prefer a recent validated stream fix; otherwise performs a one-shot
-  /// [Device.secureUserPosition] (same trust model as before the service existed).
-  Future<Position> resolveForSecureAction({
+  Position? _tryCachedValidPosition({
     Duration streamMaxAge = const Duration(seconds: 45),
     int maxFixAgeSeconds = 90,
-    LocationAccuracy fallbackDesiredAccuracy = LocationAccuracy.best,
-  }) async {
+  }) {
     final s = _snapshot;
     final p = s.lastValidPosition;
     final at = s.lastValidAt;
@@ -241,9 +254,158 @@ class ContinuousLocationService extends ChangeNotifier {
             maxFixAgeSeconds) {
       return p;
     }
+    return null;
+  }
+
+  Future<Position?> _validatePosition(
+    Position pos, {
+    required int maxFixAgeSeconds,
+  }) async {
+    final reason = await Device().secureRejectionReasonForPosition(
+      pos,
+      maxFixAgeSeconds: maxFixAgeSeconds,
+    );
+    if (reason != null) return null;
+    _setSnapshot(
+      ContinuousLocationSnapshot(
+        phase: _snapshot.phase == ContinuousLocationPhase.idle
+            ? ContinuousLocationPhase.active
+            : _snapshot.phase,
+        lastValidPosition: pos,
+        lastValidAt: DateTime.now(),
+      ),
+    );
+    return pos;
+  }
+
+  Future<Position?> _waitForStreamValidPosition(
+    Duration timeout, {
+    required int maxFixAgeSeconds,
+  }) async {
+    final immediate = _tryCachedValidPosition(maxFixAgeSeconds: maxFixAgeSeconds);
+    if (immediate != null) return immediate;
+
+    final completer = Completer<Position?>();
+    void onUpdate() {
+      final fix = _tryCachedValidPosition(maxFixAgeSeconds: maxFixAgeSeconds);
+      if (fix != null && !completer.isCompleted) {
+        completer.complete(fix);
+      }
+    }
+
+    addListener(onUpdate);
+    final timer = Timer(timeout, () {
+      if (!completer.isCompleted) completer.complete(null);
+    });
+    onUpdate();
+
+    try {
+      return await completer.future;
+    } finally {
+      removeListener(onUpdate);
+      timer.cancel();
+    }
+  }
+
+  Future<Position?> _tryTimedCurrentPosition(
+    LocationAccuracy accuracy,
+    Duration timeLimit, {
+    required int maxFixAgeSeconds,
+  }) async {
+    try {
+      final pos = await Geolocator.getCurrentPosition(
+        locationSettings: LocationSettings(
+          accuracy: accuracy,
+          timeLimit: timeLimit,
+        ),
+      );
+      return _validatePosition(pos, maxFixAgeSeconds: maxFixAgeSeconds);
+    } on TimeoutException {
+      return null;
+    }
+  }
+
+  /// Prefer a recent validated stream fix; otherwise performs a one-shot
+  /// [Device.secureUserPosition] (same trust model as before the service existed).
+  Future<Position> resolveForSecureAction({
+    Duration streamMaxAge = const Duration(seconds: 45),
+    int maxFixAgeSeconds = 90,
+    LocationAccuracy fallbackDesiredAccuracy = LocationAccuracy.best,
+  }) async {
+    final cached = _tryCachedValidPosition(
+      streamMaxAge: streamMaxAge,
+      maxFixAgeSeconds: maxFixAgeSeconds,
+    );
+    if (cached != null) return cached;
     return Device().secureUserPosition(
       desiredAccuracy: fallbackDesiredAccuracy,
       maxFixAgeSeconds: maxFixAgeSeconds,
+    );
+  }
+
+  /// Faster resolve for camera stamp and other UI-sensitive flows.
+  ///
+  /// Tries cached stream fix, last-known position, timed [getCurrentPosition]
+  /// (medium then low), a short stream wait, then the slow secure fallback.
+  Future<Position> resolveForSecureActionFast({
+    Duration streamMaxAge = const Duration(seconds: 45),
+    int maxFixAgeSeconds = 90,
+    Duration streamWait = const Duration(seconds: 3),
+    Duration positionTimeLimit = const Duration(seconds: 5),
+    LocationAccuracy fallbackDesiredAccuracy = LocationAccuracy.medium,
+  }) async {
+    final cached = _tryCachedValidPosition(
+      streamMaxAge: streamMaxAge,
+      maxFixAgeSeconds: maxFixAgeSeconds,
+    );
+    if (cached != null) return cached;
+
+    if (!_started) {
+      await start();
+    }
+
+    final afterStart = _tryCachedValidPosition(
+      streamMaxAge: streamMaxAge,
+      maxFixAgeSeconds: maxFixAgeSeconds,
+    );
+    if (afterStart != null) return afterStart;
+
+    final lastKnown = await Geolocator.getLastKnownPosition();
+    if (lastKnown != null) {
+      final validated = await _validatePosition(
+        lastKnown,
+        maxFixAgeSeconds: maxFixAgeSeconds,
+      );
+      if (validated != null) return validated;
+    }
+
+    for (final accuracy in [
+      LocationAccuracy.medium,
+      LocationAccuracy.low,
+    ]) {
+      final timed = await _tryTimedCurrentPosition(
+        accuracy,
+        positionTimeLimit,
+        maxFixAgeSeconds: maxFixAgeSeconds,
+      );
+      if (timed != null) return timed;
+    }
+
+    final streamFix = await _waitForStreamValidPosition(
+      streamWait,
+      maxFixAgeSeconds: maxFixAgeSeconds,
+    );
+    if (streamFix != null) return streamFix;
+
+    final lastChance = await _tryTimedCurrentPosition(
+      fallbackDesiredAccuracy,
+      positionTimeLimit * 2,
+      maxFixAgeSeconds: maxFixAgeSeconds,
+    );
+    if (lastChance != null) return lastChance;
+
+    throw LocationSpoofingException(
+      'Unable to get a fresh GPS fix. Please try again in an open area.',
     );
   }
 }
