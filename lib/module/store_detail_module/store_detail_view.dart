@@ -15,8 +15,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:i_densfa/module/campaign_module/new_models/campaign.dart';
 import 'package:i_densfa/module/campaign_module/view/campaign_view.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';
+import 'package:i_densfa/module/ui/button_views.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../../utility/app_constants.dart';
@@ -198,17 +200,22 @@ class StoreDetailView extends StatelessWidget {
                                       width: 1.sw,
                                       height: 1.sh,
                                       child: CampaignView(
-                                        retailerName: bloc.beatPlanModel.storeName,
-                                          mechanicsContact: bloc.beatPlanModel.mechanicContact,
-                                          mechanicsName: bloc.beatPlanModel.mechanicName,
-                                          storeId: bloc.beatPlanModel.storeId,
-                                          from: AppPaths.store,
-                                          storeLat:
-                                              bloc.beatPlanModel.latitude ??
-                                                  0.0,
-                                          storeLong:
-                                              bloc.beatPlanModel.longitude ??
-                                                  0.0),
+                                        key: ValueKey(
+                                            bloc.campaignListRefreshToken),
+                                        retailerName:
+                                            bloc.beatPlanModel.storeName,
+                                        mechanicsContact:
+                                            bloc.beatPlanModel.mechanicContact,
+                                        mechanicsName:
+                                            bloc.beatPlanModel.mechanicName,
+                                        storeId: bloc.beatPlanModel.storeId,
+                                        from: AppPaths.store,
+                                        storeLat:
+                                            bloc.beatPlanModel.latitude ??
+                                                0.0,
+                                        storeLong:
+                                            bloc.beatPlanModel.longitude ??
+                                                0.0),
                                     ),
 
                               // blueCard(context,
@@ -362,15 +369,15 @@ class StoreDetailView extends StatelessWidget {
                             ));
                       },
                     ),
-                    // SpeedDialChild(
-                    //   child: const Icon(Icons.campaign),
-                    //   foregroundColor: Colors.white,
-                    //   backgroundColor: Theme.of(context).primaryColor,
-                    //   label: 'Campaign',
-                    //   onPressed: () => bloc.add(GotoCampaignEvent()),
-                    //   closeSpeedDialOnPressed: false,
-                    // ),
-
+                    if(AppStorage().userDetail?.configuration.requiredAddCampaignBeat??false)
+                    SpeedDialChild(
+                      child: const Icon(Icons.campaign),
+                      foregroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      label: 'Add Campaign',
+                      onPressed: () =>
+                          _showAddCampaignBottomSheet(context, bloc),
+                    ),
                     SpeedDialChild(
                       child: const Icon(Icons.feedback),
                       foregroundColor: Colors.white,
@@ -1211,6 +1218,31 @@ class StoreDetailView extends StatelessWidget {
     );
   }
 
+  /// Opens the Add Campaign bottom sheet and fetches the campaign list.
+  void _showAddCampaignBottomSheet(
+      BuildContext context, StoreDetailBloc bloc) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (sheetContext) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(sheetContext).viewInsets.bottom,
+          ),
+          child: BlocProvider.value(
+            value: bloc..add(FetchCampaignsStoreDetailEvent()),
+            child: const _AddCampaignBottomSheet(),
+          ),
+        );
+      },
+    ).then((_) {
+      bloc.add(GetCampaignFilledEvent());
+    });
+  }
+
   Future<bool?> _showQuitWarning(BuildContext context) {
     return showCupertinoModalPopup(
         context: context,
@@ -1256,6 +1288,357 @@ class StoreDetailView extends StatelessWidget {
   //     ),
   //   );
   // }
+}
+
+class _AddCampaignBottomSheet extends StatefulWidget {
+  const _AddCampaignBottomSheet();
+
+  @override
+  State<_AddCampaignBottomSheet> createState() =>
+      _AddCampaignBottomSheetState();
+}
+
+class _AddCampaignBottomSheetState extends State<_AddCampaignBottomSheet> {
+  AllCampaignModel? selectedCampaign;
+  DateTime visitDate = DateTime.now();
+  final agendaController = TextEditingController();
+  String? submitErrorMessage;
+
+  @override
+  void dispose() {
+    agendaController.dispose();
+    super.dispose();
+  }
+
+  void _showColoredSnackBar(BuildContext context, String message,
+      {required Color backgroundColor}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: backgroundColor,
+      ),
+    );
+  }
+
+  Widget _buildCampaignDropdown({
+    required TextTheme textTheme,
+    required List<AllCampaignModel> campaigns,
+    required bool isFetching,
+    required bool isSubmitting,
+    required String? fetchError,
+    required StoreDetailBloc bloc,
+  }) {
+    if (isFetching) {
+      return InputDecorator(
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.h),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 18.r,
+                height: 18.r,
+                child: const CircularProgressIndicator(strokeWidth: 2),
+              ),
+              SizedBox(width: 10.w),
+              Text('Loading campaigns...', style: textTheme.bodyMedium),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (fetchError != null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: EdgeInsets.all(10.w),
+            decoration: BoxDecoration(
+              color: Colors.red.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8.r),
+              border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+            ),
+            child: Text(
+              fetchError,
+              style: textTheme.bodySmall?.copyWith(color: Colors.red),
+            ),
+          ),
+          SizedBox(height: 8.h),
+          TextButton.icon(
+            onPressed: () => bloc.add(FetchCampaignsStoreDetailEvent()),
+            icon: const Icon(Icons.refresh),
+            label: const Text('Retry'),
+          ),
+        ],
+      );
+    }
+
+    if (campaigns.isEmpty) {
+      return InputDecorator(
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.h),
+          child: Text(
+            'No campaigns available',
+            style: textTheme.bodyMedium?.copyWith(color: Colors.grey),
+          ),
+        ),
+      );
+    }
+
+    return DropDownSearchWidget<AllCampaignModel>(
+      enabled: !isSubmitting,
+      options: campaigns,
+      hint: 'Search campaign...',
+      selectedVal: selectedCampaign,
+      compareFn: (a, b) => a.uuid == b.uuid,
+      filterFn: (item, query) =>
+          item?.name.toLowerCase().contains(query.trim().toLowerCase()) ??
+          false,
+      selectedWidget: Text(
+        selectedCampaign?.name ?? 'Search campaign...',
+        style: textTheme.bodyMedium?.copyWith(
+          color: selectedCampaign == null ? Colors.grey : null,
+        ),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      ),
+      listItemWidget: (item) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            item?.name ?? '',
+            style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          if ((item?.description ?? '').isNotEmpty) ...[
+            SizedBox(height: 2.h),
+            Text(
+              "Description: ${item!.description}",
+              style: textTheme.bodySmall?.copyWith(
+                color: Colors.grey.shade600,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ],
+      ),
+      valChanged: (campaign) {
+        setState(() {
+          selectedCampaign = campaign;
+          submitErrorMessage = null;
+        });
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
+      child: BlocConsumer<StoreDetailBloc, StoreDetailState>(
+        listenWhen: (previous, current) =>
+            current is AddCampaignSuccessStoreDetailState ||
+            current is AddCampaignSubmitErrorState,
+        listener: (context, state) {
+          if (state is AddCampaignSuccessStoreDetailState) {
+            Navigator.pop(context);
+            _showColoredSnackBar(
+              context,
+              'Campaign added successfully',
+              backgroundColor: Colors.green,
+            );
+          } else if (state is AddCampaignSubmitErrorState) {
+            setState(() => submitErrorMessage = state.message);
+            _showColoredSnackBar(
+              context,
+              state.message,
+              backgroundColor: Colors.red,
+            );
+          }
+        },
+        builder: (context, state) {
+          final bloc = context.read<StoreDetailBloc>();
+          final isFetching = state is AddCampaignFetchLoadingState;
+          final isSubmitting = state is AddCampaignSubmitLoadingState;
+          final fetchError =
+              state is AddCampaignFetchErrorState ? state.message : null;
+          final campaigns = state is AddCampaignLoadedStoreDetailState
+              ? state.campaigns
+              : bloc.availableCampaigns;
+
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Add Campaign',
+                  textAlign: TextAlign.center,
+                  style: textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  'Campaign',
+                  style: textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 6.h),
+                _buildCampaignDropdown(
+                  textTheme: textTheme,
+                  campaigns: campaigns,
+                  isFetching: isFetching,
+                  isSubmitting: isSubmitting,
+                  fetchError: fetchError,
+                  bloc: bloc,
+                ),
+                SizedBox(height: 16.h),
+                if (submitErrorMessage != null) ...[
+                  Container(
+                    padding: EdgeInsets.all(10.w),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8.r),
+                      border: Border.all(
+                          color: Colors.red.withValues(alpha: 0.3)),
+                    ),
+                    child: Text(
+                      submitErrorMessage!,
+                      style:
+                          textTheme.bodySmall?.copyWith(color: Colors.red),
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                ],
+                Text(
+                  'Visit Date',
+                  style: textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 6.h),
+                InputDecorator(
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                  ),
+                  child: TextField(
+                    readOnly: true,
+                    controller: TextEditingController(
+                      text: visitDate.toStringFormat('dd MMM yyyy'),
+                    ),
+                    onTap: isSubmitting
+                        ? null
+                        : () async {
+                            final now = DateTime.now();
+                            final selectedDate = await showDatePicker(
+                              context: context,
+                              initialDate: visitDate,
+                              firstDate: now,
+                              lastDate: DateTime(now.year + 1, 12, 31),
+                            );
+                            if (selectedDate != null) {
+                              setState(() => visitDate = selectedDate);
+                            }
+                          },
+                    decoration: const InputDecoration(
+                      enabledBorder: InputBorder.none,
+                      suffixIcon: Icon(Icons.calendar_month_outlined),
+                      hintText: 'DD MMM YYYY',
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  'Agenda / Reason',
+                  style: textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 6.h),
+                TextField(
+                  controller: agendaController,
+                  maxLines: 3,
+                  enabled: !isSubmitting,
+                  decoration: InputDecoration(
+                    hintText: 'Enter reason for visit',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                  ),
+                  onChanged: (_) {
+                    if (submitErrorMessage != null) {
+                      setState(() => submitErrorMessage = null);
+                    }
+                  },
+                ),
+                SizedBox(height: 20.h),
+                FilledButton(
+                  onPressed: selectedCampaign == null || isSubmitting
+                      ? null
+                      : () {
+                          final agenda = agendaController.text.trim();
+                          if (agenda.isEmpty) {
+                            setState(() => submitErrorMessage =
+                                'Please enter agenda / reason');
+                            return;
+                          }
+                          bloc.add(
+                            AddCampaignStoreDetailEvent(
+                              campaignUuid: selectedCampaign!.uuid,
+                              visitDate: visitDate,
+                              agenda: agenda,
+                            ),
+                          );
+                        },
+                  style: FilledButton.styleFrom(
+                    minimumSize: Size(double.infinity, 48.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                  ),
+                  child: isSubmitting
+                      ? SizedBox(
+                          width: 20.r,
+                          height: 20.r,
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          'Add Campaign',
+                          style: textTheme.titleMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
 
 class StoreDetailCard extends StatelessWidget {

@@ -262,6 +262,8 @@ class URLConstants {
       '$baseURLStart/campaign-service/iSFA/api/v1/campaign';
   static const String saveCampaignImage =
       '$baseURLStart/campaign-service/iSFA/api/v1/campaign/image';
+  static const String storeBeatPlan =
+      '$baseURLStart/campaign-service/iSFA/api/v1/storeBeatPlan';
 
   static const String saveCampaignAnswers = '$apiBaseUrl/saveCampaignAnswers';
   static const String getStoreDetail = '$apiBaseUrl/getStoreDetail';

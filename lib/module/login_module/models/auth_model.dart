@@ -164,6 +164,8 @@ class UserInfo {
       configuration: data['configuration'] != null
           ? Configuration.fromJson(data['configuration'])
           : Configuration(
+             requiredAddMechanic:false,
+              requiredAddCampaignBeat:false,
               requiredMultiStore:false,
               requiredDoubleMarkIn:false,
               requiredGstfromRetailer:false,
@@ -276,10 +278,14 @@ class Configuration {
   bool requiredGstfromRetailer;
   bool requiredDoubleMarkIn;
   bool requiredMultiStore;
+  bool requiredAddCampaignBeat;
+  bool requiredAddMechanic;
 
   Configuration({
-     required this.requiredMultiStore,
-     required this.requiredDoubleMarkIn,
+       required this.requiredAddMechanic,
+     required this.requiredAddCampaignBeat,
+       required this.requiredMultiStore,
+       required this.requiredDoubleMarkIn,
       required this.requiredGstfromRetailer,
       required this.requiredFwpStore,
       required this.requiredStartDuty,
@@ -296,6 +302,8 @@ class Configuration {
       required this.requiredClientNameForSurvey});
 
   factory Configuration.fromJson(Map<String, dynamic> json) => Configuration(
+    requiredAddMechanic: json["requiredAddMechanic"]?? false,
+      requiredAddCampaignBeat:json["requiredAddCampaignBeat"]?? false,
       requiredMultiStore:json["requiredMultiStore"]??false,
       requiredDoubleMarkIn:json["requiredDoubleMarkIn"]??false,
       requiredGstfromRetailer: json['requiredGstfromRetailer']??false,
@@ -314,6 +322,8 @@ class Configuration {
       requiredClientNameForSurvey: json['requiredClientNameForSurvey'] ?? true);
 
   Map<String, dynamic> toJson() => {
+    "requiredAddMechanic":requiredAddMechanic,
+        "requiredAddCampaignBeat":requiredAddCampaignBeat,
         "requiredMultiStore":requiredMultiStore,
         "requiredDoubleMarkIn":requiredDoubleMarkIn,
         "requiredGstfromRetailer":requiredGstfromRetailer,

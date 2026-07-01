@@ -50,7 +50,7 @@ class GetStoreDetailDataModel {
   double latitude;
   double longitude;
   String phoneNo;
-  int zipcode;
+  String zipcode;
   List<StoreNoteModel> userNote;
   FormFilledModel? formFilled;
 
@@ -70,7 +70,7 @@ class GetStoreDetailDataModel {
         storeBranch: json["storeBranch"] ?? '',
         storeType: json["storeType"] ?? "",
         activeStatus: json["activeStatus"] ?? false,
-        zipcode: json["zipcode"] ?? "",
+        zipcode: (json["zipcode"]??12345).toString(),
         phoneNo: json['phoneNo'] ?? "",
         latitude: double.tryParse(json['latitude'].toString()) ?? 0.0,
         longitude: double.tryParse(json['logitude'].toString()) ?? 0.0,

@@ -13,6 +13,7 @@ import 'package:i_densfa/module/ui/app_pop_view.dart';
 import 'package:i_densfa/module/ui/custom_search_bar.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/add_retailer_helper.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 import 'package:simple_speed_dial/simple_speed_dial.dart';
 import 'package:upgrader/upgrader.dart';
@@ -79,7 +80,7 @@ class _MyScheduleViewState extends State<MyScheduleView>
                         final bloc = context.read<MyScheduleBloc>();
                         return _floatingActionButtons(
                           bloc.allPlans,
-                          showAddMechanic: bloc.mechanicVisits.isEmpty,
+                          showAddMechanic:(bloc.mechanicVisits.isEmpty && (AppStorage().userDetail?.configuration.requiredAddMechanic??false))
                         );
                       },
                     );

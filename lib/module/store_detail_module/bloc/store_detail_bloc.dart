@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
+import 'package:i_densfa/module/campaign_module/new_models/campaign.dart';
 import 'package:i_densfa/module/my_schedule_module/beat_plan_model.dart';
 import 'package:i_densfa/module/promoter_module/feedback/model/feedback_model.dart';
 import 'package:i_densfa/module/store_detail_module/store_detail_model.dart';
@@ -29,6 +30,8 @@ class StoreDetailBloc extends BaseBloc<StoreDetailEvent, StoreDetailState> with 
   List<CampaignDetailModel> campaigns = [];
   List<FeedbackDataList> feedbackList = [];
   List<String> filledCampaignList = [];
+  List<AllCampaignModel> availableCampaigns = [];
+  int campaignListRefreshToken = 0;
   final StoreDetailRepository repo;
   GetStoreDetailDataModel? details;
   Position? userLocation;
@@ -68,6 +71,8 @@ class StoreDetailBloc extends BaseBloc<StoreDetailEvent, StoreDetailState> with 
       }
     });
     on(_deleteNote);
+    on(_fetchCampaignsForAdd);
+    on(_addCampaignToStore);
     on<ChangeStateEvent>((event, emit) => emit(ChangeState()));
     add(GetStoreDetailsEvent());
     add(GetCampaignFilledEvent());
@@ -152,6 +157,34 @@ class StoreDetailBloc extends BaseBloc<StoreDetailEvent, StoreDetailState> with 
 
   void gotoCampaignEvent(GotoCampaignEvent event, emit) {
     emit(CampaignsLoadedStoreDetailState());
+  }
+
+  Future<void> _fetchCampaignsForAdd(
+      FetchCampaignsStoreDetailEvent event, emit) async {
+    try {
+      emit(AddCampaignFetchLoadingState());
+      availableCampaigns = await repo.fetchAllCampaigns();
+      emit(AddCampaignLoadedStoreDetailState(availableCampaigns));
+    } catch (e) {
+      emit(AddCampaignFetchErrorState(e.toString()));
+    }
+  }
+
+  Future<void> _addCampaignToStore(
+      AddCampaignStoreDetailEvent event, emit) async {
+    try {
+      emit(AddCampaignSubmitLoadingState());
+      await repo.postStoreBeatPlan(
+        storeId: beatPlanModel.storeId,
+        campaignUuid: event.campaignUuid,
+        visitDate: event.visitDate,
+        agenda: event.agenda,
+      );
+      campaignListRefreshToken++;
+      emit(AddCampaignSuccessStoreDetailState());
+    } catch (e) {
+      emit(AddCampaignSubmitErrorState(e.toString()));
+    }
   }
 
   Future<void> _markoutWithImage(

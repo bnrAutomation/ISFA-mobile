@@ -14,6 +14,7 @@ import 'package:i_densfa/module/promoter_module/feedback/model/feedback_model.da
 import 'package:i_densfa/module/store_detail_module/store_detail_model.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/app_storage.dart';
+import 'package:i_densfa/utility/extensions.dart';
 import 'package:i_densfa/utility/services/markin_markout_offline_service.dart';
 
 class StoreDetailRepository {
@@ -123,6 +124,53 @@ class StoreDetailRepository {
       // Other errors should still bubble up for proper handling
       rethrow;
     }
+  }
+
+  Future<List<AllCampaignModel>> fetchAllCampaigns() async {
+    final response = await client.get(
+      Uri.parse(URLConstants.getAllCampaignsList),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${AppStorage().authToken}',
+      },
+    );
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      final List<dynamic> rawList =
+          body is List ? body : (body['data'] as List? ?? []);
+      return rawList
+          .map((e) => AllCampaignModel.fromJson(e as Map<String, dynamic>))
+          .where((element) => element.status == 'PUBLISHED')
+          .where((element) => !element.isNegative())
+          .toList();
+    }
+    throw getErrorMessage(response);
+  }
+
+  Future<bool> postStoreBeatPlan({
+    required int storeId,
+    required String campaignUuid,
+    required DateTime visitDate,
+    required String agenda,
+  }) async {
+    final response = await client.post(
+      Uri.parse(URLConstants.storeBeatPlan),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${AppStorage().authToken}',
+      },
+      body: json.encode({
+        'storeId': storeId,
+        'campaignUuid': campaignUuid,
+        'visitDate': visitDate.toStringFormat('yyyy-MM-dd'),
+        'agenda': agenda,
+      }),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    }
+    throw getErrorMessage(response);
   }
 
   Future<bool> deleteNoteForStore(int noteId) async {

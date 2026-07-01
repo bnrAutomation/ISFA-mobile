@@ -24,6 +24,9 @@ class PinLoginRepository {
       if (kDebugMode) {
         debugPrint('verifyPinSetting: unauthorized (401)');
       }
+      if (kDebugMode) {
+        debugPrint(AppStorage().userDetail?.pin);
+      }
       throw "Incorrect Pin";
     } else if (response.statusCode == 200) {
       return await _getUserDetails();

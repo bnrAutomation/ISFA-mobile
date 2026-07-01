@@ -47,9 +47,9 @@ class StoreItemModel {
   String toRawJson() => json.encode(toJson());
 
   factory StoreItemModel.fromJson(Map<String, dynamic> json) => StoreItemModel(
-        storeId: json["storeId"],
-        storeCode: json["storeCode"],
-        name: json["name"],
+        storeId: json["storeId"]??-1,
+        storeCode: json["storeCode"]??"",
+        name: json["name"]??"NA",
       );
 
   Map<String, dynamic> toJson() => {

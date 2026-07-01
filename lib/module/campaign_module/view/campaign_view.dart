@@ -143,6 +143,7 @@ class CampaignView extends StatelessWidget {
                               }
                               bloc.selectedMechanicContact = mechanicsContact;
                               bloc.selectedMechanicName = mechanicsName;
+                              bloc.retailerName = retailerName;
                               bloc.selectedCampaign = bloc.storeCampaigns[index];
                               bloc.add(GetCampaignSectionsFirstTime(bloc.storeCampaigns[index].uuid, index));
 

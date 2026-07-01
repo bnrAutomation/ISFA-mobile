@@ -56,7 +56,8 @@ class CampaignRepository {
     }
     try {
       final response = await client.get(
-        Uri.parse(URLConstants.getAllClientCampaigns).replace(
+        Uri.parse(URLConstants.getAllClientCampaigns)
+        .replace(
             queryParameters: {'userId': userId.toString(), "storeId": storeId}),
             headers: {'Content-Type': 'application/json',"Authorization": "Bearer ${AppStorage().authToken}"});
       if (response.statusCode == 200) {
@@ -91,7 +92,8 @@ class CampaignRepository {
     }
     
     try {
-      final uri = Uri.parse(URLConstants.getAllCampaigns).replace(
+      final uri = Uri.parse(URLConstants.getAllCampaigns)
+      .replace(
           queryParameters: {'userId': userId.toString(), "storeId": storeId});
       final response = await client.get(uri);
       if (response.statusCode == 200) {

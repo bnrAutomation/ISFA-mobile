@@ -44,3 +44,17 @@ final class MarkOutWithImage extends StoreDetailEvent {
   final XFile file;
   MarkOutWithImage(this.file);
 }
+
+class FetchCampaignsStoreDetailEvent extends StoreDetailEvent {}
+
+class AddCampaignStoreDetailEvent extends StoreDetailEvent {
+  final String campaignUuid;
+  final DateTime visitDate;
+  final String agenda;
+
+  AddCampaignStoreDetailEvent({
+    required this.campaignUuid,
+    required this.visitDate,
+    required this.agenda,
+  });
+}

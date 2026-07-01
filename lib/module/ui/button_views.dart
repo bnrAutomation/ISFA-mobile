@@ -92,7 +92,8 @@ class DropDownSearchWidget<T> extends StatefulWidget {
   final Widget selectedWidget;
   final Widget Function(T?) listItemWidget;
   final Future<bool?> Function(T?)? onBeforePopupopen;
-  
+  final bool Function(T, T)? compareFn;
+
   const DropDownSearchWidget(
       {super.key,
        required this.enabled,
@@ -103,7 +104,8 @@ class DropDownSearchWidget<T> extends StatefulWidget {
       required this.selectedWidget,
       required this.listItemWidget,
       this.filterFn,
-      this.onBeforePopupopen});
+      this.onBeforePopupopen,
+      this.compareFn});
 
   @override
   State<DropDownSearchWidget<T>> createState() =>
@@ -160,7 +162,7 @@ class _DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
       items:  (f, cs) =>  widget.options,
       selectedItem: widget.selectedVal,
       onChanged: widget.valChanged,
-      compareFn: (item1, item2) => item1 == item2,
+      compareFn: widget.compareFn ?? (item1, item2) => item1 == item2,
       filterFn: (item, filter) => widget.filterFn!(item, filter),
       decoratorProps: const DropDownDecoratorProps(
         decoration: InputDecoration(
