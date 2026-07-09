@@ -284,7 +284,9 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
             try {
               final isOnline = await _offlineService.isOnline();
               if (isOnline) {
-                recs = await repo.getRecruiters(retailerName);
+                recs = await repo.getRecruiters(retailerName,selectedMechanicName,[
+      'master data',
+     ].contains(selectedCampaign?.name.trim().toLowerCase()));
               }
               if (recs.isNotEmpty) {
                 final optionsList = recs.map((e) => e.counterName).toList();
@@ -404,7 +406,9 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
             try {
               final isOnline = await _offlineService.isOnline();
               if (isOnline) {
-                recs = await repo.getRecruiters(retailerName);
+                recs = await repo.getRecruiters(retailerName,selectedMechanicName,[
+      'master data',
+     ].contains(selectedCampaign?.name.trim().toLowerCase()));
               }
               if (recs.isNotEmpty) {
                 final optionsList = recs.map((e) => e.counterName).toList();
@@ -1843,7 +1847,9 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       if (existingRecCase || revisitCase || buyfrom) {
         emit(CampaignListLoadingState());
         try {
-          recs = await repo.getRecruiters(retailerName);
+          recs = await repo.getRecruiters(retailerName,selectedMechanicName,[
+      'master data',
+     ].contains(selectedCampaign?.name.trim().toLowerCase()));
           // .where((element) =>
           //     element.isNew == (revisitCase || existingRecCase))
           // .toList();
@@ -2292,7 +2298,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
                   element.questionOrder == orderIndex)
               ?.answer ??
           "";
-      if (selectedCampaign?.name.toLowerCase() == "master data") {
+      if (["master data","mechanic visit"].contains(selectedCampaign?.name.toLowerCase())) {
         recruiterModelList.clear();
       }
       if (selectedRetailerOption.contains(",")) {
@@ -2317,6 +2323,7 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
     }
     if ([
       'master data',
+      "mechanic visit",
       'mobil miles mechanic registration',
       'mobil miles mechanic redemption'
     ].contains(selectedCampaign?.name.trim().toLowerCase())) {

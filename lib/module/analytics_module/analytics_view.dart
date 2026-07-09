@@ -491,6 +491,7 @@ class AnalyticsView extends StatelessWidget {
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
+                        
                         item.target.toString(),
                         textAlign: TextAlign.center,
                         style: textTheme.titleMedium,

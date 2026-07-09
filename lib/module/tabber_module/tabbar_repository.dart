@@ -44,7 +44,7 @@ class TabbarRepository {
       final multipartFile = await MultipartFile.fromPath(
         'file',
         filePath?.path ?? "",
-        contentType: MediaType('image', 'jpeg'),
+        contentType: MediaType('image', 'webp'),
       );
       request.files.add(multipartFile);
     }
@@ -121,6 +121,7 @@ class TabbarRepository {
       file.path,
       directory,
       quality: size,
+      format: CompressFormat.webp,
     );
     final listImg = await img?.readAsBytes();
     // checking if file size if more than 1000 Kb then further reduce it

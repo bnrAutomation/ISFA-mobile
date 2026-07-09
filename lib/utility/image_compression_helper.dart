@@ -55,6 +55,7 @@ class ImageCompressionHelper {
       filePath,
       directory,
       quality: compressionQuality,
+       format: CompressFormat.webp,
     );
 
     if (compressedFile == null) {
@@ -142,7 +143,7 @@ class ImageCompressionHelper {
     final multipartFile = await MultipartFile.fromPath(
       'image',
       compressedFile.path,
-      contentType: MediaType('image', 'jpeg'),
+      contentType: MediaType('image', 'webp'),
     );
     request.files.add(multipartFile);
     request.fields.addAll({"activity": activity});

@@ -252,6 +252,7 @@ class CustomHttpBaseClient extends BaseClient {
 
     // Do NOT cache these endpoints (always fetch fresh data)
     if (
+        path.contains("api/v1/analytics")||
         path.contains("getEmpLeaveBalanceDetails")||
         path.contains("getEmpLeaveDetails")||
         path.contains("auth")||

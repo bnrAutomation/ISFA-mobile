@@ -369,7 +369,7 @@ class StoreDetailView extends StatelessWidget {
                             ));
                       },
                     ),
-                    if(AppStorage().userDetail?.configuration.requiredAddCampaignBeat??false)
+                    if((AppStorage().userDetail?.configuration.requiredAddCampaignBeat??false) && (bloc.beatPlanModel.mechanicName.isEmpty))
                     SpeedDialChild(
                       child: const Icon(Icons.campaign),
                       foregroundColor: Colors.white,
@@ -1568,7 +1568,7 @@ class _AddCampaignBottomSheetState extends State<_AddCampaignBottomSheet> {
                 ),
                 SizedBox(height: 16.h),
                 Text(
-                  'Agenda / Reason',
+                  'Remark',
                   style: textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -1598,7 +1598,7 @@ class _AddCampaignBottomSheetState extends State<_AddCampaignBottomSheet> {
                           final agenda = agendaController.text.trim();
                           if (agenda.isEmpty) {
                             setState(() => submitErrorMessage =
-                                'Please enter agenda / reason');
+                                'Please enter Remark');
                             return;
                           }
                           bloc.add(

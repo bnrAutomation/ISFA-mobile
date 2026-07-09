@@ -63,7 +63,7 @@ class _ApplyAttendanceFormViewState extends State<ApplyAttendanceView> {
                                               },
        
         firstDate: DateTime(now.year, now.month - 1, now.day),
-        lastDate: DateTime(now.year, now.month, now.day - 1));
+        lastDate: AppStorage().userDetail?.companyName.toLowerCase() == "BrotherInternational".toLowerCase()?  DateTime(now.year, now.month, now.day): DateTime(now.year, now.month, now.day - 1));
     if (date != null && context.mounted) {
       bloc.add(FromDateAttendanceEvent(date));
     }
@@ -248,8 +248,7 @@ class _ApplyAttendanceFormViewState extends State<ApplyAttendanceView> {
                                             },
                                             firstDate: DateTime(now.year,
                                                 now.month - 1, now.day),
-                                            lastDate: DateTime(now.year,
-                                                now.month, now.day - 1),
+                                            lastDate:AppStorage().userDetail?.companyName.toLowerCase() == "BrotherInternational".toLowerCase()?  DateTime(now.year, now.month, now.day): DateTime(now.year, now.month, now.day - 1),
                                           );
                                           if (date != null &&
                                               context.mounted) {

@@ -115,7 +115,7 @@ class PromoterRepository {
       //  final file = await compressImage(uploadFile!);
       final multipartFile = await MultipartFile.fromPath(
           'file', uploadFile!.path,
-          contentType: MediaType('image', 'jpeg'));
+          contentType: MediaType('image', 'webp'));
       request.files.add(multipartFile);
     }
     // final file = await compressImage(uploadFile);

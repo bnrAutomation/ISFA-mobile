@@ -39,8 +39,10 @@ class Device {
   Future<bool> _isDeveloperOptionsEnabled() async {
     if (!Platform.isAndroid) return false;
     try {
+        final enabled =
       await _securityChannel.invokeMethod<bool>('isDeveloperOptionsEnabled');
-      return false;
+      return enabled ?? false;
+     // return false;
     } catch (_) {
       // Fail-open to avoid blocking users if the channel isn't available.
       return false;
@@ -67,6 +69,7 @@ class Device {
   /// Returns `null` if location services and permission allow reads.
   /// Otherwise a user-facing message (same strings as [userPosition] errors).
   Future<String?> locationAvailabilityIssue() async {
+  
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return 'Location services are disabled.Please enable to continue';

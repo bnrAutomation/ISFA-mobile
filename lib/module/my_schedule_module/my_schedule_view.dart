@@ -76,11 +76,20 @@ class _MyScheduleViewState extends State<MyScheduleView>
                       return _mechanicfloatingActionButtons();
                     }
                     return BlocBuilder<MyScheduleBloc, MyScheduleState>(
+                      buildWhen: (previous, current) =>
+                          current is BeatPlanStoreLoaded ||
+                          current is EmptySearchTextMyScheduleState ||
+                          current is MyScheduleLoadingState,
                       builder: (context, state) {
                         final bloc = context.read<MyScheduleBloc>();
                         return _floatingActionButtons(
                           bloc.allPlans,
-                          showAddMechanic:(bloc.mechanicVisits.isEmpty && (AppStorage().userDetail?.configuration.requiredAddMechanic??false))
+                          showAddMechanic: bloc.mechanicVisits.isEmpty &&
+                              (AppStorage()
+                                      .userDetail
+                                      ?.configuration
+                                      .requiredAddMechanic ??
+                                  false),
                         );
                       },
                     );
@@ -451,8 +460,11 @@ class _MyScheduleViewState extends State<MyScheduleView>
     List<BeatPlanModel> assignedStores, {
     bool showAddMechanic = false,
   }) {
+    final showAddRetailer =
+        AddRetailerHelper.showAddNewRetailer(assignedStores);
     return Builder(builder: (context) {
       return SpeedDial(
+        key: ValueKey('$showAddMechanic-$showAddRetailer'),
         closedForegroundColor: Colors.white,
         closedBackgroundColor: Theme.of(context).primaryColor,
         openForegroundColor: Theme.of(context).primaryColor,
@@ -466,7 +478,7 @@ class _MyScheduleViewState extends State<MyScheduleView>
             label: 'Add Mechanic',
             onPressed: () => _openAddMechanicSheet(context),
           ),
-        if (AddRetailerHelper.showAddNewRetailer(assignedStores))
+        if (showAddRetailer)
           SpeedDialChild(
             child: const Icon(Icons.add_business),
             foregroundColor: Colors.white,

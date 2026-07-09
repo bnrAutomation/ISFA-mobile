@@ -310,7 +310,7 @@ class CampaignRepository {
     final multipartFile = await MultipartFile.fromPath(
       'image',
       filePath!.path,
-      contentType: MediaType('image', 'jpeg'),
+      contentType: MediaType('image', 'webp'),
     );
     request.files.add(multipartFile);
     request.fields.addAll({"activity": "campaign"});
@@ -412,7 +412,7 @@ class CampaignRepository {
     }
   }
 
-  Future<List<RecruiterModel>> getRecruiters(String retailerName, 
+  Future<List<RecruiterModel>> getRecruiters(String retailerName, String mechanicName, bool isMasterData,
       {bool silentSessionExpiry = false}) async {
     await initOfflineService();
     final isOnline = await _offlineService.isOnline();
@@ -431,15 +431,17 @@ class CampaignRepository {
         Uri.parse("${URLConstants.baseURLStart}/iSFA/recruiter/$userId");
     final response = await client.get(uri);
     if (response.statusCode == 200) {
-      final recruiters = (json.decode(response.body) as List)
-          .map((e) => RecruiterModel.fromJson(e))
-          .where((retailer) =>
+      final data  = (json.decode(response.body) as List)
+          .map((e) => RecruiterModel.fromJson(e)).toList();
+
+      final recruiters = isMasterData? data : (mechanicName.isNotEmpty ? data:  (retailerName.isNotEmpty?
+       data.where((retailer) =>
             retailer.counterName.toLowerCase().trim() ==
-            retailerName.toLowerCase().trim())
-        
-          .toList();
+            retailerName.toLowerCase().trim()).toList(): data));
+      
       // Cache for offline usage.
       await _offlineService.cacheRecruiters(recruiters);
+
       return recruiters;
     } else {
       throw getErrorMessage(response,
@@ -607,7 +609,7 @@ class CampaignRepository {
       }
       
       try {
-        final recruiters = await getRecruiters("",
+        final recruiters = await getRecruiters("","",false,
             silentSessionExpiry: silentSessionExpiry);
         await _offlineService.cacheRecruiters(recruiters);
         if (kDebugMode) {

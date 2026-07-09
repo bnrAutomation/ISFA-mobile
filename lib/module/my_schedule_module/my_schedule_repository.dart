@@ -20,10 +20,10 @@ class MyScheduleRepository {
       : userId = forUserId ?? AppStorage().userDetail!.id;
 
   Future<List<BeatPlanModel>> getBeatPlans(DateTime date) async {
-    final response = await httpClient.post(Uri.parse(
-     AppStorage().userDetail?.role.toLowerCase() == "supervisor"?
-      URLConstants.beatPlansSuper:
-      URLConstants.beatPlans),
+    final response = await httpClient.post(
+        Uri.parse(AppStorage().userDetail?.role.toLowerCase() == "supervisor"
+            ? URLConstants.beatPlansSuper
+            : URLConstants.beatPlans),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           "date": date.toStringFormat("yyyy-MM-dd"),
@@ -48,7 +48,8 @@ class MyScheduleRepository {
   }
 
   Future<List<MechanicVisitModel>> getMechanicVisits(DateTime date) async {
-    final uri = Uri.parse(URLConstants.mechanicVisits).replace(queryParameters: {
+    final uri =
+        Uri.parse(URLConstants.mechanicVisits).replace(queryParameters: {
       'userId': userId.toString(),
       'date': date.toStringFormat('yyyy-MM-dd'),
       "companyId": companyId.toString()
@@ -59,7 +60,8 @@ class MyScheduleRepository {
       final decoded = json.decode(response.body);
       final List rows = decoded is List ? decoded : [];
       return rows
-          .map((e) => MechanicVisitModel.fromJson(Map<String, dynamic>.from(e as Map)))
+          .map((e) =>
+              MechanicVisitModel.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList();
     } else {
       throw getErrorMessage(response);
@@ -67,15 +69,19 @@ class MyScheduleRepository {
   }
 
   Future<List<MechanicModel>> getAllMechanics() async {
-    final response =
-        await httpClient.get(Uri.parse(URLConstants.mechanicAll));
+    Uri uri = ["mobil", "exxonmobil"]
+            .contains(AppStorage().userDetail?.companyName.toLowerCase().trim())
+        ? Uri.parse("${URLConstants.baseURLStart}/iSFA/mechanic/$userId")
+        : Uri.parse(URLConstants.mechanicAll);
+
+    final response = await httpClient.get(uri);
 
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
       final List rows = decoded is List ? decoded : [];
       return rows
-          .map((e) => MechanicModel.fromJson(
-              Map<String, dynamic>.from(e as Map)))
+          .map((e) =>
+              MechanicModel.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList();
     } else {
       throw getErrorMessage(response);
@@ -83,16 +89,29 @@ class MyScheduleRepository {
   }
 
   Future<List<StoreItemModel>> getStores() async {
-    final response =
-        await httpClient.get(Uri.parse('${URLConstants.getStores}/$companyId'));
+    Uri uri = ["mobil", "exxonmobil"]
+            .contains(AppStorage().userDetail?.companyName.toLowerCase().trim())
+        ? Uri.parse("${URLConstants.baseURLStart}/iSFA/recruiter/$userId")
+        : Uri.parse('${URLConstants.getStores}/$companyId');
 
+    final response = await httpClient.get(uri);
     if (response.statusCode == 200) {
-      final dataList = json.decode(response.body)["dataList"];
-      final List stores = dataList is List ? dataList : [];
-      if (stores.isNotEmpty) {
-        return stores.map((x) => StoreItemModel.fromJson(x)).toList();
+      if ([
+        "mobil",
+        "exxonmobil"
+      ].contains(AppStorage().userDetail?.companyName.toLowerCase().trim())) {
+
+         return (json.decode(response.body) as List)
+          .map((e) => StoreItemModel.fromJson(e))
+          .toList();
       } else {
-        throw getErrorMessage(response);
+        final dataList = json.decode(response.body)["dataList"];
+        final List stores = dataList is List ? dataList : [];
+        if (stores.isNotEmpty) {
+          return stores.map((x) => StoreItemModel.fromJson(x)).toList();
+        } else {
+          throw getErrorMessage(response);
+        }
       }
     } else {
       throw getErrorMessage(response);

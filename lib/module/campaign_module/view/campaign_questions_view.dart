@@ -68,8 +68,8 @@ class _CampaignQuestionsViewState extends State<CampaignQuestionsView> {
                                 "Syncing ${state.pendingCount} submission(s)...")));
                       }
                       if (state is SagmentAddSuccessfully) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("New Segment added")));
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //      SnackBar(content: Text(state.message)));
                       }
                       if (state is SnackbarMessageCampaignState) {
                         ScaffoldMessenger.of(context).showSnackBar(

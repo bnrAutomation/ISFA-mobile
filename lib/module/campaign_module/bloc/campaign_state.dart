@@ -22,7 +22,9 @@ class ScoreCalculatedCampaignState extends CampaignState {}
 
 class SavingAnswersLoadingState extends CampaignState {}
 
-class SagmentAddSuccessfully extends CampaignState {}
+class SagmentAddSuccessfully extends CampaignState {
+
+}
 
 class SyncingOfflineDataState extends CampaignState {
   final int pendingCount;

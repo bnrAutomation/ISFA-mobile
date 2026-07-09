@@ -731,7 +731,7 @@ class IssuesDetailView extends StatelessWidget {
     final multipartFile = await MultipartFile.fromPath(
       'image',
       filePath!.path,
-      contentType: MediaType('image', 'jpeg'),
+      contentType: MediaType('image', 'webp'),
     );
     request.files.add(multipartFile);
     request.fields.addAll({"activity": "issusmanagement"});

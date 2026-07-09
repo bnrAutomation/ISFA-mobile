@@ -67,9 +67,9 @@ class StoreDetailRepository {
 
     if (response.statusCode == 200) {
       final dataJson = jsonDecode(response.body)['data'];
-      if (dataJson == null) {
-        throw 'No store found';
-      }
+      // if (dataJson == null) {
+      //   throw 'No store found';
+      // }
       return GetStoreDetailDataModel.fromJson(dataJson);
     } else {
       throw getErrorMessage(response);
@@ -246,7 +246,7 @@ class StoreDetailRepository {
       final multipartFile = await MultipartFile.fromPath(
         'file',
         file!.path,
-        contentType: MediaType('image', 'jpeg'),
+        contentType: MediaType('image', 'webp'),
       );
       request.files.add(multipartFile);
     }
