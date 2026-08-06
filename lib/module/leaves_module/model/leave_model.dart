@@ -1,7 +1,36 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:i_densfa/utility/extensions.dart';
 
 import 'leave_enums.dart';
+
+
+
+class LeaveApplyResposne {
+  LeaveApplyResposne({
+    required this.message,
+    required this.status,
+  });
+  late String message;
+  late String status;
+
+   factory LeaveApplyResposne.fromRawJson(String str) =>
+      LeaveApplyResposne.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+  
+  LeaveApplyResposne.fromJson(Map<String, dynamic> json){
+    message = json['message']??"";
+    status = json['status']??"200";
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['message'] = message;
+    data['status'] = status;
+    return data;
+  }
+}
 
 class EmpLeaveDetailsModel {
   EmpLeaveDetailsModel({
@@ -27,15 +56,22 @@ class EmpLeaveDetailsModel {
 
   factory EmpLeaveDetailsModel.fromJson(Map<String, dynamic> json) =>
       EmpLeaveDetailsModel(
-        totalLeave: double.tryParse(json["totalLeave"].toString()) ?? 0.0,
-        leaveBalance: double.tryParse(json["leaveBalance"].toString()) ?? 0.0,
-        usedLeave: double.tryParse(json["usedLeave"].toString()) ?? 0,
+        totalLeave: max(
+            double.tryParse((json["totalLeave"] ?? 0.0).toString()) ?? 0.0,
+            0.0),
+        leaveBalance: max(
+            double.tryParse((json["leaveBalance"] ?? 0.0).toString()) ?? 0.0,
+            0.0),
+        usedLeave: max(
+            double.tryParse((json["usedLeave"] ?? 0.0).toString()) ?? 0.0, 0.0),
         leaveTypeBalance: List<LeaveBalanceModel>.from(
-            json["leaveTypeBalance"].map((x) => LeaveBalanceModel.fromJson(x))),
+            (json["leaveTypeBalance"] ?? [])
+                .map((x) => LeaveBalanceModel.fromJson(x))),
         empAppliedLeave: List<AppliedLeaveModel>.from(
-            json["empAppliedLeave"].map((x) => AppliedLeaveModel.fromJson(x))),
+            (json["empAppliedLeave"] ?? [])
+                .map((x) => AppliedLeaveModel.fromJson(x))),
         reporteeRequestedLeave: List<AppliedLeaveModel>.from(
-            json["reporteeRequestedLeave"]
+            (json["reporteeRequestedLeave"] ?? [])
                 .map((x) => AppliedLeaveModel.fromJson(x))),
       );
 
@@ -61,6 +97,7 @@ class AppliedLeaveModel {
       this.userName,
       this.leaveRequestId,
       this.reason,
+      this.fullName,
       required this.dayType});
 
   LeaveStatus leaveStatus;
@@ -71,6 +108,7 @@ class AppliedLeaveModel {
   int? leaveRequestId;
   String? reason;
   String dayType;
+  String? fullName;
 
   factory AppliedLeaveModel.fromRawJson(String str) =>
       AppliedLeaveModel.fromJson(json.decode(str));
@@ -86,6 +124,7 @@ class AppliedLeaveModel {
           userName: json["userName"],
           leaveRequestId: json['leaveRequestId'],
           reason: json['reason'],
+          fullName: json["fullName"] ?? "",
           dayType: json['dayType'] ?? "");
 
   Map<String, dynamic> toJson() => {
@@ -96,7 +135,8 @@ class AppliedLeaveModel {
         "userName": userName,
         'leaveRequestId': leaveRequestId,
         'reason': reason,
-        'dayType': dayType
+        'dayType': dayType,
+        'fullName': fullName
       };
 }
 
@@ -122,9 +162,10 @@ class LeaveBalanceModel {
 
   factory LeaveBalanceModel.fromJson(Map<String, dynamic> json) =>
       LeaveBalanceModel(
-        leaveTypeName: json["leaveTypeName"],
+        leaveTypeName: json["leaveTypeName"] ?? "",
         leaveTypeBalance:
-            double.tryParse(json["leaveTypeBalance"].toString()) ?? 0,
+            double.tryParse((json["leaveTypeBalance"] ?? 0.0).toString()) ??
+                0.0,
         leaveTypeColor: json["leaveTypeColor"] ?? "#FFFFFF",
         leaveTypeIcon: json["leaveTypeIcon"],
         dayType: json["dayType"] ?? "",

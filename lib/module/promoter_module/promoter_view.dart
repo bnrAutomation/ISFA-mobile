@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,31 +9,35 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:i_densfa/module/campaign_module/view/campaign_view.dart';
 import 'package:i_densfa/module/dynamic_questions_module/views/dynamic_questions_view.dart';
 import 'package:i_densfa/module/inventory_module/modify_product_quantity/bloc/modify_quantity_bloc.dart';
-import 'package:i_densfa/module/inventory_module/modify_product_quantity/repository.dart';
+import 'package:i_densfa/module/inventory_module/modify_product_quantity/inventory_repository.dart';
 import 'package:i_densfa/module/promoter_module/feedback/feedback_view.dart';
 import 'package:i_densfa/module/promoter_module/models/promoter_store_detail_model.dart';
 
 import 'package:i_densfa/module/ui/custom_image_button.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
+import 'package:i_densfa/module/ui/dialog_helper.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 import '../inventory_module/modify_product_quantity/view.dart';
 import 'bloc/promoter_bloc.dart';
 
 class PromoterView extends StatelessWidget {
-  const PromoterView({super.key});
+  final String name;
+  const PromoterView({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<PromoterBloc>();
     return Scaffold(
-        appBar: AppBar(title: const Text("Promoter")),
+        appBar: AppBar(title: Text(name)),
         body: BlocConsumer<PromoterBloc, PromoterState>(
-          listenWhen: (previous, current) =>
-              current is PromoterToastMessageState ||
-              current is CompaignsLoadedPromoterState,
-          listener: (context, state) {
+          // listenWhen: (previous, current) =>
+          //     current is PromoterToastMessageState ||
+          //     current is CompaignsLoadedPromoterState,
+          listener: (context, state) async {
             if (state is PromoterToastMessageState) {
               context.showSnackBarMessage(state.message);
             } else if (state is CompaignsLoadedPromoterState) {
@@ -41,9 +46,57 @@ class PromoterView extends StatelessWidget {
                   context: context,
                   child: _openCampaignSheet(context, bloc.storeDetail!));
             }
+            if (state is TakeMarkinImage) {
+              String? path = await context.pushNamed(AppPaths.appcamera,
+                  pathParameters: {'from': "markinout"});
+              if (path == null && path!.isEmpty) {
+                context.showSnackBarMessage('Please click image');
+              } else {
+                bloc.add(MarkingWithImage(XFile(path), state.loc));
+              }
+            }
+            if (state is TakeMarkOutImage) {
+              String? path = await context.pushNamed(AppPaths.appcamera,
+                  pathParameters: {'from': "markinout"});
+              if (path == null && path!.isEmpty) {
+                context.showSnackBarMessage('Please click image');
+              } else {
+                bloc.add(MarkOutWithImage(XFile(path), state.loc));
+              }
+            }
+            if (state is PromoterPOPMessageState) {
+              DialogHelper.showErrorMessage(context, "Message", state.message,
+                  onOkayClick: () => {
+                        Navigator.pop(context),
+                      });
+            }
+
+            if (state is ShowSalesMessage) {
+              DialogHelper.showErrorMessage(context, "Message", state.message,
+                  onOkayClick: () => {
+                        context.pop(),
+                        bloc.add(MoveToFeedBackEvent()),
+                      });
+            }
+
+            if (state is MoveToFeedBackState) {
+              final storeDetail = context.read<PromoterBloc>().storeDetail;
+              if (storeDetail != null) {
+                AppPopup.showAppBottomSheet(
+                  context: context,
+                  child: FeedbackView(storeName: storeDetail.name),
+                ).then((value) => {
+                      if (value)
+                        {
+                          if (state is! PromoterStoreDetailLoadingState ||
+                              bloc.storeDetail != null)
+                            {bloc.add(PromoterCheckOutStoreEvent())}
+                        }
+                    });
+              }
+            }
           },
           builder: (context, state) {
-            final bloc = context.read<PromoterBloc>();
             return bloc.storeDetail == null
                 ? Center(
                     child: Text(
@@ -55,7 +108,7 @@ class PromoterView extends StatelessWidget {
                         color: Theme.of(context)
                             .colorScheme
                             .primary
-                            .withOpacity(0.2),
+                            .withValues(alpha: 0.2),
                         // color: const Color(0xffBFD1DF),
                         margin: const EdgeInsets.symmetric(horizontal: 5),
                         shape: const RoundedRectangleBorder(
@@ -72,11 +125,19 @@ class PromoterView extends StatelessWidget {
                                 ),
                                 alignment: Alignment.center,
                                 child: Image.network(
-                                  bloc.storeDetail?.storeImage1 ??
-                                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpo1BfypXH0JcsdyjZI_w3rK-T4utQ_RAVjBx5ELNHpuN9fUdPBNuwjLjSxaVfCpXhsRQ&usqp=CAU",
+                                  (bloc.storeDetail?.storeImage1 ?? "")
+                                          .urlValid()
+                                      ? (bloc.storeDetail?.storeImage1 ?? "")
+                                      : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpo1BfypXH0JcsdyjZI_w3rK-T4utQ_RAVjBx5ELNHpuN9fUdPBNuwjLjSxaVfCpXhsRQ&usqp=CAU",
                                   fit: BoxFit.cover,
                                   width: 1.sw,
                                   height: 1.sh,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.network(
+                                      'https://media.istockphoto.com/id/912819604/vector/storefront-flat-design-e-commerce-icon.jpg?s=612x612&w=0&k=20&c=_x_QQJKHw_B9Z2HcbA2d1FH1U1JVaErOAp2ywgmmoTI=',
+                                      fit: BoxFit.fitWidth,
+                                    );
+                                  },
                                 )),
                             _storeDetailsView(bloc)
                           ],
@@ -213,11 +274,13 @@ class PromoterView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          if (bloc.isAlreadyMarkin)
+          if ( (AppStorage().userDetail?.configuration.requiredDoubleMarkIn??false) && bloc.isAlreadyMarkin)
             const Center(child: Text("Visit Complete"))
-          else if (bloc.isMarkedIn)
+          else
+          
+           if (bloc.isMarkedIn)
             BlocConsumer<PromoterBloc, PromoterState>(
-              listener: (context, state) {},
+              listener: (context, state) async {},
               builder: (context, state) {
                 return CustomMaterialButton(
                     textColor: Colors.black,
@@ -277,7 +340,15 @@ class PromoterView extends StatelessWidget {
             style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          Expanded(child: CampaignView(storeId: storeDetail.storeId)),
+          Expanded(
+              child: CampaignView(
+                retailerName:storeDetail.name ,
+                mechanicsContact: "",
+                mechanicsName: "",
+                  storeId: storeDetail.storeId,
+                  from: AppPaths.promoter,
+                  storeLat: storeDetail.latitude,
+                  storeLong: storeDetail.longitude)),
         ],
       ),
     );
@@ -298,12 +369,15 @@ class PromoterView extends StatelessWidget {
                   style: textTheme.titleMedium
                       ?.copyWith(fontWeight: FontWeight.w700),
                 ),
-                const DynamicQuestionsView(questions: []),
+                DynamicQuestionsView(
+                  questions: const [],
+                  name: 'invantory',
+                ),
               ],
             ),
           ),
           Container(
-            color: const Color(0xff278bbc).withOpacity(0.2),
+            color: const Color(0xff278bbc).withValues(alpha: 0.2),
             padding: const EdgeInsets.all(15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,13 +387,19 @@ class PromoterView extends StatelessWidget {
                   style: textTheme.titleMedium
                       ?.copyWith(fontWeight: FontWeight.w700),
                 ),
-                const DynamicQuestionsView(questions: []),
+                DynamicQuestionsView(
+                  questions: const [],
+                  name: "invantory",
+                ),
               ],
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.all(15),
-            child: DynamicQuestionsView(questions: []),
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: DynamicQuestionsView(
+              questions: const [],
+              name: 'invantory',
+            ),
           ),
           CustomMaterialButton(buttonText: "Submit", onPressed: () {}),
         ],

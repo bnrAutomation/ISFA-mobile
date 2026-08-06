@@ -10,7 +10,7 @@ class SplashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      // backgroundColor: Theme.of(context).colorScheme.onSurface,
       body: Stack(
         children: [
           Positioned.fill(
@@ -21,7 +21,7 @@ class SplashView extends StatelessWidget {
                     fit: BoxFit.cover,
                   ))),
           Positioned.fill(
-              child: ColoredBox(color: Colors.black.withOpacity(0.6))),
+              child: ColoredBox(color: Colors.black.withValues(alpha: 0.6))),
           Positioned(
               bottom: 20,
               right: 20,

@@ -13,10 +13,15 @@ class MyActivityRepository {
   Future<List<MyActivityDataList>> getMyActivity({
     required DateTime dateTime,
   }) async {
-    final response = await CustomHttpBaseClient().get(Uri.parse(
+    final response = await CustomHttpBaseClient.instance.get(Uri.parse(
         '${URLConstants.activities}/$userId/${dateTime.toStringFormat('yyyy-MM-dd')}'));
-    return response.body.isEmpty
-        ? <MyActivityDataList>[]
-        : MyActivityModel.fromRawJson(response.body).dataList;
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response.body.isEmpty
+          ? <MyActivityDataList>[]
+          : MyActivityModel.fromRawJson(response.body).dataList;
+    } else {
+      throw getErrorMessage(response);
+    }
   }
 }

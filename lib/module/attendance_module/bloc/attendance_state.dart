@@ -15,3 +15,10 @@ class AttendanceShowSnack extends AttendanceState {
   final String message;
   AttendanceShowSnack(this.message);
 }
+
+class AttendanceDateChangeState extends AttendanceState {}
+
+class LoadingState extends AttendanceState {}
+class AcceptLoadingState extends AttendanceState {}
+
+class AttendanceAppliedSuccess extends AttendanceState {}

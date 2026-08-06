@@ -4,23 +4,74 @@
 
 import 'dart:convert';
 
-List<ProductCategoryModel> categoryListfromRowJson(String str) =>
-    List<ProductCategoryModel>.from(
-      json
-          .decode(str)['dataListIs']
+List<ProductCategoryModel> categoryListfromRowJson(String str){
+
+    final jsondata = json.decode(str);
+    final list  =  jsondata["dataListIs"] ?? jsondata["dataList"];
+   return List<ProductCategoryModel>.from(
+     list
           .map((x) => ProductCategoryModel.fromJson(x)),
     );
+}
+
+
+
+List<SubCategoryModel> subCategoryListfromRowJson(String str) =>
+    List<SubCategoryModel>.from(
+      json.decode(str)
+          .map((x) => SubCategoryModel.fromJson(x)),
+    );
+
+List<ProductList> productListfromRowJson(String str) =>
+    List<ProductList>.from(
+      json.decode(str)
+          .map((x) => ProductList.fromJson(x)),
+    );
+
+class SubCategoryModel {
+  SubCategoryModel({
+    required this.subCategoryId,
+    required this.categoryId,
+    required this.subCategoryName,
+    required this.productList,
+  });
+  late final int subCategoryId;
+  late final int categoryId;
+  late final String subCategoryName;
+  List<ProductList> productList=[];
+ 
+  
+  SubCategoryModel.fromJson(Map<String, dynamic> json){
+    subCategoryId = json['subCategoryId'];
+    categoryId = json['categoryId'];
+    subCategoryName = json['subCategoryName'];
+    List<ProductList>.from(
+            (json["productList"]??[]).map((x) => ProductList.fromJson(x)));
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['subCategoryId'] = subCategoryId;
+    data['categoryId'] = categoryId;
+    data['subCategoryName'] = subCategoryName;
+    data["productList"]= List<dynamic>.from(productList.map((x) => x.toJson()));
+    return data;
+  }
+}
+
 
 class ProductCategoryModel {
   ProductCategoryModel({
     required this.categoryId,
     required this.categoryName,
     required this.productList,
+    required this.subCategoryList,
   });
 
   int categoryId;
   String categoryName;
-  List<ProductList> productList;
+  List<ProductList> productList=[];
+  List<SubCategoryModel> subCategoryList=[];
 
   factory ProductCategoryModel.fromRawJson(String str) =>
       ProductCategoryModel.fromJson(json.decode(str));
@@ -31,14 +82,18 @@ class ProductCategoryModel {
       ProductCategoryModel(
         categoryId: json["categoryId"],
         categoryName: json["categoryName"],
+        subCategoryList: List<SubCategoryModel>.from(
+            (json["subCategoryList"]??[]).map((x) => ProductList.fromJson(x))),
+
         productList: List<ProductList>.from(
-            json["productList"].map((x) => ProductList.fromJson(x))),
+            (json["productList"]??[]).map((x) => ProductList.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "categoryId": categoryId,
         "categoryName": categoryName,
         "productList": List<dynamic>.from(productList.map((x) => x.toJson())),
+        "subCategoryList": List<dynamic>.from(subCategoryList.map((x) => x.toJson())),
       };
 }
 

@@ -7,12 +7,17 @@ list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus
   file_selector_windows
   firebase_core
+  flutter_secure_storage_windows
+  flutter_timezone
   geolocator_windows
+  sentry_flutter
+  speech_to_text_windows
   syncfusion_pdfviewer_windows
   url_launcher_windows
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
+  jni
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

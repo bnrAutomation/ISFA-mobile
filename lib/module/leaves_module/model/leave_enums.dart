@@ -1,6 +1,7 @@
 enum LeaveStatus { pending, approved, rejected }
 
-enum LeaveDayPart { full, firstHalf, secondHalf }
+enum LeaveDayPart { full,firstHalf, secondHalf }
+
 
 extension LeaveStatusHelper on LeaveStatus {
   LeaveStatus fromString(String val) {
@@ -35,6 +36,8 @@ extension LeaveDayPartHelper on LeaveDayPart {
         return 2;
       case LeaveDayPart.secondHalf:
         return 3;
+      // case LeaveDayPart.half:
+      //   return 4;
     }
   }
 
@@ -46,6 +49,8 @@ extension LeaveDayPartHelper on LeaveDayPart {
         return 'First half';
       case LeaveDayPart.secondHalf:
         return 'Second half';
+      //   case LeaveDayPart.half:
+      //  return 'Half';
     }
   }
 }

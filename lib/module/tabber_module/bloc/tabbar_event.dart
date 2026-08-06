@@ -1,27 +1,35 @@
 part of 'tabbar_bloc.dart';
 
 @immutable
-abstract class TabberEvent {}
+abstract class TabbarEvent {}
 
-class ChangeTabEvent extends TabberEvent {
+class ChangeTabEvent extends TabbarEvent {
   final int selectIndex;
   ChangeTabEvent(this.selectIndex);
 }
 
-class EndDutyStatusTabberEvent extends TabberEvent {
+class EndDutyStatusTabbarEvent extends TabbarEvent {
   final XFile? file;
-
-  EndDutyStatusTabberEvent(this.file);
+  final BuildContext context;
+  EndDutyStatusTabbarEvent(this.file, this.context);
 }
 
-class StartDutyStatusTabberEvent extends TabberEvent {
+class StartDutyStatusTabbarEvent extends TabbarEvent {
   final XFile? file;
-
-  StartDutyStatusTabberEvent(this.file);
+  final BuildContext context;
+  StartDutyStatusTabbarEvent(this.file, this.context);
 }
 
-class UpdateSideMenuDetailsEvent extends TabberEvent {}
+class UpdateSideMenuDetailsEvent extends TabbarEvent {}
 
-class SubmitToken extends TabberEvent {}
+class SubmitToken extends TabbarEvent {}
 
-class LogoutEvent extends TabberEvent {}
+class LogoutEvent extends TabbarEvent {}
+
+class ShowSectionPopUp extends TabbarEvent {
+  final String title;
+  final String message;
+  ShowSectionPopUp(this.title, this.message);
+}
+
+class ResetPassword extends TabbarEvent {}

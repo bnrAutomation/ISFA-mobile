@@ -8,6 +8,7 @@ class AllCampaignModel {
   final String description;
   final DateTime startDate;
   final DateTime endDate;
+  final DateTime createdDate;
   final String tags;
   final String canViewSubmission;
   final String canEditSubmission;
@@ -21,6 +22,7 @@ class AllCampaignModel {
     required this.description,
     required this.startDate,
     required this.endDate,
+    required this.createdDate,
     required this.tags,
     required this.canViewSubmission,
     required this.canEditSubmission,
@@ -34,14 +36,15 @@ class AllCampaignModel {
 
   factory AllCampaignModel.fromJson(Map<String, dynamic> json) =>
       AllCampaignModel(
-        uuid: json["uuid"],
-        name: json["name"],
-        status: json["status"],
-        imageUrl: json["imageUrl"],
-        description: json["description"],
+        uuid: json["uuid"] ?? "",
+        name: json["name"] ?? "",
+        status: json["status"] ?? "",
+        imageUrl: json["imageUrl"] ?? "",
+        description: json["description"] ?? "",
         startDate: DateTime.parse(json["startDate"]),
         endDate: DateTime.parse(json["endDate"]),
-        tags: json["tags"],
+        createdDate :DateTime.parse(json["createdDate"]),
+        tags: json["tags"] ?? "",
         canViewSubmission: json["canViewSubmission"],
         canEditSubmission: json["canEditSubmission"],
         canCreateSubmission: json["canCreateSubmission"],
@@ -55,16 +58,20 @@ class AllCampaignModel {
         "description": description,
         "startDate": startDate.toIso8601String(),
         "endDate": endDate.toIso8601String(),
+        "createdDate":createdDate.toIso8601String(),
         "tags": tags,
         "canViewSubmission": canViewSubmission,
         "canEditSubmission": canEditSubmission,
         "canCreateSubmission": canCreateSubmission,
       };
 
-  bool isNagative() {
+  bool isNegative() {
     DateTime endDate = DateTime(
         this.endDate.year, this.endDate.month, this.endDate.day, 23, 59);
-    Duration diff = endDate.difference(DateTime.now());
+    Duration diff =
+        //DateTime.now().difference(endDate);
+
+        endDate.difference(DateTime.now());
 
     if (diff.inDays > 0) {
       return false;

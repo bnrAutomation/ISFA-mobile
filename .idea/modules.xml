@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/iSFA.iml" filepath="$PROJECT_DIR$/.idea/iSFA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/i_densfa.iml" filepath="$PROJECT_DIR$/i_densfa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/i_densfa_android.iml" filepath="$PROJECT_DIR$/android/i_densfa_android.iml" />
     </modules>
   </component>
 </project>

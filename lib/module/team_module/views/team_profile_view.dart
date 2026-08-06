@@ -25,7 +25,10 @@ class TeamProfileView extends StatelessWidget {
         );
       }),
       BottomCardItemModel('Activity History', const Icon(Icons.score), () {
-        context.push(AppPaths.myActivity, extra: memberDetail.userId);
+        context.push(
+          AppPaths.myActivity,
+          extra: memberDetail.userId,
+        );
       }),
       BottomCardItemModel('Attendance', const Icon(Icons.person_4), () {
         context.push(AppPaths.attendance, extra: memberDetail.userId);

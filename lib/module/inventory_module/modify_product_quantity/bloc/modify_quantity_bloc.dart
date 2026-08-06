@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_broadcast_receiver/flutter_broadcast_receiver.dart';
+import 'package:i_densfa/module/inventory_module/modify_product_quantity/inventory_repository.dart';
 import 'package:i_densfa/module/inventory_module/modify_product_quantity/product_category_model.dart';
-import 'package:i_densfa/module/inventory_module/modify_product_quantity/repository.dart';
+import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 
 part 'modify_quantity_event.dart';
 part 'modify_quantity_state.dart';
@@ -11,19 +14,32 @@ class ModifyQuantityBloc
   final ModifyProductsRepository repo;
   List<ProductCategoryModel> categories = [];
   ProductCategoryModel? selectedCategory;
+  SubCategoryModel? selectedSubCategory;
+
   ProductList? selectedProduct;
   int? selectedQuantity;
   double enteredPrice = 0;
   final bool isSale;
 
   List<ProductList> get products {
-    return selectedCategory?.productList ?? [];
+    return 
+    AppStorage().userDetail?.companyName.toLowerCase()=="apple"?
+
+    selectedSubCategory?.productList??[]:
+
+    selectedCategory?.productList ?? [];
+  }
+
+   List<SubCategoryModel> get subcategory {
+    return selectedCategory?.subCategoryList ?? [];
   }
 
   ModifyQuantityBloc(this.repo, this.isSale) : super(LoadingState()) {
-    on((GetCategoriesListEvent event, emit) async =>
-        await _getCategoryList(emit));
+    on((GetCategoriesListEvent event, emit) async =>await _getCategoryList(emit));
+    on((GetSubCategoriesListEvent event, emit) async =>await _getSubCategoryList(event,emit));
+    on((GetProductListEvent event, emit) async =>await _getProductList(event,emit));
     on(_selectCategoryEvent);
+    on(_selectSubCategoryEvent);
     on(_selectProductEvent);
     on((ModifyQtySubmitEvent event, emit) async => await _onSubmitEvent(emit));
     on((ChangeQtyEvent event, emit) {
@@ -47,10 +63,47 @@ class ModifyQuantityBloc
     emit(LoadedState());
   }
 
+  Future<void> _getSubCategoryList(
+     event ,Emitter<ModifyQuantityState> emit) async {
+   // emit(LoadingState());
+   final subcategory = await repo.getSubCategoryList(event.categoryId.toString()).catchError((onError) {
+      emit(ToastMessageState(onError.toString()));
+      return <SubCategoryModel>[];
+    });
+    selectedCategory?.subCategoryList = subcategory;
+    categories.firstWhere((element) =>element.categoryId==event.categoryId).subCategoryList = subcategory;
+    emit(LoadedState());
+  }
+
+    Future<void> _getProductList(GetProductListEvent event,Emitter<ModifyQuantityState> emit) async {
+   // emit(LoadingState());
+    final  productlist = await repo.getProduct(event.categoryId,event.subCategoryId).catchError((onError) {
+      emit(ToastMessageState(onError.toString()));
+      return <ProductList>[];
+    });
+    selectedCategory?.productList = productlist;
+    selectedCategory?.subCategoryList.firstWhere((element) =>element.subCategoryId==event.subCategoryId).productList = productlist;
+    categories.firstWhere((element) =>element.categoryId==event.categoryId).subCategoryList
+    .firstWhere((element) =>element.subCategoryId==event.subCategoryId).productList= productlist;
+    emit(LoadedState());
+  }
+
   void _selectCategoryEvent(
       SelectCategoryEvent event, Emitter<ModifyQuantityState> emit) {
     selectedCategory = categories
         .firstWhere((element) => element.categoryName == event.categoryName);
+        if( AppStorage().userDetail?.companyName.toLowerCase()==
+      "organic india".toLowerCase()){
+    add(GetSubCategoriesListEvent(selectedCategory?.categoryId??-1));
+        }
+    emit(LoadedState());
+  }
+
+  void _selectSubCategoryEvent(
+      SelectSubCategoryEvent event, Emitter<ModifyQuantityState> emit) {
+    selectedSubCategory =
+        selectedCategory?.subCategoryList.firstWhere((subcateElement)=>subcateElement.categoryId==event.categoryId && subcateElement.subCategoryId== event.subCategoryId);
+    add(GetProductListEvent(selectedSubCategory?.categoryId??-1,selectedSubCategory?.subCategoryId??-1));
     emit(LoadedState());
   }
 
@@ -120,6 +173,8 @@ class ModifyQuantityBloc
       if (response) {
         emit(SuccessQtyChange());
       }
+       BroadcastReceiver().publish<String>(AppConstant.updateAnylitec,
+          arguments:"");
     }
 
     emit(LoadedState());

@@ -36,11 +36,11 @@ class _TeamListViewState extends State<TeamListView> {
               padding: const EdgeInsets.all(12.0),
               child: SearchBar(
                   hintText: 'Search by Name or Email',
-                  side: MaterialStateProperty.all(
+                  side: WidgetStateProperty.all(
                       const BorderSide(width: 1.0, color: Colors.grey)),
                   controller: searchController,
-                  elevation: MaterialStateProperty.all(0.0),
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                  elevation: WidgetStateProperty.all(0.0),
+                  backgroundColor: WidgetStateProperty.all(Colors.white),
                   onChanged: (value) => teamBloc.add(SearchTeamEvent(value))),
             ),
             ListView.separated(

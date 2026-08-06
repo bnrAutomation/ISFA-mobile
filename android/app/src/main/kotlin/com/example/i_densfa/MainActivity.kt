@@ -1,12 +1,29 @@
 package com.example.i_densfa
 
-import android.view.WindowManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodChannel
+import android.provider.Settings
 
 class MainActivity: FlutterActivity() {
-     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-     // window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+  private val CHANNEL = "com.denave.isfa/security"
+
+  override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
     super.configureFlutterEngine(flutterEngine)
+
+    MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
+      .setMethodCallHandler { call, result ->
+        when (call.method) {
+          "isDeveloperOptionsEnabled" -> {
+            val enabled = Settings.Global.getInt(
+              contentResolver,
+              Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,
+              0
+            ) == 1
+            result.success(enabled)
+          }
+          else -> result.notImplemented()
+        }
+      }
   }
 }

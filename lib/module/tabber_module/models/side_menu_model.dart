@@ -2,59 +2,97 @@ import 'dart:convert';
 
 class SideMenuModel {
   SideMenuModel({
+    required this.sideMenu,
+    required this.bottomMenu,
     required this.userInfo,
-    required this.menu,
   });
-
-  HomeUserInfo userInfo;
-  List<Menu> menu;
+  late final List<Menu> sideMenu;
+  late final List<BottomMenu> bottomMenu;
+  late final HomeUserInfo userInfo;
 
   factory SideMenuModel.fromRawJson(String str) =>
       SideMenuModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory SideMenuModel.fromJson(Map<String, dynamic> json) => SideMenuModel(
-        userInfo: HomeUserInfo.fromJson(json["user_info"]),
-        menu: List<Menu>.from(json["menu"].map((x) => Menu.fromJson(x))),
-      );
+  SideMenuModel.fromJson(Map<String, dynamic> json) {
+    sideMenu =
+        List.from(json['sideMenu']).map((e) => Menu.fromJson(e)).toList();
+    userInfo = HomeUserInfo.fromJson(json['user_info']);
+    bottomMenu = List.from(json['bottomMenu'])
+        .map((e) => BottomMenu.fromJson(e))
+        .toList();
+  }
 
-  Map<String, dynamic> toJson() => {
-        "user_info": userInfo.toJson(),
-        "menu": List<dynamic>.from(menu.map((x) => x.toJson())),
-      };
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['sideMenu'] = sideMenu.map((e) => e.toJson()).toList();
+    data['bottomMenu'] = bottomMenu.map((e) => e.toJson()).toList();
+    data['user_info'] = userInfo.toJson();
+    return data;
+  }
+}
+
+class BottomMenu {
+  BottomMenu({
+    required this.name,
+    required this.icon,
+    required this.key,
+    required this.active,
+  });
+  late final String name;
+  late final String icon;
+  late final String key;
+  late final bool active;
+
+  BottomMenu.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    icon = json['icon'];
+    key = json['key'];
+    active = json['isActive'] ?? json['active'] ?? false;
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['name'] = name;
+    data['icon'] = icon;
+    data['key'] = key;
+    data['isActive'] = active;
+    return data;
+  }
 }
 
 class Menu {
   Menu({
     required this.name,
     required this.icon,
-    required this.isActive,
     required this.key,
+    required this.active,
   });
+  late final String name;
+  late final String icon;
+  late final String key;
+  late final bool active;
 
-  String name;
-  String icon;
-  bool isActive;
-  String key;
+  Menu.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    icon = json['icon'];
+    key = json['key'];
+    active = json['isActive'] ?? json['active'] ?? false;
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['name'] = name;
+    data['icon'] = icon;
+    data['key'] = key;
+    data['isActive'] = active;
+    return data;
+  }
 
   factory Menu.fromRawJson(String str) => Menu.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
-
-  factory Menu.fromJson(Map<String, dynamic> json) => Menu(
-        name: json["name"],
-        icon: json["icon"],
-        isActive: json["isActive"],
-        key: json["key"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "icon": icon,
-        "isActive": isActive,
-        "key": key,
-      };
 }
 
 class HomeUserInfo {
@@ -98,8 +136,8 @@ class HomeUserInfo {
       designation: json['designation'] ?? "",
       supervisor: json["supervisor"] ?? "",
       markInStoreId: json["markInStoreId"],
-      startDuty: json["startDuty"],
-      iRole: json['iRole']);
+      startDuty: json["startDuty"] ?? false,
+      iRole: json['role'] ?? "");
 
   Map<String, dynamic> toJson() => {
         "mobile": mobile,
@@ -111,15 +149,17 @@ class HomeUserInfo {
         "startDuty": startDuty,
         "markInStoreId": markInStoreId,
         "designation": designation,
-        "iRole": iRole
+        "role": iRole
       };
 }
 
-enum TabbarItemCase { schedule, learner, campaign, analytics }
+enum TabbarItemCase { mystore,schedule, learner, campaign, analytics, settings }
 
 extension TabbarHelper on TabbarItemCase {
   String navTitle() {
     switch (this) {
+        case TabbarItemCase.mystore:
+        return 'My Store';
       case TabbarItemCase.schedule:
         return 'My Schedule';
       case TabbarItemCase.learner:
@@ -128,13 +168,15 @@ extension TabbarHelper on TabbarItemCase {
         return 'Campaign';
       case TabbarItemCase.analytics:
         return 'Analytics';
-      default:
-        return 'ISFA';
+      case TabbarItemCase.settings:
+        return 'Settings';
     }
   }
 
   String bottomTitle() {
     switch (this) {
+        case TabbarItemCase.mystore:
+        return 'My Store';
       case TabbarItemCase.schedule:
         return 'My Schedule';
       case TabbarItemCase.learner:
@@ -143,6 +185,8 @@ extension TabbarHelper on TabbarItemCase {
         return 'Campaign';
       case TabbarItemCase.analytics:
         return 'Analytics';
+      case TabbarItemCase.settings:
+        return 'Settings';
     }
   }
 }

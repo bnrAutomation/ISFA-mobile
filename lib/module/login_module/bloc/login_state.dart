@@ -24,3 +24,13 @@ class LoginShowPasswordState extends LoginState {
 class LoginedSuccesfullState extends LoginState {}
 
 class MoveToSetPinState extends LoginState {}
+
+class LoginDeviceUnauthorizedState extends LoginState {
+  final String username;
+  final String message;
+
+  LoginDeviceUnauthorizedState({
+    required this.username,
+    required this.message,
+  });
+}

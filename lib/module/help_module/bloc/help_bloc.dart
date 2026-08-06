@@ -76,6 +76,7 @@ class HelpBloc extends Bloc<HelpEvent, HelpState> {
       'userId': userId.toString(),
       'description': description,
       'title': title,
+      "activity": "help"
     });
 
     final multipartFile =
@@ -89,9 +90,9 @@ class HelpBloc extends Bloc<HelpEvent, HelpState> {
       showDialogMessage = json.decode(body)['message'];
       return true;
     } else {
-      throw body.isEmpty
-          ? "Something went wrong"
-          : json.decode(body)['message'] ?? "Something went wrong";
+      final bod = jsonDecode(body);
+      final String mess = bod['message'] ?? bod["error"];
+      throw mess;
     }
   }
 }

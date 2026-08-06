@@ -1,23 +1,31 @@
 part of 'tabbar_bloc.dart';
 
 @immutable
-abstract class TabberState {}
+abstract class TabbarState {}
 
-class TabberInitial extends TabberState {}
+class TabbarInitial extends TabbarState {}
 
-class UpdateIndexState extends TabberState {
+class UpdateIndexState extends TabbarState {
   final int index;
   UpdateIndexState(this.index);
 }
 
-class OnlineSwitchLoadingTabberState extends TabberState {}
+class TabbarShowProgressHudState extends TabbarState {}
 
-class OnlineStatusUpdateState extends TabberState {}
+class OnlineStatusUpdateState extends TabbarState {}
 
-class TabbarSnackBarMessageState extends TabberState {
+class TabbarSnackBarMessageState extends TabbarState {
   final String message;
 
   TabbarSnackBarMessageState(this.message);
 }
 
-class LogoutSuccessfullState extends TabberState {}
+class LogoutSuccessfulState extends TabbarState {}
+
+class ShowSectionPopUpState extends TabbarState {
+  final String title;
+  final String message;
+  ShowSectionPopUpState(this.title, this.message);
+}
+
+class ResetPasswordState extends TabbarState {}

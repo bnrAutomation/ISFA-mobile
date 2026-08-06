@@ -55,23 +55,27 @@ class ScheduleVisitCallBloc
       final userId = AppStorage().userDetail!.id;
       final companyId = AppStorage().homeInfo!.userInfo.companyId;
       emit(ScheduleVisitCallLoadingState());
-      final response = await CustomHttpBaseClient().post(
+      final response = await CustomHttpBaseClient.instance.post(
         Uri.parse(URLConstants.sheduleVisit),
         body: jsonEncode({
           "companyId": companyId,
           "pjpDate": selectedDate!.toStringFormat("yyyy-MM-dd"),
           "remarks": remark,
           "storeId": selectedStore.storeId,
-          "userId": userId
+          "userId": userId,
+          //"pjpId": selectedStore.pjpId
         }),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer ${AppStorage().authToken}",
+        },
       );
 
       if (response.statusCode == 200) {
         emit(ScheduleVisitCallSnackBar('Schedule added successfully'));
         emit(ScheduleVisitCallSuccessState());
       } else {
-        final mess = getErrorMessage(response.body);
+        final mess = getErrorMessage(response);
         emit(ScheduleVisitCallSnackBar(mess));
       }
     });

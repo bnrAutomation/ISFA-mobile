@@ -1,124 +1,220 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:i_densfa/module/change_password_module/changePassword/change_password_bloc.dart';
 import 'package:i_densfa/module/change_password_module/change_password_repository.dart';
-import 'package:i_densfa/module/ui/custom_material_button.dart';
+import 'package:i_densfa/module/ui/custom_button.dart';
+import 'package:i_densfa/module/ui/dialog_helper.dart';
+import 'package:i_densfa/routes.dart';
 
 class ChangePasswordView extends StatelessWidget {
-  ChangePasswordView({super.key});
-  final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController oldPasswordController = TextEditingController();
-
+  const ChangePasswordView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(title: const Text("Change Password")),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: RepositoryProvider(
-          create: (context) => ChangePasswordRepository(),
-          child: BlocProvider(
-            create: (context) => ChangePasswordBloc(context.read()),
-            child: BlocConsumer<ChangePasswordBloc, ChangePasswordState>(
-              listener: (context, state) {
-                if (state is ChangePasswordSuccesfullState) {
+      body: RepositoryProvider(
+        create: (context) => ChangePasswordRepository(),
+        child: BlocProvider(
+          create: (context) => ChangePasswordBloc(context.read()),
+          child: BlocConsumer<ChangePasswordBloc, ChangePasswordState>(
+            listener: (context, state) {
+              if (state is ChangePasswordSuccesfullState) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Password changed successfully.")));
+                if (Navigator.canPop(context)) {
                   Navigator.pop(context);
+                } else {
+                  context.go(AppPaths.tabbar);
                 }
-              },
-              builder: (context, state) {
-                var bloc = context.read<ChangePasswordBloc>();
-                return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(height: 10),
-                      const Text(
-                        "NOTE : Your new password must be different from your previous password.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(),
+              } 
+              if (state is ChangePasswordErrorState) {
+                DialogHelper.showErrorMessage(context, "Alert", state.errorMessage);
+              }
+            },
+            builder: (context, state) {
+              var bloc = context.read<ChangePasswordBloc>();
+
+              return SafeArea(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 480),
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      if (state is ChangePasswordErrorState)
-                        Text(
-                          state.errorMessage,
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                      const SizedBox(height: 10),
-                      TextField(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.deny(" ")
-                        ],
-                        controller: oldPasswordController,
-                        obscureText: bloc.isShowingOldPassword,
-                        decoration: InputDecoration(
-                          suffixIcon: GestureDetector(
-                            onTap: () => bloc.add(OldPasswordButtonEvent()),
-                            child: Icon(
-                              bloc.isShowingOldPassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: Colors.grey,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 24),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 22,
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  child: const Icon(
+                                    Icons.lock_reset_rounded,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Change your password",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                                fontWeight: FontWeight.w600),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        "Your new password must be different from your previous password.",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                              color: Colors.grey[600],
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          filled: true,
-                          fillColor: const Color.fromARGB(74, 158, 158, 158),
-                          hintText: "Old Password",
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextField(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.deny(" ")
-                        ],
-                        controller: newPasswordController,
-                        obscureText: bloc.isShowingNewPassword,
-                        decoration: InputDecoration(
-                          suffixIcon: GestureDetector(
-                            onTap: () => bloc.add(NewPasswordButtonEvent()),
-                            child: Icon(
-                              bloc.isShowingNewPassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: Colors.grey,
+                            const SizedBox(height: 20),
+                            Text(
+                              "Current password",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium
+                                  ?.copyWith(fontWeight: FontWeight.w500),
                             ),
-                          ),
-                          filled: true,
-                          fillColor: const Color.fromARGB(74, 158, 158, 158),
-                          hintText: "New Password",
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        width: 1.sw,
-                        child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: CustomMaterialButton(
-                              onPressed: () {
-                                if (state is! ChangePasswordLoadingState) {
-                                  bloc.add(SubmitChangePasswordEvent(
-                                    newPasswordController.text,
-                                    oldPasswordController.text,
-                                  ));
-                                }
+                            const SizedBox(height: 6),
+                            TextField(
+                              inputFormatters: [
+                                FilteringTextInputFormatter.deny(" ")
+                              ],
+                              controller: TextEditingController(
+                                  text: bloc.oldPassword),
+                              obscureText: bloc.isShowingOldPassword,
+                              onChanged: (value) {
+                                bloc.oldPassword = value;
                               },
-                              buttonText: state is ChangePasswordLoadingState
-                                  ? "Loading..."
-                                  : "Change Passsord",
-                            )),
+                              decoration: InputDecoration(
+                                suffixIcon: GestureDetector(
+                                  onTap: () =>
+                                      bloc.add(OldPasswordButtonEvent()),
+                                  child: Icon(
+                                    bloc.isShowingOldPassword
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                hintText: "Enter current password",
+                                filled: true,
+                                fillColor: Colors.grey.shade100,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                      color: Colors.grey.shade300),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              "New password",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium
+                                  ?.copyWith(fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(height: 6),
+                            TextField(
+                              inputFormatters: [
+                                FilteringTextInputFormatter.deny(" ")
+                              ],
+                              controller: TextEditingController(
+                                  text: bloc.newPassword),
+                              obscureText: bloc.isShowingNewPassword,
+                              onChanged: (value) {
+                                bloc.newPassword = value;
+                              },
+                              decoration: InputDecoration(
+                                suffixIcon: GestureDetector(
+                                  onTap: () =>
+                                      bloc.add(NewPasswordButtonEvent()),
+                                  child: Icon(
+                                    bloc.isShowingNewPassword
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                hintText: "Create a new password",
+                                filled: true,
+                                fillColor: Colors.grey.shade100,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                      color: Colors.grey.shade300),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            SizedBox(
+                              width: double.infinity,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0),
+                                child: CustomButton(
+                                  onPressed: () {
+                                    if (state
+                                        is! ChangePasswordLoadingState) {
+                                      bloc.add(SubmitChangePasswordEvent(
+                                        bloc.newPassword,
+                                        bloc.oldPassword,
+                                      ));
+                                    }
+                                  },
+                                  buttonText: "Change Password",
+                                  isLoading:
+                                      state is ChangePasswordLoadingState,
+                                  isSuccess:
+                                      state is ChangePasswordSuccesfullState,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 10)
-                    ]);
-              },
-            ),
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),

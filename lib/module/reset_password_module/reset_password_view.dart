@@ -8,6 +8,7 @@ import 'package:i_densfa/module/ui/background.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/routes.dart';
 import 'package:i_densfa/utility/app_constants.dart';
+import 'package:i_densfa/utility/credential_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 class ResetPasswordView extends StatefulWidget {
@@ -30,167 +31,164 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        // backgroundColor: Theme.of(context).colorScheme.onSurface,
         body: Stack(
-          children: [
-            const Background(true),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                width: 0.9.sw >= 0.9.sh ? 0.9.sh : 0.9.sw,
-                padding: const EdgeInsets.all(6),
-                child: RepositoryProvider(
-                  create: (context) => ResetPasswordRepository(),
-                  child: BlocProvider(
-                    create: (context) => ResetPasswordBloc(context.read()),
-                    child: BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
-                      builder: (context, state) {
-                        var bloc = context.read<ResetPasswordBloc>();
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(height: 10),
-                            Image.asset(
-                              ImageConstants.logo,
-                              width: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
-                            ),
-                            const SizedBox(height: 10),
-                            const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Your new password must be different from your previous password",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            if (state is ResetPasswordErrorState)
-                              Text(
-                                state.errorMessage,
-                                style: const TextStyle(color: Colors.red),
-                              ),
-                            const SizedBox(height: 10),
-                            TextField(
-                              style: const TextStyle(color: Colors.white),
-                              controller: newPasswordController,
-                              obscureText: bloc.isShowingNewPassword,
-                              decoration: InputDecoration(
-                                suffixIcon: GestureDetector(
-                                  onTap: () =>
-                                      {bloc.add(NewPasswordButtonEvent())},
-                                  child: Container(
-                                    color: Colors.transparent,
-                                    child: Icon(
-                                      state is ShowNewPasswordState
-                                          ? state.visible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off
-                                          : Icons.visibility_off,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
+      children: [
+        const Background(true),
+        Align(
+          alignment: Alignment.center,
+          child: Container(
+            width: 0.9.sw >= 0.9.sh ? 0.9.sh : 0.9.sw,
+            padding: const EdgeInsets.all(6),
+            child: RepositoryProvider(
+              create: (context) => ResetPasswordRepository(),
+              child: BlocProvider(
+                create: (context) => ResetPasswordBloc(context.read()),
+                child: BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
+                  builder: (context, state) {
+                    var bloc = context.read<ResetPasswordBloc>();
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 10),
+                        Image.asset(
+                          ImageConstants.logo,
+                          width: 0.2.sw >= 0.2.sh ? 0.2.sh : 0.2.sw,
+                        ),
+                        const SizedBox(height: 10),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "Your new password must be different from your previous password",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        if (state is ResetPasswordErrorState)
+                          Text(
+                            state.errorMessage,
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        const SizedBox(height: 10),
+                        TextField(
+                          style: const TextStyle(color: Colors.white),
+                          controller: newPasswordController,
+                          obscureText: bloc.isShowingNewPassword,
+                          decoration: InputDecoration(
+                            suffixIcon: GestureDetector(
+                              onTap: () => {bloc.add(NewPasswordButtonEvent())},
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Icon(
+                                  state is ShowNewPasswordState
+                                      ? state.visible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off
+                                      : Icons.visibility_off,
+                                  color: Colors.grey,
                                 ),
-                                hintStyle: const TextStyle(color: Colors.white),
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(50.w),
-                                    borderSide: const BorderSide(
-                                        color: ColorConstants.amber)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(50.w),
-                                    borderSide: const BorderSide(
-                                        color: Colors.white54)),
-                                filled: true,
-                                fillColor:
-                                    const Color.fromARGB(74, 158, 158, 158),
-                                hintText: "New Password",
                               ),
                             ),
-                            const SizedBox(height: 10),
-                            TextField(
-                              style: const TextStyle(color: Colors.white),
-                              controller: confirmPasssordController,
-                              obscureText: bloc.isShowingConfirmPassword,
-                              decoration: InputDecoration(
-                                suffixIcon: GestureDetector(
-                                  onTap: () =>
-                                      bloc.add(ConfirmPasswordButtonEvent()),
-                                  child: Container(
-                                    color: Colors.transparent,
-                                    child: Icon(
-                                      state is ShowConfirmPasswordState
-                                          ? state.visible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off
-                                          : Icons.visibility_off,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
+                            hintStyle: const TextStyle(color: Colors.white),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50.w),
+                                borderSide: const BorderSide(
+                                    color: ColorConstants.amber)),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50.w),
+                                borderSide:
+                                    const BorderSide(color: Colors.white54)),
+                            filled: true,
+                            fillColor: const Color.fromARGB(74, 158, 158, 158),
+                            hintText: "New Password",
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        TextField(
+                          style: const TextStyle(color: Colors.white),
+                          controller: confirmPasssordController,
+                          obscureText: bloc.isShowingConfirmPassword,
+                          decoration: InputDecoration(
+                            suffixIcon: GestureDetector(
+                              onTap: () =>
+                                  bloc.add(ConfirmPasswordButtonEvent()),
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Icon(
+                                  state is ShowConfirmPasswordState
+                                      ? state.visible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off
+                                      : Icons.visibility_off,
+                                  color: Colors.grey,
                                 ),
-                                hintStyle: const TextStyle(color: Colors.white),
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(50.w),
-                                    borderSide: const BorderSide(
-                                        color: ColorConstants.amber)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(50.w),
-                                    borderSide: const BorderSide(
-                                        color: Colors.white54)),
-                                filled: true,
-                                fillColor:
-                                    const Color.fromARGB(74, 158, 158, 158),
-                                hintText: "Confirm Password",
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(10)),
                               ),
                             ),
-                            SizedBox(height: 10.h),
-                            const SizedBox(height: 10),
-                            BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
-                              listener: (context, state) {
-                                if (state is ResetPasswordSuccesfullState) {
-                                  context.showSnackBarMessage(
-                                      "successfully reset password");
-                                  context.go(AppPaths.login);
-                                }
-                              },
-                              builder: (context, state) {
-                                return SizedBox(
-                                  width: 1.sw,
-                                  child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      child: CustomMaterialButton(
-                                        onPressed: () {
-                                          if (state
-                                              is! ResetPasswordLoadingState) {
-                                            bloc.add(SubmitChangePasswordEvent(
-                                                newPasswordController.text,
-                                                confirmPasssordController.text,
-                                                widget.otp,
-                                                widget.email));
-                                          }
-                                        },
-                                        buttonText:
-                                            state is ResetPasswordLoadingState
-                                                ? "Loading..."
-                                                : "Change Passsord",
-                                      )),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 10)
-                          ],
-                        );
-                      },
-                    ),
-                  ),
+                            hintStyle: const TextStyle(color: Colors.white),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50.w),
+                                borderSide: const BorderSide(
+                                    color: ColorConstants.amber)),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50.w),
+                                borderSide:
+                                    const BorderSide(color: Colors.white54)),
+                            filled: true,
+                            fillColor: const Color.fromARGB(74, 158, 158, 158),
+                            hintText: "Confirm Password",
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        const SizedBox(height: 10),
+                        BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
+                          listener: (context, state) async {
+                            if (state is ResetPasswordSuccesfullState) {
+                              await CredentialStorage.clearAll();
+                              context.showSnackBarMessage(
+                                  "successfully reset password");
+                              context.go(AppPaths.login);
+                            }
+                          },
+                          builder: (context, state) {
+                            return SizedBox(
+                              width: 1.sw,
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: CustomMaterialButton(
+                                    onPressed: () {
+                                      if (state is! ResetPasswordLoadingState) {
+                                        bloc.add(SubmitChangePasswordEvent(
+                                            newPasswordController.text,
+                                            confirmPasssordController.text,
+                                            widget.otp,
+                                            widget.email));
+                                      }
+                                    },
+                                    buttonText:
+                                        state is ResetPasswordLoadingState
+                                            ? "Loading..."
+                                            : "Change Passsord",
+                                  )),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 10)
+                      ],
+                    );
+                  },
                 ),
               ),
-            )
-          ],
-        ));
+            ),
+          ),
+        )
+      ],
+    ));
   }
 }

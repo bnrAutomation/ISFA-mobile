@@ -12,7 +12,12 @@ class LoginTextChangeEvent extends LoginEvent {
 class LoginSubmitEvent extends LoginEvent {
   final String username;
   final String password;
-  LoginSubmitEvent(this.username, this.password);
+  final bool rememberMe;
+  LoginSubmitEvent(
+    this.username,
+    this.password, {
+    this.rememberMe = false,
+  });
 }
 
 class LoginShowPasswordButtonEvent extends LoginEvent {}

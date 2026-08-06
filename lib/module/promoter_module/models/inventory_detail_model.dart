@@ -72,9 +72,9 @@ class InventoryProductDetailModel {
       InventoryProductDetailModel(
         productId: json["productId"],
         categoryId: json["categoryId"],
-        categoryName: json["categoryName"],
-        productName: json["productName"],
-        price: json["price"] ?? 0.0,
+        categoryName: json["categoryName"]??"",
+        productName: json["productName"]??"",
+        price: json["price"] ?? 0.0,  
         stockBalance: json["stockBalance"] ?? 0,
       );
 

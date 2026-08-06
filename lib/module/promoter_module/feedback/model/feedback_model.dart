@@ -46,7 +46,7 @@ class FeedbackDataList {
   late final int id;
   late final int purposeId;
   late final String reason;
-  late final String imageUrl;
+  late final String? imageUrl;
   late final String purposeName;
   DateTime? createdDate;
 

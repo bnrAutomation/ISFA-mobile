@@ -18,21 +18,20 @@ class SettingsRespository {
         await MultipartFile.fromPath('image', profilePic.path);
 
     request.files.add(multipartFile);
-
+    request.fields.addAll({"activity": 'profile'});
     final response = await request.send();
     String body = await response.stream.transform(utf8.decoder).join();
 
     if (response.statusCode == 200) {
-      // = LoginModel.fromRawJson(body).logindata.userInfo;
-      var loginModel = await PinLoginRepository()
-          .verifyPin(username: userDetails.username, pin: userDetails.pin);
+      var loginModel = await PinLoginRepository().verifyPinSetting(
+          username: userDetails.username, pin: userDetails.pin);
 
       AppStorage().userDetail = loginModel;
       return json.decode(body)['message'] ?? "";
     } else {
-      throw body.isEmpty
-          ? "Something went wrong"
-          : json.decode(body)['message'] ?? "Something went wrong";
+      final bod = jsonDecode(body);
+      final String mess = bod['message'] ?? bod["error"];
+      throw mess;
     }
   }
 }

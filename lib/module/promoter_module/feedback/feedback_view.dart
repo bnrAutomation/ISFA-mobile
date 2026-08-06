@@ -8,6 +8,7 @@ import 'package:i_densfa/module/promoter_module/feedback/bloc/feedback_bloc.dart
 import 'package:i_densfa/module/promoter_module/feedback/feedback_repository.dart';
 import 'package:i_densfa/module/ui/app_pop_view.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
+import 'package:i_densfa/module/ui/speech_input_widgets.dart';
 import 'package:i_densfa/utility/app_constants.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
@@ -32,7 +33,7 @@ class FeedbackView extends StatelessWidget {
                 context.showSnackBarMessage(state.errorMessage);
               }
               if (state is FeedbackSuccessState) {
-                Navigator.pop(context);
+                Navigator.pop(context,true);
               }
             },
             builder: (context, state) {
@@ -65,6 +66,7 @@ class FeedbackView extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelLarge),
                       const SizedBox(height: 5),
                       AppPopup.dropDownMenu(
+                        enabled: true,
                         options: bloc.purposes.map((e) => e.name).toList(),
                         placeholder: "Choose an option",
                         value: bloc.selectedPurpose?.name,
@@ -84,7 +86,7 @@ class FeedbackView extends StatelessWidget {
                           border: Border.all(color: Colors.black),
                           borderRadius: BorderRadius.circular(5),
                         ),
-                        child: TextFormField(
+                        child: SpeechEnabledTextFormField(
                           decoration: const InputDecoration(
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,

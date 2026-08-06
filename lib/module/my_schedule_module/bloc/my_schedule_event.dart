@@ -17,6 +17,12 @@ class SearchMyScheduleEvent extends MyScheduleEvent {
   SearchMyScheduleEvent(this.searchText);
 }
 
+class SearchMechanicVisitsEvent extends MyScheduleEvent {
+  final String searchText;
+
+  SearchMechanicVisitsEvent(this.searchText);
+}
+
 class SortMyScheduleEvent extends MyScheduleEvent {}
 
 class AddBeatPlanDateSelected extends MyScheduleEvent {
@@ -26,5 +32,8 @@ class AddBeatPlanDateSelected extends MyScheduleEvent {
 }
 
 class GetAllStoresListEvent extends MyScheduleEvent {}
+class GetAllMechancicListEvent extends MyScheduleEvent {}
+class StateChangeEvent extends MyScheduleEvent {}
 
+class AddMechanicsEvent extends MyScheduleEvent {}
 class BeatPlanAddEvent extends MyScheduleEvent {}

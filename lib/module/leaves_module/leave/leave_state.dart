@@ -15,8 +15,14 @@ class LeaveViewShowSnack extends LeaveState {
   LeaveViewShowSnack(this.message);
 }
 
-class LeaveAppliedSuccess extends LeaveState {}
+class LeaveAppliedSuccess extends LeaveState {
+   final String message;
+
+  LeaveAppliedSuccess(this.message);
+}
 
 class LoadingState extends LeaveState {}
 
 class LeaveApplyLoadingState extends LeaveState {}
+
+class OptionalLeaveStateChange extends LeaveState {}

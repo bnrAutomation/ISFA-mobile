@@ -10,7 +10,7 @@ import 'models/team_list_model.dart';
 
 class TeamRepository {
   final userId = AppStorage().userDetail!.id;
-  final client = CustomHttpBaseClient();
+  final client = CustomHttpBaseClient.instance;
   Future<TeamListResponse> getTeamMembers(int? forUserId) async {
     final id = forUserId ?? userId;
     final response =
@@ -23,7 +23,7 @@ class TeamRepository {
         return responseBody;
       }
     } else {
-      throw getErrorMessage(response.body);
+      throw getErrorMessage(response);
     }
   }
 
@@ -39,7 +39,7 @@ class TeamRepository {
     if (response.statusCode == 200) {
       return TeamDataResponse.fromRawJson(response.body).data;
     } else {
-      throw getErrorMessage(response.body);
+      throw getErrorMessage(response);
     }
   }
 
@@ -62,7 +62,7 @@ class TeamRepository {
     if (res.statusCode == 200) {
       return jsonDecode(res.body)['message'];
     } else {
-      throw getErrorMessage(res.body);
+      throw getErrorMessage(res);
     }
   }
 }

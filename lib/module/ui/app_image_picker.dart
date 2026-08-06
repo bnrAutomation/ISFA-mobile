@@ -1,5 +1,7 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:i_densfa/routes.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AppImagePicker {
@@ -16,10 +18,11 @@ class AppImagePicker {
               CupertinoActionSheetAction(
                   onPressed: () async {
                     context.pop();
-                    final image = await ImagePicker()
-                        .pickImage(source: ImageSource.camera);
+                     String? image = await context.pushNamed(AppPaths.appcamera, pathParameters: {'from': "randowm"});
+                    // final image = await ImagePicker()
+                    //     .pickImage(source: ImageSource.camera);
                     if (image != null) {
-                      onSelectedImage(image);
+                      onSelectedImage(XFile(image));
                     }
                   },
                   isDefaultAction: true,
@@ -27,10 +30,15 @@ class AppImagePicker {
               CupertinoActionSheetAction(
                   onPressed: () async {
                     context.pop();
-                    final image = await ImagePicker()
-                        .pickImage(source: ImageSource.gallery);
+                    FilePickerResult? image =
+                        await FilePicker.platform.pickFiles(
+                      type: FileType.custom,
+                      allowMultiple: false,
+                      allowedExtensions: ['jpg','jpeg', 'png'],
+                    );
+
                     if (image != null) {
-                      onSelectedImage(image);
+                      onSelectedImage(XFile(image.files.first.path ?? ""));
                     }
                   },
                   child: const Text("Gallery"))

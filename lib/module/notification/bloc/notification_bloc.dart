@@ -19,19 +19,22 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   void _onGetNotification(
       GetNotificationsEvent event, Emitter<NotificationState> emit) async {
     String url = "${URLConstants.getNotifications}/$userId";
-    emit(NotificationsLoading());
-    final response = await CustomHttpBaseClient().get(Uri.parse(url));
+    // Avoid full-screen loader on refresh when list already has items.
+    if (notifcations.isEmpty) {
+      emit(NotificationsLoading());
+    }
+    final response = await CustomHttpBaseClient.instance.get(Uri.parse(url));
     if (response.statusCode == 200) {
       try {
         notifcations =
             NotificationResponseModel.fromRawJson(response.body).notifications;
-        emit(NotificationInitial());
+        AppConstant.notificationCount = 0;
+        emit(NotificationsReady());
       } catch (e) {
-        debugPrint(e.toString());
-        emit(NotificationInitial());
+        emit(NotificationsReady());
       }
     } else {
-      emit(NotificationInitial());
+      emit(NotificationsReady());
     }
   }
 }

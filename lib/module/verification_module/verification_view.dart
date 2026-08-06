@@ -18,7 +18,7 @@ class VerificationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.onSurface,
         body: Stack(
           children: [
             const Background(true),
@@ -148,7 +148,7 @@ class VerificationView extends StatelessWidget {
                                               .colorScheme
                                               .primary,
                                           splashColor:
-                                              Colors.red.withOpacity(0.5),
+                                              Colors.red.withValues(alpha: 0.5),
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 15, horizontal: 25),
                                           shape: RoundedRectangleBorder(

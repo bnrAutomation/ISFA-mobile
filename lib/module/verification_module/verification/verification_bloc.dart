@@ -41,9 +41,10 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
       } else {
         try {
           emit(VerificationLoadingState());
-          final verificationResponse = await repo.verifiOTP(
-              username: event.username, otp: varificationCode);
-          debugPrint(verificationResponse.toString());
+          //  final verificationResponse =
+
+          await repo.verifiOTP(username: event.username, otp: varificationCode);
+
           emit(VerificationSuccesfullState(event.username, varificationCode));
         } catch (err) {
           emit(VerificationErrorState(err.toString()));

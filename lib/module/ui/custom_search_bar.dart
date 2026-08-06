@@ -1,43 +1,43 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CustomSearchBar extends StatelessWidget {
+  final Color colors;
   final String hintText;
-  final Color color;
-  final void Function(String)? onChange;
+  final Color iconColor;
+  final Function onChange;
   const CustomSearchBar(
       {super.key,
       required this.hintText,
       required this.onChange,
-      this.color = Colors.white});
-
+      this.colors = const Color(0xff003D5B),
+      this.iconColor = Colors.amber});
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      style: TextStyle(color: color),
-      textInputAction: TextInputAction.search,
-      onChanged: onChange,
-      decoration: InputDecoration(
-          prefixIcon: Icon(
-            CupertinoIcons.search,
-            color: color,
-            size: 16,
-          ),
-          hintText: hintText,
-          hintStyle: GoogleFonts.inter(color: color, fontSize: 10),
-          contentPadding: const EdgeInsets.all(0),
-          iconColor: Colors.white,
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: color),
-              borderRadius: BorderRadius.circular(40)),
-          enabledBorder: OutlineInputBorder(
-              // gapPadding: 20,
-              borderSide: BorderSide(width: 1, color: color),
-              borderRadius: BorderRadius.circular(40)),
-          border: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: color),
-              borderRadius: BorderRadius.circular(40))),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 5),
+      child: TextFormField(
+        style: Theme.of(context).textTheme.labelSmall,
+        onChanged: (value) => onChange(value),
+        decoration: InputDecoration(
+            prefixIcon: const Icon(
+              CupertinoIcons.search,
+              color: Colors.black,
+              size: 18,
+            ),
+            hintText: hintText,
+            hintStyle: Theme.of(context).textTheme.labelSmall,
+            iconColor: Colors.white,
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 1, color: iconColor),
+                borderRadius: BorderRadius.circular(5)),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 1, color: iconColor),
+                borderRadius: BorderRadius.circular(5)),
+            border: OutlineInputBorder(
+                borderSide: BorderSide(width: 1, color: iconColor),
+                borderRadius: BorderRadius.circular(5))),
+      ),
     );
   }
 }

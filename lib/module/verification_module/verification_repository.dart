@@ -10,14 +10,12 @@ class VerificationRepository {
   Future<ForgotPasswordModel> verifiOTP(
       {required String username, required String otp}) async {
     final body = {"emailId": username, "otp": otp};
-    final response = await CustomHttpBaseClient().post(
-        Uri.parse(URLConstants.verifyotp),
-        body: jsonEncode(body),
-        headers: {'Content-Type': 'application/json'});
+    final response = await post(Uri.parse(URLConstants.verifyotp),
+        body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       return ForgotPasswordModel.fromRawJson(response.body);
     } else {
-      throw getErrorMessage(response.body);
+      throw getErrorMessage(response);
     }
   }
 
@@ -29,7 +27,7 @@ class VerificationRepository {
     if (response.statusCode == 200) {
       return ForgotPasswordModel.fromRawJson(response.body);
     } else {
-      throw json.decode(response.body)['message'];
+      throw getErrorMessage(response);
     }
   }
 }

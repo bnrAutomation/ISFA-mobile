@@ -1,5 +1,17 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+extension Unique<E, Id> on List<E> {
+  List<E> unique([Id Function(E element)? id, bool inplace = true]) {
+    final ids = <dynamic>{};
+    var list = inplace ? this : List<E>.from(this);
+    list.retainWhere((x) => ids.add(id != null ? id(x) : x as Id));
+    return list;
+  }
+}
 
 extension DateTimeHelper on DateTime {
   /// Return a string representing [date] formatted according to our locale
@@ -10,6 +22,18 @@ extension DateTimeHelper on DateTime {
 
   bool isSameDate(DateTime other) {
     return year == other.year && month == other.month && day == other.day;
+  }
+}
+
+extension TimeHelper on TimeOfDay {
+  double toDouble() {
+    return hour + minute / 60.0;
+  }
+
+  String toStringFormat(String format) {
+    final now = DateTime.now();
+    final dateTime = DateTime(now.year, now.month, now.day, hour, minute);
+    return DateFormat(format).format(dateTime);
   }
 }
 
@@ -34,8 +58,19 @@ extension Helper on String {
   }
 
   bool passwordValid() => RegExp(
-          r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$")
+          r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&=])[A-Za-z\d@$!%*?&=]{16,}$")
       .hasMatch(this);
+
+  bool urlValid() => RegExp(
+          r'(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?')
+      .hasMatch(this);
+}
+
+String encryptPassword(String password) {
+  final bytes = utf8.encode(password);
+  final hash = sha256.convert(bytes);
+  return hash.toString();
+  //return password;
 }
 
 extension BuildContextHelper on BuildContext {
@@ -44,7 +79,47 @@ extension BuildContextHelper on BuildContext {
   }
 
   void showSnackBarMessage(String message) {
-    ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(message)));
+    final msg = message.trim();
+    final isSecurityBlock = msg.contains('Developer options are enabled') ||
+        msg.contains('Mock location detected') ||
+        msg.contains('GPS spoofing') ||
+        msg.contains('Suspicious location change detected') ||
+        msg.contains('Unrealistic movement detected') ||
+        msg.contains('registered device');
+
+    if (isSecurityBlock) {
+      showDialog(
+        context: this,
+        barrierDismissible: false,
+        builder: (_) => AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          title: const Row(
+            children:  [
+              Icon(Icons.warning_rounded, color: Colors.red),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Security alert',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          ),
+          content: Text(msg),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(this, rootNavigator: true).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(msg)));
   }
 }
 
@@ -53,9 +128,8 @@ class CustomDateTime extends DateTime {
       : super(dateTime.year, dateTime.month, dateTime.day, dateTime.hour,
             dateTime.minute, dateTime.second, dateTime.millisecond);
 
-  CustomDateTime(int year, int month, int day,
-      [int hour = 0, int minute = 0, int second = 0, int millisecond = 0])
-      : super(year, month, day, hour, minute, second, millisecond);
+  CustomDateTime(super.year, super.month, super.day,
+      [super.hour, super.minute, super.second, super.millisecond]);
 
   factory CustomDateTime.fromList(List<int> dateTimeData) {
     if (dateTimeData.length < 3) {

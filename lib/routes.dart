@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:i_densfa/module/assessment_module/assessment/assessment_bloc.dart';
+import 'package:i_densfa/module/assessment_module/assessment_view.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:i_densfa/module/assessment_module/view/assessment_question.dart';
+import 'package:i_densfa/module/assessment_module/view/assessment_result_view.dart';
+import 'package:i_densfa/module/assessment_module/view/level_view.dart';
 import 'package:i_densfa/module/change_email_phone_module/change_email_phone_view.dart';
+import 'package:i_densfa/module/create_store_module/bloc/create_store_bloc.dart';
+import 'package:i_densfa/module/create_store_module/create_store_repository.dart';
+import 'package:i_densfa/module/create_store_module/create_store_view.dart';
+import 'package:i_densfa/module/issues_management_module/issues_detail_module/issues_detail_view.dart';
+import 'package:i_densfa/module/issues_management_module/issues_list_module/issues_management_view.dart';
 import 'package:i_densfa/module/login_verify_module/pin_login_view.dart';
 import 'package:i_densfa/module/splash_module/splash_view.dart';
+import 'package:i_densfa/module/survey_module/bloc/survey_bloc.dart';
+import 'package:i_densfa/module/survey_module/view/survey_questions_view.dart';
+import 'package:i_densfa/module/survey_module/view/survey_list_view.dart';
 import 'package:i_densfa/module/team_module/views/teams_main_view.dart';
+import 'package:i_densfa/module/ui/camera_preview.dart';
+import 'package:i_densfa/module/web_module/web_view.dart';
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
@@ -23,22 +39,19 @@ import 'module/my_schedule_module/beat_plan_model.dart';
 import 'module/my_schedule_module/schedule_visit/bloc/schedule_visit_call_bloc.dart';
 import 'module/my_schedule_module/schedule_visit/schedule_visit_view.dart';
 import 'module/notification/notification_view.dart';
-import 'module/policy_module/policy_view.dart';
 import 'module/promoter_module/bloc/promoter_bloc.dart';
 import 'module/promoter_module/promoter_view.dart';
 import 'module/setting_module/profile_info_view.dart';
 import 'module/setting_module/setting_view.dart';
-import 'module/store_detail_module/store_detail_repositry.dart';
+import 'module/store_detail_module/store_detail_repository.dart';
 import 'module/store_detail_module/store_detail_view.dart';
+import 'module/survey_module/view/survey_detail_view.dart';
 import 'module/team_module/models/team_list_model.dart';
 import 'module/team_module/views/team_profile_view.dart';
-import 'module/web_module/web_view.dart';
 import 'module/aboutus_module/aboutus_view.dart';
-import 'module/assessment_module/bloc/assessment_bloc.dart';
-import 'module/assessment_module/views/assessment_list_view.dart';
-import 'module/assessment_module/views/assessment_questions_view.dart';
-import 'module/assessment_module/views/selected_assessment_view.dart';
+import 'module/policy_module/policy_view.dart';
 import 'module/attendance_module/attendance_view.dart';
+import 'module/device_registration_module/device_registration_view.dart';
 import 'module/forgot_password_module/forgot_password_view.dart';
 import 'module/promoter_module/promoter_repository.dart';
 import 'module/reset_password_module/reset_password_view.dart';
@@ -54,6 +67,9 @@ final router = GoRouter(
               false
       ? AppPaths.pinLogin
       : AppPaths.initial,
+  observers: <NavigatorObserver>[
+    SentryNavigatorObserver(),
+  ],
   routes: <RouteBase>[
     GoRoute(
       path: AppPaths.initial,
@@ -75,6 +91,14 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
+      path: AppPaths.createStore,
+      name: AppPaths.createStore,
+      builder: (context, state) => BlocProvider(
+        create: (context) => CreateStoreBloc(CreateStoreRepository()),
+        child: const CreateStoreView(),
+      ),
+    ),
+    GoRoute(
       path: AppPaths.campaignQuestion,
       name: AppPaths.campaignQuestion,
       builder: (context, state) => BlocProvider.value(
@@ -91,16 +115,17 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
-      path: AppPaths.assessmentList,
+      path: "${AppPaths.assessmentList}/:name",
       name: AppPaths.assessmentList,
-      builder: (context, state) => const AssessmentListView(),
+      builder: (context, state) => AssessmentView(
+        name: state.pathParameters['name'] ?? "Assessment",
+      ),
     ),
     GoRoute(
-      path: AppPaths.assessment,
-      name: AppPaths.assessment,
+      path: AppPaths.assessmentlevel,
+      name: AppPaths.assessmentlevel,
       builder: (context, state) => BlocProvider.value(
-          value: state.extra as AssessmentBloc,
-          child: const SelectedAssessmentView()),
+          value: state.extra as AssessmentBloc, child: const LevelView()),
     ),
     GoRoute(
       path: AppPaths.assessmentQuestion,
@@ -108,6 +133,14 @@ final router = GoRouter(
       builder: (context, state) => BlocProvider.value(
         value: state.extra as AssessmentBloc,
         child: const AssessmentQuestionsView(),
+      ),
+    ),
+    GoRoute(
+      path: AppPaths.assessmentResult,
+      name: AppPaths.assessmentResult,
+      builder: (context, state) => BlocProvider.value(
+        value: state.extra as AssessmentBloc,
+        child: const AssessmentResult(),
       ),
     ),
     GoRoute(
@@ -141,7 +174,7 @@ final router = GoRouter(
     GoRoute(
       path: AppPaths.login,
       name: AppPaths.login,
-      builder: (context, state) => const LoginView(),
+      builder: (context, state) => LoginView(key: state.pageKey),
     ),
     GoRoute(
         path: AppPaths.pinLogin,
@@ -159,6 +192,17 @@ final router = GoRouter(
       path: AppPaths.forgotpass,
       name: AppPaths.forgotpass,
       builder: (context, state) => const ForgotPasswordView(),
+    ),
+    GoRoute(
+      path: AppPaths.deviceRegistration,
+      name: AppPaths.deviceRegistration,
+      builder: (context, state) {
+        final extra = state.extra;
+        final username = extra is Map
+            ? (extra['username']?.toString() ?? '')
+            : '';
+        return DeviceRegistrationView(initialUsername: username);
+      },
     ),
     GoRoute(
       path: "${AppPaths.passVerification}/:email/:msg",
@@ -185,46 +229,55 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: AppPaths.attendance,
+      path: "${AppPaths.attendance}/:name",
       name: AppPaths.attendance,
-      builder: (context, state) =>
-          AttendanceView(forUserId: state.extra as int?),
+      builder: (context, state) => AttendanceView(
+          name: state.pathParameters['name'] ?? "Attendance",
+          forUserId: state.extra as int?),
     ),
     GoRoute(
-      path: AppPaths.myActivity,
+      path: "${AppPaths.myActivity}/:name",
       name: AppPaths.myActivity,
-      builder: (context, state) =>
-          MyActivityView(forUserId: state.extra as int?),
+      builder: (context, state) => MyActivityView(
+          name: state.pathParameters['name'] ?? "My Activity",
+          forUserId: state.extra as int?),
     ),
     GoRoute(
-      path: AppPaths.promoter,
+      path: "${AppPaths.promoter}/:name",
       name: AppPaths.promoter,
       builder: (context, state) => BlocProvider(
         create: (context) =>
             PromoterBloc(PromoterRepository())..add(GetStoreDetailEvent()),
-        child: const PromoterView(),
+        child: PromoterView(
+          name: state.pathParameters['name'] ?? "Promoter",
+        ),
       ),
     ),
     GoRoute(
-      path: AppPaths.leave,
+      path: "${AppPaths.leave}/:name",
       name: AppPaths.leave,
-      builder: (context, state) => const LeaveView(),
+      builder: (context, state) => LeaveView(
+        name: state.pathParameters['name'] ?? "Leave",
+      ),
     ),
     GoRoute(
-      path: AppPaths.setting,
+      path: "${AppPaths.setting}/:name",
       name: AppPaths.setting,
-      builder: (context, state) => const SettingView(),
+      builder: (context, state) => SettingView(
+        name: state.pathParameters['name'] ?? "Settings",
+      ),
     ),
     GoRoute(
       path: AppPaths.changePass,
       name: AppPaths.changePass,
-      builder: (context, state) => ChangePasswordView(),
+      builder: (context, state) => const ChangePasswordView(),
     ),
     GoRoute(
-      path: "${AppPaths.appwebview}/:link",
+      path: "${AppPaths.appwebview}/:link/:contentType",
       name: AppPaths.appwebview,
       builder: (context, state) => AppWebView(
         link: state.pathParameters['link'] ?? "",
+         contentType: state.pathParameters['contentType'] ?? "pdf",
       ),
     ),
     GoRoute(
@@ -237,6 +290,11 @@ final router = GoRouter(
       name: AppPaths.aboutUs,
       builder: (context, state) => const AboutUsView(),
     ),
+    GoRoute(
+        path: AppPaths.issuesDetail,
+        name: AppPaths.issuesDetail,
+        builder: (context, state) =>
+            IssuesDetailView(id: state.extra as String)),
     GoRoute(
       path: "${AppPaths.changeEmailPhone}/:changeEmail",
       name: AppPaths.changeEmailPhone,
@@ -261,9 +319,46 @@ final router = GoRouter(
           TeamProfileView(memberDetail: state.extra as TeamMemberModel),
     ),
     GoRoute(
+      path: "${AppPaths.appcamera}/:from",
+      name: AppPaths.appcamera,
+      builder: (context, state) => AppCameraPreview(
+          from: state.pathParameters['from'] ?? "",
+      ),
+    ),
+    GoRoute(
       path: AppPaths.help,
       name: AppPaths.help,
       builder: (context, state) => const HelpView(),
+    ),
+    GoRoute(
+      path: "${AppPaths.surveyList}/:name",
+      name: AppPaths.surveyList,
+      builder: (context, state) => SurveyListView(
+        name: state.pathParameters['name'] ?? "Survey",
+      ),
+    ),
+    GoRoute(
+      path: "${AppPaths.issuesManagement}/:name",
+      name: AppPaths.issuesManagement,
+      builder: (context, state) => IssuesManagementView(
+        name: state.pathParameters['name'] ?? "Issues Management",
+      ),
+    ),
+    GoRoute(
+      path: AppPaths.surveyForm,
+      name: AppPaths.surveyForm,
+      builder: (context, state) => BlocProvider.value(
+        value: state.extra as SurveyBloc,
+        child: const SurveyQuestionsView(),
+      ),
+    ),
+    GoRoute(
+      path: AppPaths.selectedSurveyDetail,
+      name: AppPaths.selectedSurveyDetail,
+      builder: (context, state) => BlocProvider.value(
+        value: state.extra as SurveyBloc,
+        child: const SelectedSurveyView(),
+      ),
     ),
   ],
   errorBuilder: (context, state) {
@@ -282,14 +377,16 @@ class AppPaths {
   static const aboutUs = "/aboutus";
   static const help = "/help";
   static const appwebview = '/appwebview';
-  static const assessment = '/assessment';
+  static const assessmentlevel = '/assessmentlevel';
   static const assessmentList = '/assessmentlist';
   static const assessmentQuestion = '/assessmentQuestion';
+  static const assessmentResult = "/assessmentResult";
   static const attendance = '/attendance';
   static const campaignQuestion = '/campaignQuestion';
   static const changePass = '/changePass';
   static const checkin = '/checkin';
   static const forgotpass = '/forgotpass';
+  static const deviceRegistration = '/device-registration';
   static const initial = '/';
   static const inventory = '/inventory';
   static const leave = '/leave';
@@ -304,6 +401,7 @@ class AppPaths {
   static const selfie = '/selfie';
   static const setting = '/setting';
   static const store = '/store';
+  static const createStore = '/createStore';
   static const tabbar = '/tabbar';
   static const pinLogin = '/pinlogin';
   static const pinset = '/pinset';
@@ -312,4 +410,10 @@ class AppPaths {
   static const notification = '/notification';
   static const team = '/team';
   static const teamProfile = '/teamProfile';
+  static const surveyList = '/surveyList';
+  static const issuesManagement = '/issuesManagement';
+  static const issuesDetail = '/issuesDetail';
+  static const selectedSurveyDetail = '/selectedSurveyDetail';
+  static const surveyForm = '/surveyForm';
+  static const appcamera = "/appcamera";
 }

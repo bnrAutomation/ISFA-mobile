@@ -15,3 +15,13 @@ class LoginedSuccesfullState extends PinLoginState {}
 class PinLoginLoadingState extends PinLoginState {}
 
 class PinLoginTokenExpiredState extends PinLoginState {}
+
+class PinLoginDeviceUnauthorizedState extends PinLoginState {
+  final String username;
+  final String message;
+
+  PinLoginDeviceUnauthorizedState({
+    required this.username,
+    required this.message,
+  });
+}

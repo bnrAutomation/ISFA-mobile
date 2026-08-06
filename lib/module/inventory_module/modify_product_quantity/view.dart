@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:i_densfa/module/ui/custom_material_button.dart';
 import 'package:i_densfa/module/ui/button_views.dart';
+import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/extensions.dart';
 
 import 'bloc/modify_quantity_bloc.dart';
@@ -60,7 +61,22 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                 SizedBox(height: 12.h),
                 Text("Category", style: Theme.of(context).textTheme.labelLarge),
                 const SizedBox(height: 5),
-                DropDownWithOptions(
+                DropDownSearchWidget<String>(
+                  filterFn: (items, value) => items?.trim().toLowerCase().contains(value.trim().toLowerCase()) ?? false,
+                  listItemWidget: (userItems) => Text(
+                    userItems ?? "NA",
+                    style: Theme.of(context).textTheme.titleSmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  selectedWidget: Text(
+                    (bloc.selectedCategory?.categoryName ?? "").isNotEmpty
+                        ? bloc.selectedCategory?.categoryName ??
+                            "Please select category"
+                        : "Please select category",
+                    style: Theme.of(context).textTheme.titleSmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  enabled: true,
                   options: bloc.categories.map((e) => e.categoryName).toList(),
                   hint: "Please select category",
                   selectedVal: bloc.selectedCategory?.categoryName,
@@ -71,11 +87,102 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 8.h),
-                if (bloc.selectedCategory != null) ...[
+                if (bloc.selectedCategory != null &&
+                    AppStorage().userDetail?.companyName.toLowerCase() ==
+                        "organic india") ...[
+                  Text("Sub-Category",
+                      style: Theme.of(context).textTheme.labelLarge),
+                  const SizedBox(height: 5),
+
+                  DropDownSearchWidget<String>(
+                     filterFn: (items, value) => items?.trim().toLowerCase().contains(value.trim().toLowerCase()) ?? false,
+                  listItemWidget: (userItems) => Text(
+                    userItems ?? "NA",
+                    style: Theme.of(context).textTheme.titleSmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  selectedWidget: Text(
+                    (bloc.selectedSubCategory?.subCategoryName ?? "").isNotEmpty
+                        ? bloc.selectedSubCategory?.subCategoryName ??
+                            "Please select  sub-category"
+                        : "Please select  sub-category",
+                    style: Theme.of(context).textTheme.titleSmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  enabled: true,
+                   
+
+
+
+                    options:
+                        bloc.subcategory.map((e) => e.subCategoryName).toList(),
+                    hint: "Please select sub-category",
+                    selectedVal: bloc.selectedSubCategory?.subCategoryName,
+                    valChanged: (value) {
+                      if (value != null) {
+                        bloc.selectedProduct = null;
+                        final selected = bloc.subcategory.firstWhere(
+                            (elemnt) => elemnt.subCategoryName == value);
+                        bloc.add(SelectSubCategoryEvent(selected.categoryId,
+                            selected.subCategoryName, selected.subCategoryId));
+                      }
+                    },
+                  ),
+
                   Text("Product",
                       style: Theme.of(context).textTheme.labelLarge),
                   const SizedBox(height: 5),
-                  DropDownWithOptions(
+                  
+                   DropDownSearchWidget<String>(
+                     filterFn: (items, value) => items?.trim().toLowerCase().contains(value.trim().toLowerCase()) ?? false,
+                  listItemWidget: (userItems) => Text(
+                    userItems ?? "NA",
+                    style: Theme.of(context).textTheme.titleSmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  selectedWidget: Text(
+                    (bloc.selectedProduct?.productName?? "").isNotEmpty
+                        ? bloc.selectedProduct?.productName ??
+                            "Please select product"
+                        : "Please select product",
+                    style: Theme.of(context).textTheme.titleSmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  
+                    enabled: true,
+                    options: bloc.products.map((e) => e.productName).toList(),
+                    hint: "Please select product",
+                    selectedVal: bloc.selectedProduct?.productName,
+                    valChanged: (value) {
+                      if (value != null) {
+                        bloc.add(SelectProductEvent(value));
+                      }
+                    },
+                  ),
+                ],
+                if (bloc.selectedCategory != null &&
+                    AppStorage().userDetail?.companyName.toLowerCase() !=
+                        "organic india") ...[
+                  Text("Product",
+                      style: Theme.of(context).textTheme.labelLarge),
+                  const SizedBox(height: 5),
+                   DropDownSearchWidget<String>(
+                     filterFn: (items, value) => items?.trim().toLowerCase().contains(value..trim().toLowerCase()) ?? false,
+                  listItemWidget: (userItems) => Text(
+                    userItems ?? "NA",
+                    style: Theme.of(context).textTheme.titleSmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  selectedWidget: Text(
+                    (bloc.selectedProduct?.productName?? "").isNotEmpty
+                        ? bloc.selectedProduct?.productName ??
+                            "Please select product"
+                        : "Please select product",
+                    style: Theme.of(context).textTheme.titleSmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  
+                    enabled: true,
                     options: bloc.products.map((e) => e.productName).toList(),
                     hint: "Please select product",
                     selectedVal: bloc.selectedProduct?.productName,
@@ -111,7 +218,13 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                       onChanged: (value) => bloc.add(ChangeQtyEvent(value)),
                     ),
                   ),
-                  if (bloc.isSale && bloc.selectedProduct != null) ...[
+                  if (!(["tata consumer", "tata consumers"].contains(
+                          AppStorage()
+                              .userDetail
+                              ?.companyName
+                              .toLowerCase())) &&
+                      bloc.isSale &&
+                      bloc.selectedProduct != null) ...[
                     SizedBox(height: 8.h),
                     Text("Calculated Price",
                         style: Theme.of(context).textTheme.labelLarge),

@@ -14,3 +14,4 @@ class AnalyticsSnackBarMessage extends AnalyticsState {
 }
 
 class LoadingState extends AnalyticsState {}
+class DataChangeState extends AnalyticsState{}
