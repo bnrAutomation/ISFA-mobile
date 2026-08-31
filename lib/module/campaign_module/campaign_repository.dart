@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:http/http.dart';
+import 'package:i_densfa/module/campaign_module/new_models/campaign_response_values.dart';
 import 'package:i_densfa/module/campaign_module/new_models/filled_campaign_list.dart';
 import 'package:i_densfa/module/campaign_module/new_models/response_model.dart';
 import 'package:i_densfa/utility/handler.dart';
@@ -298,6 +299,69 @@ class CampaignRepository {
       }
     } else {
       throw getErrorMessage(response);
+    }
+  }
+
+  /// Fetches previously submitted campaign responses for prefill.
+  /// Returns an empty list on any failure so campaign load is never blocked.
+  /// Each item may include [CampaignResponseValuesSubmission.createdDate].
+  Future<List<CampaignResponseValuesSubmission>> getCampaignResponseValues({
+    required String campaignUuid,
+    required int storeId,
+  }) async {
+    try {
+      final isOnline = await _offlineService.isOnline();
+      if (!isOnline) return [];
+
+      final response = await client.get(
+        Uri.parse(URLConstants.getCampaignResponseValues).replace(
+          queryParameters: {
+            'userId': userId.toString(),
+            'storeId': storeId.toString(),
+            'campaignUuid': campaignUuid,
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body);
+        if (decoded == null) return [];
+        return parseCampaignResponseValuesSubmissions(decoded);
+      }
+      return [];
+    } catch (e) {
+      debugPrint('getCampaignResponseValues failed: $e');
+      return [];
+    }
+  }
+
+  /// Fetches section fill status from response-values (Outlet Onboarding).
+  /// Returns an empty list on any failure so campaign load is never blocked.
+  Future<List<CampaignSectionFillStatus>> getCampaignSectionFillStatuses({
+    required String campaignUuid,
+    required int storeId,
+  }) async {
+    try {
+      final isOnline = await _offlineService.isOnline();
+      if (!isOnline) return [];
+
+      final response = await client.get(
+        Uri.parse(URLConstants.getFilledSection).replace(
+          queryParameters: {
+            'userId': userId.toString(),
+            'storeId': storeId.toString(),
+            'campaignUuid': campaignUuid,
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body);
+        if (decoded == null) return [];
+        return parseCampaignSectionFillStatuses(decoded);
+      }
+      return [];
+    } catch (e) {
+      debugPrint('getCampaignSectionFillStatuses failed: $e');
+      return [];
     }
   }
 

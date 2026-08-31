@@ -256,6 +256,11 @@ class URLConstants {
   static const String getAllClientCampaigns =
       '$baseURLStart/campaign-service/iSFA/api/v1/client/campaign/campaign-response';
 
+  static const String getCampaignResponseValues =
+      '$baseURLStart/campaign-service/iSFA/api/v1/client/campaign/response-values';
+
+  static const String getFilledSection = "$baseURLStart/campaign-service/iSFA/api/v1/client/campaign/section-filled";
+
   static const String getAllCampaigns =
       '$baseURLStart/campaign-service/iSFA/api/v1/campaign/client';
   static const String getAllCampaignsList =

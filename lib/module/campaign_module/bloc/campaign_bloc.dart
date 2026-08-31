@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:i_densfa/module/campaign_module/campaign_model.dart';
 import 'package:i_densfa/module/campaign_module/campaign_repository.dart';
 import 'package:i_densfa/module/campaign_module/new_models/campaign.dart';
+import 'package:i_densfa/module/campaign_module/new_models/campaign_response_values.dart';
 import 'package:i_densfa/module/campaign_module/new_models/question.dart';
 import 'package:i_densfa/module/campaign_module/new_models/question_section.dart';
 import 'package:i_densfa/module/campaign_module/new_models/response_model.dart';
@@ -53,6 +54,12 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
   List<RecruiterModel> recs = [];
   List<MechanicModel> mechanics = [];
   List<ProductInfo> productInfo = [];
+
+  /// sectionUuid -> (questionUuid -> saved response value) for prefill
+  Map<String, Map<String, CampaignResponseQuestionValue>> _prefillBySection = {};
+
+  /// Tracks questions already prefilled in this campaign session
+  final Set<String> _prefilledQuestionKeys = {};
 
   String from;
   bool canpopshow = false;
@@ -110,11 +117,14 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       try {
         emit(CampaignListLoadingState());
         storeCampaigns = await repo.getCampaignsForStore(event.storeId);
-
-        if(event.mechanicsName.isEmpty){
-        storeCampaigns.removeWhere(
-            (campaign) => campaign.name.toLowerCase() == "mechanic visit");
+        if(event.storeId=="-1"){
+           storeCampaigns =  storeCampaigns.where((element)=> element.name.trim().toLowerCase() =="master data").toList();
         }
+        
+        // if(event.mechanicsName.isEmpty){
+        // storeCampaigns.removeWhere(
+        //     (campaign) => campaign.name.toLowerCase() == "mechanic visit");
+        // }
         emit(CampaignListLoadedState());
 
         // If online, trigger background pre-sync of all campaign data
@@ -168,8 +178,11 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       segmentList.clear();
       indexCampaign = event.index;
       add(GetSavedCampaignResponseEvent(event.campUuId));
-      allCampSections =
-          await repo.getSections(campaignUuid: event.campUuId);
+      final sectionsFuture = repo.getSections(campaignUuid: event.campUuId);
+      final prefillFuture = _loadPrefillResponseValues(event.campUuId);
+      allCampSections = await sectionsFuture;
+      await _filterOutletOnboardingSections(event.campUuId);
+      await prefillFuture;
       allCampSections
           .sort((a, b) => a.priorityOrder.compareTo(b.priorityOrder));
       _updateVisibleSections(switchSectionIfHidden: false);
@@ -185,8 +198,11 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       segmentList.clear();
       indexCampaign = event.index;
       add(GetSavedCampaignResponseEvent(event.campUuId));
-      allCampSections =
-          await repo.getSections(campaignUuid: event.campUuId);
+      final sectionsFuture = repo.getSections(campaignUuid: event.campUuId);
+      final prefillFuture = _loadPrefillResponseValues(event.campUuId);
+      allCampSections = await sectionsFuture;
+      await _filterOutletOnboardingSections(event.campUuId);
+      await prefillFuture;
       allCampSections
           .sort((a, b) => a.priorityOrder.compareTo(b.priorityOrder));
       _updateVisibleSections(switchSectionIfHidden: false);
@@ -312,6 +328,8 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
           section.selectedSectionQuestions = questions;
         }
 
+        _applyPrefillToQuestions(
+            event.sectionUuId, section.selectedSectionQuestions);
         _updateQuestionModelWithRule();
         emit(CampaignQuestionsLoadedState());
         emit(CampaignQuestionsLoadedForState());
@@ -432,6 +450,8 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
           section.selectedSectionQuestions = questions;
         }
 
+        _applyPrefillToQuestions(
+            event.sectionUuId, section.selectedSectionQuestions);
         _updateQuestionModelWithRule();
         emit(CampaignQuestionsLoadedState());
       } catch (e, st) {
@@ -1285,13 +1305,13 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
 
   Future<void> _addSegment(Map<String, Object> reqBody, String uuId) async {
     final isOsmm = (reqBody['campaignResponse'] as List<Map<String, Object>>)
-        .any((element) => ["osmm", "isp", "record sales"]
+        .any((element) => ["osmm", "isp", "record sales","order sheet"]
             .contains(element["sectionName"].toString().toLowerCase()));
 
     if (isOsmm) {
       Map<String, dynamic> section =
           (reqBody['campaignResponse'] as List<Map<String, Object>>).firstWhere(
-              (element) => ["osmm", "isp", 'record sales']
+              (element) => ["osmm", "isp", 'record sales','order sheet']
                   .contains(element["sectionName"].toString().toLowerCase()));
       final campaignUuid = reqBody['campaignUuid'];
 
@@ -1690,6 +1710,222 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
       lastSelectedQuestions
           ?.firstWhereOrNull((element) => element.uuid == q.uuid)
           ?.issuesRemark = q.issuesRemark;
+    }
+  }
+
+  bool get _isPrefilledQuestionEnabled =>
+      selectedCampaign?.isAutoFill == true &&
+      AppStorage().userDetail?.configuration.allowPrefilledQuestion == true;
+
+  bool get _isIspCampaign =>
+      selectedCampaign?.name.trim().toLowerCase() == 'isp';
+
+  /// Compares API createdDate (yyyy-MM-dd or datetime) to local calendar today.
+  bool _isCreatedDateToday(String? createdDate) {
+    if (createdDate == null || createdDate.trim().isEmpty) return false;
+    final datePart = createdDate.trim().length >= 10
+        ? createdDate.trim().substring(0, 10)
+        : createdDate.trim();
+    final now = DateTime.now();
+    final today =
+        '${now.year.toString().padLeft(4, '0')}-'
+        '${now.month.toString().padLeft(2, '0')}-'
+        '${now.day.toString().padLeft(2, '0')}';
+    return datePart == today;
+  }
+
+  Future<void> _loadPrefillResponseValues(String campaignUuid) async {
+    _prefillBySection = {};
+    _prefilledQuestionKeys.clear();
+
+    if (!_isPrefilledQuestionEnabled) return;
+
+    try {
+      final submissions = await repo.getCampaignResponseValues(
+        campaignUuid: campaignUuid,
+        storeId: storeId,
+      );
+
+      // ISP: only prefill from submissions created today.
+      final usable = _isIspCampaign
+          ? submissions
+              .where((s) => _isCreatedDateToday(s.createdDate))
+              .toList()
+          : submissions;
+
+      if (usable.isEmpty) return;
+
+      // Prefer the last matching submission when multiple exist for today.
+      final sections = usable.last.responseValues;
+      for (final section in sections) {
+        if (section.sectionUuid.isEmpty) continue;
+        _prefillBySection[section.sectionUuid] = {
+          for (final q in section.questions)
+            if (q.questionUuid.isNotEmpty) q.questionUuid: q,
+        };
+      }
+    } catch (e) {
+      debugPrint('Failed to load campaign response values for prefill: $e');
+      _prefillBySection = {};
+    }
+  }
+
+  // static const _outletOnboardingCampaignUuid =
+  //     '0b825398-979d-4e8c-ae77-a4bc42111b96';
+
+  bool _isOutletOnboardingCampaign(String campaignUuid) {
+    //if (campaignUuid == _outletOnboardingCampaignUuid) return true;
+    return selectedCampaign?.name.trim().toLowerCase() == 'outlet onboarding';
+  }
+
+  /// For Outlet Onboarding only: keep sections whose response-values status
+  /// matches by sectionUuid and has filled == false.
+  /// On empty/failed API response, leaves allCampSections unchanged.
+  /// Progressive unlock:
+  /// - all unfilled → Demographic of outlet + requirement gathering
+  /// - those two filled and First Purchage unfilled → First Purchage only
+  /// - all filled → Repeat Order only
+  Future<void> _filterOutletOnboardingSections(String campaignUuid) async {
+    if (!_isOutletOnboardingCampaign(campaignUuid)) return;
+
+    try {
+      final statuses = await repo.getCampaignSectionFillStatuses(
+        campaignUuid: campaignUuid,
+        storeId: storeId,
+      );
+      if (statuses.isEmpty) {
+        // Empty or failed fetch — keep all sections to avoid blank campaign.
+        return;
+      }
+
+      final filledByUuid = <String, bool>{
+        for (final status in statuses)
+          if (status.sectionUuid.isNotEmpty)
+            status.sectionUuid: status.filled,
+      };
+
+      // Snapshot before filtering so we can read filled status by name.
+      final originalSections =
+          List<CampaignQuestionSectionModel>.from(allCampSections);
+
+      bool isFilled(String name) {
+        final section = originalSections.firstWhereOrNull(
+            (s) => s.name.trim().toLowerCase() == name);
+        if (section == null) return false;
+        return filledByUuid[section.uuid] == true;
+      }
+
+      bool isUnfilled(String name) {
+        final section = originalSections.firstWhereOrNull(
+            (s) => s.name.trim().toLowerCase() == name);
+        if (section == null) return false;
+        return filledByUuid[section.uuid] == false;
+      }
+
+      bool isFirstPurchageSection(CampaignQuestionSectionModel s) {
+        final name = s.name.trim().toLowerCase();
+        return name == 'first purchage' || name == 'first purchase';
+      }
+
+      bool isRepeatOrderSection(CampaignQuestionSectionModel s) {
+        return s.name.trim().toLowerCase() == 'repeat order';
+      }
+
+      bool isRequirementGatherSection(CampaignQuestionSectionModel s) {
+        return s.name.trim().toLowerCase() == 'requirement gathering';
+      }
+
+
+
+
+      allCampSections = allCampSections
+          .where((section) => filledByUuid[section.uuid] == false)
+          .toList();
+
+      // Fresh start: all API sections unfilled → only initial onboarding sections.
+      final allUnfilled = statuses.every((s) => s.filled == false);
+      final allFilled = statuses.every((s) => s.filled == true);
+      if (allUnfilled) {
+        const initialSections = {
+          'demographic of outlet',
+          'requirement gathering',
+        };
+        allCampSections = allCampSections
+            .where((s) =>
+                initialSections.contains(s.name.trim().toLowerCase()))
+            .toList();
+      } else if(isFilled("demographic of outlet") && isUnfilled('requirement gathering')){
+            allCampSections =
+            allCampSections.where(isRequirementGatherSection).toList();
+      }
+      else if (isFilled('demographic of outlet') &&
+         isFilled('requirement gathering') &&
+          (isUnfilled('first purchage') || isUnfilled('first purchase'))) {
+        allCampSections =
+            allCampSections.where(isFirstPurchageSection).toList();
+      } else if (allFilled) {
+        // Restore from original list — Repeat Order may itself be filled.
+        allCampSections =
+            originalSections.where(isRepeatOrderSection).toList();
+      }
+    } catch (e) {
+      debugPrint('Outlet Onboarding section filter failed: $e');
+      // Keep original allCampSections on failure.
+    }
+  }
+
+  /// Questions that must never be autofilled from response-values.
+  static const _prefillExcludedQuestions = {
+    "customer type ?",
+    "retailer/workshop name",
+    "select mechanics",
+    "name",
+    "contact no.",
+    "product type",
+    "product name",
+    "pack size",
+    "number of pack sold",
+    "gift type",
+    "gift qty",
+    "competition brand sold",
+    "castrol product sold",
+    "shell product sold",
+    "gulf pack sold",
+    "valvoline pack sold",
+    "motul pack sold",
+    "total pack sold",
+    "veedol pack sold",
+    "remark",
+  };
+
+  /// Populates only editable response fields on existing question models.
+  /// Does not overwrite question metadata from Campaign Details API.
+  void _applyPrefillToQuestions(
+    String sectionUuid,
+    List<CampaignQuestionModel> questions,
+  ) {
+    if (!_isPrefilledQuestionEnabled) return;
+
+    final byQuestion = _prefillBySection[sectionUuid];
+    if (byQuestion == null || byQuestion.isEmpty) return;
+
+    for (final question in questions) {
+      if (_prefillExcludedQuestions
+          .contains(question.question.trim().toLowerCase())) {
+        continue;
+      }
+
+      final saved = byQuestion[question.uuid];
+      if (saved == null) continue;
+
+      final key = '$sectionUuid:${question.uuid}';
+      if (_prefilledQuestionKeys.contains(key)) continue;
+
+      question.answer = saved.answer;
+      question.isIssue = saved.issue;
+      question.issuesImage = saved.issuesImage;
+      question.issuesRemark = saved.issuesRemarks;
+      _prefilledQuestionKeys.add(key);
     }
   }
 

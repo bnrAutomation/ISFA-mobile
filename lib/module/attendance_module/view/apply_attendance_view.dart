@@ -376,48 +376,48 @@ class _ApplyAttendanceFormViewState extends State<ApplyAttendanceView> {
                               )
                             ],
                           ),
-                          // if ((AppStorage().userDetail?.companyName ?? '').toLowerCase().trim() == 'brotherinternational') ...[
-                          //   SizedBox(height: 18.h),
-                          //   Text(
-                          //     'Attendance type',
-                          //     style: textTheme.titleSmall?.copyWith(
-                          //       fontWeight: FontWeight.w700,
-                          //     ),
-                          //   ),
-                          //   SizedBox(height: 8.h),
-                          //   DropDownSearchWidget<String>(
-                          //     filterFn: (items, value) =>
-                          //         items
-                          //             ?.trim()
-                          //             .toLowerCase()
-                          //             .contains(value.trim().toLowerCase()) ??
-                          //         false,
-                          //     listItemWidget: (item) => Text(
-                          //       item ?? "NA",
-                          //       style: Theme.of(context).textTheme.titleSmall,
-                          //       overflow: TextOverflow.ellipsis,
-                          //     ),
-                          //     selectedWidget: Text(
-                          //       context.select((AttendanceBloc value) =>
-                          //               value.selectedAttendanceType) ??
-                          //           "Please select attendance type",
-                          //       style: Theme.of(context).textTheme.titleSmall,
-                          //       overflow: TextOverflow.ellipsis,
-                          //     ),
-                          //     enabled: true,
-                          //     options: AttendanceBloc.attendanceTypeOptions,
-                          //     hint: "Please select attendance type",
-                          //     selectedVal: context.select(
-                          //         (AttendanceBloc value) =>
-                          //             value.selectedAttendanceType),
-                          //     valChanged: (value) {
-                          //       if (value != null) {
-                          //         bloc.selectedAttendanceType = value;
-                          //         bloc.add(DateChangedEvent());
-                          //       }
-                          //     },
-                          //   ),
-                          // ],
+                          if ((AppStorage().userDetail?.companyName ?? '').toLowerCase().trim() == 'brotherinternational') ...[
+                            SizedBox(height: 18.h),
+                            Text(
+                              'Attendance type',
+                              style: textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: 8.h),
+                            DropDownSearchWidget<String>(
+                              filterFn: (items, value) =>
+                                  items
+                                      ?.trim()
+                                      .toLowerCase()
+                                      .contains(value.trim().toLowerCase()) ??
+                                  false,
+                              listItemWidget: (item) => Text(
+                                item ?? "NA",
+                                style: Theme.of(context).textTheme.titleSmall,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              selectedWidget: Text(
+                                context.select((AttendanceBloc value) =>
+                                        value.selectedAttendanceType) ??
+                                    "Please select attendance type",
+                                style: Theme.of(context).textTheme.titleSmall,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              enabled: true,
+                              options: AttendanceBloc.attendanceTypeOptions,
+                              hint: "Please select attendance type",
+                              selectedVal: context.select(
+                                  (AttendanceBloc value) =>
+                                      value.selectedAttendanceType),
+                              valChanged: (value) {
+                                if (value != null) {
+                                  bloc.selectedAttendanceType = value;
+                                  bloc.add(DateChangedEvent());
+                                }
+                              },
+                            ),
+                          ],
                           SizedBox(height: 18.h),
                           Text(
                             'Reason',

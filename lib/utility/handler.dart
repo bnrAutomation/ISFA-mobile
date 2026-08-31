@@ -236,7 +236,9 @@ class CustomHttpBaseClient extends BaseClient {
     final path = url.path;
 
     // Do NOT cache highly dynamic campaign-related endpoints
-    if (
+    if (path.contains("/question")||
+      path.contains("client/campaign/response-values")||
+      path.contains("client/campaign/section-filled")||
       path.contains("/iSFA/mechanic")||
       path.contains("/iSFA/recruiter")||
       path.contains("iSFA/client/modules")||

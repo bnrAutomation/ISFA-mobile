@@ -78,9 +78,7 @@ class CampaignView extends StatelessWidget {
                     bloc.add(SnackbarMessageCampaignEvent(
                         message: 'No Questions added.'));
                   } else {
-                    for (var element in bloc.questionAnswers) {
-                      element.answer = null;
-                    }
+                    // Keep prefilled response values on questionAnswers.
                     bloc.selectedMechanicContact = mechanicsContact;
                     bloc.selectedMechanicName = mechanicsName;
                     bloc.retailerName = retailerName;
@@ -258,9 +256,7 @@ class SelectedCampaignView extends StatelessWidget {
                                 message: 'No Questions added.'));
                             return;
                           }
-                          for (var element in bloc.questionAnswers) {
-                            element.answer = null;
-                          }
+                          // Keep prefilled response values on questionAnswers.
                           //  bloc.selectedMechanicContact = mechanicsContact;
                           // bloc.selectedMechanicName = mechanicsName;
                           context

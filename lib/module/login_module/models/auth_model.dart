@@ -181,7 +181,8 @@ class UserInfo {
               requiredEmailChange: true,
               requiredPhoneChange: true,
               requiredPasswordChange: true,
-              requiredClientNameForSurvey: true),
+              requiredClientNameForSurvey: true,
+              allowPrefilledQuestion: false),
       userConfiguration: data['userConfiguration'] != null
           ? data['userConfiguration'] is Map
               ? UserConfiguration.fromJson(data['userConfiguration'])
@@ -280,6 +281,7 @@ class Configuration {
   bool requiredMultiStore;
   bool requiredAddCampaignBeat;
   bool requiredAddMechanic;
+  bool allowPrefilledQuestion;
 
   Configuration({
        required this.requiredAddMechanic,
@@ -299,7 +301,8 @@ class Configuration {
       required this.requiredPasswordChange,
       required this.requiresAllFillCampigned,
       required this.requiredMultiImageInCampaign,
-      required this.requiredClientNameForSurvey});
+      required this.requiredClientNameForSurvey,
+      this.allowPrefilledQuestion = false});
 
   factory Configuration.fromJson(Map<String, dynamic> json) => Configuration(
     requiredAddMechanic: json["requiredAddMechanic"]?? false,
@@ -319,7 +322,8 @@ class Configuration {
       requiredEmailChange: json['requiredEmailChange'] ?? true,
       requiredPhoneChange: json["requiredPhoneChange"] ?? true,
       requiredPasswordChange: json['requiredPasswordChange'] ?? true,
-      requiredClientNameForSurvey: json['requiredClientNameForSurvey'] ?? true);
+      requiredClientNameForSurvey: json['requiredClientNameForSurvey'] ?? true,
+      allowPrefilledQuestion: json['allowPrefilledQuestion'] == true);
 
   Map<String, dynamic> toJson() => {
     "requiredAddMechanic":requiredAddMechanic,
@@ -339,6 +343,7 @@ class Configuration {
         "requiredPasswordChange": requiredPasswordChange,
         "requiredPhoneChange": requiredPhoneChange,
         "requiredEmailChange": requiredEmailChange,
-        'requiredClientNameForSurvey': requiredClientNameForSurvey
+        'requiredClientNameForSurvey': requiredClientNameForSurvey,
+        'allowPrefilledQuestion': allowPrefilledQuestion,
       };
 }

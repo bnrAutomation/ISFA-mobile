@@ -13,6 +13,7 @@ class AllCampaignModel {
   final String canViewSubmission;
   final String canEditSubmission;
   final String canCreateSubmission;
+  final bool isAutoFill;
 
   AllCampaignModel({
     required this.uuid,
@@ -27,6 +28,7 @@ class AllCampaignModel {
     required this.canViewSubmission,
     required this.canEditSubmission,
     required this.canCreateSubmission,
+    this.isAutoFill = false,
   });
 
   factory AllCampaignModel.fromRawJson(String str) =>
@@ -48,6 +50,7 @@ class AllCampaignModel {
         canViewSubmission: json["canViewSubmission"],
         canEditSubmission: json["canEditSubmission"],
         canCreateSubmission: json["canCreateSubmission"],
+        isAutoFill: json["isAutoFill"] == true,
       );
 
   Map<String, dynamic> toJson() => {
@@ -63,6 +66,7 @@ class AllCampaignModel {
         "canViewSubmission": canViewSubmission,
         "canEditSubmission": canEditSubmission,
         "canCreateSubmission": canCreateSubmission,
+        "isAutoFill": isAutoFill,
       };
 
   bool isNegative() {

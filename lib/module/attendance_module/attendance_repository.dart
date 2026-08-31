@@ -91,7 +91,7 @@ class AttendanceRepository {
       //         toDate.year, toDate.month, toDate.day, toTime.hour, toTime.minute)
       //     .toLocal().toString(),
       "reason": reason,
-    //  "attendanceType": attendanceType ??"",
+      "attendanceType": attendanceType ??"",
       "timeZone": currentTimeZone,
       "storeId": "-1"
     };
