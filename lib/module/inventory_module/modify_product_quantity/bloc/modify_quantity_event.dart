@@ -44,6 +44,11 @@ class ChangeQtyEvent extends ModifyQuantityEvent {
   ChangeQtyEvent(this.value);
 }
 
+class ChangeAprochQtyEvent extends ModifyQuantityEvent {
+  final String value;
+  ChangeAprochQtyEvent(this.value);
+}
+
 class AddPriceSaleProductEvent extends ModifyQuantityEvent {
   final String price;
 

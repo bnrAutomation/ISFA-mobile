@@ -7,6 +7,7 @@ import 'package:i_densfa/module/create_store_module/create_store_repository.dart
 import 'package:i_densfa/utility/app_storage.dart';
 import 'package:i_densfa/utility/base_bloc.dart';
 import 'package:i_densfa/utility/device_helper.dart';
+import 'package:i_densfa/utility/services/%20region_mapper.dart';
 
 part 'create_store_event.dart';
 part 'create_store_state.dart';
@@ -53,7 +54,7 @@ class CreateStoreBloc extends BaseBloc<CreateStoreEvent, CreateStoreState> {
   ) async {
     try {
       emit(CreateStoreLoading());
-
+      final region = RegionMapper.getRegionName(currentLocation?.latitude??0.0,currentLocation?.longitude??0.0);
       final model = CreateStoreModel(
         storeName: event.storeName,
         storeCode: event.storeCode,
@@ -63,12 +64,12 @@ class CreateStoreBloc extends BaseBloc<CreateStoreEvent, CreateStoreState> {
         storeType: event.storeType,
         address: event.address,
         city: event.city,
-        region:"", //event.region,
+        region:region,
         state: event.state,
         location: event.location,
         zipcode: event.zipcode,
-        latitude: currentLocation?.latitude,
-        longitude: currentLocation?.longitude,
+        latitude:currentLocation?.latitude,
+        longitude:currentLocation?.longitude,
         campaignId: AppStorage().userDetail?.companyId.toString() ?? "-1",
         userId: AppStorage().userDetail?.id.toString()??"-1"
       );

@@ -109,13 +109,8 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleSmall,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  enabled: true,
-                   
-
-
-
-                    options:
-                        bloc.subcategory.map((e) => e.subCategoryName).toList(),
+                    enabled: true,
+                    options: bloc.subcategory.map((e) => e.subCategoryName).toList(),
                     hint: "Please select sub-category",
                     selectedVal: bloc.selectedSubCategory?.subCategoryName,
                     valChanged: (value) {
@@ -218,6 +213,35 @@ class ModifyProductQuantityPopup extends StatelessWidget {
                       onChanged: (value) => bloc.add(ChangeQtyEvent(value)),
                     ),
                   ),
+                  if(["tata consumer", "tata consumers"].contains(
+                          AppStorage()
+                              .userDetail
+                              ?.companyName
+                              .toLowerCase()))...[
+                                  Text(
+                      "Approach",
+                      style: Theme.of(context).textTheme.labelLarge),
+                  const SizedBox(height: 5),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: TextField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(3),
+                      ],
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                        hintText: 'Enter quantity',
+                      ),
+                      onChanged: (value) => bloc.add(ChangeAprochQtyEvent(value)),
+                    ),
+                  ),
+                              ],
                   if (!(["tata consumer", "tata consumers"].contains(
                           AppStorage()
                               .userDetail

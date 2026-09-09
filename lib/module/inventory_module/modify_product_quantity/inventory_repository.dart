@@ -82,6 +82,7 @@ class ModifyProductsRepository {
       {required int catId,
       required int productId,
       required int qty,
+       required int approchQty,
       required double price}) async {
     final url = Uri.parse('${URLConstants.saleProduct}/$userId');
 
@@ -90,6 +91,7 @@ class ModifyProductsRepository {
       "productId": productId,
       "categoryId": catId,
       "transUnit": qty,
+      "approchTransUnit": approchQty,
       "price": price,
       "totalPrice": "${qty * price}"
     };

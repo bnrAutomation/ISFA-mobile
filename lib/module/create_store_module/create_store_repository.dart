@@ -36,7 +36,7 @@ class CreateStoreRepository {
     request.fields['storeType'] = model.storeType;
     request.fields['address'] = model.address;
     request.fields['city'] = model.city;
-    request.fields['region'] ="";// model.region;
+    request.fields['region'] = model.region;
     request.fields['state'] = model.state;
     request.fields['location'] = model.location;
     request.fields['zipcode'] = model.zipcode;

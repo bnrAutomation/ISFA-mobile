@@ -18,6 +18,7 @@ class ModifyQuantityBloc
 
   ProductList? selectedProduct;
   int? selectedQuantity;
+  int? selectedApprochedQuantity;
   double enteredPrice = 0;
   final bool isSale;
 
@@ -48,6 +49,14 @@ class ModifyQuantityBloc
       selectedQuantity = val;
       emit(LoadedState());
     });
+
+    on((ChangeAprochQtyEvent event, emit) {
+      final val = int.tryParse(event.value) ?? 0;
+      selectedApprochedQuantity = val;
+      emit(LoadedState());
+    });
+
+    
     on((AddPriceSaleProductEvent event, emit) {
       final val = double.tryParse(event.price) ?? 0;
       enteredPrice = val;
@@ -143,11 +152,20 @@ class ModifyQuantityBloc
         emit(ToastMessageState('Please enter price'));
         return;
       }
+      if(["tata consumer", "tata consumers"].contains(
+                          AppStorage()
+                              .userDetail
+                              ?.companyName
+                              .toLowerCase()) && ((selectedApprochedQuantity??0) <= (selectedQuantity?? 0))){
+                                    emit(ToastMessageState('Total Approach must always be MORE than Total Sales Units.'));
+        return;
+                              }
       final response = await repo
           .addSaleQty(
               catId: selectedCategory!.categoryId,
               productId: selectedProduct!.productId,
               qty: selectedQuantity!,
+              approchQty: selectedApprochedQuantity??0,
               price: selectedProduct?.price ?? 0.0)
           .catchError((onError) {
         emit(ToastMessageState(onError.toString()));
